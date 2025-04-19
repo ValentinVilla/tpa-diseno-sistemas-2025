@@ -1,9 +1,9 @@
 # Diseño de Sistemas de Información 
+
 ## Trabajo práctico anual: MetaMapa
 [Enunciado](https://docs.google.com/document/d/1ctxGwWrnM0XmPii38KWod9mTzphzNxxPRg9HkpXyNBg/edit?tab=t.0)
 
-# Grupo 4
-## Integrantes
+## Grupo 4 - Integrantes
 * Bertella Tomás Emiliano
 * García Fontenla Gonzalo
 * González Grünwaldt César Tomás
