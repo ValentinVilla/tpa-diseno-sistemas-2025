@@ -1,0 +1,98 @@
+@startuml classDiagram
+
+class Coleccion {
+  - titulo: String
+  - descripcion: String
+  - fuente: Fuente
+  - criterio: CriterioPertenencia
+  + contiene(hecho: Hecho): boolean
+}
+
+abstract class Hecho {
+  - titulo: String
+  - descripcion: String
+  - categoria: String
+  - latitud: Double
+  - longitud: Double
+  - fechaAcontecimiento: LocalDate
+  - fechaCarga: LocalDate
+  - origen: Origen
+}
+
+class HechoDeTexto {}
+
+class HechoConMultimedia {
+  - urls: List<String>
+}
+
+interface CriterioPertenencia {
+  + cumple(hecho: Hecho): boolean
+}
+
+class CriterioPorCategoriaYFecha {
+  - categoria: String
+  - desde: LocalDate
+  - hasta: LocalDate
+  + cumple(hecho: Hecho): boolean
+}
+
+
+enum Origen {
+  CSV
+  MANUAL
+  CONTRIBUYENTE
+}
+
+abstract class Fuente {
+  + obtenerHechos(): List<Hecho>
+}
+
+class FuenteCSV {
+  - path string
+  + obtenerHechos(): List<Hecho>
+}
+
+
+interface Contribuyente {
+}
+
+class Visualizador {
+}
+
+class ContribuyenteIdentificado {
+  - nombre: String
+  - apellido: String
+  - edad: int
+}
+
+
+class SolicitudEliminacion {
+  - hecho: Hecho
+  - textoFundamentacion: String
+  - estado: EstadoSolicitud
+}
+
+enum EstadoSolicitud {
+  PENDIENTE
+  ACEPTADA
+  RECHAZADA
+}
+
+Coleccion --> CriterioPertenencia
+Coleccion --> Fuente
+
+CriterioPorCategoriaYFecha ..|> CriterioPertenencia
+
+FuenteCSV ..|> Fuente
+
+Visualizador ..|> Contribuyente
+ContribuyenteIdentificado ..|> Contribuyente
+
+Hecho --> Origen
+
+HechoDeTexto ..|> Hecho
+HechoConMultimedia ..|> Hecho
+
+SolicitudEliminacion --> Hecho
+SolicitudEliminacion --> EstadoSolicitud
+@enduml

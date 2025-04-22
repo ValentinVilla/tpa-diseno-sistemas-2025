@@ -1,0 +1,101 @@
+@startuml package
+
+package "Dominio" {
+  class Coleccion {
+    - titulo: String
+    - descripcion: String
+    - fuente: Fuente
+    - criterio: CriterioPertenencia
+    + contiene(hecho: Hecho): boolean
+  }
+
+  interface CriterioPertenencia {
+    + cumple(hecho: Hecho): boolean
+  }
+
+  class CriterioPorCategoriaYFecha {
+    - categoria: String
+    - desde: LocalDate
+    - hasta: LocalDate
+    + cumple(hecho: Hecho): boolean
+  }
+
+  CriterioPorCategoriaYFecha ..|> CriterioPertenencia
+  Coleccion --> CriterioPertenencia
+}
+
+package "Hechos" {
+  abstract class Hecho {
+    - titulo: String
+    - descripcion: String
+    - categoria: String
+    - latitud: Double
+    - longitud: Double
+    - fechaAcontecimiento: LocalDate
+    - fechaCarga: LocalDate
+    - origen: Origen
+  }
+
+  class HechoDeTexto {}
+  class HechoConMultimedia {
+    - urls: List<String>
+  }
+
+  enum Origen {
+    CSV
+    MANUAL
+    CONTRIBUYENTE
+  }
+
+  HechoDeTexto ..|> Hecho
+  HechoConMultimedia ..|> Hecho
+  Hecho --> Origen
+}
+
+package "Fuentes" {
+  abstract class Fuente {
+    + obtenerHechos(): List<Hecho>
+  }
+
+  class FuenteCSV {
+    - path: String
+    + obtenerHechos(): List<Hecho>
+  }
+
+  FuenteCSV ..|> Fuente
+  Coleccion --> Fuente
+}
+
+package "Usuarios" {
+  interface Contribuyente {
+  }
+
+  class Visualizador {}
+  class ContribuyenteIdentificado {
+    - nombre: String
+    - apellido: String
+    - edad: int
+  }
+
+  Visualizador ..|> Contribuyente
+  ContribuyenteIdentificado ..|> Contribuyente
+}
+
+package "Moderacion" {
+  class SolicitudEliminacion {
+    - hecho: Hecho
+    - textoFundamentacion: String
+    - estado: EstadoSolicitud
+  }
+
+  enum EstadoSolicitud {
+    PENDIENTE
+    ACEPTADA
+    RECHAZADA
+  }
+
+  SolicitudEliminacion --> Hecho
+  SolicitudEliminacion --> EstadoSolicitud
+}
+
+@enduml
