@@ -1,4 +1,15 @@
-@startuml classDiagram
+@startuml
+
+left to right direction
+
+skinparam shadowing true
+
+class Administrador {
+  - user: String
+  - password: String
+  + crearColeccion()
+  + importarHecho(archivo: FuenteCSV)
+}
 
 class Coleccion {
   - titulo: String
@@ -19,10 +30,16 @@ abstract class Hecho {
   - origen: Origen
 }
 
-class HechoDeTexto {}
-
 class HechoConMultimedia {
   - urls: List<String>
+}
+
+class HechoDeTexto{}
+
+enum Origen {
+  CSV
+  MANUAL
+  CONTRIBUYENTE
 }
 
 interface CriterioPertenencia {
@@ -36,28 +53,16 @@ class CriterioPorCategoriaYFecha {
   + cumple(hecho: Hecho): boolean
 }
 
-
-enum Origen {
-  CSV
-  MANUAL
-  CONTRIBUYENTE
-}
-
 abstract class Fuente {
   + obtenerHechos(): List<Hecho>
 }
 
 class FuenteCSV {
-  - path string
+  - path: string
   + obtenerHechos(): List<Hecho>
 }
 
-
-interface Contribuyente {
-}
-
-class Visualizador {
-}
+interface Contribuyente{}
 
 class ContribuyenteIdentificado {
   - nombre: String
@@ -65,6 +70,20 @@ class ContribuyenteIdentificado {
   - edad: int
 }
 
+class Visualizador {
+  + navegarPorHechos(coleccion: Coleccion, filtro: Filtro)
+}
+
+enum Filtro {
+  TITULO
+  DESCRIPCION
+  CATEGORIA
+  LATITUD
+  LONGITUD
+  FECHA_ACONTECIMIENTO
+  FECHA_CARGA
+  ORIGEN
+}
 
 class SolicitudEliminacion {
   - hecho: Hecho
@@ -78,21 +97,29 @@ enum EstadoSolicitud {
   RECHAZADA
 }
 
-Coleccion --> CriterioPertenencia
+
+Administrador --> Coleccion
+Administrador --> SolicitudEliminacion
+
+Coleccion --> Hecho
 Coleccion --> Fuente
+Coleccion --> CriterioPertenencia
+
+Hecho --> Origen
+HechoConMultimedia ..|> Hecho
+HechoDeTexto ..|> Hecho
 
 CriterioPorCategoriaYFecha ..|> CriterioPertenencia
 
 FuenteCSV ..|> Fuente
 
-Visualizador ..|> Contribuyente
+Contribuyente --> Hecho
+Contribuyente --> SolicitudEliminacion
 ContribuyenteIdentificado ..|> Contribuyente
-
-Hecho --> Origen
-
-HechoDeTexto ..|> Hecho
-HechoConMultimedia ..|> Hecho
+Visualizador ..|> Contribuyente
+Visualizador --> Filtro
 
 SolicitudEliminacion --> Hecho
 SolicitudEliminacion --> EstadoSolicitud
+
 @enduml
