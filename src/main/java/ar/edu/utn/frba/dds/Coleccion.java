@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds;
 
 public class Coleccion {
-  private String titulo;
-  private String descripcion;
-  private Fuente fuente;
-  private CriterioPertenencia criterio;
+  private final String titulo;
+  private final String descripcion;
+  private final Fuente fuente;
+  private final CriterioPertenencia criterio;
 
   // public boolean contiene(Hecho hecho, Hecho hecho2){}
 

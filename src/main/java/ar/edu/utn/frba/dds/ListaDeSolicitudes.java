@@ -1,24 +1,28 @@
 package ar.edu.utn.frba.dds;
 
+import ar.edu.utn.frba.dds.SolicitudEliminacion;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ListaDeSolicitudes {
-  public List<SolicitudEliminacion> listaDeSolicitudesDeEliminacion;
+  private static final ListaDeSolicitudes INSTANCE = new ListaDeSolicitudes();
+
+  private List<SolicitudEliminacion> listaDeSolicitudesDeEliminacion;
+
+  private ListaDeSolicitudes() {
+    this.listaDeSolicitudesDeEliminacion = new ArrayList<>();
+  }
+
+  public static ListaDeSolicitudes instance() {
+    return INSTANCE;
+  }
 
   public void sacarSolicitud(SolicitudEliminacion solicitud) {
     this.listaDeSolicitudesDeEliminacion.remove(solicitud);
-
   }
 
   public void agregarSolicitud(SolicitudEliminacion solicitud) {
     this.listaDeSolicitudesDeEliminacion.add(solicitud);
   }
-
-  // Constructor
-  public ListaDeSolicitudes(List<SolicitudEliminacion> solicitudes) {
-    this.listaDeSolicitudesDeEliminacion = new ArrayList<>();
-  }
-  
 }
+

@@ -1,4 +1,4 @@
-NOTAS: Consideramos que las validaciones se tienen que hacer cuando se traen desde el SCV o En el builder del hecho
+NOTAS: Consideramos que las validaciones se tienen que hacer cuando se traen desde el CSV o en el builder del hecho.
 teniamos pensado que el hecho tuviera un estado de habilitado o deshabilitado pero las solicitudes no tienen un estado
 pq no cumplirian ninguna funcion una solicitud que ya fue evaluada o rechazada sera eliminada de la lista.
 -Creamos una clase lista de solicitudes para que sea la UNICA lista de solicitudes que vamos a manejar, es una clase pq

@@ -9,7 +9,6 @@ public class SolicitudEliminacion {
     return hecho;
   }
 
-
   // Constructor
   public SolicitudEliminacion(Hecho hecho, String textoFundamentacion) {
     this.hecho = hecho;
