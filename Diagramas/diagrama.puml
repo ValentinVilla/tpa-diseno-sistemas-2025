@@ -1,15 +1,9 @@
 @startuml
 
-left to right direction
+
 
 skinparam shadowing true
 
-class Administrador {
-  - user: String
-  - password: String
-  + crearColeccion()
-  + importarHecho(archivo: FuenteCSV)
-}
 
 class Coleccion {
   - titulo: String
@@ -19,22 +13,12 @@ class Coleccion {
   + contiene(hecho: Hecho): boolean
 }
 
-abstract class Hecho {
-  - titulo: String
-  - descripcion: String
-  - categoria: String
-  - latitud: Double
-  - longitud: Double
-  - fechaAcontecimiento: LocalDate
-  - fechaCarga: LocalDate
-  - origen: Origen
+class Administrador {
+  - user: String
+  - password: String
+  + crearColeccion()
+  + importarHecho(archivo: FuenteCSV)
 }
-
-class HechoConMultimedia {
-  - urls: List<String>
-}
-
-class HechoDeTexto{}
 
 enum Origen {
   CSV
@@ -42,14 +26,7 @@ enum Origen {
   CONTRIBUYENTE
 }
 
-interface CriterioPertenencia {
-  + cumple(hecho: Hecho): boolean
-}
-
-class CriterioPorCategoriaYFecha {
-  - categoria: String
-  - desde: LocalDate
-  - hasta: LocalDate
+class CriterioPertenencia {
   + cumple(hecho: Hecho): boolean
 }
 
@@ -61,7 +38,17 @@ class FuenteCSV {
   - path: string
   + obtenerHechos(): List<Hecho>
 }
+class SolicitudEliminacion {
+  - hecho: Hecho
+  - textoFundamentacion: String
+  - estado: EstadoSolicitud
+}
 
+enum EstadoSolicitud {
+  PENDIENTE
+  ACEPTADA
+  RECHAZADA
+}
 interface Contribuyente{}
 
 class ContribuyenteIdentificado {
@@ -85,21 +72,27 @@ enum Filtro {
   ORIGEN
 }
 
-class SolicitudEliminacion {
-  - hecho: Hecho
-  - textoFundamentacion: String
-  - estado: EstadoSolicitud
+abstract class Hecho {
+  - titulo: String
+  - descripcion: String
+  - categoria: String
+  - latitud: Double
+  - longitud: Double
+  - fechaAcontecimiento: LocalDate
+  - fechaCarga: LocalDate
+  - origen: Origen
 }
 
-enum EstadoSolicitud {
-  PENDIENTE
-  ACEPTADA
-  RECHAZADA
+class HechoConMultimedia {
+  - urls: List<String>
 }
+
+class HechoDeTexto{}
 
 
 Administrador --> Coleccion
 Administrador --> SolicitudEliminacion
+Administrador ..|> Contribuyente
 
 Coleccion --> Hecho
 Coleccion --> Fuente
@@ -109,15 +102,13 @@ Hecho --> Origen
 HechoConMultimedia ..|> Hecho
 HechoDeTexto ..|> Hecho
 
-CriterioPorCategoriaYFecha ..|> CriterioPertenencia
-
 FuenteCSV ..|> Fuente
 
 Contribuyente --> Hecho
 Contribuyente --> SolicitudEliminacion
+Contribuyente --> Filtro
 ContribuyenteIdentificado ..|> Contribuyente
 Visualizador ..|> Contribuyente
-Visualizador --> Filtro
 
 SolicitudEliminacion --> Hecho
 SolicitudEliminacion --> EstadoSolicitud
