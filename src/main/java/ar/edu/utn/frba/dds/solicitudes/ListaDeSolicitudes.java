@@ -1,6 +1,5 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.SolicitudEliminacion;
 import java.util.ArrayList;
 import java.util.List;
 

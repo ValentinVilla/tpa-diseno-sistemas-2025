@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.dominio;
 
 import java.time.LocalDate;
 
@@ -13,12 +13,27 @@ public class Hecho {
   private Origen origen;
   private boolean visible;
 
-
   public void setVisible(boolean visible){
     this.visible = visible;
   }
 
-  private Hecho(Builder builder) {
+  public String getCategoria() {
+    return this.categoria;
+  }
+
+  public LocalDate getFechaHecho() {
+    return this.fechaAcontecimiento;
+  }
+
+  public double getLatitud() {
+    return this.latitud;
+  }
+
+  public double getLongitud() {
+    return this.longitud;
+  }
+
+  public Hecho(Builder builder) {
     this.titulo = builder.titulo;
     this.descripcion = builder.descripcion;
     this.categoria = builder.categoria;
@@ -90,4 +105,20 @@ public class Hecho {
       return new Hecho(this);
     }
   }
+
+
+  /*
+  Utilizar para los tests
+  public Hecho(String titulo, String descripcion, String categoria, double latitud, double longitud, LocalDate fechaAcontecimiento, LocalDate fechaCarga, Origen origen) {
+    this.titulo = titulo;
+    this.descripcion = descripcion;
+    this.categoria = categoria;
+    this.latitud = latitud;
+    this.longitud = longitud;
+    this.fechaAcontecimiento = fechaAcontecimiento;
+    this.fechaCarga = fechaCarga;
+    this.origen = origen;
+    this.visible = true; // Por defecto todos los hechos nuevos arrancan visibles
 }
+  */
+  }

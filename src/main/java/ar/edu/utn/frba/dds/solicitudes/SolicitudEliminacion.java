@@ -1,4 +1,6 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.solicitudes;
+
+import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public class SolicitudEliminacion {
   private Hecho hecho;
