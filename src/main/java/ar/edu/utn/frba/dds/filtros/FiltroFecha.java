@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public class FiltroFecha implements Filtro {
-  private LocalDate fechaBuscada;
+  private final LocalDate fechaBuscada;
 
   public FiltroFecha(LocalDate fechaBuscada) {
     this.fechaBuscada = fechaBuscada;

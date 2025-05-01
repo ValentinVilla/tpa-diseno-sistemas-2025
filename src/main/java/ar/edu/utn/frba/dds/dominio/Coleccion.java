@@ -1,14 +1,22 @@
 package ar.edu.utn.frba.dds.dominio;
 
-import java.util.Objects;
 import java.util.List;
+
+import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.*;
 
 public class Coleccion {
   private final String titulo;
   private final String descripcion;
-  private final Fuente fuente;
-  private Filtro criterioPertenencia = new FiltroCategoria("General");
+  private final Fuente fuente; //
+  private Filtro criterioPertenencia;
+
+  public Coleccion(ColeccionBuilder builder) {
+    this.titulo = builder.getTitulo();
+    this.descripcion = builder.getDescripcion();
+    this.fuente = builder.getFuente();
+    this.criterioPertenencia = builder.getCriterio();
+  }
 
   public List<Hecho> getHechos() {
     HechosAlmacenados hechos = HechosAlmacenados.instance();
@@ -17,72 +25,19 @@ public class Coleccion {
   }
 
   public void mostrarHechos() {
-    getHechos().stream().forEach(hecho -> System.out.println(hecho));
+    getHechos().forEach(System.out::println);
   }
 
   public List<Hecho> filtrarHechos(Filtro filtro) {
-    return getHechos().stream().filter(hecho -> filtro.cumple(hecho)).toList();
+    return getHechos().stream().filter(filtro::cumple).toList();
   }
 
   public void mostrarHechosFiltrados(Filtro filtro) {
-    filtrarHechos(filtro).stream().forEach(hecho -> System.out.println(hecho));
+    filtrarHechos(filtro).forEach(System.out::println);
   }
 
   public void setFiltro(Filtro filtro) {
     this.criterioPertenencia = filtro;
-  }
-
-  private Coleccion(Builder builder) {
-    this.titulo = builder.titulo;
-    this.descripcion = builder.descripcion;
-    this.fuente = builder.fuente;
-    this.criterioPertenencia = builder.criterio;
-  }
-
-  public static class Builder {
-    private String titulo;
-    private String descripcion;
-    private Fuente fuente;
-    private Filtro criterio;
-
-    public Builder titulo(String titulo) {
-      this.titulo = validateNotNullOrEmpty(titulo, "El título no puede ser nulo o vacío");
-      return this;
-    }
-
-    public Builder descripcion(String descripcion) {
-      this.descripcion = validateNotNullOrEmpty(descripcion, "La descripcion no puede ser nula o vacía");
-      return this;
-    }
-
-    public Builder fuente(Fuente fuente) {
-      Objects.requireNonNull(fuente, "La fuente no puede ser nula");
-      this.fuente = fuente;
-      return this;
-    }
-
-    public Builder criterio(Filtro criterio) {
-      Objects.requireNonNull(criterio, "El criterio no puede ser nulo");
-      this.criterio = criterio;
-      return this;
-    }
-
-    public Coleccion build() {
-      return new Coleccion(this);
-    }
-
-    private String validateNotNullOrEmpty(String value, String errorMessage) {
-      if (value == null || value.isEmpty()) {
-        throw new CampoInvalido(errorMessage);
-      }
-      return value;
-    }
-  }
-
-  public static class CampoInvalido extends RuntimeException {
-    public CampoInvalido(String message) {
-      super(message);
-    }
   }
 
   public String getTitulo() {

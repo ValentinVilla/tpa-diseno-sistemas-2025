@@ -6,7 +6,7 @@ import java.util.List;
 public class HechosAlmacenados {
   private static final HechosAlmacenados INSTANCE = new HechosAlmacenados();
 
-  private List<Hecho> hechosAlmacenados;
+  private final List<Hecho> hechosAlmacenados;
 
   private HechosAlmacenados() {
     this.hechosAlmacenados = new ArrayList<>();

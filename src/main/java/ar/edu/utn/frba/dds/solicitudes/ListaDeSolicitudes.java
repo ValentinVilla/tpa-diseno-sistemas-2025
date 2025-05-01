@@ -6,7 +6,7 @@ import java.util.List;
 public class ListaDeSolicitudes {
   private static final ListaDeSolicitudes INSTANCE = new ListaDeSolicitudes();
 
-  private List<SolicitudEliminacion> listaDeSolicitudesDeEliminacion;
+  private final List<SolicitudEliminacion> listaDeSolicitudesDeEliminacion;
 
   private ListaDeSolicitudes() {
     this.listaDeSolicitudesDeEliminacion = new ArrayList<>();
@@ -24,4 +24,3 @@ public class ListaDeSolicitudes {
     this.listaDeSolicitudesDeEliminacion.add(solicitud);
   }
 }
-

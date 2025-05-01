@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.solicitudes;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public class SolicitudEliminacion {
-  private Hecho hecho;
+  private final Hecho hecho;
   private String textoFundamentacion;
   //private EstadoSolicitud estado;
 
@@ -16,5 +16,4 @@ public class SolicitudEliminacion {
     this.hecho = hecho;
     this.textoFundamentacion = textoFundamentacion;
   }
-
 }

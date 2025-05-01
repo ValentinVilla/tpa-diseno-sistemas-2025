@@ -3,10 +3,10 @@ package ar.edu.utn.frba.dds.filtros;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public class FiltroUbicacion implements Filtro {
-    private double latitudMin;
-    private double latitudMax;
-    private double longitudMin;
-    private double longitudMax;
+    private final double latitudMin;
+    private final double latitudMax;
+    private final double longitudMin;
+    private final double longitudMax;
 
     public FiltroUbicacion(double latitudMin, double latitudMax, double longitudMin, double longitudMax) {
       this.latitudMin = latitudMin;
