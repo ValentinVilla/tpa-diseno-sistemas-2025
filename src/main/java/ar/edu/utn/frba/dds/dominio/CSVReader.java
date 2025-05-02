@@ -14,10 +14,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CSVReader {
-  public void leerLote(String fuente, Consumer<Hecho> procesador) {
+  public void leerLote(String fuente, String categoria, Consumer<Hecho> procesador) {
     try {
       String path = "src/main/java/ar/edu/utn/frba/dds/files" + fuente;
       Scanner input = new Scanner(new File(path));
+
+      //De acuerdo a la categoria hay que diferenciar como va leer
 
       Set<String> camposImportantes = Set.of("fecha", "municipio", "lat", "lng");
       Map<String, Integer> indices = new HashMap<>();
@@ -31,7 +33,7 @@ public class CSVReader {
 
       while (input.hasNextLine()) {
         String linea = input.nextLine();
-        Hecho hecho = prepararHecho(linea, indices, camposImportantes);
+        Hecho hecho = prepararHecho(linea, categoria, indices, camposImportantes);
         procesador.accept(hecho); // Se procesa el hecho en el momento
       }
 
@@ -42,7 +44,7 @@ public class CSVReader {
     }
   }
 
-  private Hecho prepararHecho(String registro, Map<String, Integer> indices, Set<String> camposImportantes) {
+  private Hecho prepararHecho(String registro, String categoria, Map<String, Integer> indices, Set<String> camposImportantes) {
     String[] campos = registro.split(",");
 
     String municipio = obtenerCampo(campos, indices.get("municipio"));
@@ -87,6 +89,7 @@ public class CSVReader {
     return new HechoBuilder()
             .titulo(titulo)
             .descripcion(descripcion.toString())
+            .categoria(categoria)
             .latitud(latParsed)
             .longitud(lngParsed)
             .fechaAcontecimiento(fechaHecho)

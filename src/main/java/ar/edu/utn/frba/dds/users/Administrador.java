@@ -28,11 +28,12 @@ public class Administrador extends Contribuyente{
     ListaDeSolicitudes.instance().sacarSolicitud(solicitud);
   }
 
-  public void mostrarHechosDesdeFuente(String fuente) {
+  public void mostrarHechosDesdeFuente(String fuente, String categoria) {
     CSVReader reader = new CSVReader();
-    reader.leerLote(fuente, hecho -> {
+    reader.leerLote(fuente, categoria, hecho -> {
       System.out.println("Título: " + hecho.getTitulo());
       System.out.println("Descripcion: " + hecho.getDescripcion());
+      System.out.println("Categoria: "+ hecho.getCategoria());
       System.out.println("Latitud: " + hecho.getLatitud());
       System.out.println("Longitud: " + hecho.getLongitud());
       System.out.println("---------------------------------------------------");
