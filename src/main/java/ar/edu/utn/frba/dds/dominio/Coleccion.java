@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.dominio;
 
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;

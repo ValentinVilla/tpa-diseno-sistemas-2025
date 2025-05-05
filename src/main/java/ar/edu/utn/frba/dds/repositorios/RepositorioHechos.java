@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.dominio.repositorios;
+package ar.edu.utn.frba.dds.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import java.util.ArrayList;

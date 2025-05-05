@@ -1,15 +1,14 @@
 package ar.edu.utn.frba.dds.servicios;
 
 import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Fuente;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.filtros.Filtro;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioColecciones;
+import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ColeccionService {
 

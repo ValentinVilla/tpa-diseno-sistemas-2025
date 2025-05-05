@@ -1,0 +1,21 @@
+package ar.edu.utn.frba.dds.fuentes;
+
+import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.Origen;
+
+import java.util.stream.Stream;
+
+public class FuenteEstatica implements Fuente {
+  private final String pathArchivo;
+  private final String categoria;
+
+  public FuenteEstatica(String pathArchivo, String categoria) {
+    this.pathArchivo = pathArchivo;
+    this.categoria = categoria;
+  }
+
+  @Override
+  public  Stream<Hecho> cargarHechos() {
+    return new LectorCSV().leerDesde(pathArchivo, categoria);
+  }
+}

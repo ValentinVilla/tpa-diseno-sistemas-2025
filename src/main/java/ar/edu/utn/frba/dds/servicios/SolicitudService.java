@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.servicios;
 
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.solicitudes.*;
 
 public class SolicitudService {

@@ -1,10 +1,9 @@
 package ar.edu.utn.frba.dds.servicios;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 
 import java.util.List;
-import java.util.Optional;
 
 public class HechoService {
 

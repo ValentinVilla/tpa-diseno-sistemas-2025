@@ -55,4 +55,12 @@ public class Hecho {
   public String getDescripcion() {
     return this.descripcion;
   }
+
+  public LocalDate getFechaCarga() {
+    return this.fechaCarga;
+  }
+
+  public LocalDate getFechaAcontecimiento(){
+    return this.fechaAcontecimiento;
+  }
 }

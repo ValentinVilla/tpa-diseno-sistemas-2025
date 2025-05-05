@@ -1,10 +1,9 @@
 package ar.edu.utn.frba.dds.dominio.builders;
 
-import ar.edu.utn.frba.dds.dominio.repositorios.RepositorioSolicitudes;
 import java.util.Objects;
 
 import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Fuente;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 
 public class ColeccionBuilder {
