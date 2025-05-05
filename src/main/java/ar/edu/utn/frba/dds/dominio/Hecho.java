@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import java.time.LocalDate;
 
 public class Hecho {
+  //TODO: agregar ID
   private final String titulo;
   private final String descripcion;
   private final String categoria;

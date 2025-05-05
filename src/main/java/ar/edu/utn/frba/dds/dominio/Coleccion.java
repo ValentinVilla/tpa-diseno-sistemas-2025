@@ -1,14 +1,15 @@
 package ar.edu.utn.frba.dds.dominio;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
-import ar.edu.utn.frba.dds.filtros.*;
+import ar.edu.utn.frba.dds.filtros.Filtro;
 
 public class Coleccion {
   private final String titulo;
   private final String descripcion;
-  private final Fuente fuente; //
+  private final Fuente fuente;
   private Filtro criterioPertenencia;
 
   public Coleccion(ColeccionBuilder builder) {
@@ -18,22 +19,12 @@ public class Coleccion {
     this.criterioPertenencia = builder.getCriterio();
   }
 
-  public List<Hecho> getHechos() {
-    HechosAlmacenados hechos = HechosAlmacenados.instance();
-    List<Hecho> listaHechos = hechos.getHechosAlmacenados();
-    return listaHechos.stream().filter(hecho -> criterioPertenencia.cumple(hecho)).toList();
+  public List<Hecho> mostrarHechos(List<Hecho> hechos) {
+    return hechos.stream().filter(hecho -> criterioPertenencia.cumple(hecho)).toList();
   }
 
-  public void mostrarHechos() {
-    getHechos().forEach(System.out::println);
-  }
-
-  public List<Hecho> filtrarHechos(Filtro filtro) {
-    return getHechos().stream().filter(filtro::cumple).toList();
-  }
-
-  public void mostrarHechosFiltrados(Filtro filtro) {
-    filtrarHechos(filtro).forEach(System.out::println);
+  public List<Hecho> hechosFiltrados(List<Hecho> hechos, Filtro filtro) {
+    return mostrarHechos(hechos).stream().filter(filtro::cumple).toList();
   }
 
   public void setFiltro(Filtro filtro) {
