@@ -1,42 +1,36 @@
 @startuml
-
-
-
 skinparam shadowing true
-
 
 class Coleccion {
   - titulo: String
   - descripcion: String
   - fuente: Fuente
-  - criterio: CriterioPertenencia
+  - criterioPertenencia: FiltroCategoria
   + contiene(hecho: Hecho): boolean
 }
 
 class Administrador {
   - user: String
   - password: String
-  + crearColeccion()
+  + crearColeccion(titulo, descripcion, fuente, criterio)
+  + aceptarSolicitud(SolicitudEliminacion solicitud)
+  + rechazarSolicitud(SolicitudEliminacion solicitud)
   + importarHecho(archivo: FuenteCSV)
 }
 
 enum Origen {
-  CSV
-  MANUAL
-  CONTRIBUYENTE
-}
-
-class CriterioPertenencia {
-  + cumple(hecho: Hecho): boolean
+  CARGAMANUAL,
+  DATASET,
+  CONTRIBUYENTE;
 }
 
 abstract class Fuente {
-  + obtenerHechos(): List<Hecho>
+  + cargarHechos(): Stream<Hecho>
 }
 
-class FuenteCSV {
-  - path: string
-  + obtenerHechos(): List<Hecho>
+class FuenteEstatica {
+  - pathArchivo: string
+  + cargarHechos(): Stream<Hecho>
 }
 class SolicitudEliminacion {
   - hecho: Hecho
@@ -49,27 +43,36 @@ enum EstadoSolicitud {
   ACEPTADA
   RECHAZADA
 }
-interface Contribuyente{}
 
-class ContribuyenteIdentificado {
-  - nombre: String
-  - apellido: String
-  - edad: int
-}
+class Contribuyente {
+   - solicitarEliminacion(Hecho hecho, String textoFundamentacion)
+ }
 
 class Visualizador {
-  + navegarPorHechos(coleccion: Coleccion, filtro: Filtro)
+  + navegarUnaColeccion(Coleccion coleccion)
+  + navegarUnaColeccionSegunUnFiltro(Coleccion coleccion, Filtro filtro)
 }
 
-enum Filtro {
-  TITULO
-  DESCRIPCION
-  CATEGORIA
-  LATITUD
-  LONGITUD
-  FECHA_ACONTECIMIENTO
-  FECHA_CARGA
-  ORIGEN
+interface Filtro {
+  +boolean cumple(Hecho hecho);
+ }
+
+class FiltroCategoria {
+- categoria: String
++ cumple(hecho: Hecho): boolean
+}
+
+class FiltroFecha {
+  - fechaBuscada : LocalDate
+  + cumple(hecho: Hecho): boolean
+}
+
+class FiltroUbicacion {
+  -latitudMin: Double
+  -latitudMax: Double
+  -longitudMin: Double
+  -longitudMax: Double
+  +cumple(hecho: Hecho): boolean
 }
 
 abstract class Hecho {
@@ -83,34 +86,26 @@ abstract class Hecho {
   - origen: Origen
 }
 
-class HechoConMultimedia {
-  - urls: List<String>
-}
-
-class HechoDeTexto{}
-
-
-Administrador --> Coleccion
-Administrador --> SolicitudEliminacion
-Administrador ..|> Contribuyente
-
 Coleccion --> Hecho
 Coleccion --> Fuente
-Coleccion --> CriterioPertenencia
 
 Hecho --> Origen
-HechoConMultimedia ..|> Hecho
-HechoDeTexto ..|> Hecho
 
-FuenteCSV ..|> Fuente
+FuenteEstatica ..|> Fuente
 
-Contribuyente --> Hecho
+Visualizador --> Hecho
+Visualizador --> Filtro
+Visualizador --> Coleccion
 Contribuyente --> SolicitudEliminacion
-Contribuyente --> Filtro
-ContribuyenteIdentificado ..|> Contribuyente
-Visualizador ..|> Contribuyente
+
+Contribuyente --|> Visualizador
+Administrador --|> Contribuyente
 
 SolicitudEliminacion --> Hecho
 SolicitudEliminacion --> EstadoSolicitud
+
+FiltroCategoria ..|> Filtro
+FiltroFecha ..|> Filtro
+FiltroUbicacion ..|> Filtro
 
 @enduml
