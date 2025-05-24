@@ -8,7 +8,6 @@ import ar.edu.utn.frba.dds.fuentes.LectorCSV;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.servicios.ColeccionService;
-import ar.edu.utn.frba.dds.users.Administrador;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileWriter;
@@ -71,14 +70,7 @@ public class LeerCSVTest {
     RepositorioHechos repoHechos = new RepositorioHechos();
     ColeccionService coleccionService = new ColeccionService(repoColeccion, repoHechos);
 
-    Administrador administrador = new Administrador(coleccionService);
-
-    administrador.crearColeccion(
-        "Ambiente",
-        "Descripción de la colección",
-        fuente,
-        filtro
-    );
+    coleccionService.crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro);
 
     assertNotNull(repoColeccion.obtenerTodas());
   }
