@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,8 +34,7 @@ public class LeerCSVTest {
 
     // Act: leer el archivo
     LectorCSV lector = new LectorCSV();
-    List<Hecho> hechos = lector.leerDesde(tempFile.toString(), "Emergencia")
-        .toList();
+    List<Hecho> hechos = lector.leerDesde(tempFile.toString(), "Emergencia");
 
     // Assert: verificar los datos leídos
     assertEquals(2, hechos.size());

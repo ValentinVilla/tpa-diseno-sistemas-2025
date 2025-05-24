@@ -7,14 +7,13 @@ import com.opencsv.CSVReaderHeaderAware;
 
 import java.io.FileReader;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class LectorCSV {
 
-  public Stream<Hecho> leerDesde(String path, String categoria) {
+  public ArrayList<Hecho> leerDesde(String path, String categoria) {
     try {
       CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(path));
 
@@ -42,8 +41,12 @@ public class LectorCSV {
         }
       };
 
-      return StreamSupport.stream(iterable.spliterator(), false)
-          .map(fila -> crearHechoDesdeMap(fila, categoria));
+      ArrayList<Hecho> hechos = new ArrayList<>();
+      for (Map<String, String> fila : iterable) {
+        hechos.add(crearHechoDesdeMap(fila, categoria));
+      }
+
+      return hechos;
 
     } catch (Exception e) {
       throw new RuntimeException("Error leyendo archivo CSV en " + path, e);

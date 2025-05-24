@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds.fuentes;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;
 
 public class FuenteEstatica implements Fuente {
   private final String pathArchivo;
@@ -15,7 +15,7 @@ public class FuenteEstatica implements Fuente {
   }
 
   @Override
-  public  Stream<Hecho> cargarHechos() {
+  public ArrayList<Hecho> cargarHechos() {
     return new LectorCSV().leerDesde(pathArchivo, categoria);
   }
 }
