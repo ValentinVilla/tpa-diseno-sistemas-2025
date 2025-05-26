@@ -74,6 +74,28 @@ public class LeerCSVTest {
 
     assertNotNull(repoColeccion.obtenerTodas());
   }
+  @Test
+  void hechoConTituloDuplicadoSobrescribeAlAnterior() throws Exception {
+    // Arrange: crear archivo temporal CSV con dos hechos de mismo título
+    Path tempFile = Files.createTempFile("hechos", ".csv");
+    try (FileWriter writer = new FileWriter(tempFile.toFile())) {
+      writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
+      writer.write("Robo,Robo original,-34.6037,-58.3816,2023-08-15\n");
+      writer.write("robo,Robo actualizado,-34.6000,-58.3800,2023-09-01\n"); // mismo título, diferente casing
+    }
 
+    // Act
+    LectorCSV lector = new LectorCSV();
+    List<Hecho> hechos = lector.leerDesde(tempFile.toString(), "Emergencia");
+
+    // Assert
+    assertEquals(1, hechos.size(), "Debe haber solo un hecho (el segundo sobreescribe al primero)");
+
+    Hecho hechoFinal = hechos.get(0);
+    assertEquals("robo", hechoFinal.getTitulo()); // el título del segundo (último leído)
+    assertEquals("Robo actualizado", hechoFinal.getDescripcion());
+    assertEquals(LocalDate.of(2023, 9, 1), hechoFinal.getFechaAcontecimiento());
+    assertEquals(-34.6000, hechoFinal.getLatitud());
+  }
 }
 

@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class LectorCSV {
@@ -41,12 +42,18 @@ public class LectorCSV {
         }
       };
 
-      ArrayList<Hecho> hechos = new ArrayList<>();
+      // Usamos un map para evitar duplicados por título
+      Map<String, Hecho> hechosMap = new LinkedHashMap<>(); // mantiene orden de inserción
+
       for (Map<String, String> fila : iterable) {
-        hechos.add(crearHechoDesdeMap(fila, categoria));
+        Hecho hecho = crearHechoDesdeMap(fila, categoria);
+        if (!hecho.getTitulo().isEmpty()) {
+          String clave = hecho.getTitulo().trim().toLowerCase();
+          hechosMap.put(clave, hecho); // sobrescribe si ya existe
+        }
       }
 
-      return hechos;
+      return new ArrayList<>(hechosMap.values());
 
     } catch (Exception e) {
       throw new RuntimeException("Error leyendo archivo CSV en " + path, e);
