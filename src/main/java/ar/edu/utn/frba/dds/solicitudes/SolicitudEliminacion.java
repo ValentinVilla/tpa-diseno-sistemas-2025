@@ -3,18 +3,18 @@ package ar.edu.utn.frba.dds.solicitudes;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public class SolicitudEliminacion {
-  private final Hecho hecho;
   private final String textoFundamentacion;
   private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
 
-  public SolicitudEliminacion(Hecho hecho, String textoFundamentacion) {
-    this.hecho = hecho;
+  // Eliminado: private final Hecho hecho;
+
+  public SolicitudEliminacion(String textoFundamentacion) {
     this.textoFundamentacion = textoFundamentacion;
   }
 
-  public void aceptar() {
+  public void aceptar(Hecho hecho) {
     this.estado = EstadoSolicitud.ACEPTADA;
-    this.hecho.setVisible(false);
+    hecho.setVisible(false);
   }
 
   public void rechazar() {
@@ -28,9 +28,4 @@ public class SolicitudEliminacion {
   public String getFundamentacion() {
     return this.textoFundamentacion;
   }
-
-  public Hecho getHecho() {
-    return this.hecho;
-  }
 }
-

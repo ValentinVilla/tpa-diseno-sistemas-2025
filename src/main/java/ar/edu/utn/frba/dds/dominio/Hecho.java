@@ -1,8 +1,11 @@
 package ar.edu.utn.frba.dds.dominio;
 
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hecho {
   //TODO: agregar ID
@@ -15,6 +18,8 @@ public class Hecho {
   private final LocalDate fechaCarga;
   private final Origen origen;
   private boolean visible;
+
+  private List<SolicitudEliminacion> solicitudes = new ArrayList<>();
 
   public Hecho(HechoBuilder builder) {
     this.titulo = builder.getTitulo();
@@ -62,5 +67,13 @@ public class Hecho {
 
   public LocalDate getFechaAcontecimiento(){
     return this.fechaAcontecimiento;
+  }
+
+  public void agregarSolicitud(SolicitudEliminacion solicitud) {
+    this.solicitudes.add(solicitud);
+  }
+
+  public List<SolicitudEliminacion> getSolicitudes() {
+    return this.solicitudes;
   }
 }

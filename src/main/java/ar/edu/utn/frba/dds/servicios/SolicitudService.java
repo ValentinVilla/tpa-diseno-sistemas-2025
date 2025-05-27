@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.servicios;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
+import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.solicitudes.*;
 
@@ -14,16 +15,17 @@ public class SolicitudService {
     this.detector = detector;
   }
 
-  public void procesarNuevaSolicitud(SolicitudEliminacion solicitud) {
+  public void procesarNuevaSolicitud(SolicitudEliminacion solicitud, Hecho hecho) {
     if (detector.esSpam(solicitud.getFundamentacion())) {
       solicitud.rechazar();
     }
 
+    hecho.agregarSolicitud(solicitud);
     repositorio.actualizar(solicitud);
   }
 
-  public void aprobarSolicitud(SolicitudEliminacion solicitud) {
-    solicitud.aceptar();
+  public void aprobarSolicitud(SolicitudEliminacion solicitud, Hecho hecho) {
+    solicitud.aceptar(hecho);
     repositorio.actualizar(solicitud);
   }
 

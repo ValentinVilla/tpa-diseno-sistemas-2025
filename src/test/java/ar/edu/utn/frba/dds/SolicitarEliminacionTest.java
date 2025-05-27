@@ -34,11 +34,14 @@ public class SolicitarEliminacionTest {
     RepositorioSolicitudes repo = new RepositorioSolicitudes();
     SolicitudService service = new SolicitudService(repo, detectorSiempreTrue);
 
-    SolicitudEliminacion solicitud = new SolicitudEliminacion(hecho, "Mensaje sospechoso de spam");
+    SolicitudEliminacion solicitud = new SolicitudEliminacion("Mensaje sospechoso de spam");
+    hecho.agregarSolicitud(solicitud);
+    service.procesarNuevaSolicitud(solicitud, hecho);
 
-    service.procesarNuevaSolicitud(solicitud);
+    //reviso la solicitud desde el hecho
+    SolicitudEliminacion solicitudDesdeHecho = hecho.getSolicitudes().get(0);
 
-    assertFalse(solicitud.estaPendiente(), "La solicitud debería haber sido rechazada por spam");
+    assertFalse(solicitudDesdeHecho.estaPendiente(), "La solicitud debería haber sido rechazada por spam");
   }
 
   @Test
@@ -59,10 +62,14 @@ public class SolicitarEliminacionTest {
     RepositorioSolicitudes repo = new RepositorioSolicitudes();
     SolicitudService service = new SolicitudService(repo, detectorSiempreFalse);
 
-    SolicitudEliminacion solicitud = new SolicitudEliminacion(hecho, "Texto valido y claro");
+    SolicitudEliminacion solicitud = new SolicitudEliminacion( "Texto valido y claro");
 
-    service.procesarNuevaSolicitud(solicitud);
+    hecho.agregarSolicitud(solicitud);
+    service.procesarNuevaSolicitud(solicitud, hecho);
 
-    assertTrue(solicitud.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");
+    //reviso la solicitud desde el hecho
+    SolicitudEliminacion solicitudDesdeHecho = hecho.getSolicitudes().get(0);
+
+    assertTrue(solicitudDesdeHecho.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");
   }
 }
