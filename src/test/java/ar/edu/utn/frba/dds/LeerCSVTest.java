@@ -1,13 +1,17 @@
 package ar.edu.utn.frba.dds;
 
-import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.fuentes.FuenteEstatica;
+import ar.edu.utn.frba.dds.fuentes.FuenteProxy;
+import ar.edu.utn.frba.dds.fuentes.FuenteRemota;
 import ar.edu.utn.frba.dds.fuentes.LectorCSV;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.servicios.ColeccionService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileWriter;
@@ -15,9 +19,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 
 public class LeerCSVTest {
@@ -74,6 +86,7 @@ public class LeerCSVTest {
 
     assertNotNull(repoColeccion.obtenerTodas());
   }
+
   @Test
   void hechoConTituloDuplicadoSobrescribeAlAnterior() throws Exception {
     // Arrange: crear archivo temporal CSV con dos hechos de mismo título
@@ -98,4 +111,3 @@ public class LeerCSVTest {
     assertEquals(-34.6000, hechoFinal.getLatitud());
   }
 }
-

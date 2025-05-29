@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RepositorioHechos {
-  private List<Hecho> hechos = new ArrayList<>();
+  private final List<Hecho> hechos = new ArrayList<>();
 
   public List<Hecho> obtenerTodos() {
     return new ArrayList<>(hechos);

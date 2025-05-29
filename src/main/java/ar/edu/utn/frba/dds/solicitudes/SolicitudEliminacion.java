@@ -5,11 +5,15 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 public class SolicitudEliminacion {
   private final String textoFundamentacion;
   private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
+  private final Hecho hecho;
 
-  // Eliminado: private final Hecho hecho;
-
-  public SolicitudEliminacion(String textoFundamentacion) {
+  public SolicitudEliminacion(String textoFundamentacion, Hecho hecho) {
     this.textoFundamentacion = textoFundamentacion;
+    this.hecho = hecho;
+  }
+
+  public Hecho getHecho() {
+    return hecho;
   }
 
   public void aceptar(Hecho hecho) {
