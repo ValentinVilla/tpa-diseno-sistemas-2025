@@ -1,8 +1,6 @@
 package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.Origen;
-
 import java.util.ArrayList;
 
 public class FuenteEstatica implements Fuente {

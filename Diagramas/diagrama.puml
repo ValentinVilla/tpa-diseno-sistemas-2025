@@ -9,15 +9,6 @@ class Coleccion {
   + contiene(hecho: Hecho): boolean
 }
 
-class Administrador {
-  - user: String
-  - password: String
-  + crearColeccion(titulo, descripcion, fuente, criterio)
-  + aceptarSolicitud(SolicitudEliminacion solicitud)
-  + rechazarSolicitud(SolicitudEliminacion solicitud)
-  + importarHecho(archivo: FuenteCSV)
-}
-
 enum Origen {
   CARGAMANUAL,
   DATASET,
@@ -42,15 +33,6 @@ enum EstadoSolicitud {
   PENDIENTE
   ACEPTADA
   RECHAZADA
-}
-
-class Contribuyente {
-   - solicitarEliminacion(Hecho hecho, String textoFundamentacion)
- }
-
-class Visualizador {
-  + navegarUnaColeccion(Coleccion coleccion)
-  + navegarUnaColeccionSegunUnFiltro(Coleccion coleccion, Filtro filtro)
 }
 
 interface Filtro {
@@ -92,14 +74,6 @@ Coleccion --> Fuente
 Hecho --> Origen
 
 FuenteEstatica ..|> Fuente
-
-Visualizador --> Hecho
-Visualizador --> Filtro
-Visualizador --> Coleccion
-Contribuyente --> SolicitudEliminacion
-
-Contribuyente --|> Visualizador
-Administrador --|> Contribuyente
 
 SolicitudEliminacion --> Hecho
 SolicitudEliminacion --> EstadoSolicitud

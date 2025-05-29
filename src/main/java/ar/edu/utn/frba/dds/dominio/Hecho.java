@@ -3,9 +3,10 @@ package ar.edu.utn.frba.dds.dominio;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Hecho {
-  //TODO: agregar ID
+  private final String id;
   private final String titulo;
   private final String descripcion;
   private final String categoria;
@@ -17,6 +18,7 @@ public class Hecho {
   private boolean visible;
 
   public Hecho(HechoBuilder builder) {
+    this.id = UUID.randomUUID().toString();
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.categoria = builder.getCategoria();
@@ -26,6 +28,10 @@ public class Hecho {
     this.fechaCarga = builder.getFechaCarga();
     this.origen = builder.getOrigen();
     this.visible = builder.isVisible();
+  }
+
+  public String getId() {
+    return id;
   }
 
   public void setVisible(boolean visible) {
