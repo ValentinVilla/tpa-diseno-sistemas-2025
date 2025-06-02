@@ -20,7 +20,7 @@ public class Hecho {
   private final Origen origen;
   private boolean visible;
   private LocalDate fechaModificacion;
-  private boolean editable;
+  private boolean editable; //Entiendo lo que hace, pero me parece que con solo el metodo de esEditable no hace falta q guarde ese valor de si es o no editable
   private int idContribuyenteCreador;
 
 
@@ -40,12 +40,12 @@ public class Hecho {
     this.visible = builder.isVisible();
   }
 
-  public String getId() {
-    return id;
-  }
-
   public void setVisible(boolean visible) {
     this.visible = visible;
+  }
+
+  public String getId() {
+    return id;
   }
 
   public String getCategoria() {
@@ -115,15 +115,33 @@ public class Hecho {
     this.fechaModificacion = LocalDate.now();
   }
 
-  public boolean esEditableActualmente() {
-    if (!editable) return false;
+  public boolean esEditableActualmente() {//si solo uso este boolean no es necesario el atributo editable :)
+    if (!editable) return false; //lo sacaria
 
     long diasDesdeCarga = ChronoUnit.DAYS.between(fechaCarga, LocalDate.now());
     if (diasDesdeCarga > 7) {
-      this.editable = false;
+      this.editable = false; //lo sacaria
       return false;
     }
 
+    return true;
+  }
+
+  //Cosas que pondria tobi, pero a charlar
+  public boolean esEditableActualmenteSub() {//si solo uso este boolean no es necesario el atributo editable :)a
+    long diasDesdeCarga = ChronoUnit.DAYS.between(fechaCarga, LocalDate.now());
+    if (diasDesdeCarga > 7) {
+      return false;
+    }
+    else
+      return true;
+  }
+
+  public boolean fueSubidoPorContribuyenteRegistrado(){ //podriamos poner que cuando un contribuyente que no esta registrado sube un hecho y su id es negativo o alguna logica que nos permita diferenciar los contribuyentes registrados de los no registrados
+    if (this.idContribuyenteCreador <= 0) {
+      return false;
+    }
+    else
     return true;
   }
 

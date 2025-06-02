@@ -12,9 +12,6 @@ public class SolicitudEliminacion {
     this.hecho = hecho;
   }
 
-  public Hecho getHecho() {
-    return hecho;
-  }
 
   public void aceptar(Hecho hecho) {
     this.estado = EstadoSolicitud.ACEPTADA;
@@ -32,4 +29,13 @@ public class SolicitudEliminacion {
   public String getFundamentacion() {
     return this.textoFundamentacion;
   }
+
+  public Hecho getHecho() {
+    return hecho;
+  }
+
+  public EstadoSolicitud getEstado() {
+    return estado;
+  }
+
 }

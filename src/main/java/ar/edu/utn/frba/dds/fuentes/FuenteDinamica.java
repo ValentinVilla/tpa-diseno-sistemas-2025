@@ -16,11 +16,11 @@ public class FuenteDinamica {
   public void subirHecho(Hecho hecho) {
     hecho.setEditable(false);
     repositorioHechos.guardar(this, hecho);
-  }
+  }//este subir hechos lo sacaria dejaria solo el otro asumiendo q si no es registrado ese numero de idContribuyenteCreador es -1
 
   // Caso 2: usuario registrado
   public void subirHecho(int idContribuyenteCreador, Hecho hecho) {
-    hecho.setEditable(true); // editable solo por 3 semanas
+    hecho.setEditable(true); // editable solo por 3 semanas (lo sacaria)
     hecho.setIdContribuyenteCreador(idContribuyenteCreador);
     repositorioHechos.guardar(this, hecho);
   }
@@ -34,8 +34,8 @@ public class FuenteDinamica {
     if (!puedeModificar(idContribuyenteCreador, hechoOriginal)) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     }
-
-    hechoOriginal.actualizarDesde(datosNuevos);
+    else
+      hechoOriginal.actualizarDesde(datosNuevos);
   }
 
   public ArrayList<Hecho> cargarHechos(){
