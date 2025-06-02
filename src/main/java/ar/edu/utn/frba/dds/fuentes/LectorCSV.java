@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class LectorCSV {
 
-  public ArrayList<Hecho> leerDesde(String path, String categoria) {
+  public ArrayList<Hecho> leerDesde(String path, String categoria, ArrayList<String> campos) {
     try {
       CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(path));
 
@@ -46,7 +46,7 @@ public class LectorCSV {
       Map<String, Hecho> hechosMap = new LinkedHashMap<>(); // mantiene orden de inserción
 
       for (Map<String, String> fila : iterable) {
-        Hecho hecho = crearHechoDesdeMap(fila, categoria);
+        Hecho hecho = crearHechoDesdeMap(fila, categoria, campos);
         if (!hecho.getTitulo().isEmpty()) {
           String clave = hecho.getTitulo().trim().toLowerCase();
           hechosMap.put(clave, hecho); // sobrescribe si ya existe
@@ -61,12 +61,12 @@ public class LectorCSV {
   }
 
 
-  private Hecho crearHechoDesdeMap(Map<String, String> fila, String categoria) {
-    String titulo = fila.getOrDefault("Título", "").trim();
-    String descripcion = fila.getOrDefault("Descripción", "").trim();
-    String latitud = fila.getOrDefault("Latitud", "").trim();
-    String longitud = fila.getOrDefault("Longitud", "").trim();
-    String fechaHecho = fila.getOrDefault("Fecha del hecho", "").trim();
+  private Hecho crearHechoDesdeMap(Map<String, String> fila, String categoria, ArrayList<String> campos) {
+    String titulo = fila.getOrDefault(campos.get(0), "").trim();
+    String descripcion = fila.getOrDefault(campos.get(1), "").trim();
+    String latitud = fila.getOrDefault(campos.get(2), "").trim();
+    String longitud = fila.getOrDefault(campos.get(3), "").trim();
+    String fechaHecho = fila.getOrDefault(campos.get(4), "").trim();
 
     return new HechoBuilder()
         .titulo(titulo)

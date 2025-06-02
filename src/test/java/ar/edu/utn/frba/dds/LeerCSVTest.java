@@ -38,14 +38,19 @@ public class LeerCSVTest {
     // Arrange: crear archivo temporal CSV
     Path tempFile = Files.createTempFile("hechos", ".csv");
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
-      writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
+      writer.write("titulo_custom,desc_custom,lat,lon,fecha\n");
       writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15\n");
       writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16\n");
     }
 
+    // Ingresamos los campos de interes
+    ArrayList<String> campos = new ArrayList<>(List.of(
+        "titulo_custom", "desc_custom", "lat", "lon", "fecha"
+    ));
+
     // Act: leer el archivo
     LectorCSV lector = new LectorCSV();
-    List<Hecho> hechos = lector.leerDesde(tempFile.toString(), "Emergencia");
+    List<Hecho> hechos = lector.leerDesde(tempFile.toString(), "Emergencia", campos);
 
     // Assert: verificar los datos leídos
     assertEquals(2, hechos.size());
@@ -75,8 +80,12 @@ public class LeerCSVTest {
         throw new RuntimeException(e);
     }
 
+    ArrayList<String> campos = new ArrayList<>(List.of(
+        "Título", "Descripción", "Latitud", "Longitud", "Fecha del hecho"
+    ));
+
     FiltroCategoria filtro = new FiltroCategoria("Emergencia");
-    FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia");
+    FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
 
     RepositorioColecciones repoColeccion = new RepositorioColecciones();
     RepositorioHechos repoHechos = new RepositorioHechos();
@@ -97,11 +106,13 @@ public class LeerCSVTest {
       writer.write("robo,Robo actualizado,-34.6000,-58.3800,2023-09-01\n"); // mismo título, diferente casing
     }
 
-    // Act
-    LectorCSV lector = new LectorCSV();
-    List<Hecho> hechos = lector.leerDesde(tempFile.toString(), "Emergencia");
+    ArrayList<String> campos = new ArrayList<>(List.of(
+        "Título", "Descripción", "Latitud", "Longitud", "Fecha del hecho"
+    ));
 
-    // Assert
+    FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
+    List<Hecho> hechos = fuente.cargarHechos();
+
     assertEquals(1, hechos.size(), "Debe haber solo un hecho (el segundo sobreescribe al primero)");
 
     Hecho hechoFinal = hechos.get(0);

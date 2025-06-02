@@ -6,14 +6,16 @@ import java.util.ArrayList;
 public class FuenteEstatica implements Fuente {
   private final String pathArchivo;
   private final String categoria;
+  private final ArrayList<String> campos;
 
-  public FuenteEstatica(String pathArchivo, String categoria) {
+  public FuenteEstatica(String pathArchivo, String categoria, ArrayList<String> campos) {
     this.pathArchivo = pathArchivo;
     this.categoria = categoria;
+    this.campos = campos;
   }
 
   @Override
   public ArrayList<Hecho> cargarHechos() {
-    return new LectorCSV().leerDesde(pathArchivo, categoria);
+    return new LectorCSV().leerDesde(pathArchivo, categoria, campos);
   }
 }
