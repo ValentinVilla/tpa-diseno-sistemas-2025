@@ -42,7 +42,6 @@ public class FuenteDinamicaTest {
     Hecho hecho = crearHecho("hecho-anonimo");
     fuente.subirHecho(hecho);
 
-    assertFalse(hecho.isEditable());
     assertEquals(1, fuente.cargarHechos().size());
   }
 
@@ -51,7 +50,6 @@ public class FuenteDinamicaTest {
     Hecho hecho = crearHecho("hecho-registrado");
     fuente.subirHecho(42, hecho);
 
-    assertTrue(hecho.isEditable());
     assertEquals(42, hecho.getIdContribuyenteCreador());
   }
 

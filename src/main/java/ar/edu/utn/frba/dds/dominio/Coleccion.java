@@ -20,14 +20,12 @@ public class Coleccion {
     this.criterioPertenencia = builder.getCriterio();
   }
 
-  public List<Hecho> mostrarHechos(List<Hecho> hechos) {
-    /*
-    Acá la propuesta del profe era:
-    coleccion.java: return fuente.cargarHechos().stream().filter(hecho -> criterioPertenencia.cumple(hecho)).toList();
+  public List<Hecho> mostrarHechos() {
 
-    creo que refiere a que los hechos se listen de su respectiva fuente pero mientras tanto elimino los streams como pidio
-     */
+    List<Hecho> hechos = fuente.cargarHechos();
+
     List<Hecho> resultado = new ArrayList<>();
+
     for (Hecho hecho : hechos) {
       if (criterioPertenencia.cumple(hecho)) {
         resultado.add(hecho);
@@ -36,9 +34,9 @@ public class Coleccion {
     return resultado;
   }
 
-  public List<Hecho> hechosFiltrados(List<Hecho> hechos, Filtro filtro) {
+  public List<Hecho> hechosFiltrados(Filtro filtro) {
     List<Hecho> resultado = new ArrayList<>();
-    for (Hecho hecho : mostrarHechos(hechos)) {
+    for (Hecho hecho : mostrarHechos()) {
       if (filtro.cumple(hecho)) {
         resultado.add(hecho);
       }

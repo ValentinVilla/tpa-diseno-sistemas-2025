@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 
 import java.util.ArrayList;
 
-public class FuenteDinamica {
+public class FuenteDinamica implements Fuente {//creo q faltaba poner el implements Fuente!!!
   private final RepositorioHechos repositorioHechos;
 
   public FuenteDinamica(String nombreFuente, RepositorioHechos repositorioHechos) {
@@ -14,20 +14,19 @@ public class FuenteDinamica {
 
   // Caso 1: usuario anónimo
   public void subirHecho(Hecho hecho) {
-    hecho.setEditable(false);
+    hecho.setIdContribuyenteCreador(-1);//representa un usuario anonimo
     repositorioHechos.guardar(this, hecho);
-  }//este subir hechos lo sacaria dejaria solo el otro asumiendo q si no es registrado ese numero de idContribuyenteCreador es -1
+  }
 
   // Caso 2: usuario registrado
   public void subirHecho(int idContribuyenteCreador, Hecho hecho) {
-    hecho.setEditable(true); // editable solo por 3 semanas (lo sacaria)
     hecho.setIdContribuyenteCreador(idContribuyenteCreador);
     repositorioHechos.guardar(this, hecho);
   }
 
   public boolean puedeModificar(int idContribuyenteCreador, Hecho hecho) {
     return hecho.getIdContribuyenteCreador()==(idContribuyenteCreador)
-        && hecho.esEditableActualmente();
+        && hecho.estaDentroDePlazo();
   }
 
   public void modificarHecho(int idContribuyenteCreador, Hecho hechoOriginal, Hecho datosNuevos) {

@@ -3,7 +3,7 @@ package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.ClienteMetaMapa;
+import ar.edu.utn.frba.dds.clientes.ClienteMetaMapa;
 import ar.edu.utn.frba.dds.fuentes.FuenteMetaMapa;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import org.junit.jupiter.api.BeforeEach;

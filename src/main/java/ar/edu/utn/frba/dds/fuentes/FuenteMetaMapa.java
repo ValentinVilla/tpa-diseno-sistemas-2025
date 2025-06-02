@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.clientes.ClienteMetaMapa;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
@@ -17,7 +18,7 @@ public class FuenteMetaMapa implements FuenteRemota {
   @Override
   public void procesarHechosDesde(String urlBase, ParametrosConsulta parametros, Consumer<Hecho> procesador) {
     List<Hecho> hechos = cliente.obtenerHechos(urlBase, parametros);
-   procesar(hechos, procesador);
+    procesar(hechos, procesador);
   }
 
   public void procesarHechosColeccionDesde(String urlBase, String idColeccion, ParametrosConsulta parametros, Consumer<Hecho> procesador) {

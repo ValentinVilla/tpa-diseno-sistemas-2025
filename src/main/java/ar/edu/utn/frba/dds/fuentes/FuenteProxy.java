@@ -21,7 +21,7 @@ public class FuenteProxy implements Fuente {
     this.fuenteRemota = Objects.requireNonNull(fuenteRemota);
     this.parametros = Objects.requireNonNull(parametros);
     this.idColeccion = idColeccion;
-  }
+  }//pq hay 2 constructores??
 
   @Override
   public ArrayList<Hecho> cargarHechos() {
@@ -34,4 +34,13 @@ public class FuenteProxy implements Fuente {
     return hechos;
   }
 }
-
+//public void procesarHechosDesde(String urlBase, ParametrosConsulta parametros, Consumer<Hecho> procesador) {
+//  List<Hecho> hechos = cliente.obtenerHechos(urlBase, parametros);
+//  LocalDateTime haceUnaHora = LocalDateTime.now().minusHours(1);
+//
+//  List<Hecho> hechosRecientes = hechos.stream()
+//    .filter(hecho -> hecho.getFechaCarga().isAfter(haceUnaHora))
+//    .collect(Collectors.toList());
+//
+//  hechosRecientes.forEach(procesador);
+//}

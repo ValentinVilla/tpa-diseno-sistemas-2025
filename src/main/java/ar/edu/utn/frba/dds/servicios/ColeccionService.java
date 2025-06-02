@@ -39,11 +39,11 @@ public class ColeccionService {
   }
 
   public List<Hecho> obtenerHechosDe(Coleccion coleccion) {
-    return coleccion.mostrarHechos(repositorioHechos.obtenerTodos());
+    return coleccion.mostrarHechos();
   }
 
   public List<Hecho> obtenerHechosFiltradosDe(Coleccion coleccion, Filtro filtro) {
-    return coleccion.hechosFiltrados(repositorioHechos.obtenerTodos(), filtro);
+    return coleccion.hechosFiltrados(filtro);
   }
 
 }
