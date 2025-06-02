@@ -31,9 +31,11 @@ public class HechoService {
         .collect(Collectors.toList());
   }
 
+  /*
   public void guardarHecho(Hecho hecho) {
     repositorio.guardar(hecho);
   }
+  */
 
   public List<Hecho> obtenerTodos() {
     return repositorio.obtenerTodos();
