@@ -3,7 +3,8 @@ package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.FuenteProxy;
+import ar.edu.utn.frba.dds.fuentes.FuenteRemota;
+import ar.edu.utn.frba.dds.fuentes.fuentesExternas.FuenteProxy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +39,7 @@ class FuenteRemotaTest {
       return null;
     }).when(fuenteRemota).procesarHechosDesde(anyString(), any(), any());
 
-    FuenteProxyyyy fuente = new FuenteProxyyyy("http://url", fuenteRemota, parametros);
+    FuenteRemota fuente = new FuenteRemota("http://url", fuenteRemota, parametros);
     ArrayList<Hecho> hechos = fuente.cargarHechos();
 
     assertEquals(1, hechos.size());
@@ -53,15 +54,15 @@ class FuenteRemotaTest {
       Consumer<Hecho> consumer = invocation.getArgument(3);
       consumer.accept(hechoEjemplo);
       return null;
-    }).when(fuenteRemota).procesarHechosColeccionDesde(anyString(), anyString(), any(), any());
+    }).when(fuenteRemota).procesarHechosColeccionDesde(anyString(), anyString(), any(), any()); //aca tendria si no me equivoco que como segundo arg pasarle una coleccion.
 
-    FuenteProxyyyy fuente = new FuenteProxyyyy("http://url", fuenteRemota, parametros, "coleccion123");
+    FuenteRemota fuente = new FuenteRemota("http://url", fuenteRemota, parametros, "coleccion123");
     ArrayList<Hecho> hechos = fuente.cargarHechos();
 
     assertEquals(1, hechos.size());
     assertEquals(hechoEjemplo, hechos.get(0));
     verify(fuenteRemota).procesarHechosColeccionDesde(eq("http://url"), eq("coleccion123"), eq(parametros), any());
-  }
+  } //devuelta seria como segundo argumento una coleccion.
 }
 
 

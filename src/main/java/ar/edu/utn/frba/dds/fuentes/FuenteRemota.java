@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.fuentes.fuentesExternas.FuenteProxy;
 
 import java.util.ArrayList;
 import java.util.Objects;

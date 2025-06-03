@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuentesExternas;
 
 import ar.edu.utn.frba.dds.clientes.ClienteMetaMapa;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
