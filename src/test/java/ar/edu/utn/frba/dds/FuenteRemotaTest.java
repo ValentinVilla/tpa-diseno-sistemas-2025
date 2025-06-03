@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.FuenteProxyyyy;
 import ar.edu.utn.frba.dds.fuentes.FuenteProxy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class FuenteProxyyyyTest {
+class FuenteRemotaTest {
   private FuenteProxy fuenteRemota;
   private ParametrosConsulta parametros;
   private Hecho hechoEjemplo;
