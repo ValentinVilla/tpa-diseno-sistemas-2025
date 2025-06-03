@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.fuentes.AdaptadorHechoDemo;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.joda.time.DateTime;
@@ -15,6 +16,9 @@ public class ClienteDemo {
     this.adaptador = new AdaptadorHechoDemo();
   }
 
+
+  public Map<String, Object> siguienteHecho(String url, DateTime fechaUltimaConsulta) {
+   //ESTO SERIA LO QUE RETORNA:
   /*
    Devuelve un mapa con los atributos de un hecho, indexados por nombre de
    atributo. Si el metodo retorna null, significa que no hay nuevos hechos
@@ -28,18 +32,25 @@ public class ClienteDemo {
    * "longitud": -58.3816
 
    */
-  public Map<String, Object> siguienteHecho(String url, DateTime fechaUltimaConsulta) {
-    // Simula la obtención de un hecho desde una fuente externa.
-    // En un caso real, aquí se haría una llamada a una API o base de datos.
-    //Map<String, Object> datos = obtenerDatosDesdeFuente(url, fechaUltimaConsulta);
+    Map<String, Object> hechoEjemplo = new HashMap<>();
+    hechoEjemplo.put("titulo", "Incidente en la vía pública");
+    hechoEjemplo.put("descripcion", "Se reportó un bache en la calle principal.");
+    hechoEjemplo.put("fecha", new org.joda.time.DateTime(2024, 6, 10, 0, 0));
+    hechoEjemplo.put("latitud", -34.6037);
+    hechoEjemplo.put("longitud", -58.3816);
+    return hechoEjemplo; //esto es un ejemplo, en teoria deberia ser un llamado a una API externa que nos retorne un hecho
+  } //EN TEORIA ESTO LO DEBE PROVEER UNA BIBLIOTECA O API EXTERNA
 
-    //if (datos == null) {
-    //  return null; // No hay más hechos disponibles
-    //}
-
-    //Hecho hecho = adaptador.desdeMapa(datos);
-   // return hecho.toMap(); // Convertir el hecho a un mapa para devolverlo
+  public List<Hecho> traerHechos(String urlBase) {
+    List<Hecho> hechos = new ArrayList<>();
+    Map<String, Object> objHecho = siguienteHecho(urlBase, DateTime.now().minusDays(1));
+    while (objHecho != null) {
+      hechos.add(adaptador.desdeMapa(objHecho));
+      objHecho = siguienteHecho(urlBase, DateTime.now().minusDays(1));
+    }
+    return hechos;
   }
+
 }
 
 //tomamos que esta clase conexion es una api externa que nos va a brindar los datos de los hechos, nosotros no tenemos que implementar lo que hace este metodo siguiente hecho, sino como nuestro sistema va a manejar la info que le da esta api externa, verdad?

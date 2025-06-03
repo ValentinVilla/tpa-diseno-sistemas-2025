@@ -35,9 +35,6 @@ public class HechoBuilder {
     if (latitud < -90 || latitud > 90) {
       throw new CampoInvalido("La latitud debe estar entre -90 y 90");
     }
-    else if (latitud == null){
-      throw new CampoInvalido("La latitud no puede ser nula");
-    }
     this.latitud = latitud;
     return this;
   }
@@ -45,9 +42,6 @@ public class HechoBuilder {
   public HechoBuilder longitud(double longitud) {
     if (longitud < -180 || longitud > 180) {
       throw new CampoInvalido("La longitud debe estar entre -180 y 180");
-    }
-    else if (longitud == null){
-      throw new CampoInvalido("La latitud no puede ser nula");
     }
     this.longitud = longitud;
     return this;

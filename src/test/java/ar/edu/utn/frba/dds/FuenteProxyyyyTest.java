@@ -3,8 +3,8 @@ package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.fuentes.FuenteProxyyyy;
 import ar.edu.utn.frba.dds.fuentes.FuenteProxy;
-import ar.edu.utn.frba.dds.fuentes.FuenteRemota;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,14 +19,14 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class FuenteProxyTest {
-  private FuenteRemota fuenteRemota;
+class FuenteProxyyyyTest {
+  private FuenteProxy fuenteRemota;
   private ParametrosConsulta parametros;
   private Hecho hechoEjemplo;
 
   @BeforeEach
   void setUp() {
-    fuenteRemota = mock(FuenteRemota.class);
+    fuenteRemota = mock(FuenteProxy.class);
     parametros = mock(ParametrosConsulta.class);
     hechoEjemplo = new Hecho(new HechoBuilder());
   }
@@ -39,7 +39,7 @@ class FuenteProxyTest {
       return null;
     }).when(fuenteRemota).procesarHechosDesde(anyString(), any(), any());
 
-    FuenteProxy fuente = new FuenteProxy("http://url", fuenteRemota, parametros);
+    FuenteProxyyyy fuente = new FuenteProxyyyy("http://url", fuenteRemota, parametros);
     ArrayList<Hecho> hechos = fuente.cargarHechos();
 
     assertEquals(1, hechos.size());
@@ -56,7 +56,7 @@ class FuenteProxyTest {
       return null;
     }).when(fuenteRemota).procesarHechosColeccionDesde(anyString(), anyString(), any(), any());
 
-    FuenteProxy fuente = new FuenteProxy("http://url", fuenteRemota, parametros, "coleccion123");
+    FuenteProxyyyy fuente = new FuenteProxyyyy("http://url", fuenteRemota, parametros, "coleccion123");
     ArrayList<Hecho> hechos = fuente.cargarHechos();
 
     assertEquals(1, hechos.size());

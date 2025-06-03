@@ -11,7 +11,8 @@ public class Coleccion {
   private final String titulo;
   private final String descripcion;
   private final Fuente fuente;
-  private Filtro criterioPertenencia;
+  public Filtro criterioPertenencia;
+  public String handle; // Handle para identificar la colección en el sistema
 
   public Coleccion(ColeccionBuilder builder) {
     this.titulo = builder.getTitulo();

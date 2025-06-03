@@ -9,14 +9,14 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class AdaptadorHechoDemo {
-  public Hecho desdeMapa(Map<String, Object> datos) {
+  public Hecho desdeMapa(Map<String, Object> dato) {
     return new HechoBuilder()
-        .titulo((String) datos.getOrDefault("titulo", ""))
-        .descripcion((String) datos.getOrDefault("descripcion", ""))
-        .latitud((Double) datos.getOrDefault("latitud", null))
-        .longitud((Double) datos.getOrDefault("longitud", null))
+        .titulo((String) dato.getOrDefault("titulo", ""))
+        .descripcion((String) dato.getOrDefault("descripcion", ""))
+        .latitud((Double) dato.getOrDefault("latitud", null))
+        .longitud((Double) dato.getOrDefault("longitud", null))
         .fechaAcontecimiento(
-            datos.get("fecha") instanceof DateTime ? ((LocalDate) datos.get("fecha")) : null
+            dato.get("fecha") instanceof DateTime ? ((LocalDate) dato.get("fecha")) : null
         ).fechaCarga(LocalDate.now())
         .origen(Origen.SERVICIOEXTERNO)
         .build();

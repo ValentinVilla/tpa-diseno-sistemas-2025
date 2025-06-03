@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.dominio;
 
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Hecho {
-  private final String id;
+  private final String id; //este id q es???
   private String titulo;
   private String descripcion;
   private String categoria;
@@ -122,6 +123,15 @@ public class Hecho {
     }
     else
     return true;
+  }
+
+  //COSAS AGREGADAS POR TOBI
+   public boolean cumpleCon(Filtro filtro) {
+    return filtro.cumple(this);
+  }
+
+  public boolean perteneceAColeccion(Coleccion coleccion){
+    return this.cumpleCon(coleccion.criterioPertenencia);
   }
 
 }
