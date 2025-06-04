@@ -47,6 +47,10 @@ public class Coleccion {
     return resultado;
   }
 
+  public boolean hechoPertenece(Hecho hecho) {
+    return criterioPertenencia.cumple(hecho);
+  }
+
   public void setFiltro(Filtro filtro) {
     this.criterioPertenencia = filtro;
   }

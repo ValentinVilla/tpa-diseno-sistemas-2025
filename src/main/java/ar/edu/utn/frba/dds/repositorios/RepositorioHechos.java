@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RepositorioHechos {
-  private Map<Fuente, List<Hecho>> hechosPorFuente = new HashMap<>();
+  private final Map<Fuente, List<Hecho>> hechosPorFuente = new HashMap<>();
 
   public List<Hecho> obtenerTodos() {
     return hechosPorFuente.values()
@@ -38,15 +38,10 @@ public class RepositorioHechos {
     }
   }
 
-  //opcional para eliminar de una fuente en particular
   public void eliminarDeFuente(Fuente fuente, Hecho hecho) {
     List<Hecho> lista = hechosPorFuente.get(fuente);
     if (lista != null) {
       lista.remove(hecho);
     }
-  }
-
-  public void actualizar(Hecho hecho) {
-    //TODO
   }
 }

@@ -5,13 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 
-public class RepositorioColecciones {
-  private List<Coleccion> colecciones = new ArrayList<>();
+import java.util.*;
 
-  public Coleccion obtenerColeccionPorId(String idGuardarropa) throws Exception {
-    List<GuardaRopa> guardarropas = this.guardaRopa.stream().filter(guardarropa -> guardarropa.id() == idGuardarropa).collect(Collectors.toList());
-    if(guardarropas.isEmpty())
-      throw new Exception();
-    return guardarropas.get(0);
+public class RepositorioColecciones {
+  private final Map<String, Coleccion> colecciones = new HashMap<>();
+
+  public void guardar(Coleccion coleccion) {
+    colecciones.put(coleccion.handle, coleccion);
+  }
+
+  public Coleccion buscarPorHandle(String handle) {
+    return colecciones.get(handle);
+  }
+
+  public List<Coleccion> listarTodas() {
+    return new ArrayList<>(colecciones.values());
+  }
+
+  public void eliminar(String handle) {
+    colecciones.remove(handle);
   }
 }

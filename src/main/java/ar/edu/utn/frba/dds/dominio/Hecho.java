@@ -27,47 +27,18 @@ public class Hecho {
   private final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
 
   public Hecho(HechoBuilder builder) {
-
-  }
-
-  public void setVisible(boolean visibilidad) {
-    this.visible = visibilidad;
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public String getCategoria() {
-    return this.categoria;
-  }
-
-  public LocalDate getFechaHecho() {
-    return this.fechaAcontecimiento;
-  }
-
-  public double getLatitud() {
-    return this.latitud;
-  }
-
-  public double getLongitud() {
-    return this.longitud;
-  }
-
-  public String getTitulo() {
-    return this.titulo;
-  }
-
-  public String getDescripcion() {
-    return this.descripcion;
-  }
-
-  public LocalDate getFechaCarga() {
-    return this.fechaCarga;
-  }
-
-  public LocalDate getFechaAcontecimiento(){
-    return this.fechaAcontecimiento;
+    this.id = UUID.randomUUID().toString();
+    this.titulo = builder.getTitulo();
+    this.descripcion = builder.getDescripcion();
+    this.categoria = builder.getCategoria();
+    this.latitud = builder.getLatitud();
+    this.longitud = builder.getLongitud();
+    this.fechaAcontecimiento = builder.getFechaAcontecimiento();
+    this.fechaCarga = builder.getFechaCarga();
+    this.origen = builder.getOrigen();
+    this.visible = builder.isVisible();
+    this.fechaModificacion = builder.getFechaModificacion();
+    this.idContribuyenteCreador = builder.getIdContribuyenteCreador();
   }
 
   public void agregarSolicitud(SolicitudEliminacion solicitud) {
@@ -117,16 +88,49 @@ public class Hecho {
     return true;
   }
 
-  //COSAS AGREGADAS POR TOBI
-   public boolean cumpleCon(Filtro filtro) {
+  public boolean cumpleCon(Filtro filtro) {
     return filtro.cumple(this);
   }
 
-  public boolean perteneceAColeccion(Coleccion coleccion){
-    return this.cumpleCon(coleccion.criterioPertenencia);
+  public void setVisible(boolean visibilidad) {
+    this.visible = visibilidad;
   }
 
-  public boolean perteneceAColeccionId(String coleccionId) {
+  public String getId() {
+    return id;
   }
+
+  public String getCategoria() {
+    return this.categoria;
+  }
+
+  public LocalDate getFechaHecho() {
+    return this.fechaAcontecimiento;
+  }
+
+  public double getLatitud() {
+    return this.latitud;
+  }
+
+  public double getLongitud() {
+    return this.longitud;
+  }
+
+  public String getTitulo() {
+    return this.titulo;
+  }
+
+  public String getDescripcion() {
+    return this.descripcion;
+  }
+
+  public LocalDate getFechaCarga() {
+    return this.fechaCarga;
+  }
+
+  public LocalDate getFechaAcontecimiento(){
+    return this.fechaAcontecimiento;
+  }
+
 }
 
