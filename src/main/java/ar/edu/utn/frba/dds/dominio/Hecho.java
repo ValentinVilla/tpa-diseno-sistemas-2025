@@ -42,12 +42,9 @@ public class Hecho {
     this.idContribuyenteCreador = builder.getIdContribuyenteCreador();
   }
 
-  public void setVisible() {
-    this.visible = true;
+  public void setVisible(boolean visibilidad) {
+    this.visible = visibilidad;
   }
-  public void setInVisible() {
-    this.visible = false;
-  }//si bien podria poner un solo metodo alternarVisibilidad me parece mas declarativo tener dos.
 
   public String getId() {
     return id;
