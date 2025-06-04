@@ -29,20 +29,7 @@ public class LeerCSVTest {
   void puedeLeerUnArchivoCSVYDevolverHechos() throws Exception {
     // Arrange: crear archivo temporal CSV
     Path tempFile = Files.createTempFile("hechos", ".csv");
-    try (FileWriter writer = new FileWriter(tempFile.toFile())) {
-      writer.write("titulo_custom,desc_custom,lat,lon,fecha\n");
-      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15\n");
-      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16\n");
-    }
-
-    // Ingresamos los campos de interes
-    ArrayList<String> campos = new ArrayList<>(List.of(
-        "titulo_custom", "desc_custom", "lat", "lon", "fecha"
-    ));
-
-    // Act: leer el archivo
-    LectorCSV lector = new LectorCSV();
-    List<Hecho> hechos = lector.leerDesde(tempFile.toString(), "Emergencia", campos);
+    List<Hecho> hechos = getHechoList(tempFile);
 
     // Assert: verificar los datos leídos
     assertEquals(2, hechos.size());
@@ -58,6 +45,23 @@ public class LeerCSVTest {
 
     Hecho segundo = hechos.get(1);
     assertEquals("Incendio", segundo.getTitulo());
+  }
+
+  private static List<Hecho> getHechoList(Path tempFile) throws IOException {
+    try (FileWriter writer = new FileWriter(tempFile.toFile())) {
+      writer.write("titulo_custom,desc_custom,lat,lon,fecha\n");
+      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15\n");
+      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16\n");
+    }
+
+    // Ingresamos los campos de interes
+    ArrayList<String> campos = new ArrayList<>(List.of(
+        "titulo_custom", "desc_custom", "lat", "lon", "fecha"
+    ));
+
+    // Act: leer el archivo
+    LectorCSV lector = new LectorCSV();
+    return lector.leerDesde(tempFile.toString(), "Emergencia", campos);
   }
 
   @Test
@@ -92,6 +96,18 @@ public class LeerCSVTest {
   void hechoConTituloDuplicadoSobrescribeAlAnterior() throws Exception {
     // Arrange: crear archivo temporal CSV con dos hechos de mismo título
     Path tempFile = Files.createTempFile("hechos", ".csv");
+    List<Hecho> hechos = getHechos(tempFile);
+
+    assertEquals(1, hechos.size(), "Debe haber solo un hecho (el segundo sobreescribe al primero)");
+
+    Hecho hechoFinal = hechos.get(0);
+    assertEquals("robo", hechoFinal.getTitulo()); // el título del segundo (último leído)
+    assertEquals("Robo actualizado", hechoFinal.getDescripcion());
+    assertEquals(LocalDate.of(2023, 9, 1), hechoFinal.getFechaAcontecimiento());
+    assertEquals(-34.6000, hechoFinal.getLatitud());
+  }
+
+  private static List<Hecho> getHechos(Path tempFile) throws IOException {
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
       writer.write("Robo,Robo original,-34.6037,-58.3816,2023-08-15\n");
@@ -103,14 +119,6 @@ public class LeerCSVTest {
     ));
 
     FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
-    List<Hecho> hechos = fuente.cargarHechos();
-
-    assertEquals(1, hechos.size(), "Debe haber solo un hecho (el segundo sobreescribe al primero)");
-
-    Hecho hechoFinal = hechos.get(0);
-    assertEquals("robo", hechoFinal.getTitulo()); // el título del segundo (último leído)
-    assertEquals("Robo actualizado", hechoFinal.getDescripcion());
-    assertEquals(LocalDate.of(2023, 9, 1), hechoFinal.getFechaAcontecimiento());
-    assertEquals(-34.6000, hechoFinal.getLatitud());
+    return fuente.cargarHechos();
   }
 }

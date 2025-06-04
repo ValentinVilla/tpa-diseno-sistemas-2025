@@ -8,15 +8,10 @@ import ar.edu.utn.frba.dds.dominio.Coleccion;
 public class RepositorioColecciones {
   private List<Coleccion> colecciones = new ArrayList<>();
 
-  public List<Coleccion> obtenerTodas() {
-    return new ArrayList<>(colecciones);
-  }
-
-  public void guardar(Coleccion coleccion) {
-    colecciones.add(coleccion);
-  }
-
-  public void actualizar(Coleccion coleccion) {
-    //TODO
+  public Coleccion obtenerColeccionPorId(String idGuardarropa) throws Exception {
+    List<GuardaRopa> guardarropas = this.guardaRopa.stream().filter(guardarropa -> guardarropa.id() == idGuardarropa).collect(Collectors.toList());
+    if(guardarropas.isEmpty())
+      throw new Exception();
+    return guardarropas.get(0);
   }
 }

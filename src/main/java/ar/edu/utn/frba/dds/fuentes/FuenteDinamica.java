@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 
 import java.util.ArrayList;
@@ -35,6 +36,11 @@ public class FuenteDinamica implements Fuente {//creo q faltaba poner el impleme
     }
     else
       hechoOriginal.actualizarDesde(datosNuevos);
+  }
+
+  @Override
+  public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
+    return cargarHechos();
   }
 
   public ArrayList<Hecho> cargarHechos(){

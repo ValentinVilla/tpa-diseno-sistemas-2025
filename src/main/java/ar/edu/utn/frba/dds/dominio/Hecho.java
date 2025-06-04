@@ -27,19 +27,7 @@ public class Hecho {
   private final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
 
   public Hecho(HechoBuilder builder) {
-    // Cuando tengamos base de datos el ID se le asignara en la carga
-    this.id = UUID.randomUUID().toString();
-    this.titulo = builder.getTitulo();
-    this.descripcion = builder.getDescripcion();
-    this.categoria = builder.getCategoria();
-    this.latitud = builder.getLatitud();
-    this.longitud = builder.getLongitud();
-    this.fechaAcontecimiento = builder.getFechaAcontecimiento();
-    this.fechaCarga = builder.getFechaCarga();
-    this.origen = builder.getOrigen();
-    this.visible = builder.isVisible();
-    this.fechaModificacion = builder.getFechaModificacion();
-    this.idContribuyenteCreador = builder.getIdContribuyenteCreador();
+
   }
 
   public void setVisible(boolean visibilidad) {
@@ -138,5 +126,7 @@ public class Hecho {
     return this.cumpleCon(coleccion.criterioPertenencia);
   }
 
+  public boolean perteneceAColeccionId(String coleccionId) {
+  }
 }
 

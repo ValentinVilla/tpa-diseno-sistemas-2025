@@ -3,8 +3,7 @@ package ar.edu.utn.frba.dds;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.fuentesExternas.FuenteRemota;
-import ar.edu.utn.frba.dds.fuentes.fuentesExternas.FuenteProxy;
+import ar.edu.utn.frba.dds.fuentes.FuenteProxy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

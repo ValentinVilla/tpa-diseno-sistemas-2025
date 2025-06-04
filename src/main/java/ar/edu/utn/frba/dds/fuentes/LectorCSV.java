@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import com.opencsv.CSVReaderHeaderAware;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,40 +17,15 @@ public class LectorCSV {
 
   public ArrayList<Hecho> leerDesde(String path, String categoria, ArrayList<String> campos) {
     try {
-      CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(path));
+      Iterable<Map<String, String>> iterable = getMaps(path);
 
-      Iterable<Map<String, String>> iterable = () -> new Iterator<>() {
-        Map<String, String> next = leerSiguiente();
-
-        private Map<String, String> leerSiguiente() {
-          try {
-            return reader.readMap();
-          } catch (Exception e) {
-            throw new RuntimeException("Error leyendo fila del CSV", e);
-          }
-        }
-
-        @Override
-        public boolean hasNext() {
-          return next != null;
-        }
-
-        @Override
-        public Map<String, String> next() {
-          Map<String, String> actual = next;
-          next = leerSiguiente();
-          return actual;
-        }
-      };
-
-      // Usamos un map para evitar duplicados por título
-      Map<String, Hecho> hechosMap = new LinkedHashMap<>(); // mantiene orden de inserción
+      Map<String, Hecho> hechosMap = new LinkedHashMap<>();
 
       for (Map<String, String> fila : iterable) {
         Hecho hecho = crearHechoDesdeMap(fila, categoria, campos);
         if (!hecho.getTitulo().isEmpty()) {
           String clave = hecho.getTitulo().trim().toLowerCase();
-          hechosMap.put(clave, hecho); // sobrescribe si ya existe
+          hechosMap.put(clave, hecho);
         }
       }
 
@@ -60,6 +36,33 @@ public class LectorCSV {
     }
   }
 
+  private static Iterable<Map<String, String>> getMaps(String path) throws IOException {
+    CSVReaderHeaderAware reader = new CSVReaderHeaderAware(new FileReader(path));
+
+    return () -> new Iterator<>() {
+      Map<String, String> next = leerSiguiente();
+
+      private Map<String, String> leerSiguiente() {
+        try {
+          return reader.readMap();
+        } catch (Exception e) {
+          throw new RuntimeException("Error leyendo fila del CSV", e);
+        }
+      }
+
+      @Override
+      public boolean hasNext() {
+        return next != null;
+      }
+
+      @Override
+      public Map<String, String> next() {
+        Map<String, String> actual = next;
+        next = leerSiguiente();
+        return actual;
+      }
+    };
+  }
 
   private Hecho crearHechoDesdeMap(Map<String, String> fila, String categoria, ArrayList<String> campos) {
     String titulo = fila.getOrDefault(campos.get(0), "").trim();

@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.dominio;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
@@ -12,9 +13,10 @@ public class Coleccion {
   private final String descripcion;
   private final Fuente fuente;
   public Filtro criterioPertenencia;
-  public String handle; // Handle para identificar la colección en el sistema
+  public String handle;
 
   public Coleccion(ColeccionBuilder builder) {
+    this.handle = UUID.randomUUID().toString();
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.fuente = builder.getFuente();
