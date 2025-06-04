@@ -27,7 +27,7 @@ public class SolicitudEliminacion {
   }
 
   public String getFundamentacion() {
-    return this.textoFundamentacion;
+    return textoFundamentacion;
   }
 
   public Hecho getHecho() {

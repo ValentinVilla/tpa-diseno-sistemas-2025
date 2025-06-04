@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
-import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class RepositorioHechos {
         .add(hecho);
   }
 
-  public void eliminar(Hecho hecho) {//cuando vos decis eliminar, querras decir poner el hecho como no visible?
+  public void eliminar(Hecho hecho) {
     for (List<Hecho> lista : hechosPorFuente.values()) {
       if (lista.remove(hecho)) {
         break;
