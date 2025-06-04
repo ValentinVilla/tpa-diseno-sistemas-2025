@@ -11,6 +11,7 @@ public class ColeccionBuilder {
   private String descripcion;
   private Fuente fuente;
   private Filtro criterio;
+  private String handle; // Handle para identificar la colección en el sistema
 
   public ColeccionBuilder titulo(String titulo) {
     this.titulo = validateNotNullOrEmpty(titulo, "El título no puede ser nulo o vacío");
@@ -31,6 +32,11 @@ public class ColeccionBuilder {
   public ColeccionBuilder criterio(Filtro criterio) {
     Objects.requireNonNull(criterio, "El criterio no puede ser nulo");
     this.criterio = criterio;
+    return this;
+  }
+
+  public ColeccionBuilder handle(String handle) {
+    this.handle = validateNotNullOrEmpty(handle, "El handle no puede ser nulo o vacío");
     return this;
   }
 
@@ -60,6 +66,10 @@ public class ColeccionBuilder {
 
   public Filtro getCriterio() {
     return criterio;
+  }
+
+  public String getHandle() {
+    return handle;
   }
 
   public static class CampoInvalido extends RuntimeException {

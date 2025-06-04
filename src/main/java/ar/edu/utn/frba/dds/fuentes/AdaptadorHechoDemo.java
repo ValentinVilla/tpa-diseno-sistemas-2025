@@ -13,8 +13,8 @@ public class AdaptadorHechoDemo {
     return new HechoBuilder()
         .titulo((String) dato.getOrDefault("titulo", ""))
         .descripcion((String) dato.getOrDefault("descripcion", ""))
-        .latitud((Double) dato.getOrDefault("latitud", null))
-        .longitud((Double) dato.getOrDefault("longitud", null))
+        .latitud((double) dato.getOrDefault("latitud", null))
+        .longitud((double) dato.getOrDefault("longitud", null))
         .fechaAcontecimiento(
             dato.get("fecha") instanceof DateTime ? ((LocalDate) dato.get("fecha")) : null
         ).fechaCarga(LocalDate.now())

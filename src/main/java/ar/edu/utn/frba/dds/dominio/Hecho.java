@@ -38,11 +38,16 @@ public class Hecho {
     this.fechaCarga = builder.getFechaCarga();
     this.origen = builder.getOrigen();
     this.visible = builder.isVisible();
+    this.fechaModificacion = builder.getFechaModificacion();
+    this.idContribuyenteCreador = builder.getIdContribuyenteCreador();
   }
 
-  public void setVisible(boolean visible) {
-    this.visible = visible;
+  public void setVisible() {
+    this.visible = true;
   }
+  public void setInVisible() {
+    this.visible = false;
+  }//si bien podria poner un solo metodo alternarVisibilidad me parece mas declarativo tener dos.
 
   public String getId() {
     return id;
@@ -105,6 +110,8 @@ public class Hecho {
     this.longitud = otro.getLongitud();
     this.fechaAcontecimiento = otro.getFechaAcontecimiento();
     this.fechaModificacion = LocalDate.now();
+    this.visible = otro.visible;
+    this.idContribuyenteCreador = otro.getIdContribuyenteCreador();
   }
 
   //Cosas que pondria tobi, pero a charlar

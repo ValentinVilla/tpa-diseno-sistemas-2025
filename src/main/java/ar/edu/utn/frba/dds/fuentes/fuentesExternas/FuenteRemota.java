@@ -1,8 +1,8 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuentesExternas;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.fuentesExternas.FuenteProxy;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,7 +25,7 @@ public class FuenteRemota implements Fuente {
   }
 
   @Override
-  public ArrayList<Hecho> cargarHechos() {
+  public ArrayList<Hecho> cargarHechos() {//no veo en donde guarda los hechos en el repositorio
 
     ArrayList<Hecho> hechos = new ArrayList<>();
     if (idColeccion != null) {

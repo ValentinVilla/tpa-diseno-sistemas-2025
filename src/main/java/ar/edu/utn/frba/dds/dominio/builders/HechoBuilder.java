@@ -15,6 +15,9 @@ public class HechoBuilder {
   private LocalDate fechaCarga;
   private Origen origen;
   private boolean visible = true;
+  private LocalDate fechaModificacion;
+  private int idContribuyenteCreador;
+
 
   public HechoBuilder titulo(String titulo) {
     this.titulo = validateNotNullOrEmpty(titulo, "El título no puede ser nulo o vacío");
@@ -75,6 +78,16 @@ public class HechoBuilder {
     this.visible = visible;
     return this;
   }
+  public HechoBuilder fechaModificacion(LocalDate fechaModificacion) {
+    this.fechaModificacion = fechaModificacion;
+    return this;
+  }
+  public HechoBuilder idContribuyenteCreador(int idContribuyenteCreador) {
+    this.idContribuyenteCreador = idContribuyenteCreador;
+    return this;
+  }
+
+
 
   public Hecho build() {
     // Validación final por seguridad (defensiva, en caso de setters alternativos)
@@ -91,6 +104,7 @@ public class HechoBuilder {
     if (origen == null) {
       throw new CampoInvalido("El origen no puede ser nulo");
     }
+
 
     return new Hecho(this);
   }
@@ -112,6 +126,8 @@ public class HechoBuilder {
   public LocalDate getFechaCarga() { return fechaCarga; }
   public Origen getOrigen() { return origen; }
   public boolean isVisible() { return visible; }
+  public LocalDate getFechaModificacion() { return fechaModificacion; }
+  public int getIdContribuyenteCreador() { return idContribuyenteCreador; }
 
   public static class CampoInvalido extends RuntimeException {
     public CampoInvalido(String mensaje) {

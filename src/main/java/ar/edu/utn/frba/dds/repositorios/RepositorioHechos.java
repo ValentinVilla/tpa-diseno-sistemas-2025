@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.repositorios;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RepositorioHechos {
-  private Map<FuenteDinamica, List<Hecho>> hechosPorFuente = new HashMap<>();
+  private Map<Fuente, List<Hecho>> hechosPorFuente = new HashMap<>();
 
   public List<Hecho> obtenerTodos() {
     return hechosPorFuente.values()
@@ -19,17 +20,17 @@ public class RepositorioHechos {
         .collect(Collectors.toList());
   }
 
-  public List<Hecho> obtenerhechosDe(FuenteDinamica fuente) {
+  public List<Hecho> obtenerhechosDe(Fuente fuente) {
     return hechosPorFuente.getOrDefault(fuente, Collections.emptyList());
   }
 
-  public void guardar(FuenteDinamica fuente, Hecho hecho) {
+  public void guardar(Fuente fuente, Hecho hecho) {
     hechosPorFuente
         .computeIfAbsent(fuente, f -> new ArrayList<>())
         .add(hecho);
   }
 
-  public void eliminar(Hecho hecho) {
+  public void eliminar(Hecho hecho) {//cuando vos decis eliminar, querras decir poner el hecho como no visible?
     for (List<Hecho> lista : hechosPorFuente.values()) {
       if (lista.remove(hecho)) {
         break;
@@ -38,7 +39,7 @@ public class RepositorioHechos {
   }
 
   //opcional para eliminar de una fuente en particular
-  public void eliminarDeFuente(FuenteDinamica fuente, Hecho hecho) {
+  public void eliminarDeFuente(Fuente fuente, Hecho hecho) {
     List<Hecho> lista = hechosPorFuente.get(fuente);
     if (lista != null) {
       lista.remove(hecho);
