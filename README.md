@@ -2,6 +2,7 @@
 
 ## Trabajo práctico anual: MetaMapa
 [Enunciado Parte 1](https://docs.google.com/document/d/1ctxGwWrnM0XmPii38KWod9mTzphzNxxPRg9HkpXyNBg/edit?tab=t.0)
+
 [Enunciado Parte 2](https://docs.google.com/document/d/1sbS4HisuozJ-952PxdNS6VcNz-Ly9i4quJ6UQtItNnY/edit?usp=sharing)
 
 ## Grupo 4 - Integrantes
