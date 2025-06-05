@@ -25,4 +25,11 @@ public class RepositorioColecciones {
   public void eliminar(String handle) {
     colecciones.remove(handle);
   }
+
+  public void actualizar(Coleccion coleccion) {
+    if (!colecciones.containsKey(coleccion.handle)) {
+      throw new IllegalArgumentException("No existe una colección con ese handle para actualizar.");
+    }
+    colecciones.put(coleccion.handle, coleccion);
+  }
 }

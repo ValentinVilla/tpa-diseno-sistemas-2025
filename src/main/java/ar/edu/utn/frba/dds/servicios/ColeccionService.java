@@ -30,7 +30,7 @@ public class ColeccionService {
   }
 
   public List<Coleccion> obtenerTodas() {
-    return repositorio.obtenerTodas();
+    return repositorio.listarTodas();
   }
 
   public void aplicarFiltro(Coleccion coleccion, Filtro filtro) {
