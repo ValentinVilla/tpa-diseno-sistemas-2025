@@ -28,12 +28,29 @@ public class FuenteDemoTest {
   }
 
   @Test
-  void cargarHechosActualizaCacheSiPasoUnaHora() {
+  void siNoPasoUnaHoraNoActualizaCache() {
     List<Hecho> hechosMock = List.of(mock(Hecho.class));
     when(cliente.traerHechos("http://demo.com")).thenReturn(hechosMock);
-    assertEquals(hechosMock, fuente.cargarHechos(new ParametrosConsulta()));
-    assertEquals(hechosMock, fuente.cargarHechos(new ParametrosConsulta()));
+    fuente.cargarHechos(new ParametrosConsulta());
+    fuente.cargarHechos(new ParametrosConsulta());
     verify(cliente, times(1)).traerHechos("http://demo.com");
+  }
+
+  @Test
+  void actualizaCacheSiPasoUnaHora() {
+    List<Hecho> hechosMock1 = List.of(mock(Hecho.class));
+    List<Hecho> hechosMock2 = List.of(mock(Hecho.class));
+    when(cliente.traerHechos("http://demo.com"))
+        .thenReturn(hechosMock1)
+        .thenReturn(hechosMock2);
+
+    fuente.cargarHechos(new ParametrosConsulta());
+    // Simular que pasó una hora (dependiendo de la implementación, podrías exponer un método o mockear el reloj)
+    fuente.forzarExpiracionCache(); //HACE QUE EL CACHE SE EXPIRE tiempo ult consulta = 2hs
+    List<Hecho> hechos = fuente.cargarHechos(new ParametrosConsulta());
+
+    assertEquals(hechosMock2, hechos);
+    verify(cliente, times(2)).traerHechos("http://demo.com");
   }
 
   @Test
@@ -54,10 +71,15 @@ public class FuenteDemoTest {
   @Test
   void cargaHechosHastaQueNoHayMas() {
     List<Hecho> hechosMock = List.of(mock(Hecho.class), mock(Hecho.class));
+    List<Hecho> hechosMock2 = List.of(mock(Hecho.class), mock(Hecho.class), mock(Hecho.class));
     when(cliente.traerHechos("http://demo.com")).thenReturn(hechosMock);
     List<Hecho> hechosCargados = fuente.cargarHechos(new ParametrosConsulta());
     assertEquals(2, hechosCargados.size());
     verify(cliente, times(1)).traerHechos("http://demo.com");
+    fuente.forzarExpiracionCache();
+    when(cliente.traerHechos("http://demo.com")).thenReturn(hechosMock2);
+    hechosCargados = fuente.cargarHechos(new ParametrosConsulta());
+    assertEquals(3, hechosCargados.size());
   }
 
 }

@@ -44,4 +44,9 @@ public class FuenteDemo extends FuenteProxy {
   boolean pasoUnaHoraDesdeUltimaConsulta() {
     return ultimaConsulta == null || LocalDateTime.now().isAfter(ultimaConsulta.plusHours(1));
   }
+
+  //METODO PARA TESTEAR NECESITO FORZAR O SIMULAR QUE SE PASO UNA HORA
+  public void forzarExpiracionCache() {
+    ultimaConsulta = LocalDateTime.now().minusHours(2); // Simula que pasó más de una hora
+  }
 }
