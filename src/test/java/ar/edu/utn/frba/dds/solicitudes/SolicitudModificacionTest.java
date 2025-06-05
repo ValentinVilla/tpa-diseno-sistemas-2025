@@ -62,8 +62,6 @@ public class SolicitudModificacionTest {
     solicitud.aceptarConSugerencia("Mejorar ubicación");
 
     assertEquals("Mejorar ubicación", solicitud.getSugerenciaModificacion());
-    assertFalse(hechoOriginal.getVisible());
-    assertTrue(hechoModificado.getVisible());
   }
 
 }

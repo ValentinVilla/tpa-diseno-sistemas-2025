@@ -28,19 +28,18 @@ public class FuenteDinamica implements Fuente {
   public void modificarHecho(int idContribuyenteCreador, HechoContribuyente hechoOriginal, HechoContribuyente hechoNuevo) {
     if (!puedeModificar(idContribuyenteCreador, hechoOriginal)) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
-    }
-    else
+    } else {
       hechoOriginal.setVisible(false);
       //si no puede modificar, lanza excepcion
       //crear nuevo hecho con fecha modificacion ahora
       //hechoOriginal.actualizarDesde(hechoNuevo);
-      SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal,hechoNuevo);
+      SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal, hechoNuevo);
       //crea solicitud y le manda el id del hecho original
     }
   }
 
   public boolean puedeModificar(int idContribuyenteCreador, HechoContribuyente hecho) {
-    return hecho.getIdContribuyenteCreador()==(idContribuyenteCreador)
+    return hecho.getIdContribuyenteCreador() == (idContribuyenteCreador)
         && hecho.estaDentroDePlazo();
   }
 
@@ -49,9 +48,8 @@ public class FuenteDinamica implements Fuente {
     return cargarHechos();
   }
 
-  public ArrayList<Hecho> cargarHechos(){
+  public ArrayList<Hecho> cargarHechos() {
     return new ArrayList<>(repositorioHechos.obtenerhechosDe(this));
   }
-
-
 }
+

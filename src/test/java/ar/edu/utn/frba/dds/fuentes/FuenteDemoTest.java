@@ -8,8 +8,6 @@ import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,19 +22,16 @@ public class FuenteDemoTest {
 
   @BeforeEach
   void setUp() {
-    AdaptadorHechoDemo adaptador = new AdaptadorHechoDemo();
-    ClienteDemo cliente =  new ClienteDemo(adaptador);
-    RepositorioColecciones repo = new RepositorioColecciones();
-    FuenteDemo fuenteDemo = new FuenteDemo(cliente, "http://demo.com", repo);
+    cliente = mock(ClienteDemo.class);
+    repo = mock(RepositorioColecciones.class);
+    fuente = new FuenteDemo(cliente, "http://demo.com", repo);
   }
 
   @Test
   void cargarHechosActualizaCacheSiPasoUnaHora() {
     List<Hecho> hechosMock = List.of(mock(Hecho.class));
     when(cliente.traerHechos("http://demo.com")).thenReturn(hechosMock);
-
-    fuente.cargarHechos(new ParametrosConsulta());
-
+    assertEquals(hechosMock, fuente.cargarHechos(new ParametrosConsulta()));
     assertEquals(hechosMock, fuente.cargarHechos(new ParametrosConsulta()));
     verify(cliente, times(1)).traerHechos("http://demo.com");
   }
@@ -46,63 +41,23 @@ public class FuenteDemoTest {
     Hecho hecho = mock(Hecho.class);
     Coleccion coleccion = mock(Coleccion.class);
     ParametrosConsulta parametros = new ParametrosConsulta(
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "123"
+        null, null, null, null, null, null, "123"
     );
-
     when(cliente.traerHechos("http://demo.com")).thenReturn(List.of(hecho));
     when(repo.buscarPorHandle("123")).thenReturn(coleccion);
     when(coleccion.hechoPertenece(hecho)).thenReturn(true);
-
     List<Hecho> hechos = fuente.cargarHechos(parametros);
-
     assertEquals(1, hechos.size());
     assertTrue(hechos.contains(hecho));
   }
 
   @Test
   void cargaHechosHastaQueNoHayMas() {
-    List<Hecho> hechosMock1 = List.of(mock(Hecho.class), mock(Hecho.class));
-    List<Hecho> hechosMock2 = List.of(); // Simula que no hay más hechos
-
-    when(cliente.traerHechos("http://demo.com"))
-        .thenReturn(hechosMock1);    // Primera llamada devuelve hechos// Segunda llamada devuelve lista vacía
-
+    List<Hecho> hechosMock = List.of(mock(Hecho.class), mock(Hecho.class));
+    when(cliente.traerHechos("http://demo.com")).thenReturn(hechosMock);
     List<Hecho> hechosCargados = fuente.cargarHechos(new ParametrosConsulta());
-
     assertEquals(2, hechosCargados.size());
     verify(cliente, times(1)).traerHechos("http://demo.com");
   }
-
-
-
-/*
-  @Test
-  void pasoUnaHoraDesdeUltimaConsultaDevuelveTrueSiNoHayConsultaPrevia() {
-
-    assertTrue(fuente.pasoUnaHoraDesdeUltimaConsulta());
-  }
-
-  @Test
-  void pasoUnaHoraDesdeUltimaConsultaDevuelveTrueSiPasoUnaHora() {
-    fuente.cargarHechos(new ParametrosConsulta());
-    fuente.ultimaConsulta = LocalDateTime.now().minusHours(2);
-
-    assertTrue(fuente.pasoUnaHoraDesdeUltimaConsulta());
-  }
-
-  @Test
-  void pasoUnaHoraDesdeUltimaConsultaDevuelveFalseSiNoPasoUnaHora() {
-    fuente.cargarHechos(new ParametrosConsulta());
-    fuente.ultimaConsulta = LocalDateTime.now().minusMinutes(30);
-
-    assertFalse(fuente.pasoUnaHoraDesdeUltimaConsulta());
-  }
-  */
 
 }

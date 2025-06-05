@@ -14,6 +14,10 @@ public class SolicitudModificacion extends Solicitud{
     this.sugerenciaModificacion = sugerenciaModificacion;
   }
 
+  public String getSugerenciaModificacion() {
+    return sugerenciaModificacion;
+  }
+
   @Override
   public void aplicarAceptacion() {
 
