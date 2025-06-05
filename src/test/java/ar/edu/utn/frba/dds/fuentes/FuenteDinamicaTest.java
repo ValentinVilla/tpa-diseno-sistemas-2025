@@ -1,10 +1,8 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.fuentes;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.HechoContribuyente;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,13 +54,17 @@ public class FuenteDinamicaTest {
 
   @Test
   void puedeModificarHechoDentroDelPlazo() {
-    HechoContribuyente original = crearHecho("original");
-    fuente.subirHecho(1, original);
+    HechoContribuyente original = crearHecho("incendio");
+    HechoContribuyente nuevo = crearHecho("incendio-modificado");
+    FuenteDinamica fuente = new FuenteDinamica(repo);
 
-    HechoContribuyente nuevo = crearHecho("modificado");
-    fuente.modificarHecho(1, original, nuevo);
+    //fuente.subirHecho(10, original);
+    fuente.subirHecho(10, original);
 
-    assertEquals("modificado", original.getTitulo());
+    fuente.modificarHecho(10, original, nuevo);
+
+    assertTrue(nuevo.getVisible());
+    assertFalse(original.getVisible());
   }
 
   @Test
@@ -119,6 +121,6 @@ public class FuenteDinamicaTest {
 
     repo.eliminar(hecho);
 
-    assertTrue(repo.obtenerhechosDe(fuente).isEmpty());
+    assertFalse(hecho.getVisible());
   }
 }

@@ -20,6 +20,10 @@ public class HechoContribuyente extends Hecho {
     return this.idCreador;
   }
 
+  public boolean getVisible(){
+    return visible;
+  }
+
   public boolean estaDentroDePlazo() {
     long diasDesdeCarga = ChronoUnit.DAYS.between(getFechaCarga(), LocalDate.now());
     if (diasDesdeCarga > 7) {

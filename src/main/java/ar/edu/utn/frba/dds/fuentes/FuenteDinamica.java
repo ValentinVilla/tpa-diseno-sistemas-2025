@@ -31,7 +31,6 @@ public class FuenteDinamica implements Fuente {
     }
     else
       hechoOriginal.setVisible(false);
-
       //si no puede modificar, lanza excepcion
       //crear nuevo hecho con fecha modificacion ahora
       //hechoOriginal.actualizarDesde(hechoNuevo);

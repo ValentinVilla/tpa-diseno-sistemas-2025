@@ -25,7 +25,9 @@ public class SolicitudService {
   }
 
   public void aprobarSolicitud(SolicitudEliminacion solicitud, Hecho hecho) {
-    solicitud.aceptar(hecho);
+    //revisar de donde se llama este metodo para corroborar si trae cargado un hecho
+    //reversionar parametros (hecho no se esta usando)
+    solicitud.aceptar();
     repositorio.actualizar(solicitud);
   }
 

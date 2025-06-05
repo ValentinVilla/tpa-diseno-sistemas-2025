@@ -19,6 +19,10 @@ public class SolicitudSubida extends Solicitud{
     System.out.println("Solicitud de modificación aceptada con sugerencia: " + sugerenciaModificacion);
   }
 
+  public String getSugerenciaModificacion() {
+    return sugerenciaModificacion;
+  }
+
   @Override
   public void aplicarRechazo() {
     hecho.setVisible(false);
