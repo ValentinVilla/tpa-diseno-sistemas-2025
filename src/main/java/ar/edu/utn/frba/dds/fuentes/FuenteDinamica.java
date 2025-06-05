@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.HechoContribuyente;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 
 import java.util.ArrayList;
 
@@ -23,12 +24,19 @@ public class FuenteDinamica implements Fuente {
     repositorioHechos.guardar(this, hecho);
   }
 
-  public void modificarHecho(int idContribuyenteCreador, HechoContribuyente hechoOriginal, HechoContribuyente datosNuevos) {
+  public void modificarHecho(int idContribuyenteCreador, HechoContribuyente hechoOriginal, HechoContribuyente hechoNuevo) {
     if (!puedeModificar(idContribuyenteCreador, hechoOriginal)) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     }
     else
-      hechoOriginal.actualizarDesde(datosNuevos);
+      hechoOriginal.setVisible(false);
+      //si no puede modificar, lanza excepcion
+      //crear nuevo hecho con fecha modificacion ahora
+
+      hechoOriginal.actualizarDesde(hechoNuevo);
+      SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal,hechoNuevo);
+      //crea solicitud y le manda el id del hecho original
+
   }
 
   public boolean puedeModificar(int idContribuyenteCreador, HechoContribuyente hecho) {
@@ -44,4 +52,6 @@ public class FuenteDinamica implements Fuente {
   public ArrayList<Hecho> cargarHechos(){
     return new ArrayList<>(repositorioHechos.obtenerhechosDe(this));
   }
+
+
 }
