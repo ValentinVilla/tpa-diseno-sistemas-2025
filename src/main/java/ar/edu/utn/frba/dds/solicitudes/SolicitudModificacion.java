@@ -22,9 +22,9 @@ public class SolicitudModificacion extends Solicitud{
 
   @Override
   public void aplicarRechazo() {
-    hechoModificado.actualizarDesde(original);
-    //notificarAlAutorDeLaModificacion();
-    //actualizarDesde hace que el hecho que se actualiza se pone en visible false y al que esta dentro de los () actualiza la fecha de modificacion
+    hecho.setVisible(true);
+    hechoModificado.setVisible(false);
+    //notificarAlAutorDelRechazoDeModificacion();
   }
 
   public void aceptarConSugerencia(String sugerencia){

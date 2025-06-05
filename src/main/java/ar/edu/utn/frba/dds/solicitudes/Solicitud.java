@@ -7,8 +7,12 @@ public abstract class Solicitud {
   protected EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
   protected Hecho hecho;
 
+  public Solicitud(Hecho hecho) {
+    this.hecho = hecho;
+    this.estado = EstadoSolicitud.PENDIENTE;
+  }
 
-  void aceptar(){
+  public void aceptar(){
      this.estado = EstadoSolicitud.ACEPTADA;
      aplicarAceptacion();
   }
@@ -21,9 +25,5 @@ public abstract class Solicitud {
   public abstract void aplicarRechazo();
     // Implementar la lógica de aceptación
 
-  public Solicitud(Hecho hecho) {
-    this.hecho = hecho;
-    this.estado = EstadoSolicitud.PENDIENTE;
-  }
 
 }

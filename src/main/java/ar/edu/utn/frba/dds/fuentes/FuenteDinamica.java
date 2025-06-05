@@ -22,6 +22,7 @@ public class FuenteDinamica implements Fuente {
   public void subirHecho(int idContribuyenteCreador, HechoContribuyente hecho) {
     hecho.setIdContribuyenteCreador(idContribuyenteCreador);
     repositorioHechos.guardar(this, hecho);
+    //crear solicitud subida
   }
 
   public void modificarHecho(int idContribuyenteCreador, HechoContribuyente hechoOriginal, HechoContribuyente hechoNuevo) {
@@ -32,8 +33,7 @@ public class FuenteDinamica implements Fuente {
       hechoOriginal.setVisible(false);
       //si no puede modificar, lanza excepcion
       //crear nuevo hecho con fecha modificacion ahora
-
-      hechoOriginal.actualizarDesde(hechoNuevo);
+      //hechoOriginal.actualizarDesde(hechoNuevo);
       SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal,hechoNuevo);
       //crea solicitud y le manda el id del hecho original
 

@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.UUID;
 
 public class Hecho {
-  private final String id;
-  private String titulo;
-  private String descripcion;
-  private String categoria;
-  private double latitud;
-  private double longitud;
-  private LocalDate fechaAcontecimiento;
-  private final LocalDate fechaCarga;
-  private final Origen origen;
-  private boolean visible;
-  private LocalDate fechaModificacion;
+  protected final String id;
+  protected String titulo;
+  protected String descripcion;
+  protected String categoria;
+  protected double latitud;
+  protected double longitud;
+  protected LocalDate fechaAcontecimiento;
+  protected final LocalDate fechaCarga;
+  protected final Origen origen;
+  protected boolean visible;
+  protected LocalDate fechaModificacion;
 
-  private final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
+  protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
 
   public Hecho(HechoBuilder builder) {
     this.id = UUID.randomUUID().toString();

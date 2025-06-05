@@ -7,7 +7,6 @@ import java.time.temporal.ChronoUnit;
 
 public class HechoContribuyente extends Hecho {
   private int idCreador;
-  private boolean pendienteRevision = true;
 
   public HechoContribuyente(HechoBuilder builder) {
     super(builder);
