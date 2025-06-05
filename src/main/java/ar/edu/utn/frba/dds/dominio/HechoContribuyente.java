@@ -29,8 +29,4 @@ public class HechoContribuyente extends Hecho {
       return true;
   }
 
-  public void revisar() {
-    this.pendienteRevision = false;
-  }
-
 }

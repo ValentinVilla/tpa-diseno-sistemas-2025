@@ -16,7 +16,7 @@ public abstract class Solicitud {
      this.estado = EstadoSolicitud.ACEPTADA;
      aplicarAceptacion();
   }
-  void rechazar(){
+  public void rechazar(){
       this.estado = EstadoSolicitud.RECHAZADA;
       aplicarRechazo();
   }

@@ -45,23 +45,6 @@ public class Hecho {
     return this.solicitudes;
   }
 
-  public void actualizarDesde(Hecho otro) {
-    this.setVisible(false);
-    HechoContribuyente nuevoHecho = new HechoContribuyente();
-    this.titulo = otro.getTitulo();
-    this.descripcion = otro.getDescripcion();
-    this.categoria = otro.getCategoria();
-    this.latitud = otro.getLatitud();
-    this.longitud = otro.getLongitud();
-    this.fechaAcontecimiento = otro.getFechaAcontecimiento();
-
-
-    this.fechaModificacion = LocalDate.now();
-
-
-    this.setVisible(false);
-  }
-
   public boolean cumpleCon(Filtro filtro) {
     return filtro.cumple(this);
   }

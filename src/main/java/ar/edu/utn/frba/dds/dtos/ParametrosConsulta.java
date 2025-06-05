@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParametrosConsulta {
-  private final String categoria =null ;
+  private final String categoria;
   private final LocalDate fechaReporteDesde;
   private final LocalDate fechaReporteHasta;
   private final LocalDate fechaAcontecimientoDesde;
@@ -14,13 +14,13 @@ public class ParametrosConsulta {
   private final String coleccionId;
 
   public ParametrosConsulta() {
-//    this.categoria = null;
-//    this.fechaReporteDesde = null;
-//    this.fechaReporteHasta = null;
-//    this.fechaAcontecimientoDesde = null;
-//    this.fechaAcontecimientoHasta = null;
-//    this.ubicacion = null;
-//    this.coleccionId = null;
+    this.categoria = null;
+    this.fechaReporteDesde = null;
+    this.fechaReporteHasta = null;
+    this.fechaAcontecimientoDesde = null;
+    this.fechaAcontecimientoHasta = null;
+    this.ubicacion = null;
+    this.coleccionId = null;
   }
 
   public ParametrosConsulta(String categoria,

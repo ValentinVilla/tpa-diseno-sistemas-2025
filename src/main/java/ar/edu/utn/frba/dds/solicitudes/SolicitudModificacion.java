@@ -5,13 +5,11 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public class SolicitudModificacion extends Solicitud{
   String sugerenciaModificacion;
-  Hecho original;
   Hecho hechoModificado;
 
-  public SolicitudModificacion(Hecho original, Hecho hechoModificado) {
-    super(original);
+  public SolicitudModificacion(Hecho hecho, Hecho hechoModificado) {
+    super(hecho);
     this.hechoModificado = hechoModificado;
-    this.sugerenciaModificacion = sugerenciaModificacion;
   }
 
   @Override
