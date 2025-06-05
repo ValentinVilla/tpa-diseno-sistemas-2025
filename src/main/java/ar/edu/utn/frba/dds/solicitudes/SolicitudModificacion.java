@@ -10,6 +10,7 @@ public class SolicitudModificacion extends Solicitud{
 
   public SolicitudModificacion(Hecho original, Hecho hechoModificado) {
     super(original);
+    hecho.setVisible(false);
     this.hechoModificado = hechoModificado;
     this.sugerenciaModificacion = sugerenciaModificacion;
   }

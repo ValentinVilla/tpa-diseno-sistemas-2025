@@ -29,7 +29,6 @@ public class FuenteDinamica implements Fuente {
     if (!puedeModificar(idContribuyenteCreador, hechoOriginal)) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     } else {
-      hechoOriginal.setVisible(false);
       //si no puede modificar, lanza excepcion
       //crear nuevo hecho con fecha modificacion ahora
       //hechoOriginal.actualizarDesde(hechoNuevo);
