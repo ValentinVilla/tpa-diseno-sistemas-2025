@@ -12,8 +12,8 @@ import org.joda.time.DateTime;
 public class ClienteDemo {
   private final AdaptadorHechoDemo adaptador; //esto nc si va
 
-  public ClienteDemo() {
-    this.adaptador = new AdaptadorHechoDemo();
+  public ClienteDemo(AdaptadorHechoDemo adaptador) {
+    this.adaptador = adaptador;
   }
 
 

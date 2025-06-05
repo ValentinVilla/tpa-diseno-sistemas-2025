@@ -36,7 +36,7 @@ public class FuenteDinamica implements Fuente {
       //hechoOriginal.actualizarDesde(hechoNuevo);
       SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal,hechoNuevo);
       //crea solicitud y le manda el id del hecho original
-
+    }
   }
 
   public boolean puedeModificar(int idContribuyenteCreador, HechoContribuyente hecho) {
