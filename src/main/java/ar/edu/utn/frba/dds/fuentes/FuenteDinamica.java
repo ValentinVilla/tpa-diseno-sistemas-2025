@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.HechoContribuyente;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 
@@ -13,16 +14,16 @@ public class FuenteDinamica implements Fuente {
     this.repositorioHechos = repositorioHechos;
   }
 
-  public void subirHecho(Hecho hecho) {
+  public void subirHecho(HechoContribuyente hecho) {
     subirHecho(-1, hecho);
   }
 
-  public void subirHecho(int idContribuyenteCreador, Hecho hecho) {
+  public void subirHecho(int idContribuyenteCreador, HechoContribuyente hecho) {
     hecho.setIdContribuyenteCreador(idContribuyenteCreador);
     repositorioHechos.guardar(this, hecho);
   }
 
-  public void modificarHecho(int idContribuyenteCreador, Hecho hechoOriginal, Hecho datosNuevos) {
+  public void modificarHecho(int idContribuyenteCreador, HechoContribuyente hechoOriginal, HechoContribuyente datosNuevos) {
     if (!puedeModificar(idContribuyenteCreador, hechoOriginal)) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     }
@@ -30,7 +31,7 @@ public class FuenteDinamica implements Fuente {
       hechoOriginal.actualizarDesde(datosNuevos);
   }
 
-  public boolean puedeModificar(int idContribuyenteCreador, Hecho hecho) {
+  public boolean puedeModificar(int idContribuyenteCreador, HechoContribuyente hecho) {
     return hecho.getIdContribuyenteCreador()==(idContribuyenteCreador)
         && hecho.estaDentroDePlazo();
   }
