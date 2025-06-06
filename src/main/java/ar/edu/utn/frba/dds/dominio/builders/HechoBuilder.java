@@ -108,7 +108,6 @@ public class HechoBuilder {
     return value;
   }
 
-  // Getters para que Hecho acceda a los atributos
   public String getTitulo() { return titulo; }
   public String getDescripcion() { return descripcion; }
   public String getCategoria() { return categoria; }

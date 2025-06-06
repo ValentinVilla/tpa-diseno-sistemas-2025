@@ -51,7 +51,6 @@ public class ColeccionBuilder {
     return value;
   }
 
-  // Getters para que Coleccion acceda a los campos
   public String getTitulo() {
     return titulo;
   }
