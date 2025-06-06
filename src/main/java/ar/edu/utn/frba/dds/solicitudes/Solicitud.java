@@ -20,10 +20,8 @@ public abstract class Solicitud {
       this.estado = EstadoSolicitud.RECHAZADA;
       aplicarRechazo();
   }
- //metodos que implementa cada tipo de solicitud
+
   public abstract void aplicarAceptacion();
   public abstract void aplicarRechazo();
-    // Implementar la lógica de aceptación
-
 
 }

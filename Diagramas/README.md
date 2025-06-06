@@ -1,6 +1,10 @@
 # Justificación de Decisiones de Diseño
 
+---
+
 # Paquete dominio
+
+---
 
 ## Builders (`ColeccionBuilder`, `HechoBuilder`)
 Se utiliza el patrón Builder para la creación de objetos inmutables de las clases `Coleccion` y `Hecho`.  
@@ -22,7 +26,6 @@ Se introdujo un `enum` llamado `Origen` que permite identificar si un hecho prov
 Se implementó una clase `SolicitudDeEliminacion` que permite gestionar las solicitudes de eliminación de hechos.
 Esta clase permite instanciar las solicitudes y su estado (mediante el `enum` `EstadoSolicitud`), facilitando su gestión.
 Esta clase se explica mejor en la sección de **Solicitudes**.
-
 
 ### 3. Creacion del campo Visibilidad:
 Es un booleano que nos va a permitir diferenciar cuando un hecho es valido o no ya que en el caso de no ser valido no tiene que mostrarse cuando se busquen hechos que pertenezcan a esa coleccion. Util cuando se gestionan las solicitudes.
@@ -50,6 +53,72 @@ Esto permite crear distintos criterios sin acoplarlos directamente a la clase `C
 Se definió `Fuente` como una clase abstracta, permitiendo la implementación de distintas fuentes de datos (por ejemplo, CSV, API, etc.) sin modificar la lógica de la aplicación.  
 Esto otorga mayor flexibilidad y escalabilidad en el futuro, aunque para esta empresa solo trabajamos con CSV.
 Estas fuentes estarán mejor explicadas en la sección de **Fuentes**.
+
+---
+
+# Paquete filtros
+
+---
+
+## Interfaz Filtro
+Se define la interfaz `Filtro` con un único método `cumple(Hecho hecho)`, que permite determinar si un hecho cumple cierto criterio.
+
+**Justificación:**
+- Implementa el **Patrón Strategy**, permitiendo encapsular y abstraer el criterio de filtrado respecto del resto del sistema.
+- Facilita la **extensibilidad y el polimorfismo**: agregar nuevos tipos de filtros no requiere modificar código existente, solo implementar la interfaz.
+- Permite inyectar filtros tanto en colecciones (como criterio de pertenencia) como en búsquedas, haciendo el sistema mucho más flexible y desacoplado.
+
+---
+
+## Filtros concretos
+Se implementan variantes concretas de filtro:
+### FiltroCategoria
+Filtra hechos por categoría.
+### FiltroFecha
+Filtra hechos por fecha exacta.
+### FiltroUbicacion
+Filtra hechos dentro de un rango de latitud y longitud.
+
+La ventaja de esta solución es que cada clase tiene **alta cohesión**: una sola responsabilidad, lo que facilita mantenimiento, pruebas y futuras extensiones.
+
+---
+
+# Paquete solicitudes
+
+---
+
+
+## Abstracción Solicitud y Subtipos
+
+Decidimos modelar la clase abstracta `Solicitud` para capturar la noción general de una solicitud sobre un hecho, con subclases para los tipos específicos.
+Cada solicitud tiene un estado (`EstadoSolicitud`), una referencia al hecho afectado y define el flujo de aceptación/rechazo a través de template methods.
+
+**Justificación:**
+- **Abstracción y polimorfismo:** Todas las solicitudes comparten estado y comportamiento básico, pero las acciones concretas al aceptar/rechazar dependen de su tipo. La herencia y los métodos abstractos (`aplicarAceptacion`, `aplicarRechazo`) permiten que cada subtipo defina su lógica específica, cumpliendo el **Patrón Template Method**.
+- **Extensibilidad:** Es sencillo agregar nuevas solicitudes implementando la abstracción.
+- **Centralización:** El flujo de procesamiento de solicitudes (aceptar/rechazar) queda unificado y centralizado, favoreciendo el mantenimiento.
+
+---
+
+## SolicitudEliminacion
+Encapsula la fundamentación textual y la acción de ocultar el hecho al ser aceptada.
+
+**Justificación:**
+- Permite la trazabilidad y la rendición de cuentas: los hechos no se eliminan físicamente, sino que se ocultan.
+- Puede evolucionar para agregar lógica de auditoría, notificaciones, etc.
+
+---
+
+## SolicitudModificacion y SolicitudSubida
+Estas clases permiten aceptar, rechazar o aceptar con sugerencia (en cuyo caso almacenan la sugerencia para el contribuyente, al cual luego habría que notificar).
+
+**Justificación:**
+- Facilita el feedback para un usuario contribuyente y encapsula la lógica para que un administrador pueda manejar la subida y modificación de hechos de parte de contribuyentes.
+- La lógica de visibilidad y sugerencias queda encapsulada en cada subtipo, favoreciendo la evolución futura (por ejemplo, notificaciones, auditorías, etc.).
+
+
+
+
 
 <!--Cosas viejas que aún no integré:
 ## LectorCSV

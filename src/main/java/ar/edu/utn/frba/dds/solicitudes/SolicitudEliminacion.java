@@ -4,8 +4,6 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public class SolicitudEliminacion extends Solicitud {
   private final String textoFundamentacion;
-//  private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
-//  private final Hecho hecho;
 
   public SolicitudEliminacion(String textoFundamentacion, Hecho hecho) {
     super(hecho);
@@ -21,14 +19,6 @@ public class SolicitudEliminacion extends Solicitud {
     hecho.setVisible(false);
   }
 
-//  public void aceptar(Hecho hecho) {
-//    this.estado = EstadoSolicitud.ACEPTADA;
-//    hecho.setVisible(false);
-//  }
-//
-//  public void rechazar() {
-//    this.estado = EstadoSolicitud.RECHAZADA;
-//  }
 
   public boolean estaPendiente() {
     return estado == EstadoSolicitud.PENDIENTE;
@@ -47,3 +37,14 @@ public class SolicitudEliminacion extends Solicitud {
   }
 
 }
+//  private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
+//  private final Hecho hecho;
+
+//  public void aceptar(Hecho hecho) {
+//    this.estado = EstadoSolicitud.ACEPTADA;
+//    hecho.setVisible(false);
+//  }
+//
+//  public void rechazar() {
+//    this.estado = EstadoSolicitud.RECHAZADA;
+//  }
