@@ -216,6 +216,99 @@ Responsable de la integración vía HTTP con instancias externas de MetaMapa, ma
 
 ---
 
+# Paquete repositorios
+
+## Patrón Repositorio y centralización de la persistencia
+Se implementan clases repositorio para abstraer y centralizar el acceso, almacenamiento y gestión de las entidades principales del dominio (colecciones, hechos y solicitudes).
+
+**Justificación:**
+- **Patrón Repositorio:** Separa la lógica de acceso y manipulación de datos del resto del dominio, permitiendo que las entidades y servicios no conozcan los detalles de la persistencia.
+- **Centralización:** Todos los accesos y modificaciones sobre las colecciones, hechos y solicitudes se realizan a través de sus respectivos repositorios, evitando dispersión de lógica y facilitando el mantenimiento.
+- **Desacoplamiento:** Permite cambiar la forma de almacenamiento (de memoria a base de datos real, archivos, etc.) sin impactar en el dominio ni en los servicios que consumen los repositorios.
+- **Preparación para la persistencia real:** Si en el futuro se requiere implementar persistencia en base de datos, solo es necesario modificar o reemplazar estos componentes.
+
+---
+
+## RepositorioColecciones
+Gestiona las colecciones mediante un mapa indexado por `handle`, permitiendo operaciones de guardar, buscar, listar, eliminar y actualizar colecciones.
+
+**Justificación:**
+- **Acceso eficiente:** El uso de un mapa por `handle` permite búsquedas rápidas y únicas, usando identificadores únicos para colecciones.
+- **Responsabilidad:** La clase tiene una única responsabilidad: manejar el almacenamiento y recuperación de colecciones.
+
+---
+
+## RepositorioHechos
+Almacena los hechos agrupados por fuente. Permite obtener todos los hechos, obtener hechos de una fuente específica, guardar, eliminar (lógico, vía visibilidad) y actualizar hechos.
+
+**Justificación:**
+- **Organización por fuente:** Refleja el modelo descentralizado del sistema, donde los hechos pueden provenir de distintas fuentes.
+- **Soporte a eliminación lógica:** La función `eliminar` marca el hecho como no visible en lugar de borrarlo físicamente, pudiendo cumplir posibles requerimientos futuros de accountability y trazabilidad.
+- **Cohesión:** Toda la lógica de pertenencia, actualización y eliminación de hechos se encuentra concentrada en una única clase.
+
+---
+
+## RepositorioSolicitudes
+Puede gestionar cualquier tipo de solicitud (por ejemplo, de eliminación, revisión, edición, etc.) por cada instancia del mismo mediante el manejo de una lista de objetos del tipo `Solicitud`, en vez de limitarlo a un subtipo específico.
+
+**Justificación:**
+- **Flexibilidad y extensibilidad:** Permite que el repositorio soporte de manera uniforme cualquier clase que herede de `Solicitud`, independientemente de su tipo o propósito.
+- **Reutilización:** Evita la necesidad de crear un repositorio diferente para cada subtipo de solicitud, promoviendo la reutilización de código y la simplicidad arquitectónica.
+- **Desacoplamiento:** Los servicios que consumen el repositorio pueden operar sobre la abstracción general (`Solicitud`), sin requerir conocimiento de los detalles concretos de cada subtipo.
+
+---
+
+# Paquete servicios
+
+---
+
+## Separación de lógica de aplicación y dominio
+Se crean servicios de aplicación (`ColeccionService`, `HechoService`, `SolicitudService`) que encapsulan la lógica de orquestación y manipulación de las entidades del dominio, delegando la persistencia a los repositorios correspondientes.
+Esto es para el futuro manejo de exposición de APIs y la lógica de negocio que no pertenece a las entidades del dominio.
+En realidad este paquete no es necesario para el funcionamiento del sistema, pero se deja preparado para futuras entregas y para mantener una buena organización del código. Esto ocasiona que el uso de las entidades del mismo no sea extensivo actualmente.
+
+**Justificación:**
+- **Separación de responsabilidades:** Los servicios de aplicación se ocupan de coordinar operaciones y reglas de negocio, dejando a las entidades del dominio la lógica específica de cada una.
+- **Desacoplamiento:** Los servicios interactúan con los repositorios para persistir y recuperar datos, evitando acoplamiento directo a la infraestructura y facilitando el reemplazo o evolución de la capa de persistencia.
+- **Cohesión:** Cada servicio agrupa operaciones relacionadas con una entidad o área funcional específica (colecciones, hechos, solicitudes).
+
+---
+
+## ColeccionService
+Es capaz de gestionar la creación, actualización y consulta de colecciones, así como la aplicación de filtros y la obtención de hechos asociados a una colección.
+
+**Justificación:**
+- **Orquestación:** Centraliza la lógica relacionada con la gestión de colecciones, facilitando la validación y el cumplimiento de reglas de negocio.
+- **Reutilización:** Permite que la lógica de gestión de colecciones sea utilizada de manera uniforme por distintos controladores o interfaces.
+
+---
+
+## HechoService
+Provee operaciones para filtrar, obtener, eliminar y actualizar hechos, delegando la persistencia al repositorio de hechos.
+
+**Justificación:**
+- **Encapsulamiento de la lógica de filtrado:** Permite centralizar y reutilizar los criterios de búsqueda y filtrado de hechos.
+- **Desacoplamiento de la lógica de presentación:** Separa la obtención y manipulación de datos de la lógica de interfaz o interacción con el usuario.
+
+---
+
+## SolicitudService
+Actualmente, `SolicitudService` gestiona solicitudes de eliminación, incluyendo la detección automática de spam mediante la integración con un detector externo.
+
+**Justificación:**
+- **Automatización de reglas de negocio:** Incorpora la lógica de validación y procesamiento automático de solicitudes, como el rechazo por spam.
+- **Centralización:** Permite que toda la lógica relacionada con el ciclo de vida de las solicitudes esté centralizada, facilitando el mantenimiento y la evolución.
+- **Testabilidad:** Hace posible probar flujos completos de gestión de solicitudes sin depender de la infraestructura de persistencia.
+
+**Aclaración:**  
+Aunque en la versión actual, `SolicitudService` está orientado a solicitudes de eliminación, el diseño del repositorio de solicitudes ya fue generalizado para admitir cualquier tipo de solicitud.  
+Por lo tanto, es menester para nosotros que `SolicitudService` también evolucione para soportar operaciones genéricas sobre distintos tipos de solicitudes (por ejemplo, solicitudes de revisión, edición, etc.), siguiendo el mismo principio de flexibilidad y extensibilidad. Esto implica que para futuras entregas vamos a:
+- Generalizar las operaciones para que funcionen con la abstracción `Solicitud` en vez de tipos concretos.
+- Introducir lógica específica según el tipo de solicitud a través de polimorfismo.
+- Facilitar la incorporación de nuevas reglas de negocio asociadas a los diferentes tipos de solicitud.
+
+---
+
 ## 📌 Diagrama de Clases General
 
 A continuación se presenta el diagrama UML general del dominio del sistema, en el que se modelan los principales conceptos como hechos, colecciones, contribuyentes, fuentes de datos y solicitudes de eliminación.
