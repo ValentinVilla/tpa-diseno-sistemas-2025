@@ -116,18 +116,71 @@ Estas clases permiten aceptar, rechazar o aceptar con sugerencia (en cuyo caso a
 - Facilita el feedback para un usuario contribuyente y encapsula la lógica para que un administrador pueda manejar la subida y modificación de hechos de parte de contribuyentes.
 - La lógica de visibilidad y sugerencias queda encapsulada en cada subtipo, favoreciendo la evolución futura (por ejemplo, notificaciones, auditorías, etc.).
 
-
-
-
-
-<!--Cosas viejas que aún no integré:
-## LectorCSV
-El lector cumple la funcion de leer un archivo CSV y pasar los datos a un objeto Hecho, utilizamos librerias para el manejo de estos tipos de archivos. Planteamos que si un archivo CSV no contiene los campos que utiliza un Hecho, tire una excepcion de que el archivo es incompleto.
-
-## Atributo categoria en Fuente
-Este atributo nos va a permitir diferenciar a que coleccion van a pertenecer los hechos. Para en el caso de sea un archivo SCV de incenidos forestales este campo va a valer "Incendios Forestales"
--->
 ---
+
+# Paquete Fuentes
+
+---
+
+## Interfaz Fuente
+Se define la interfaz `Fuente` como punto de entrada único para la obtención de hechos desde cualquier origen.  
+Incluye el método:
+- `cargarHechos(ParametrosConsulta parametros)`: permite la obtención de hechos con o sin parámetros de consulta, admitiendo filtrado y consultas flexibles.
+
+**Justificación:**
+- **Polimorfismo:** Permite tratar todas las fuentes (estáticas, dinámicas, proxy) de la misma manera desde el resto del sistema, desacoplando el código cliente de la implementación concreta.
+- **Extensibilidad:** Agregar nuevas fuentes (por ejemplo, una API externa, una base de datos, etc.) solo requiere implementar la interfaz, sin modificar el resto del sistema.
+- **Inyección de dependencias y testeo:** Facilita el uso de mocks o stubs en tests al programar contra la interfaz.
+
+---
+
+## FuenteEstatica y LectorCSV
+`FuenteEstatica` implementa `Fuente` para cargar hechos desde archivos CSV, delegando el parseo a la clase `LectorCSV`.  
+`LectorCSV` abstrae el proceso de lectura y transformación de datos externos al modelo interno (`Hecho`).
+
+**Justificación:**
+- **Single Responsibility Principle (SRP):** Cada clase tiene una responsabilidad única: `FuenteEstatica` representa la fuente, mientras que `LectorCSV` se encarga de la lectura y transformación del CSV. De esta forma, el parseo y la lógica de negocio se mantienen claramente separados.
+- **Extensibilidad:** Cambios en el formato de los archivos o en la lógica de transformación sólo afectan a `LectorCSV`.
+
+Cabe aclarar que para el manejo de los CSVs se utiliza una librería externa y además, para poder soportar cualquier tipo de CSV, se le permite al usuario definir los campos que va a tener el CSV y cuáles de estos se corresponden con cada atributo de Hecho.
+
+---
+
+## FuenteDinamica
+Modela el flujo de subida y gestión de hechos provistos por contribuyentes, recurriendo a un repositorio en memoria (`RepositorioHechos`).  
+Incluye métodos para subir y modificar hechos, validando permisos y plazos.
+
+**Justificación:**
+- **Responsabilidad clara:** Separa la lógica de negocio de la fuente (subida, modificación, permisos) del almacenamiento concreto, permitiendo evolucionar el repositorio a una base de datos en el futuro sin afectar la fuente.
+- **Facilita testing:** Permite simular diferentes escenarios de contribución y modificación.
+- **Cohesión:** Todas las reglas de pertenencia y modificación de hechos por contribuyentes se concentran en un mismo lugar.
+
+---
+
+## FuenteProxy (abstracta) - FuenteDemo y FuenteMetaMapa
+
+**Decisión:**  
+`FuenteProxy` es una abstracción para fuentes intermediarias (integraciones con APIs externas o sistemas de terceros).
+- `FuenteMetaMapa` integra el sistema con otras instancias de MetaMapa mediante una API REST, usando un cliente HTTP y adaptador de datos.
+- `FuenteDemo` modela la integración con un sistema externo ficticio, gestionando caché y antigüedad de datos.
+
+**Justificación:**
+- **Strategy y Template Method:** Permiten encapsular la lógica común de proxy y delegar los detalles concretos en subclases.
+- **Desacoplamiento:** La lógica de integración y de parseo queda aislada en clientes y adaptadores, permitiendo modificar protocolos o formatos sin afectar el resto del sistema.
+- **Caché y control de antigüedad:** En `FuenteDemo`, la gestión del caché interno y el control de tiempo permite cumplir con requisitos funcionales y de performance.
+- **Testabilidad:** Permite simular fuentes externas y probar comportamientos de integración.
+
+---
+
+### 5. Adaptadores de datos (`AdaptadorHechoDemo`, `AdaptadorHechoMetaMapa`)
+Se crean adaptadores para convertir datos externos (por ejemplo, JSON, mapas de datos de APIs, etc.) al modelo interno `Hecho`.
+
+**Justificación:**
+- **Responsabilidades y aislamiento:** Permiten centralizar y aislar la lógica de transformación, facilitando los cambios si varía el formato externo y respetando el principio de responsabilidad única.
+- **Reutilización:** Distintos clientes/fuentes pueden reutilizar el mismo adaptador, evitando duplicación de lógica.
+
+---
+
 ## 📌 Diagrama de Clases General
 
 A continuación se presenta el diagrama UML general del dominio del sistema, en el que se modelan los principales conceptos como hechos, colecciones, contribuyentes, fuentes de datos y solicitudes de eliminación.
