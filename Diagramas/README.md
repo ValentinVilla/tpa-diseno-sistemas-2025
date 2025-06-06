@@ -87,7 +87,6 @@ La ventaja de esta solución es que cada clase tiene **alta cohesión**: una sol
 
 ---
 
-
 ## Abstracción Solicitud y Subtipos
 
 Decidimos modelar la clase abstracta `Solicitud` para capturar la noción general de una solicitud sobre un hecho, con subclases para los tipos específicos.
@@ -172,12 +171,48 @@ Incluye métodos para subir y modificar hechos, validando permisos y plazos.
 
 ---
 
-### 5. Adaptadores de datos (`AdaptadorHechoDemo`, `AdaptadorHechoMetaMapa`)
+## Adaptadores de datos (`AdaptadorHechoDemo`, `AdaptadorHechoMetaMapa`)
 Se crean adaptadores para convertir datos externos (por ejemplo, JSON, mapas de datos de APIs, etc.) al modelo interno `Hecho`.
 
 **Justificación:**
 - **Responsabilidades y aislamiento:** Permiten centralizar y aislar la lógica de transformación, facilitando los cambios si varía el formato externo y respetando el principio de responsabilidad única.
 - **Reutilización:** Distintos clientes/fuentes pueden reutilizar el mismo adaptador, evitando duplicación de lógica.
+
+---
+
+# Paquete clientes
+
+---
+
+## Encapsulamiento de la integración con sistemas externos
+Se crean clases específicas (`ClienteDemo`, `ClienteMetaMapa`) para encapsular y aislar la lógica de integración con sistemas externos, ya sean APIs ficticias o servicios REST reales.
+
+**Justificación:**
+- **Desacoplamiento:** Las fuentes (`FuenteDemo`, `FuenteMetaMapa`) delegan toda la lógica de acceso, comunicación y parseo de datos a los clientes. De esta manera, el sistema central nunca interactúa directamente con protocolos de red ni mapeos de datos externos.
+- **Extensibilidad:** Permite agregar fácilmente nuevas integraciones (nuevos clientes) para distintos servicios externos sin modificar el resto del sistema.
+- **Testabilidad:** Facilita la simulación o reemplazo de clientes en tests, permitiendo probar el sistema sin necesidad de acceder a servicios reales.
+- **Responsabilidades:** Cada cliente tiene la única responsabilidad de interactuar con una API/servicio externo y transformar/obtener los datos necesarios, sin acoplarse a la lógica de negocio.
+- **Adaptabilidad:** Si cambia el formato de la API externa, solo el cliente y su adaptador requieren cambios, minimizando el impacto en otras partes del sistema.
+
+---
+
+## ClienteDemo
+Encapsula el consumo de una fuente externa ficticia, utilizando un adaptador para transformar el mapa de datos recibido en objetos del dominio (`Hecho`).
+
+**Justificación:**
+- **Aislamiento:** El sistema nunca interactúa directamente con la estructura de datos de la API demo; todo pasa por el cliente y el adaptador.
+- **Reutilización:** El mismo cliente puede usarse en diferentes contextos o ser extendido para soportar nuevas formas de interacción.
+- **Simulación:** Permite simular el funcionamiento de integraciones reales en entornos de desarrollo o prueba.
+
+---
+
+## ClienteMetaMapa
+Responsable de la integración vía HTTP con instancias externas de MetaMapa, manejando la construcción de URLs, el envío de solicitudes, el parseo de respuestas JSON y el envío de solicitudes de eliminación.
+
+**Justificación:**
+- **Centralización:** Toda la lógica de comunicación y transformación con la API MetaMapa está en un único lugar.
+- **Robustez y control de errores:** El cliente maneja errores de red y de parseo de manera centralizada, facilitando el manejo de fallos y la trazabilidad.
+- **Escalabilidad:** Si la API MetaMapa evoluciona, los cambios de integración quedan aislados en esta clase.
 
 ---
 
