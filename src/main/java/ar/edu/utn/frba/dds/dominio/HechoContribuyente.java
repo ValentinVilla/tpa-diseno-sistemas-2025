@@ -5,12 +5,11 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class HechoContribuyente extends Hecho{
+public class HechoContribuyente extends Hecho {
   private int idCreador;
 
-  public HechoContribuyente(HechoBuilder builder,  int idCreador) {
+  public HechoContribuyente(HechoBuilder builder) {
     super(builder);
-    this.idCreador = idCreador;
   }
 
   public void setIdContribuyenteCreador(int idContribuyenteCreador) {
@@ -19,6 +18,10 @@ public class HechoContribuyente extends Hecho{
 
   public int getIdContribuyenteCreador() {
     return this.idCreador;
+  }
+
+  public boolean getVisible(){
+    return visible;
   }
 
   public boolean estaDentroDePlazo() {

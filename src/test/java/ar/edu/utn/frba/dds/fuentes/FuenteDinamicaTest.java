@@ -1,12 +1,12 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.fuentes;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.HechoContribuyente;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 import java.time.LocalDate;
 
@@ -20,11 +20,11 @@ public class FuenteDinamicaTest {
   @BeforeEach
   void init() {
     repo = new RepositorioHechos();
-    fuente = new FuenteDinamica("fuente-test", repo);
+    fuente = new FuenteDinamica(repo);
   }
 
-  private Hecho crearHecho(String titulo) {
-    return new HechoBuilder()
+  private HechoContribuyente crearHecho(String titulo) {
+    HechoBuilder hechoBase = new HechoBuilder()
         .titulo(titulo)
         .descripcion("desc")
         .categoria("cat")
@@ -33,21 +33,21 @@ public class FuenteDinamicaTest {
         .fechaAcontecimiento(LocalDate.now())
         .fechaCarga(LocalDate.now())
         .visible(true)
-        .origen(Origen.CONTRIBUYENTE)
-        .build();
+        .origen(Origen.CONTRIBUYENTE);
+    return new HechoContribuyente(hechoBase);
   }
 
   @Test
   void puedeSubirHechoAnonimo() {
-    Hecho hecho = crearHecho("hecho-anonimo");
-    fuente.subirHecho(hecho);
+    HechoContribuyente hecho = crearHecho("hecho-anonimo");
+    fuente.subirHecho(-1, hecho);
 
     assertEquals(1, fuente.cargarHechos().size());
   }
 
   @Test
   void puedeSubirHechoRegistrado() {
-    Hecho hecho = crearHecho("hecho-registrado");
+    HechoContribuyente hecho = crearHecho("hecho-registrado");
     fuente.subirHecho(42, hecho);
 
     assertEquals(42, hecho.getIdContribuyenteCreador());
@@ -55,21 +55,25 @@ public class FuenteDinamicaTest {
 
   @Test
   void puedeModificarHechoDentroDelPlazo() {
-    Hecho original = crearHecho("original");
-    fuente.subirHecho(1, original);
+    HechoContribuyente original = crearHecho("incendio");
+    HechoContribuyente nuevo = crearHecho("incendio-modificado");
+    FuenteDinamica fuente = new FuenteDinamica(repo);
 
-    Hecho nuevo = crearHecho("modificado");
-    fuente.modificarHecho(1, original, nuevo);
+    //fuente.subirHecho(10, original);
+    fuente.subirHecho(10, original);
 
-    assertEquals("modificado", original.getTitulo());
+    fuente.modificarHecho(10, original, nuevo);
+
+    assertTrue(nuevo.getVisible());
+    assertFalse(original.getVisible());
   }
 
   @Test
   void noPuedeModificarHechoSiEsOtroUsuario() {
-    Hecho original = crearHecho("original");
+    HechoContribuyente original = crearHecho("original");
     fuente.subirHecho(1, original);
 
-    Hecho nuevo = crearHecho("malicioso");
+    HechoContribuyente nuevo = crearHecho("malicioso");
 
     assertThrows(RuntimeException.class, () -> fuente.modificarHecho(99, original, nuevo));
   }
@@ -79,7 +83,7 @@ public class FuenteDinamicaTest {
     int idContribuyente = 1;
 
     // Crear hecho con fecha de carga hace más de 7 días
-    Hecho hecho = new HechoBuilder()
+    HechoBuilder Builder = new HechoBuilder()
         .titulo("original")
         .descripcion("desc")
         .categoria("cat")
@@ -88,13 +92,13 @@ public class FuenteDinamicaTest {
         .fechaAcontecimiento(LocalDate.now())
         .fechaCarga(LocalDate.now().minusDays(8)) // Simula pasaron 8 dias
         .visible(true)
-        .origen(Origen.CONTRIBUYENTE)
-        .build();
+        .origen(Origen.CONTRIBUYENTE);
+    HechoContribuyente hecho = new HechoContribuyente(Builder);
 
     // Se sube el hecho
     fuente.subirHecho(idContribuyente, hecho);
 
-    Hecho datosNuevos = new HechoBuilder()
+    HechoBuilder Builder2 = new HechoBuilder()
         .titulo("modificado")
         .descripcion("nueva desc")
         .categoria("cat")
@@ -103,8 +107,9 @@ public class FuenteDinamicaTest {
         .fechaAcontecimiento(LocalDate.now())
         .fechaCarga(LocalDate.now()) // no importa
         .visible(true)
-        .origen(Origen.CONTRIBUYENTE)
-        .build();
+        .origen(Origen.CONTRIBUYENTE);
+
+    HechoContribuyente datosNuevos = new HechoContribuyente(Builder2);
 
     // Esperamos excepcion al intentar modificar fuera del plazo
     assertThrows(RuntimeException.class, () -> fuente.modificarHecho(1, hecho, datosNuevos));
@@ -112,11 +117,11 @@ public class FuenteDinamicaTest {
 
   @Test
   void puedeEliminarHecho() {
-    Hecho hecho = crearHecho("para borrar");
+    HechoContribuyente hecho = crearHecho("para borrar");
     fuente.subirHecho(1, hecho);
 
     repo.eliminar(hecho);
 
-    assertTrue(repo.obtenerhechosDe(fuente).isEmpty());
+    assertFalse(hecho.getVisible());
   }
 }

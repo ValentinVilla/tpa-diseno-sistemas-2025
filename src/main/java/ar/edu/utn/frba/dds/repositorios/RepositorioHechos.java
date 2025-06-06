@@ -39,18 +39,8 @@ public class RepositorioHechos {
   }
 
   public void eliminar(Hecho hecho) {
-    for (List<Hecho> lista : hechosPorFuente.values()) {
-      if (lista.remove(hecho)) {
-        break;
-      }
-    }
-  }
-
-  public void eliminarDeFuente(Fuente fuente, Hecho hecho) {
-    List<Hecho> lista = hechosPorFuente.get(fuente);
-    if (lista != null) {
-      lista.remove(hecho);
-    }
+    hecho.setVisible(false);
+    actualizar(hecho);
   }
 
   public void actualizar(Hecho hecho) {

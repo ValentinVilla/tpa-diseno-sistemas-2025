@@ -26,6 +26,7 @@ public class FuenteDemo extends FuenteProxy {
     this.repo = repo;
   }
 
+  //cada una hora
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
     if (pasoUnaHoraDesdeUltimaConsulta()) {
@@ -37,11 +38,15 @@ public class FuenteDemo extends FuenteProxy {
       Coleccion coleccion = repo.buscarPorHandle(parametros.getColeccionId());
       stream = stream.filter(coleccion::hechoPertenece);
     }
-
     return stream.collect(Collectors.toCollection(ArrayList::new));
   }
 
   boolean pasoUnaHoraDesdeUltimaConsulta() {
     return ultimaConsulta == null || LocalDateTime.now().isAfter(ultimaConsulta.plusHours(1));
+  }
+
+  //METODO PARA TESTEAR NECESITO FORZAR O SIMULAR QUE SE PASO UNA HORA
+  public void forzarExpiracionCache() {
+    ultimaConsulta = LocalDateTime.now().minusHours(2); // Simula que pasó más de una hora
   }
 }

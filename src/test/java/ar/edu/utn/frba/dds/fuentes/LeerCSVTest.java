@@ -1,9 +1,7 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
-import ar.edu.utn.frba.dds.fuentes.FuenteEstatica;
-import ar.edu.utn.frba.dds.fuentes.LectorCSV;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.servicios.ColeccionService;
@@ -89,7 +87,7 @@ public class LeerCSVTest {
 
     coleccionService.crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro);
 
-    assertNotNull(repoColeccion.obtenerTodas());
+    assertNotNull(repoColeccion.listarTodas());
   }
 
   @Test

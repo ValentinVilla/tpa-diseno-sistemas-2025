@@ -21,4 +21,8 @@ public class AdaptadorHechoDemo {
         .origen(Origen.SERVICIOEXTERNO)
         .build();
   }
+
+  public AdaptadorHechoDemo() {
+    // Constructor vacío
+  }
 }

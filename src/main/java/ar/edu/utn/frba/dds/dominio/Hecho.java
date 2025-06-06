@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.UUID;
 
 public class Hecho {
-  private final String id;
-  private String titulo;
-  private String descripcion;
-  private String categoria;
-  private double latitud;
-  private double longitud;
-  private LocalDate fechaAcontecimiento;
-  private final LocalDate fechaCarga;
-  private final Origen origen;
-  private boolean visible;
-  private LocalDate fechaModificacion;
+  protected final String id;
+  protected String titulo;
+  protected String descripcion;
+  protected String categoria;
+  protected double latitud;
+  protected double longitud;
+  protected LocalDate fechaAcontecimiento;
+  protected final LocalDate fechaCarga;
+  protected final Origen origen;
+  protected boolean visible;
+  protected LocalDate fechaModificacion;
 
-  private final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
+  protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
 
   public Hecho(HechoBuilder builder) {
     this.id = UUID.randomUUID().toString();
@@ -35,7 +35,6 @@ public class Hecho {
     this.fechaCarga = builder.getFechaCarga();
     this.origen = builder.getOrigen();
     this.visible = builder.isVisible();
-    this.fechaModificacion = builder.getFechaModificacion();
   }
 
   public void agregarSolicitud(SolicitudEliminacion solicitud) {
@@ -44,17 +43,6 @@ public class Hecho {
 
   public List<SolicitudEliminacion> getSolicitudes() {
     return this.solicitudes;
-  }
-
-  public void actualizarDesde(Hecho otro) {
-    this.titulo = otro.getTitulo();
-    this.descripcion = otro.getDescripcion();
-    this.categoria = otro.getCategoria();
-    this.latitud = otro.getLatitud();
-    this.longitud = otro.getLongitud();
-    this.fechaAcontecimiento = otro.getFechaAcontecimiento();
-    this.fechaModificacion = LocalDate.now();
-    this.visible = otro.visible;
   }
 
   public boolean cumpleCon(Filtro filtro) {
@@ -97,7 +85,7 @@ public class Hecho {
     return this.fechaCarga;
   }
 
-  public LocalDate getFechaAcontecimiento(){
+  public LocalDate getFechaAcontecimiento() {
     return this.fechaAcontecimiento;
   }
 
