@@ -3,151 +3,115 @@ skinparam classAttributeIconSize 0
 left to right direction
 skinparam linetype ortho
 
-' ==========[ ÁREA: Fuentes ]==========
-package "Fuentes" {
-  interface Fuente {
-    + cargarHechos(): ArrayList<Hecho>
-  }
-
-  abstract class FuenteProxy {
-    + cargarHechos(ParametrosConsulta): ArrayList<Hecho>
-  }
-
-  class FuenteDinamica {
-    - repositorioHechos: RepositorioHechos
-    + subirHecho(...)
-    + modificarHecho(...)
-  }
-
-  class FuenteEstatica {
-    - pathArchivo: String
-    - categoria: String
-    - campos: ArrayList<String>
-  }
-
-  class FuenteDemo {
-    - cliente: ClienteDemo
-  }
-
-  class FuenteMetaMapa {
-    - cliente: ClienteMetaMapa
-  }
-
-  class FuenteManual {
-    - hechos: ArrayList<Hecho>
-  }
-
-  FuenteDinamica ..|> Fuente
-  FuenteEstatica ..|> Fuente
-  FuenteDemo ..|> Fuente
-  FuenteMetaMapa ..|> Fuente
-  FuenteManual ..|> Fuente
-  FuenteProxy ..|> Fuente
-  FuenteDemo ..|> FuenteProxy
-  FuenteMetaMapa ..|> FuenteProxy
+interface Fuente {
+  + cargarHechos(): ArrayList<Hecho>
 }
 
-' ==========[ ÁREA: Hechos y Repositorio ]==========
-package "Modelo de Hechos" {
-  abstract class Hecho {
-    - id: String
-    - titulo: String
-    - descripcion: String
-    - categoria: String
-    - latitud: double
-    - longitud: double
-    - fechaAcontecimiento: LocalDate
-    - fechaCarga: LocalDate
-    - origen: Origen
-    - visible: boolean
-    - solicitudes: List<SolicitudEliminacion>
-  }
-
-  class HechoContribuyente {
-    - idCreador: int
-    + estaDentroDePlazo(): boolean
-  }
-
-  enum Origen {
-    CARGAMANUAL
-    DATASET
-    CONTRIBUYENTE
-    SERVICIOEXTERNO
-  }
-
-  class RepositorioHechos {
-    - hechosPorFuente: Map<FuenteDinamica, List<Hecho>>
-  }
-
-  Hecho <|-- HechoContribuyente
-  FuenteDinamica --> RepositorioHechos
-  RepositorioHechos --> Hecho
+abstract class FuenteProxy {
+  + cargarHechos(ParametrosConsulta): ArrayList<Hecho>
 }
 
-' ==========[ ÁREA: Solicitudes ]==========
-package "Solicitudes" {
-  abstract class Solicitud {
-    - estado: EstadoSolicitud
-    - hecho: Hecho
-    + aceptar()
-    + rechazar()
-    + aplicarAceptacion()
-    + aplicarRechazo()
-  }
-
-  class SolicitudEliminacion {
-    - textoFundamentacion: String
-  }
-
-  class SolicitudModificacion {
-    - sugerenciaModificacion: String
-    - hechoModificado: Hecho
-  }
-
-  class SolicitudSubida {
-    - sugerenciaModificacion: String
-  }
-
-  enum EstadoSolicitud {
-    PENDIENTE
-    ACEPTADA
-    RECHAZADA
-  }
-
-  Solicitud <|-- SolicitudEliminacion
-  Solicitud <|-- SolicitudModificacion
-  Solicitud <|-- SolicitudSubida
-  Solicitud --> EstadoSolicitud
-  Solicitud --> Hecho
+class FuenteDinamica {
+  - repositorioHechos: RepositorioHechos
+  + subirHecho(...)
+  + modificarHecho(...)
 }
 
-' ==========[ ÁREA: Filtros ]==========
-package "Filtros" {
-  interface Filtro {
-    + cumple(hecho: Hecho): boolean
-  }
-
-  class FiltroCategoria {
-    - categoria: String
-  }
-
-  class FiltroFecha {
-    - fechaBuscada: LocalDate
-  }
-
-  class FiltroUbicacion {
-    - latitudMin: Double
-    - latitudMax: Double
-    - longitudMin: Double
-    - longitudMax: Double
-  }
-
-  FiltroCategoria ..|> Filtro
-  FiltroFecha ..|> Filtro
-  FiltroUbicacion ..|> Filtro
+class FuenteEstatica {
+  - pathArchivo: String
+  - categoria: String
+  - campos: ArrayList<String>
 }
 
-' ==========[ ÁREA: Colección ]==========
+class FuenteDemo {
+  - cliente: ClienteDemo
+}
+
+class FuenteMetaMapa {
+  - cliente: ClienteMetaMapa
+}
+
+class FuenteManual {
+  - hechos: ArrayList<Hecho>
+}
+
+abstract class Hecho {
+  - id: String
+  - titulo: String
+  - descripcion: String
+  - categoria: String
+  - latitud: double
+  - longitud: double
+  - fechaAcontecimiento: LocalDate
+  - fechaCarga: LocalDate
+  - origen: Origen
+  - visible: boolean
+  - solicitudes: List<SolicitudEliminacion>
+}
+
+class HechoContribuyente {
+  - idCreador: int
+  + estaDentroDePlazo(): boolean
+}
+
+enum Origen {
+  CARGAMANUAL
+  DATASET
+  CONTRIBUYENTE
+  SERVICIOEXTERNO
+}
+
+class RepositorioHechos {
+  - hechosPorFuente: Map<FuenteDinamica, List<Hecho>>
+}
+
+abstract class Solicitud {
+  - estado: EstadoSolicitud
+  - hecho: Hecho
+  + aceptar()
+  + rechazar()
+  + aplicarAceptacion()
+  + aplicarRechazo()
+}
+
+class SolicitudEliminacion {
+  - textoFundamentacion: String
+}
+
+class SolicitudModificacion {
+  - sugerenciaModificacion: String
+  - hechoModificado: Hecho
+}
+
+class SolicitudSubida {
+  - sugerenciaModificacion: String
+}
+
+enum EstadoSolicitud {
+  PENDIENTE
+  ACEPTADA
+  RECHAZADA
+}
+
+interface Filtro {
+  + cumple(hecho: Hecho): boolean
+}
+
+class FiltroCategoria {
+  - categoria: String
+}
+
+class FiltroFecha {
+  - fechaBuscada: LocalDate
+}
+
+class FiltroUbicacion {
+  - latitudMin: Double
+  - latitudMax: Double
+  - longitudMin: Double
+  - longitudMax: Double
+}
+
 class Coleccion {
   - titulo: String
   - descripcion: String
@@ -156,8 +120,31 @@ class Coleccion {
   + contiene(hecho: Hecho): boolean
 }
 
-Coleccion --> Fuente
-Coleccion --> Filtro
-Coleccion --> Hecho
+FuenteDinamica ..|> Fuente
+FuenteEstatica ..|> Fuente
+FuenteManual ..|> Fuente
+FuenteProxy ..|> Fuente
+FuenteDemo --|> FuenteProxy
+FuenteMetaMapa --|> FuenteProxy
+
+Hecho <|-- HechoContribuyente
+Hecho "1"-->"1" Origen
+FuenteDinamica "*" --> "1" RepositorioHechos
+
+
+Solicitud <|-- SolicitudEliminacion
+Solicitud <|-- SolicitudModificacion
+Solicitud <|-- SolicitudSubida
+Solicitud "1"-->"1"EstadoSolicitud
+Solicitud "*"-->"1" Hecho
+
+FiltroCategoria ..|> Filtro
+FiltroFecha ..|> Filtro
+FiltroUbicacion ..|> Filtro
+
+Coleccion "*"-->"1" Fuente
+Coleccion "*"-->"*" Filtro
+Coleccion "*"-->"*"Hecho
+
 
 @enduml
