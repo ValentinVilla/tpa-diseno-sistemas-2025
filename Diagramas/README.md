@@ -309,6 +309,62 @@ Por lo tanto, es menester para nosotros que `SolicitudService` también evolucio
 
 ---
 
+# Paquete dtos
+
+---
+
+## Desacoplamiento entre capas y protección del dominio
+Se implementan clases DTO (Data Transfer Object), para trasladar datos entre capas del sistema y/o hacia el exterior (por ejemplo, APIs o interfaces gráficas), sin exponer directamente las entidades internas del dominio.
+
+**Justificación:**
+- **Desacoplamiento:** Los DTO actúan como una barrera entre las entidades de dominio y las interfaces externas, evitando filtrar detalles internos o lógica de negocio fuera de la capa correspondiente.
+- **Protección del modelo:** Permite exponer solo los datos relevantes, omitiendo atributos sensibles, métodos o lógica que no deben ser accesibles desde el exterior.
+- **Flexibilidad:** Si la estructura de las entidades de dominio cambia, los DTO pueden evolucionar de manera independiente, manteniendo la compatibilidad con clientes externos o APIs.
+- **Facilita la serialización y deserialización:** Los DTO están preparados para ser convertidos fácilmente en formatos como JSON o XML, facilitando la comunicación con otros sistemas o capas.
+
+---
+
+## HechoDTO
+Encapsula los datos de un hecho que se desean exponer (título, descripción, categoría, ubicación, fechas), construyéndose a partir de una instancia de `Hecho`.
+
+**Justificación:**
+- **Encapsulamiento de información:** Solo los datos seleccionados son expuestos, permitiendo cumplir con requerimientos de privacidad y claridad.
+- **Prevención de fugas de lógica:** No se expone lógica de negocio ni métodos de la entidad, solo información de lectura.
+
+---
+
+## ParametrosConsulta
+Encapsula los criterios de búsqueda y filtrado de hechos (categoría, fechas, ubicación, colección), facilitando la transferencia de estos criterios entre capas y la construcción dinámica de consultas.
+
+**Justificación:**
+- **Claridad de interfaz:** Agrupa todos los filtros posibles en un solo objeto, simplificando interfaces y métodos.
+- **Extensibilidad:** Se pueden agregar nuevos criterios de filtrado sin modificar todas las firmas de métodos que los consumen.
+- **Comodidad para integración:** El método `comoMapa()` permite transformar fácilmente los parámetros para construir URLs o consultas en APIs externas.
+
+---
+
+## Paquete DetectorSpam
+
+---
+
+## Abstracción de la lógica de detección de spam
+Se define la interfaz `DetectorDeSpam` para abstraer la lógica de detección de spam, permitiendo desacoplar la validación de spam del resto del sistema.
+
+**Justificación:**
+- **Desacoplamiento:** Al definir una interfaz, la lógica de detección de spam no queda acoplada a una implementación particular. Esto permite que los servicios que la consumen (como el manejo de solicitudes) puedan trabajar con cualquier implementación.
+- **Intercambiabilidad:** Facilita el reemplazo de la implementación.
+- **Testabilidad:** Permite inyectar implementaciones de prueba para validar el funcionamiento del sistema sin depender de la lógica real de spam.
+
+---
+
+## Alternativas de implementación
+La interfaz propuesta:
+- **Permite implementar fácilmente ambas variantes:** una implementación local (TF-IDF u otro algoritmo simple), o una integración con APIs externas.
+- **Reduce el impacto de cambios futuros:** Si se decide migrar de un detector local a un servicio externo (o viceversa), solo se debe cambiar la clase concreta, no el resto del sistema.
+- **Aborda preocupaciones de privacidad y costos:** El encapsulamiento de la lógica permite evaluar y gestionar los riesgos asociados (privacidad de los textos enviados, costos de consumo de APIs externas, etc.) en un único lugar.
+
+---
+
 ## 📌 Diagrama de Clases General
 
 A continuación se presenta el diagrama UML general del dominio del sistema, en el que se modelan los principales conceptos como hechos, colecciones, contribuyentes, fuentes de datos y solicitudes de eliminación.
