@@ -117,6 +117,6 @@ public class LeerCSVTest {
     ));
 
     FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
-    return fuente.cargarHechos();
+    return fuente.cargarHechos(null);
   }
 }

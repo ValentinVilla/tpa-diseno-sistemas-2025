@@ -1,40 +1,38 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
+import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 
 public class SolicitudModificacion extends Solicitud{
-  String sugerenciaModificacion;
-  Hecho original;
   Hecho hechoModificado;
 
-  public SolicitudModificacion(Hecho original, Hecho hechoModificado) {
-    super(original);
-    hecho.setVisible(false);
+  public SolicitudModificacion(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
+    super(hecho, sugerenciaModificacion, detector);;
     this.hechoModificado = hechoModificado;
-    this.sugerenciaModificacion = sugerenciaModificacion;
+    hechoModificado.setVisible(false);
   }
 
-  public String getSugerenciaModificacion() {
-    return sugerenciaModificacion;
-  }
 
   @Override
   public void aplicarAceptacion() {
-
+    hechoModificado.setVisible(true);
+    hecho.setVisible(false);
     return;
   }
 
   @Override
   public void aplicarRechazo() {
-    hecho.setVisible(true);
-    hechoModificado.setVisible(false);
+
+    //hecho.setVisible(true);
+    //hechoModificado.setVisible(false);
     //notificarAlAutorDelRechazoDeModificacion();
   }
 
   public void aceptarConSugerencia(String sugerencia){
-    sugerenciaModificacion = sugerencia;
+    aplicarAceptacion();
+    textoFundamentacion = sugerencia;
     //generarSugerenciaDeModificacion(); esto en teoria tiene que notificar a quien realizo la modificacion
-    System.out.println("Solicitud de modificación aceptada con sugerencia: " + sugerenciaModificacion);
+    System.out.println("Solicitud de modificación aceptada con sugerencia: " + textoFundamentacion);
   }
 }

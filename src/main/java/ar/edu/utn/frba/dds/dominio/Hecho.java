@@ -89,5 +89,9 @@ public class Hecho {
     return this.fechaAcontecimiento;
   }
 
+  public boolean getVisible(){
+    return visible;
+  }
+
 }
 

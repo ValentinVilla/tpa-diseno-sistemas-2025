@@ -1,19 +1,20 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
+import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
-public abstract class Solicitud {
+public abstract class Solicitud {//como se yo si este Solicitud tiene que ser una clase abstracta o una interfaz???
 
   protected EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
   protected Hecho hecho;
-  String sugerenciaModificacion;
+  String textoFundamentacion;
   public DetectorDeSpam detector;
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector) {
     this.hecho = hecho;
     this.estado = EstadoSolicitud.PENDIENTE;
-    this.sugerenciaModificacion = sugerenciaModificacion;
+    this.textoFundamentacion = sugerenciaModificacion;
     this.detector = detector;
     if(detector != null && detector.esSpam(sugerenciaModificacion)){
       throw new IllegalArgumentException("La sugerencia de modificación es spam");
@@ -28,10 +29,20 @@ public abstract class Solicitud {
       this.estado = EstadoSolicitud.RECHAZADA;
       aplicarRechazo();
   }
+
  //metodos que implementa cada tipo de solicitud
   public abstract void aplicarAceptacion();
   public abstract void aplicarRechazo();
-    // Implementar la lógica de aceptación
+    // Implementar la lógica de aceptación y rechazo en las subclases
 
 
+  public String getTextoFundamentacion() {
+    return textoFundamentacion;
+  }
+  public Hecho getHecho() {
+    return hecho;
+  }
+  public EstadoSolicitud getEstado() {
+    return estado;
+  }
 }

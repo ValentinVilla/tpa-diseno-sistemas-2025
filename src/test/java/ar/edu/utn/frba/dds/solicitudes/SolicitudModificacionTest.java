@@ -1,10 +1,12 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
+import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +19,7 @@ public class SolicitudModificacionTest {
   private HechoDinamico hechoModificado;
   private SolicitudModificacion solicitud;
   private FuenteDinamica fuente;
+  private Contribuyente contribuyente;
 
   @BeforeEach
   void setUp() {
@@ -43,15 +46,17 @@ public class SolicitudModificacionTest {
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
-    hechoOriginal = new HechoDinamico(builderOriginal);
-    hechoModificado = new HechoDinamico(builderModificado);
-    solicitud = new SolicitudModificacion(hechoOriginal, hechoModificado);
+    contribuyente = new Contribuyente(42, 25, "juan", "perez");
+    hechoOriginal = new HechoDinamico(builderOriginal, contribuyente);
+    hechoModificado = new HechoDinamico(builderModificado, contribuyente);
+    solicitud = new SolicitudModificacion(hechoOriginal, "sugerenciaModificacion",new ImplementadorSpam(10),hechoModificado);
   }
 
    @Test
-  void aplicarRechazoRevierteVisibilidad() {
-    solicitud.aplicarRechazo();
+  void aplicarRechazoDejaALaSolicitudRechazadaYLosHechosComoEstan() {
+    solicitud.rechazar();
 
+    assertEquals(solicitud.estado, EstadoSolicitud.RECHAZADA);
     assertTrue(hechoOriginal.getVisible());
     assertFalse(hechoModificado.getVisible());
   }
@@ -60,7 +65,7 @@ public class SolicitudModificacionTest {
   void aceptarConSugerenciaGuardaSugerencia() {
     solicitud.aceptarConSugerencia("Mejorar ubicación");
 
-    assertEquals("Mejorar ubicación", solicitud.getSugerenciaModificacion());
+    assertEquals("Mejorar ubicación", solicitud.getTextoFundamentacion());
   }
 
 }

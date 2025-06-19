@@ -16,7 +16,7 @@ public class SolicitudService {
   }
 
   public void procesarNuevaSolicitud(SolicitudEliminacion solicitud, Hecho hecho) {
-    if (detector.esSpam(solicitud.getFundamentacion())) {
+    if (detector.esSpam(solicitud.getTextoFundamentacion())) {
       solicitud.rechazar();
     }
 

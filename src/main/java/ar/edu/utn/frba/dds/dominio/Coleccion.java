@@ -25,7 +25,7 @@ public class Coleccion {
 
   public List<Hecho> mostrarHechos() {
 
-    List<Hecho> hechos = fuente.cargarHechos();
+    List<Hecho> hechos = fuente.cargarHechos(null);
 
     List<Hecho> resultado = new ArrayList<>();
 

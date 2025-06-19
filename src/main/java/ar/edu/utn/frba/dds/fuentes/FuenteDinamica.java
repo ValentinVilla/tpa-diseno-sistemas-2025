@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
@@ -16,29 +17,30 @@ public class FuenteDinamica implements Fuente {
   }
 
   public void subirHecho(HechoDinamico hecho) {
-    subirHecho(-1, hecho);
+    repositorioHechos.guardar(this, hecho); //repostiro fuentes?? y seria guardar en la fuente
+    //subirHecho(-1, hecho);
   }
 
-  public void subirHecho(int idContribuyenteCreador, HechoDinamico hecho) {
-    hecho.setIdContribuyenteCreador(idContribuyenteCreador);
-    repositorioHechos.guardar(this, hecho);
-    //crear solicitud subida
-  }
+//  public void subirHecho(int idContribuyenteCreador, HechoDinamico hecho) {
+//    hecho.setIdContribuyenteCreador(idContribuyenteCreador);
+//    repositorioHechos.guardar(this, hecho); //repostiro fuentes?? y seria guardar en la fuente
+//    //crear solicitud subida
+//  }
 
-  public void modificarHecho(int idContribuyenteCreador, HechoDinamico hechoOriginal, HechoDinamico hechoNuevo) {
+  public void solicitarModificarHecho(int idContribuyenteCreador, HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
     if (!puedeModificar(idContribuyenteCreador, hechoOriginal)) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     } else {
       //si no puede modificar, lanza excepcion
       //crear nuevo hecho con fecha modificacion ahora
       //hechoOriginal.actualizarDesde(hechoNuevo);
-      SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal, hechoNuevo);
-      //crea solicitud y le manda el id del hecho original
+      SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal, textoArg, new ImplementadorSpam(15),hechoNuevo);
+      //crea solicitud y esa solicitud espera a ser aceptada por un administrador, una vez que se acepta la solicitud se pone en visible el nuevo y se pone en no visible el anterior
     }
   }
 
   public boolean puedeModificar(int idContribuyenteCreador, HechoDinamico hecho) {
-    return hecho.getIdContribuyenteCreador() == (idContribuyenteCreador)
+    return hecho.getContribuyente().getId() == (idContribuyenteCreador)
         && hecho.estaDentroDePlazo();
   }
 
