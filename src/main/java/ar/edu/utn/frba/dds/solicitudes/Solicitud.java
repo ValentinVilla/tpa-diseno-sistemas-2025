@@ -1,15 +1,18 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
+import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public abstract class Solicitud {
 
   protected EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
   protected Hecho hecho;
+  public DetectorDeSpam detector;
 
   public Solicitud(Hecho hecho) {
     this.hecho = hecho;
     this.estado = EstadoSolicitud.PENDIENTE;
+    this.detector = detector;
   }
 
   public void aceptar(){
