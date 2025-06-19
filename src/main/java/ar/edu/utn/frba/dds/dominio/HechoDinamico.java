@@ -5,10 +5,10 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class HechoContribuyente extends Hecho {
+public class HechoDinamico extends Hecho {
   private int idCreador;
 
-  public HechoContribuyente(HechoBuilder builder) {
+  public HechoDinamico(HechoBuilder builder) {
     super(builder);
   }
 
@@ -26,11 +26,7 @@ public class HechoContribuyente extends Hecho {
 
   public boolean estaDentroDePlazo() {
     long diasDesdeCarga = ChronoUnit.DAYS.between(getFechaCarga(), LocalDate.now());
-    if (diasDesdeCarga > 7) {
-      return false;
+    return diasDesdeCarga > 7;
     }
-    else
-      return true;
-  }
 
 }

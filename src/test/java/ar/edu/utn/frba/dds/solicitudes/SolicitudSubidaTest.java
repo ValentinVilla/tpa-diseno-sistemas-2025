@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.dominio.HechoContribuyente;
+import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SolicitudSubidaTest {
 
-  private HechoContribuyente hecho;
+  private HechoDinamico hecho;
   private SolicitudSubida solicitud;
 
   @BeforeEach
   void setUp() {
-    hecho = new HechoContribuyente(new HechoBuilder());
+    hecho = new HechoDinamico(new HechoBuilder());
     hecho.setVisible(true);
     solicitud = new SolicitudSubida(hecho);
   }

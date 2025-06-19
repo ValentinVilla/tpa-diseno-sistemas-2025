@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.HechoContribuyente;
+import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
@@ -14,8 +13,8 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SolicitudModificacionTest {
-  private HechoContribuyente hechoOriginal;
-  private HechoContribuyente hechoModificado;
+  private HechoDinamico hechoOriginal;
+  private HechoDinamico hechoModificado;
   private SolicitudModificacion solicitud;
   private FuenteDinamica fuente;
 
@@ -44,8 +43,8 @@ public class SolicitudModificacionTest {
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
-    hechoOriginal = new HechoContribuyente(builderOriginal);
-    hechoModificado = new HechoContribuyente(builderModificado);
+    hechoOriginal = new HechoDinamico(builderOriginal);
+    hechoModificado = new HechoDinamico(builderModificado);
     solicitud = new SolicitudModificacion(hechoOriginal, hechoModificado);
   }
 
