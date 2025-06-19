@@ -10,10 +10,7 @@ public class fuenteManual implements Fuente {
 
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
-    return cargarHechos();
+    return hechos;
   }
 
-  public ArrayList<Hecho> cargarHechos(){
-      return hechos;
-    }
 }

@@ -44,11 +44,8 @@ public class FuenteDinamica implements Fuente {
 
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
-    return cargarHechos();
-  }
-
-  public ArrayList<Hecho> cargarHechos() {
     return new ArrayList<>(repositorioHechos.obtenerhechosDe(this));
   }
+
 }
 

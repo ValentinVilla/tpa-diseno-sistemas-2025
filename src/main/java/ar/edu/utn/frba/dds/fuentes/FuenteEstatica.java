@@ -18,10 +18,8 @@ public class FuenteEstatica implements Fuente {
 
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
-    return cargarHechos();
-  }
-
-  public ArrayList<Hecho> cargarHechos() {
     return new LectorCSV().leerDesde(pathArchivo, categoria, campos);
   }
+
+
 }
