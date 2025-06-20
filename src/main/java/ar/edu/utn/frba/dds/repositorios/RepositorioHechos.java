@@ -23,6 +23,7 @@ public class RepositorioHechos {
     return hechosPorFuente.getOrDefault(fuente, Collections.emptyList());
   }
 
+  /* descontinuado
   private Fuente buscarFuenteDe(Hecho hecho) {
     for (Map.Entry<Fuente, List<Hecho>> entry : hechosPorFuente.entrySet()) {
       if (entry.getValue().contains(hecho)) {
@@ -31,18 +32,25 @@ public class RepositorioHechos {
     }
     throw new IllegalArgumentException("Hecho no encontrado en ninguna fuente");
   }
+*/
 
+  /* descontinuado
   public void guardar(Fuente fuente, Hecho hecho) {
     hechosPorFuente
         .computeIfAbsent(fuente, f -> new ArrayList<>())
         .add(hecho);
   }
+*/
 
+  /* descontinuado
   public void eliminar(Hecho hecho) {
     hecho.setVisible(false);
     actualizar(hecho);
   }
 
+   */
+
+  /* descontinuado
   public void actualizar(Hecho hecho) {
     Fuente fuente = buscarFuenteDe(hecho);
     List<Hecho> lista = hechosPorFuente.get(fuente);
@@ -53,5 +61,5 @@ public class RepositorioHechos {
       }
     }
   }
-
+*/
 }

@@ -4,13 +4,13 @@ import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
 import java.util.ArrayList;
 
 public class FuenteDinamica implements Fuente {
-  private final ArrayList<Hecho> hechosDinamicos = new ArrayList<>();
+  private final ArrayList<HechoDinamico> hechosDinamicos = new ArrayList<>();
 
   public FuenteDinamica() {
   }
@@ -18,10 +18,10 @@ public class FuenteDinamica implements Fuente {
   public void subirHecho(HechoDinamico hecho) {
     hechosDinamicos.add(hecho);
     //aca habria que crear la solicitud de subida
-    //aca habria que sumar la clase usuario y pasarla
+    //asumo que el usuario ya viene asociado al hecho
   }
 
-  public void eliminarHecho(Hecho hecho) {
+  public void eliminarHecho(HechoDinamico hecho) {
     hecho.setVisible(false);
   }
 
@@ -32,8 +32,9 @@ public class FuenteDinamica implements Fuente {
 //    //crear solicitud subida
 //  }
 
-  public void solicitarModificarHecho(int idContribuyenteCreador, HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
-    if (!puedeModificar(idContribuyenteCreador, hechoOriginal)) {
+  public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
+    //el contribuyente necesitaba un texto argumentativo??
+    if (!puedeModificar(hechoOriginal, hechoNuevo.getContribuyente())) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     } else {
       //si no puede modificar, lanza excepcion
@@ -44,8 +45,9 @@ public class FuenteDinamica implements Fuente {
     }
   }
 
-  public boolean puedeModificar(int idContribuyenteCreador, HechoDinamico hecho) {
-    return hecho.getContribuyente().getId() == (idContribuyenteCreador)
+  public boolean puedeModificar(HechoDinamico hecho, Contribuyente contribuyenteModificador) {
+    return hecho.getContribuyente().getId().equals(contribuyenteModificador.getId())
+        && contribuyenteModificador.getId()!=null
         && hecho.estaDentroDePlazo();
   }
 

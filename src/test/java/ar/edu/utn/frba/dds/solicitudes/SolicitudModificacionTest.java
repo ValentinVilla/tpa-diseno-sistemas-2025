@@ -5,7 +5,6 @@ import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ public class SolicitudModificacionTest {
 
   @BeforeEach
   void setUp() {
-    fuente = new FuenteDinamica(new RepositorioHechos());
+    fuente = new FuenteDinamica();
     HechoBuilder builderOriginal = new HechoBuilder()
         .titulo("Hecho original")
         .descripcion("desc")

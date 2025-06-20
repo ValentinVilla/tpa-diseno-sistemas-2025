@@ -36,10 +36,10 @@ public class HechoService {
   }
 
   public void eliminarHecho(Hecho hecho) {
-    repositorio.eliminar(hecho);
+    //buscar y eliminar el hecho
   }
 
   public void actualizarHecho(Hecho hecho) {
-    repositorio.actualizar(hecho);
+    //actualizar hecho
   }
 }

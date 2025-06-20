@@ -26,7 +26,7 @@ public class HechoDinamico extends Hecho {
 
   public boolean estaDentroDePlazo() {
     long diasDesdeCarga = ChronoUnit.DAYS.between(getFechaCarga(), LocalDate.now());
-    return diasDesdeCarga > 7;
+    return diasDesdeCarga <= 7;
   }
 
   public Contribuyente getContribuyente(){

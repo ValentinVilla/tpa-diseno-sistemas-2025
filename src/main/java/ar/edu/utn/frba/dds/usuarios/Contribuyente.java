@@ -7,9 +7,11 @@ public class Contribuyente {
   private String apellido;
 
   public Contribuyente(Integer id, Integer edad, String nombre, String apellido) {
+    /* el usuario anonimo tiene que estar considerado para mi esto deberia poder ser todo null
     if (nombre == null || nombre.trim().isEmpty()) {
       throw new IllegalArgumentException("El nombre es obligatorio");
     }
+    */
     this.edad = edad;
     this.id = id;
     this.nombre = nombre;
