@@ -10,16 +10,21 @@ import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 import java.util.ArrayList;
 
 public class FuenteDinamica implements Fuente {
-  private final RepositorioHechos repositorioHechos;
+  private final ArrayList<Hecho> hechosDinamicos = new ArrayList<>();
 
-  public FuenteDinamica(RepositorioHechos repositorioHechos) {
-    this.repositorioHechos = repositorioHechos;
+  public FuenteDinamica() {
   }
 
   public void subirHecho(HechoDinamico hecho) {
-    repositorioHechos.guardar(this, hecho); //repostiro fuentes?? y seria guardar en la fuente
-    //subirHecho(-1, hecho);
+    hechosDinamicos.add(hecho);
+    //aca habria que crear la solicitud de subida
+    //aca habria que sumar la clase usuario y pasarla
   }
+
+  public void eliminarHecho(Hecho hecho) {
+    hecho.setVisible(false);
+  }
+
 
 //  public void subirHecho(int idContribuyenteCreador, HechoDinamico hecho) {
 //    hecho.setIdContribuyenteCreador(idContribuyenteCreador);
@@ -45,9 +50,15 @@ public class FuenteDinamica implements Fuente {
   }
 
   @Override
-  public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
-    return new ArrayList<>(repositorioHechos.obtenerhechosDe(this));
+  public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros){
+    //solucion que no usa streams
+    ArrayList<Hecho> visibles = new ArrayList<>();
+    for (Hecho hecho : hechosDinamicos) {
+      if (hecho.getVisible()) {
+        visibles.add(hecho);
+      }
+    }
+    return visibles;
   }
-
 }
 
