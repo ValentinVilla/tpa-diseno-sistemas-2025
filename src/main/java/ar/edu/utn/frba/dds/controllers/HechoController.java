@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.dtos.HechoDTO;
-import ar.edu.utn.frba.dds.servicios.HechoService;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/hechos")
 public class HechoController {
-  private final HechoService hechoService;
+  private final RepositorioHechos repositorio;
 
-  public HechoController (HechoService hechoService) {
-    this.hechoService = hechoService;
+  public HechoController (RepositorioHechos repositorio) {
+    this.repositorio = repositorio;
   }
   
   @GetMapping
@@ -26,7 +26,7 @@ public class HechoController {
       @RequestParam(name = "fecha_acontecimiento_desde", required = false) LocalDate fechaAcontecimientoDesde,
       @RequestParam(name = "fecha_acontecimiento_hasta", required = false) LocalDate fechaAcontecimientoHasta
   ) {
-    List <Hecho> hechosFiltrador = hechoService.filtrarHechos(
+    List <Hecho> hechosFiltrador = filtrarHechos(
         categoria,
         fechaReporteDesde, fechaReporteHasta,
         fechaAcontecimientoDesde, fechaAcontecimientoHasta
@@ -34,6 +34,22 @@ public class HechoController {
 
     return hechosFiltrador.stream()
         .map(HechoDTO::new)
+        .collect(Collectors.toList());
+  }
+
+  private List<Hecho> filtrarHechos(
+      String categoria,
+      LocalDate fechaReporteDesde,
+      LocalDate fechaReporteHasta,
+      LocalDate fechaAcontecimientoDesde,
+      LocalDate fechaAcontecimientoHasta
+  ) {
+    return repositorio.obtenerTodos().stream()
+        .filter(hecho -> (categoria == null || hecho.getCategoria().equals(categoria)))
+        .filter(hecho -> (fechaReporteDesde == null || hecho.getFechaCarga().isAfter(fechaReporteDesde)))
+        .filter(hecho -> (fechaReporteHasta == null || hecho.getFechaCarga().isBefore(fechaReporteHasta)))
+        .filter(hecho -> (fechaAcontecimientoDesde == null || hecho.getFechaAcontecimiento().isAfter(fechaAcontecimientoDesde)))
+        .filter(hecho -> (fechaAcontecimientoHasta == null || hecho.getFechaAcontecimiento().isBefore(fechaAcontecimientoHasta)))
         .collect(Collectors.toList());
   }
 }

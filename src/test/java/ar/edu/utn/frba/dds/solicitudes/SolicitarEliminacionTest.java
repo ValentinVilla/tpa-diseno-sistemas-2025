@@ -1,16 +1,5 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
-import ar.edu.utn.frba.dds.servicios.SolicitudService;
-import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
