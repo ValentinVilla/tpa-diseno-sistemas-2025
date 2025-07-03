@@ -1,8 +1,8 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.Fuente;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class ServicioAgregacion implements Fuente{
   List<Fuente> fuentesQueConsidera;
   ArrayList<Hecho> cacheDeHechos = new ArrayList<>();
 
-  void actualizarCache() {
+  public void actualizarCache() {
     //esta es la funcion para vincular al crontab
     cacheDeHechos.clear();
     fuentesQueConsidera.forEach(fuente -> {
@@ -27,6 +27,13 @@ public class ServicioAgregacion implements Fuente{
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
     return cacheDeHechos;
     //cumple criterios de coleccion
-  }//implementar despues
+  }
 
+  public List<Fuente> getFuente(){
+    return fuentesQueConsidera;
+  }
+
+  public ServicioAgregacion(List<Fuente> fuentesQueConsidera) {
+    this.fuentesQueConsidera = fuentesQueConsidera;
+  }
 }

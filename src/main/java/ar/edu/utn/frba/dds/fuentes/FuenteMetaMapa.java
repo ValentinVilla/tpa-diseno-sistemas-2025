@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FuenteMetaMapa implements FuenteProxy {
   public ClienteMetaMapa cliente;
@@ -30,5 +31,9 @@ public class FuenteMetaMapa implements FuenteProxy {
 
   public void enviarSolicitudEliminacion(String url, SolicitudEliminacion solicitud) {
     cliente.enviarSolicitudEliminacion(urlBase, solicitud);
+  }
+
+  public List<Fuente> getFuente(){
+    return List.of(this);
   }
 }

@@ -49,4 +49,8 @@ public class FuenteDemo implements FuenteProxy {
   public void forzarExpiracionCache() {
     ultimaConsulta = LocalDateTime.now().minusHours(2); // Simula que pasó más de una hora
   }
+
+  public List<Fuente> getFuente(){
+    return List.of(this);
+  }
 }

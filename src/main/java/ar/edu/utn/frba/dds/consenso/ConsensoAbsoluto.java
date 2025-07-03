@@ -8,12 +8,13 @@ import java.util.List;
 public class ConsensoAbsoluto implements AlgoritmoConsenso {
 
   @Override
-  public boolean tieneConsenso(Hecho hecho, List<Fuente> fuentes) {
+  public void tieneConsenso(Hecho hecho, List<Fuente> fuentes) {
     for (Fuente fuente : fuentes) {
       if (!fuente.cargarHechos(null).contains(hecho)) {
-        return false;
+        hecho.setConsensuado(false);
+        return; // Si al menos una fuente no contiene el hecho, no hay consenso absoluto
       }
     }
-    return true;
+    hecho.setConsensuado(true);
   }
 }

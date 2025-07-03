@@ -6,8 +6,9 @@ import java.util.List;
 
 public class ConsensoMultiplesMenciones implements AlgoritmoConsenso {
   @Override
-  public boolean tieneConsenso(Hecho hecho, List<Fuente> fuentes) {
+  public void tieneConsenso(Hecho hecho, List<Fuente> fuentes) {
     int coincidencias = 0;
+    int coincidenciasTitulo = 0;
 
     /*
     El problema es que equals compara si son iguales las direcciones de los objetos, no sus atributos
@@ -15,13 +16,19 @@ public class ConsensoMultiplesMenciones implements AlgoritmoConsenso {
     */
     for (Fuente fuente : fuentes) {
       for (Hecho hechoComparable : fuente.cargarHechos(null)) {
-        if (hechoComparable.equals(hecho)) {
+        if (hechoComparable.esElMismo(hecho)) {
           coincidencias++;
-        } else if (hechoComparable.getTitulo().equals(hecho.getTitulo()) && !hechoComparable.equals(hecho)) {
-          return false; // mismo titulo pero distintos atributos
+        }
+        // Si el hecho tiene el mismo titulo, pero no es el mismo hecho, se cuenta como coincidencia de titulo
+        if (hechoComparable.getTitulo().equals(hecho.getTitulo())) {
+          coincidenciasTitulo++;
         }
       }
     }
-    return coincidencias >= 2;
+    if (coincidencias >= 2 && coincidenciasTitulo == coincidencias) {
+      hecho.setConsensuado(true);
+    } else {
+      hecho.setConsensuado(false);
+    }
   }
 }

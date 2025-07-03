@@ -1,6 +1,10 @@
 package ar.edu.utn.frba.dds.dominio;
 
+import ar.edu.utn.frba.dds.ModoNavegacion;
+import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.consenso.ConsensoDefault;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +18,8 @@ public class Coleccion {
   private final Fuente fuente;
   public Filtro criterioPertenencia;
   public String handle;
+  ModoNavegacion modoNavegacion;
+  AlgoritmoConsenso algoritmoConsenso = new ConsensoDefault();
 
   public Coleccion(ColeccionBuilder builder) {
     this.handle = UUID.randomUUID().toString();
@@ -21,20 +27,22 @@ public class Coleccion {
     this.descripcion = builder.getDescripcion();
     this.fuente = builder.getFuente();
     this.criterioPertenencia = builder.getCriterio();
+    this.modoNavegacion = builder.getModoNavegacion();
+    this.algoritmoConsenso = builder.getAlgoritmoConsenso();
   }
 
   public List<Hecho> mostrarHechos() {
 
     List<Hecho> hechos = fuente.cargarHechos(null);
-
     List<Hecho> resultado = new ArrayList<>();
 
     for (Hecho hecho : hechos) {
-      if (criterioPertenencia.cumple(hecho)) {
+      if (criterioPertenencia.cumple(hecho)) { //si el hecho esta curado entonces lo agrego sino no, arrancan como no curados
         resultado.add(hecho);
       }
     }
-    return resultado;
+
+    return modoNavegacion.mostrarHechos(resultado);
   }
 
   public List<Hecho> hechosFiltrados(Filtro filtro) {
@@ -45,6 +53,12 @@ public class Coleccion {
       }
     }
     return resultado;
+  }
+
+  public void ejecutarAlgoritmo(List<Hecho> hechos) {
+    for (Hecho hecho : hechos) {
+      algoritmoConsenso.tieneConsenso(hecho, fuente.getFuente());//marco el hecho como curado
+    }
   }
 
   public boolean hechoPertenece(Hecho hecho) {
@@ -71,3 +85,5 @@ public class Coleccion {
     return criterioPertenencia;
   }
 }
+
+

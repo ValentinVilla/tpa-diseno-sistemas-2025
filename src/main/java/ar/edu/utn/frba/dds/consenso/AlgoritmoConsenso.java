@@ -5,5 +5,5 @@ import ar.edu.utn.frba.dds.fuentes.Fuente;
 import java.util.List;
 
 public interface AlgoritmoConsenso {
-  boolean tieneConsenso(Hecho hecho, List<Fuente> fuentes);
+  void tieneConsenso(Hecho hecho, List<Fuente> fuentes);
 }

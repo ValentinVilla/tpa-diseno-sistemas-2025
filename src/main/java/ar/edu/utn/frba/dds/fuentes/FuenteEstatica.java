@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FuenteEstatica implements Fuente {
   private final String pathArchivo;
@@ -21,5 +22,7 @@ public class FuenteEstatica implements Fuente {
     return new LectorCSV().leerDesde(pathArchivo, categoria, campos);
   }
 
-
+  public List<Fuente> getFuente(){
+    return List.of(this);
+  }
 }

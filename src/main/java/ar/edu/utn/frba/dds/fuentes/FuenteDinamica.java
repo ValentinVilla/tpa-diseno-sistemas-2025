@@ -8,6 +8,7 @@ import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FuenteDinamica implements Fuente {
   private final ArrayList<HechoDinamico> hechosDinamicos = new ArrayList<>();
@@ -61,6 +62,10 @@ public class FuenteDinamica implements Fuente {
       }
     }
     return visibles;
+  }
+
+  public List<Fuente> getFuente(){
+    return List.of(this);
   }
 }
 
