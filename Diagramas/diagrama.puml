@@ -4,7 +4,7 @@ left to right direction
 skinparam linetype ortho
 
 interface Fuente {
-  + cargarHechos(): ArrayList<Hecho>
+  + cargarHechos(ParametrosConsulta): ArrayList<Hecho>
 }
 
 abstract class FuenteProxy {
@@ -12,9 +12,11 @@ abstract class FuenteProxy {
 }
 
 class FuenteDinamica {
-  - repositorioHechos: RepositorioHechos
+  - hechosDinamicos: ArrayList<HechoDinamico>
   + subirHecho(...)
-  + modificarHecho(...)
+  + eliminarHecho(hecho: HechoDinamico)
+  + solicitarModificarHecho(hechoOriginal: HechoDinamico, hechoNuevo: HechoDinamico, textoArg: String)
+  + puedeModificar(hecho: HechoDinamico, contribuyente
 }
 
 class FuenteEstatica {
@@ -25,10 +27,19 @@ class FuenteEstatica {
 
 class FuenteDemo {
   - cliente: ClienteDemo
+  - direccionApi: String
+  - ultimaConsulta: LocalDateTime
+  - cacheHechos: List<Hecho>
+  - repo: RepositorioColecciones
+  + cargarHechos(parametros: ParametrosConsulta): ArrayList<Hecho>
+  + forzarExpiracionCache()
 }
 
 class FuenteMetaMapa {
   - cliente: ClienteMetaMapa
+  - urlBase: String
+  + cargarHechos(parametros: ParametrosConsulta): ArrayList<Hecho>
+  + enviarSolicitudEliminacion(url: String, solicitud: SolicitudEliminacion)
 }
 
 class FuenteManual {
@@ -46,11 +57,12 @@ abstract class Hecho {
   - fechaCarga: LocalDate
   - origen: Origen
   - visible: boolean
+  - consensuado: boolean
   - solicitudes: List<SolicitudEliminacion>
 }
 
 class HechoContribuyente {
-  - idCreador: int
+  - contribuyente: Contribuyente
   + estaDentroDePlazo(): boolean
 }
 
@@ -61,6 +73,13 @@ enum Origen {
   SERVICIOEXTERNO
 }
 
+class Contribuyente {
+  - id: Integer
+  - edad: Integer
+  - nombre: String
+  - apellido: String
+  + getId(): Integer
+}
 class RepositorioHechos {
   - hechosPorFuente: Map<FuenteDinamica, List<Hecho>>
 }
@@ -117,7 +136,44 @@ class Coleccion {
   - descripcion: String
   - fuente: Fuente
   - criterioPertenencia: Filtro
+  - modoNavegacion: ModoNavegacion
+  - algoritmoConsenso: AlgoritmoConsenso
   + contiene(hecho: Hecho): boolean
+  + ejecutarAlgoritmo(hechos: List<Hecho>)
+}
+
+class Nodo {
+  - fuentesDelNodo: List<Fuente>
+  - coleccionesDelNodo: List<Coleccion>
+  - hechosDelNodo: List<Hecho>
+  + cargarHechosALista(fuentes: List<Fuente>)
+  + cargarColeccionesALista()
+  + calcularConsenso()
+}
+
+abstract class AlgoritmoConsenso {
+  + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
+}
+
+class ConsensoDefault {
+  + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
+}
+
+class ConsensoAbsoluto {
+  + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
+}
+
+class ConsensoMayoriaSimple {
+  + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
+}
+
+class ConsensoMultiplesMenciones {
+  + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
+}
+
+enum ModoNavegacion {
+  IRRESTRICTA
+  CURADA
 }
 
 FuenteDinamica ..|> Fuente
@@ -146,5 +202,16 @@ Coleccion "*"-->"1" Fuente
 Coleccion "*"-->"*" Filtro
 Coleccion "*"-->"*"Hecho
 
+Nodo "*"-->"*" Fuente
+Nodo "*"-->"*" Coleccion
+Nodo "*"-->"*" Hecho
+
+ModoNavegacion <|-- IRRESTRICTA
+ModoNavegacion <|-- CURADA
+
+AlgoritmoConsenso <|-- ConsensoDefault
+AlgoritmoConsenso <|-- ConsensoAbsoluto
+AlgoritmoConsenso <|-- ConsensoMayoriaSimple
+AlgoritmoConsenso <|-- ConsensoMultiplesMenciones
 
 @enduml
