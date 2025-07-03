@@ -61,7 +61,7 @@ abstract class Hecho {
   - solicitudes: List<SolicitudEliminacion>
 }
 
-class HechoContribuyente {
+class HechoDinamico {
   - contribuyente: Contribuyente
   + estaDentroDePlazo(): boolean
 }
@@ -78,7 +78,6 @@ class Contribuyente {
   - edad: Integer
   - nombre: String
   - apellido: String
-  + getId(): Integer
 }
 class RepositorioHechos {
   - hechosPorFuente: Map<FuenteDinamica, List<Hecho>>
@@ -151,7 +150,7 @@ class Nodo {
   + calcularConsenso()
 }
 
-abstract class AlgoritmoConsenso {
+interface AlgoritmoConsenso {
   + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
 }
 
@@ -182,11 +181,11 @@ FuenteManual ..|> Fuente
 FuenteProxy ..|> Fuente
 FuenteDemo --|> FuenteProxy
 FuenteMetaMapa --|> FuenteProxy
-
-Hecho <|-- HechoContribuyente
-Hecho "1"-->"1" Origen
 FuenteDinamica "*" --> "1" RepositorioHechos
 
+Hecho <|-- HechoDinamico
+Hecho "1"-->"1" Origen
+HechoDinamico "1"-->"1" Contribuyente
 
 Solicitud <|-- SolicitudEliminacion
 Solicitud <|-- SolicitudModificacion
@@ -200,6 +199,8 @@ FiltroUbicacion ..|> Filtro
 
 Coleccion "*"-->"1" Fuente
 Coleccion "*"-->"*" Filtro
+Coleccion "*"-->"1" AlgoritmoConsenso
+Coleccion "*"-->"1" ModoNavegacion
 Coleccion "*"-->"*"Hecho
 
 Nodo "*"-->"*" Fuente
@@ -209,9 +210,9 @@ Nodo "*"-->"*" Hecho
 ModoNavegacion <|-- IRRESTRICTA
 ModoNavegacion <|-- CURADA
 
-AlgoritmoConsenso <|-- ConsensoDefault
-AlgoritmoConsenso <|-- ConsensoAbsoluto
-AlgoritmoConsenso <|-- ConsensoMayoriaSimple
-AlgoritmoConsenso <|-- ConsensoMultiplesMenciones
+AlgoritmoConsenso <|.. ConsensoDefault
+AlgoritmoConsenso <|.. ConsensoAbsoluto
+AlgoritmoConsenso <|.. ConsensoMayoriaSimple
+AlgoritmoConsenso <|.. ConsensoMultiplesMenciones
 
 @enduml
