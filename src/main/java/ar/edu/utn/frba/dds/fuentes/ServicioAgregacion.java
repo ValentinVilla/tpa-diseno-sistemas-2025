@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServicioAgregacion implements Fuente{
-  List<Fuente> fuentesQueConsidera;
-  ArrayList<Hecho> cacheDeHechos = new ArrayList<>();
+  private final List<Fuente> fuentesQueConsidera;
+  private final ArrayList<Hecho> cacheDeHechos = new ArrayList<>();
 
   public void actualizarCache() {
     //esta es la funcion para vincular al crontab
@@ -20,7 +20,7 @@ public class ServicioAgregacion implements Fuente{
 
   private List<Hecho> ultimosNHechos(int n, List<Hecho> listaCompleta){
     int size = listaCompleta.size();
-    return listaCompleta.subList(Math.max(size - 10, 0), size);
+    return listaCompleta.subList(Math.max(size - n, 0), size);
   }
 
   @Override

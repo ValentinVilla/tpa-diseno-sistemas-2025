@@ -42,8 +42,11 @@ class FuenteMetaMapa {
   + enviarSolicitudEliminacion(url: String, solicitud: SolicitudEliminacion)
 }
 
-class FuenteManual {
-  - hechos: ArrayList<Hecho>
+class ServicioAgregacion{
+  - fuentesQueConsidera:List<Fuente>
+  - cacheDeHechos:ArrayList<Hecho>
+  + actualizarCache( ): void
+  + cargarHechos(parametros: ParametrosConsulta) : ArrayList<Hecho>
 }
 
 abstract class Hecho {
@@ -78,9 +81,6 @@ class Contribuyente {
   - edad: Integer
   - nombre: String
   - apellido: String
-}
-class RepositorioHechos {
-  - hechosPorFuente: Map<FuenteDinamica, List<Hecho>>
 }
 
 abstract class Solicitud {
@@ -141,15 +141,6 @@ class Coleccion {
   + ejecutarAlgoritmo(hechos: List<Hecho>)
 }
 
-class Nodo {
-  - fuentesDelNodo: List<Fuente>
-  - coleccionesDelNodo: List<Coleccion>
-  - hechosDelNodo: List<Hecho>
-  + cargarHechosALista(fuentes: List<Fuente>)
-  + cargarColeccionesALista()
-  + calcularConsenso()
-}
-
 interface AlgoritmoConsenso {
   + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
 }
@@ -177,11 +168,11 @@ enum ModoNavegacion {
 
 FuenteDinamica ..|> Fuente
 FuenteEstatica ..|> Fuente
-FuenteManual ..|> Fuente
+ServicioAgregacion ..|> Fuente
 FuenteProxy ..|> Fuente
 FuenteDemo --|> FuenteProxy
 FuenteMetaMapa --|> FuenteProxy
-FuenteDinamica "*" --> "1" RepositorioHechos
+
 
 Hecho <|-- HechoDinamico
 Hecho "1"-->"1" Origen
@@ -203,9 +194,6 @@ Coleccion "*"-->"1" AlgoritmoConsenso
 Coleccion "*"-->"1" ModoNavegacion
 Coleccion "*"-->"*"Hecho
 
-Nodo "*"-->"*" Fuente
-Nodo "*"-->"*" Coleccion
-Nodo "*"-->"*" Hecho
 
 ModoNavegacion <|-- IRRESTRICTA
 ModoNavegacion <|-- CURADA

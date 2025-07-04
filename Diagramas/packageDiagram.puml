@@ -6,7 +6,7 @@ skinparam linetype ortho
 ' ==========[ Fuentes ]==========
 package "Fuentes" {
   interface Fuente {
-    + cargarHechos(): ArrayList<Hecho>
+    + cargarHechos(ParametrosConsulta): ArrayList<Hecho>
   }
 
   abstract class FuenteProxy {
@@ -14,9 +14,11 @@ package "Fuentes" {
   }
 
   class FuenteDinamica {
-    - repositorioHechos: RepositorioHechos
+    - hechosDinamicos: ArrayList<HechoDinamico>
     + subirHecho(...)
-    + modificarHecho(...)
+    + eliminarHecho(hecho: HechoDinamico)
+    + solicitarModificarHecho(hechoOriginal: HechoDinamico, hechoNuevo: HechoDinamico, textoArg: String)
+    + puedeModificar(hecho: HechoDinamico, contribuyente)
   }
 
   class FuenteEstatica {
@@ -27,19 +29,31 @@ package "Fuentes" {
 
   class FuenteDemo {
     - cliente: ClienteDemo
+    - direccionApi: String
+    - ultimaConsulta: LocalDateTime
+    - cacheHechos: List<Hecho>
+    - repo: RepositorioColecciones
+    + cargarHechos(parametros: ParametrosConsulta): ArrayList<Hecho>
+    + forzarExpiracionCache()
   }
 
   class FuenteMetaMapa {
     - cliente: ClienteMetaMapa
+    - urlBase: String
+    + cargarHechos(parametros: ParametrosConsulta): ArrayList<Hecho>
+    + enviarSolicitudEliminacion(url: String, solicitud: SolicitudEliminacion)
   }
 
-  class FuenteManual {
-    - hechos: ArrayList<Hecho>
+  class ServicioAgregacion {
+    - fuentesQueConsidera: List<Fuente>
+    - cacheDeHechos: ArrayList<Hecho>
+    + actualizarCache(): void
+    + cargarHechos(parametros: ParametrosConsulta): ArrayList<Hecho>
   }
 
   FuenteDinamica ..|> Fuente
   FuenteEstatica ..|> Fuente
-  FuenteManual ..|> Fuente
+  ServicioAgregacion ..|> Fuente
   FuenteProxy ..|> Fuente
   FuenteDemo --|> FuenteProxy
   FuenteMetaMapa --|> FuenteProxy
@@ -58,12 +72,20 @@ package "Modelo de Hechos" {
     - fechaCarga: LocalDate
     - origen: Origen
     - visible: boolean
+    - consensuado: boolean
     - solicitudes: List<SolicitudEliminacion>
   }
 
-  class HechoContribuyente {
-    - idCreador: int
+  class HechoDinamico {
+    - contribuyente: Contribuyente
     + estaDentroDePlazo(): boolean
+  }
+
+  class Contribuyente {
+    - id: Integer
+    - edad: Integer
+    - nombre: String
+    - apellido: String
   }
 
   enum Origen {
@@ -73,13 +95,9 @@ package "Modelo de Hechos" {
     SERVICIOEXTERNO
   }
 
-  class RepositorioHechos {
-    - hechosPorFuente: Map<FuenteDinamica, List<Hecho>>
-  }
-
-  Hecho <|-- HechoContribuyente
+  Hecho <|-- HechoDinamico
   Hecho "1" --> "1" Origen
-  FuenteDinamica "*" --> "1" RepositorioHechos
+  HechoDinamico "1" --> "1" Contribuyente
 }
 
 ' ==========[ Solicitudes ]==========
@@ -145,17 +163,44 @@ package "Filtros" {
   FiltroUbicacion ..|> Filtro
 }
 
-' ==========[ Coleccion ]==========
+' ==========[ Consenso y Navegación ]==========
+package "Consensos y Navegacion" {
+  interface AlgoritmoConsenso {
+    + tieneConsenso(hecho: Hecho, fuentes: List<Fuente>)
+  }
+
+  class ConsensoDefault
+  class ConsensoAbsoluto
+  class ConsensoMayoriaSimple
+  class ConsensoMultiplesMenciones
+
+  enum ModoNavegacion {
+    IRRESTRICTA
+    CURADA
+  }
+
+  AlgoritmoConsenso <|.. ConsensoDefault
+  AlgoritmoConsenso <|.. ConsensoAbsoluto
+  AlgoritmoConsenso <|.. ConsensoMayoriaSimple
+  AlgoritmoConsenso <|.. ConsensoMultiplesMenciones
+}
+
+' ==========[ Colección ]==========
 class Coleccion {
   - titulo: String
   - descripcion: String
   - fuente: Fuente
   - criterioPertenencia: Filtro
+  - modoNavegacion: ModoNavegacion
+  - algoritmoConsenso: AlgoritmoConsenso
   + contiene(hecho: Hecho): boolean
+  + ejecutarAlgoritmo(hechos: List<Hecho>)
 }
 
 Coleccion "*" --> "1" Fuente
 Coleccion "*" --> "*" Filtro
 Coleccion "*" --> "*" Hecho
+Coleccion "*" --> "1" ModoNavegacion
+Coleccion "*" --> "1" AlgoritmoConsenso
 
 @enduml
