@@ -9,49 +9,50 @@ import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.fuentes.FuenteEstatica;
 import ar.edu.utn.frba.dds.fuentes.ServicioAgregacion;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class TareasCronometradas {
-    public static void main(String[] args) {
-        List<Fuente> fuentes = List.of(
-            new FuenteEstatica("Hechos.csv", "Hechos", new ArrayList<>(List.of("id", "texto", "fecha"))),
-            new FuenteEstatica("Hechos2.csv", "Hechos2", new ArrayList<>(List.of("id", "texto", "fecha")))
-        );
+  public static void main(String[] args) {
+    List<Fuente> fuentes = List.of(
+        new FuenteEstatica("Hechos.csv", "Hechos", new ArrayList<>(List.of("id", "texto", "fecha"))),
+        new FuenteEstatica("Hechos2.csv", "Hechos2", new ArrayList<>(List.of("id", "texto", "fecha")))
+    );
 
-        // Suponiendo que ya tenés una fuente y un filtro definidos
+    // Suponiendo que ya hay una fuente y un filtro definidos
 
-        Filtro filtro = new FiltroCategoria("nombreDeLaCategoria"); // Instancia de Filtro, según tu lógica
+    Filtro filtro = new FiltroCategoria("nombreDeLaCategoria"); // Instancia de Filtro
 
-        ServicioAgregacion servicioAgregacion = new ServicioAgregacion(fuentes);
+    ServicioAgregacion servicioAgregacion = new ServicioAgregacion(fuentes);
 
-        Coleccion coleccion = new ColeccionBuilder()
-            .titulo("Mi Colección")
-            .descripcion("Descripción de la colección")
-            .fuente(servicioAgregacion)
-            .criterio(filtro)
-            .modoNavegacion(ModoNavegacion.CURADA)
-            .algoritmoConsenso(new ConsensoAbsoluto())
-            .build();
+    Coleccion coleccion = new ColeccionBuilder()
+        .titulo("Mi Colección")
+        .descripcion("Descripción de la colección")
+        .fuente(servicioAgregacion)
+        .criterio(filtro)
+        .modoNavegacion(ModoNavegacion.CURADA)
+        .algoritmoConsenso(new ConsensoAbsoluto())
+        .build();
 
-        if (args.length == 0) {
+    if (args.length == 0) {
 
-            return;
-        }
-        switch (args[0]) {
-            case "actualizarCache":
-            servicioAgregacion.actualizarCache();
-                System.out.println("se actualizó el cache");
-                break;
-            case "curar hechos":
-                coleccion.ejecutarAlgoritmo(coleccion.mostrarHechos());
-                System.out.println("Hechos curados.");
-                break;
-            default:
-                System.out.println("falta argumentos.");
-        }
+      return;
     }
-    
+    switch (args[0]) {
+      case "actualizarCache":
+        servicioAgregacion.actualizarCache();
+        System.out.println("se actualizó el cache");
+        break;
+      case "curar hechos":
+        coleccion.ejecutarAlgoritmo(coleccion.mostrarHechos());
+        System.out.println("Hechos curados.");
+        break;
+
+        //aca faltaria la rutina para que la fuente proxi revise e incorpore nuevos hechos
+      default:
+        System.out.println("falta argumentos.");
+    }
+  }
+
 
 }
