@@ -60,7 +60,7 @@ public class ClienteMetaMapa {
 
     JSONObject json = new JSONObject();
     json.put("idHecho", solicitud.getHecho().getId());
-    json.put("fundamento", solicitud.getFundamentacion());
+    json.put("fundamento", solicitud.getTextoFundamentacion());
 
     try (OutputStream os = conn.getOutputStream()) {
       byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);

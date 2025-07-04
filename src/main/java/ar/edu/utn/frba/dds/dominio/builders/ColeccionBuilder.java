@@ -2,6 +2,8 @@ package ar.edu.utn.frba.dds.dominio.builders;
 
 import java.util.Objects;
 
+import ar.edu.utn.frba.dds.ModoNavegacion;
+import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.filtros.Filtro;
@@ -12,6 +14,8 @@ public class ColeccionBuilder {
   private Fuente fuente;
   private Filtro criterio;
   private String handle; // Handle para identificar la colección en el sistema
+  private ModoNavegacion modoNavegacion; // Modo de navegación por defecto
+  private AlgoritmoConsenso algoritmoConsenso; // Algoritmo de consenso por defecto
 
   public ColeccionBuilder titulo(String titulo) {
     this.titulo = validateNotNullOrEmpty(titulo, "El título no puede ser nulo o vacío");
@@ -37,6 +41,16 @@ public class ColeccionBuilder {
 
   public ColeccionBuilder handle(String handle) {
     this.handle = validateNotNullOrEmpty(handle, "El handle no puede ser nulo o vacío");
+    return this;
+  }
+
+  public ColeccionBuilder modoNavegacion(ModoNavegacion modoNavegacion) {
+    this.modoNavegacion = modoNavegacion;
+    return this;
+  }
+
+  public ColeccionBuilder algoritmoConsenso(AlgoritmoConsenso algoritmoConsenso) {
+    this.algoritmoConsenso = algoritmoConsenso;
     return this;
   }
 
@@ -70,6 +84,16 @@ public class ColeccionBuilder {
   public String getHandle() {
     return handle;
   }
+
+  public ModoNavegacion getModoNavegacion() {
+    return modoNavegacion;
+  }
+
+  public AlgoritmoConsenso getAlgoritmoConsenso() {
+    return algoritmoConsenso;
+  }
+
+
 
   public static class CampoInvalido extends RuntimeException {
     public CampoInvalido(String message) {

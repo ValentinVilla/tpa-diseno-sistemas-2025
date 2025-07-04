@@ -1,10 +1,11 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
+import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
-import ar.edu.utn.frba.dds.servicios.ColeccionService;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileWriter;
@@ -16,11 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 
 public class LeerCSVTest {
   @Test
@@ -82,10 +78,9 @@ public class LeerCSVTest {
     FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
 
     RepositorioColecciones repoColeccion = new RepositorioColecciones();
-    RepositorioHechos repoHechos = new RepositorioHechos();
-    ColeccionService coleccionService = new ColeccionService(repoColeccion, repoHechos);
 
-    coleccionService.crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro);
+    //eliminado el uso del service
+    crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro, repoColeccion);
 
     assertNotNull(repoColeccion.listarTodas());
   }
@@ -117,6 +112,16 @@ public class LeerCSVTest {
     ));
 
     FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
-    return fuente.cargarHechos();
+    return fuente.cargarHechos(null);
+  }
+
+  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, RepositorioColecciones repositorio) {
+    Coleccion nueva = new ColeccionBuilder()
+        .titulo(titulo)
+        .descripcion(descripcion)
+        .fuente(fuente)
+        .criterio(criterio)
+        .build();
+    repositorio.guardar(nueva);
   }
 }

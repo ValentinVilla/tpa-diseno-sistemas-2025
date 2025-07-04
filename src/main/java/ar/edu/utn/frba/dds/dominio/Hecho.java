@@ -4,7 +4,6 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +19,9 @@ public class Hecho {
   protected final LocalDate fechaCarga;
   protected final Origen origen;
   protected boolean visible;
+  protected boolean consensuado = false;
   protected LocalDate fechaModificacion;
+
 
   protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
 
@@ -89,5 +90,28 @@ public class Hecho {
     return this.fechaAcontecimiento;
   }
 
+  public boolean getVisible(){
+    return visible;
+  }
+
+  public void setConsensuado(boolean b) {
+    this.consensuado = b;
+  }
+
+  public boolean estaConsensuado(){
+    return this.consensuado;
+  }
+
+  public boolean esElMismo(Hecho otroHecho) {
+    return
+        this.titulo.equals(otroHecho.getTitulo()) &&
+            this.descripcion.equals(otroHecho.getDescripcion()) &&
+            this.categoria.equals(otroHecho.getCategoria()) &&
+           this.latitud == otroHecho.getLatitud() &&
+           this.longitud == otroHecho.getLongitud() &&
+           this.fechaAcontecimiento.equals(otroHecho.getFechaAcontecimiento()) &&
+           this.visible == otroHecho.getVisible();
+
+  }
 }
 

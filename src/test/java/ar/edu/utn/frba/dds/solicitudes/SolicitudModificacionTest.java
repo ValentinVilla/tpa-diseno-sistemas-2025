@@ -1,11 +1,11 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.HechoContribuyente;
+import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
+import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +14,15 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SolicitudModificacionTest {
-  private HechoContribuyente hechoOriginal;
-  private HechoContribuyente hechoModificado;
+  private HechoDinamico hechoOriginal;
+  private HechoDinamico hechoModificado;
   private SolicitudModificacion solicitud;
   private FuenteDinamica fuente;
+  private Contribuyente contribuyente;
 
   @BeforeEach
   void setUp() {
-    fuente = new FuenteDinamica(new RepositorioHechos());
+    fuente = new FuenteDinamica();
     HechoBuilder builderOriginal = new HechoBuilder()
         .titulo("Hecho original")
         .descripcion("desc")
@@ -44,15 +45,17 @@ public class SolicitudModificacionTest {
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
-    hechoOriginal = new HechoContribuyente(builderOriginal);
-    hechoModificado = new HechoContribuyente(builderModificado);
-    solicitud = new SolicitudModificacion(hechoOriginal, hechoModificado);
+    contribuyente = new Contribuyente(42, 25, "juan", "perez");
+    hechoOriginal = new HechoDinamico(builderOriginal, contribuyente);
+    hechoModificado = new HechoDinamico(builderModificado, contribuyente);
+    solicitud = new SolicitudModificacion(hechoOriginal, "sugerenciaModificacion",new ImplementadorSpam(10),hechoModificado);
   }
 
    @Test
-  void aplicarRechazoRevierteVisibilidad() {
-    solicitud.aplicarRechazo();
+  void aplicarRechazoDejaALaSolicitudRechazadaYLosHechosComoEstan() {
+    solicitud.rechazar();
 
+    assertEquals(solicitud.estado, EstadoSolicitud.RECHAZADA);
     assertTrue(hechoOriginal.getVisible());
     assertFalse(hechoModificado.getVisible());
   }
@@ -61,7 +64,7 @@ public class SolicitudModificacionTest {
   void aceptarConSugerenciaGuardaSugerencia() {
     solicitud.aceptarConSugerencia("Mejorar ubicación");
 
-    assertEquals("Mejorar ubicación", solicitud.getSugerenciaModificacion());
+    assertEquals("Mejorar ubicación", solicitud.getTextoFundamentacion());
   }
 
 }

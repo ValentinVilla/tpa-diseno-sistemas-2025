@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FuenteDemo extends FuenteProxy {
+public class FuenteDemo implements FuenteProxy {
   protected ClienteDemo cliente;
   private final String direccionApi;
   private LocalDateTime ultimaConsulta;
@@ -48,5 +48,9 @@ public class FuenteDemo extends FuenteProxy {
   //METODO PARA TESTEAR NECESITO FORZAR O SIMULAR QUE SE PASO UNA HORA
   public void forzarExpiracionCache() {
     ultimaConsulta = LocalDateTime.now().minusHours(2); // Simula que pasó más de una hora
+  }
+
+  public List<Fuente> getFuente(){
+    return List.of(this);
   }
 }

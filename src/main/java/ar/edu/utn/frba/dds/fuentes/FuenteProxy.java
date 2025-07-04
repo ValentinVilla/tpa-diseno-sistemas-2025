@@ -5,7 +5,7 @@ import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 
 import java.util.ArrayList;
 
-public abstract class FuenteProxy implements Fuente {
+public interface FuenteProxy extends Fuente {
   @Override
   public abstract ArrayList<Hecho> cargarHechos(ParametrosConsulta parametrosConsulta);
 }

@@ -66,6 +66,30 @@
         <version>2.22.2</version>
       </plugin>
       <plugin>
+        <!-- Este plugin permite empaquetar nuestras aplicaciones utilizando distintos formatos -->
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <!-- Esto indica que genere un paquete que incluya las dependencias -->
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <!-- Esto indica cual será el punto de entrada de nuestro ejecutable -->
+            <manifest>
+              <mainClass>ar.edu.utn.frba.dds.cron.TareasCronometradas</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>3.2.1</version>
