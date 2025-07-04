@@ -1,0 +1,12 @@
+@startuml diagrama
+
+class Coleccion {
+    titulo string
+    []Hecho
+}
+
+class Hecho {
+
+}
+
+@enduml
