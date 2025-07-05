@@ -5,6 +5,8 @@
 
 [Enunciado Parte 2](https://docs.google.com/document/d/1sbS4HisuozJ-952PxdNS6VcNz-Ly9i4quJ6UQtItNnY/edit?usp=sharing)
 
+[Enunciado Parte 3](https://docs.google.com/document/d/1aQC-Z10xQsyUA2ffpHQkFW3x-Bd5KtD06x3JVorfwJ8/edit?usp=sharing)
+
 ## Grupo 4 - Integrantes
 * Bertella Tomás Emiliano
 * García Fontenla Gonzalo
