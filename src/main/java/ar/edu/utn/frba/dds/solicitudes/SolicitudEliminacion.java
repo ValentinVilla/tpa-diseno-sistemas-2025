@@ -13,7 +13,6 @@ public class SolicitudEliminacion extends Solicitud {
 
   @Override
   public void aplicarRechazo(){
-    return;
   }
   @Override
   public void aplicarAceptacion(){

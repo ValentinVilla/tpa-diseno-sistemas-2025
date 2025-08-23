@@ -11,7 +11,6 @@ public class SolicitudSubida extends Solicitud{
   }
 
   public void aplicarAceptacion(){
-    return;
   }
 
   public void aceptarConSugerencia(String sugerencia){

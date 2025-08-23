@@ -2,7 +2,6 @@ package ar.edu.utn.frba.dds.dominio;
 
 import ar.edu.utn.frba.dds.ModoNavegacion;
 import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.consenso.ConsensoDefault;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Coleccion {
   public Filtro criterioPertenencia;
   public String handle;
   ModoNavegacion modoNavegacion;
-  AlgoritmoConsenso algoritmoConsenso = new ConsensoDefault();
+  AlgoritmoConsenso algoritmoConsenso;
 
   public Coleccion(ColeccionBuilder builder) {
     this.handle = UUID.randomUUID().toString();

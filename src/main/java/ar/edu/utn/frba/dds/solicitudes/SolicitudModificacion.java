@@ -8,7 +8,7 @@ public class SolicitudModificacion extends Solicitud{
   Hecho hechoModificado;
 
   public SolicitudModificacion(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
-    super(hecho, sugerenciaModificacion, detector);;
+    super(hecho, sugerenciaModificacion, detector);
     this.hechoModificado = hechoModificado;
     hechoModificado.setVisible(false);
   }
@@ -18,7 +18,6 @@ public class SolicitudModificacion extends Solicitud{
   public void aplicarAceptacion() {
     hechoModificado.setVisible(true);
     hecho.setVisible(false);
-    return;
   }
 
   @Override

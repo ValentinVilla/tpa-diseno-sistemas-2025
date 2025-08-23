@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
-import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 public abstract class Solicitud {//como se yo si este Solicitud tiene que ser una clase abstracta o una interfaz???
@@ -13,7 +12,6 @@ public abstract class Solicitud {//como se yo si este Solicitud tiene que ser un
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector) {
     this.hecho = hecho;
-    this.estado = EstadoSolicitud.PENDIENTE;
     this.textoFundamentacion = sugerenciaModificacion;
     this.detector = detector;
     if(detector != null && detector.esSpam(sugerenciaModificacion)){

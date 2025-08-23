@@ -13,9 +13,7 @@ public class ServicioAgregacion implements Fuente{
   public void actualizarCache() {
     //esta es la funcion para vincular al crontab
     cacheDeHechos.clear();
-    fuentesQueConsidera.forEach(fuente -> {
-      ultimosNHechos(10,fuente.cargarHechos(null)).addAll(cacheDeHechos);
-    });
+    fuentesQueConsidera.forEach(fuente -> ultimosNHechos(10,fuente.cargarHechos(null)).addAll(cacheDeHechos));
   }
 
   private List<Hecho> ultimosNHechos(int n, List<Hecho> listaCompleta){

@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
 import java.util.ArrayList;
 import java.util.List;
 import ar.edu.utn.frba.dds.dominio.Coleccion;

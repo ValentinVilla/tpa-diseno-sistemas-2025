@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class HechoDinamico extends Hecho {
-  private Contribuyente contribuyente;
+  private final Contribuyente contribuyente;
 
   public HechoDinamico(HechoBuilder builder, Contribuyente contribuyente) {
     super(builder);

@@ -7,5 +7,5 @@ import java.util.ArrayList;
 
 public interface FuenteProxy extends Fuente {
   @Override
-  public abstract ArrayList<Hecho> cargarHechos(ParametrosConsulta parametrosConsulta);
+  ArrayList<Hecho> cargarHechos(ParametrosConsulta parametrosConsulta);
 }

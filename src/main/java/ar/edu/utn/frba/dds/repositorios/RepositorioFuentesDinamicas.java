@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
 
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RepositorioFuentesDinamicas {
   // Este repositorio se encarga de almacenar las fuentes dinámicas

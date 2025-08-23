@@ -25,10 +25,6 @@ public class ConsensoMultiplesMenciones implements AlgoritmoConsenso {
         }
       }
     }
-    if (coincidencias >= 2 && coincidenciasTitulo == coincidencias) {
-      hecho.setConsensuado(true);
-    } else {
-      hecho.setConsensuado(false);
-    }
+    hecho.setConsensuado(coincidencias >= 2 && coincidenciasTitulo == coincidencias);
   }
 }

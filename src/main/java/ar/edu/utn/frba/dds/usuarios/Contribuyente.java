@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.usuarios;
 
 public class Contribuyente {
-  private Integer id;
-  private Integer edad;
-  private String nombre;
-  private String apellido;
+  private final Integer id;
+  private final Integer edad;
+  private final String nombre;
+  private final String apellido;
 
   public Contribuyente(Integer id, Integer edad, String nombre, String apellido) {
     /* el usuario anonimo tiene que estar considerado para mi esto deberia poder ser todo null

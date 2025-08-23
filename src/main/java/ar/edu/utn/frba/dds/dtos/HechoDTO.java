@@ -7,8 +7,8 @@ public class HechoDTO {
   public String titulo;
   public String descripcion;
   public String categoria;
-  private double latitud;
-  private double longitud;
+  private final double latitud;
+  private final double longitud;
   public LocalDate fechaReporte;
   public LocalDate fechaAcontecimiento;
 
