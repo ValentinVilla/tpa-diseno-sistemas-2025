@@ -52,7 +52,7 @@ public class ClienteMetaMapa {
     }
   }
 
-  private static HttpURLConnection getHttpURLConnection(SolicitudEliminacion solicitud, String endpoint) throws IOException {
+    private static HttpURLConnection getHttpURLConnection(SolicitudEliminacion solicitud, String endpoint) throws IOException {
     HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
     conn.setRequestMethod("POST");
     conn.setDoOutput(true);
