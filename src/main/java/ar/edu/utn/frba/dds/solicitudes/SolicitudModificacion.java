@@ -3,9 +3,16 @@ package ar.edu.utn.frba.dds.solicitudes;
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("MODIFICACION")
 
 public class SolicitudModificacion extends Solicitud{
   Hecho hechoModificado;
+
+  public SolicitudModificacion() {}
 
   public SolicitudModificacion(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
     super(hecho, sugerenciaModificacion, detector);

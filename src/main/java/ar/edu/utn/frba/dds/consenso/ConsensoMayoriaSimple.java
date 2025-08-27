@@ -6,11 +6,9 @@ import ar.edu.utn.frba.dds.fuentes.Fuente;
 import java.util.List;
 
 public class ConsensoMayoriaSimple implements AlgoritmoConsenso {
-
   @Override
   public void tieneConsenso(Hecho hecho, List<Fuente> fuentes) { //List<Hecho> hechos
     int coincidencias = 0;
-
     for (Fuente fuente : fuentes) {
       if (fuente.cargarHechos(null).contains(hecho)) {
         coincidencias++;

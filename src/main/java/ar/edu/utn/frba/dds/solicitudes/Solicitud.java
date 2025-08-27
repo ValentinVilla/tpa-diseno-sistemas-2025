@@ -3,12 +3,33 @@ package ar.edu.utn.frba.dds.solicitudes;
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
-public abstract class Solicitud {//como se yo si este Solicitud tiene que ser una clase abstracta o una interfaz???
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_solicitud")
+public abstract class Solicitud {
+  @Id
+  @GeneratedValue
+  protected Long id;
 
   protected EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
-  protected Hecho hecho;
-  String textoFundamentacion;
+  protected String textoFundamentacion;
   public DetectorDeSpam detector;
+
+  @ManyToOne
+  @JoinColumn(name = "hecho_id")
+  protected Hecho hecho;
+
+  protected Solicitud(){} //Cuestion de hibernate, necesita constructor vacio
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector) {
     this.hecho = hecho;
@@ -28,11 +49,8 @@ public abstract class Solicitud {//como se yo si este Solicitud tiene que ser un
       aplicarRechazo();
   }
 
- //metodos que implementa cada tipo de solicitud
   public abstract void aplicarAceptacion();
   public abstract void aplicarRechazo();
-    // Implementar la lógica de aceptación y rechazo en las subclases
-
 
   public String getTextoFundamentacion() {
     return textoFundamentacion;

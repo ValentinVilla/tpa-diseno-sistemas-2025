@@ -3,22 +3,34 @@ package ar.edu.utn.frba.dds.dominio;
 import ar.edu.utn.frba.dds.ModoNavegacion;
 import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class Coleccion {
-  private final String titulo;
-  private final String descripcion;
-  private final Fuente fuente;
-  public Filtro criterioPertenencia;
+  @Id
+  @GeneratedValue
+  private long id;
+
+  private String titulo;
+  private String descripcion;
   public String handle;
+  @ManyToOne
+  private Fuente fuente;
+  @ManyToOne
+  public Filtro criterioPertenencia;
   ModoNavegacion modoNavegacion;
+  @ManyToOne
   AlgoritmoConsenso algoritmoConsenso;
+
+  public Coleccion(){}
 
   public Coleccion(ColeccionBuilder builder) {
     this.handle = UUID.randomUUID().toString();
