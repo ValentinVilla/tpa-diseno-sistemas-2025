@@ -3,12 +3,17 @@ package ar.edu.utn.frba.dds.filtros;
 import java.time.LocalDate;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
-public class FiltroFecha implements Filtro {
-  private final LocalDate fechaBuscada;
+import javax.persistence.Entity;
+
+@Entity
+public class FiltroFecha extends Filtro {
+  private LocalDate fechaBuscada;
 
   public FiltroFecha(LocalDate fechaBuscada) {
     this.fechaBuscada = fechaBuscada;
   }
+
+  public FiltroFecha() {}
 
   @Override
   public boolean cumple(Hecho hecho) {

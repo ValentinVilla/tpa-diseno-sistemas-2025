@@ -2,11 +2,16 @@ package ar.edu.utn.frba.dds.filtros;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
-public class FiltroUbicacion implements Filtro {
-    private final double latitudMin;
-    private final double latitudMax;
-    private final double longitudMin;
-    private final double longitudMax;
+import javax.persistence.Entity;
+
+@Entity
+public class FiltroUbicacion extends Filtro {
+    private double latitudMin;
+    private double latitudMax;
+    private double longitudMin;
+    private double longitudMax;
+
+    public FiltroUbicacion() {}
 
     public FiltroUbicacion(double latitudMin, double latitudMax, double longitudMin, double longitudMax) {
       this.latitudMin = latitudMin;

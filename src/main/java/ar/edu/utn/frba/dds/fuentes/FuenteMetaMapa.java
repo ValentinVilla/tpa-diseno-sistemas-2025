@@ -7,7 +7,7 @@ import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuenteMetaMapa implements FuenteProxy {
+public class FuenteMetaMapa extends Fuente {
   public ClienteMetaMapa cliente;
   private final String urlBase;
 

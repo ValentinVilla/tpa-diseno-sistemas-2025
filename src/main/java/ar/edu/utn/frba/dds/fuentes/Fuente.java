@@ -6,10 +6,17 @@ import java.util.List;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-public interface Fuente {
-    ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros);
+@Entity
+public abstract class Fuente {
+  @Id
+  @GeneratedValue
+  private Long id;
 
-    List<Fuente> getFuente();
+  public abstract ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros);
+  public abstract List<Fuente> getFuente();
 }
 

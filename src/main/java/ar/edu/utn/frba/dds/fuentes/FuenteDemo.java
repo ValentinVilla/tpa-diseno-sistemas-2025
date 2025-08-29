@@ -6,17 +6,23 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.joda.time.LocalDateTime;
+
+import javax.persistence.Entity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FuenteDemo implements FuenteProxy {
+@Entity
+public class FuenteDemo extends Fuente {
   protected ClienteDemo cliente;
-  private final String direccionApi;
+  private  String direccionApi;
   private LocalDateTime ultimaConsulta;
   private List<Hecho> cacheHechos;
-  private final RepositorioColecciones repo;
+  private RepositorioColecciones repo;
+
+  public FuenteDemo() {}
 
   public FuenteDemo(ClienteDemo cliente, String direccionApi,  RepositorioColecciones repo) {
     this.cliente = cliente;
@@ -26,7 +32,6 @@ public class FuenteDemo implements FuenteProxy {
     this.repo = repo;
   }
 
-  //cada una hora
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
     if (pasoUnaHoraDesdeUltimaConsulta()) {
@@ -45,9 +50,8 @@ public class FuenteDemo implements FuenteProxy {
     return ultimaConsulta == null || LocalDateTime.now().isAfter(ultimaConsulta.plusHours(1));
   }
 
-  //METODO PARA TESTEAR NECESITO FORZAR O SIMULAR QUE SE PASO UNA HORA
   public void forzarExpiracionCache() {
-    ultimaConsulta = LocalDateTime.now().minusHours(2); // Simula que pasó más de una hora
+    ultimaConsulta = LocalDateTime.now().minusHours(2);
   }
 
   public List<Fuente> getFuente(){

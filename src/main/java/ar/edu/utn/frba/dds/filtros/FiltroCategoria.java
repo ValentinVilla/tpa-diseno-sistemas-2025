@@ -1,12 +1,17 @@
 package ar.edu.utn.frba.dds.filtros;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
-public class FiltroCategoria implements Filtro {
-  private final String categoria;
+import javax.persistence.Entity;
+
+@Entity
+public class FiltroCategoria extends Filtro {
+  private String categoria;
 
   public FiltroCategoria(String categoria) {
     this.categoria = categoria;
   }
+
+  public FiltroCategoria() {}
 
   @Override
   public boolean cumple(Hecho hecho) {
