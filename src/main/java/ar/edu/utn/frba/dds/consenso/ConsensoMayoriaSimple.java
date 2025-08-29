@@ -8,8 +8,18 @@ import java.util.List;
 public class ConsensoMayoriaSimple implements AlgoritmoConsenso {
 
   @Override
-  public void tieneConsenso(Hecho hecho, List<Fuente> fuentes) { //List<Hecho> hechos
-    int coincidencias = 0;
+  public void tieneConsenso(Hecho hecho, List<Fuente> fuentes) {
+
+    long coincidencias = fuentes.stream()
+        .flatMap(fuente -> fuente.cargarHechos(null).stream())
+        .filter(h -> h.esElMismo(hecho))
+        .count();
+
+    boolean hayConsenso = coincidencias > (fuentes.size() / 2);
+
+    hecho.setConsensuado(hayConsenso);
+    /*
+    Esto es lo que estaba:
 
     for (Fuente fuente : fuentes) {
       if (fuente.cargarHechos(null).contains(hecho)) {
@@ -24,5 +34,6 @@ public class ConsensoMayoriaSimple implements AlgoritmoConsenso {
       hecho.setConsensuado(false);
       // No hay consenso si no se alcanza la mayoría
     }
+     */
   }
 }

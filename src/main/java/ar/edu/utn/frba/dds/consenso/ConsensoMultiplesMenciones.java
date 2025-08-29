@@ -15,7 +15,7 @@ public class ConsensoMultiplesMenciones implements AlgoritmoConsenso {
     if (coincidenciasTitulo.size() <= 1) {
       hecho.setConsensuado(false);
     }
-    if (coincidenciasTitulo.size() > 2) {
+    if (coincidenciasTitulo.size() >= 2) {
       int cantCoinicidenciasTitulo = coincidenciasTitulo.size();
       int cantidadCoincidencias = coincidenciasTitulo.stream().filter(unHecho -> hecho.esElMismo(unHecho)).toList().size();
       hecho.setConsensuado(cantCoinicidenciasTitulo == cantidadCoincidencias);
