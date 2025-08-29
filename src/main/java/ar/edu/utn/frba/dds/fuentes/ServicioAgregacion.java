@@ -13,8 +13,10 @@ public class ServicioAgregacion implements Fuente{
   public void actualizarCache() {
     //esta es la funcion para vincular al crontab
     cacheDeHechos.clear();
-    fuentesQueConsidera.forEach(fuente -> ultimosNHechos(10,fuente.cargarHechos(null)).addAll(cacheDeHechos));
-  }
+    fuentesQueConsidera.forEach(fuente -> {
+      ultimosNHechos(10,fuente.cargarHechos(null)).addAll(cacheDeHechos);
+    });
+  }//pasa que si no le ponemos un tope de la cantidad de hechos que traer puede colgarse trayendo los muchisimos hechos que puede tener esa fuente. Es mejor que le pongamos un tope nosotros, que deje de traer hechos cuando encuentra uno repetido??
 
   private List<Hecho> ultimosNHechos(int n, List<Hecho> listaCompleta){
     int size = listaCompleta.size();

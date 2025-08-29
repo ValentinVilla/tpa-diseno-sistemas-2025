@@ -126,5 +126,9 @@ public class Hecho {
            this.visible == otroHecho.getVisible();
 
   }
+
+  public boolean tieneMismoTitulo(Hecho otroHecho) {
+    return this.titulo.equals(otroHecho.getTitulo());
+  }
 }
 
