@@ -15,7 +15,6 @@ public class ConsensoAbsoluto implements AlgoritmoConsenso {
 //        return; // Si al menos una fuente no contiene el hecho, no hay consenso absoluto
 //      }
 //    }
-
     boolean consenso = fuentes.stream().allMatch(fuente -> fuente.cargarHechos(null).contains(hecho));
     hecho.setConsensuado(consenso);
   }
