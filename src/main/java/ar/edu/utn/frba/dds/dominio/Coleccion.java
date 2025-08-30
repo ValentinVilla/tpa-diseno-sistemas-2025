@@ -35,7 +35,7 @@ public class Coleccion {
   public Coleccion(){}
 
   public Coleccion(ColeccionBuilder builder) {
-    this.id = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID().getMostSignificantBits();
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.fuente = builder.getFuente();
