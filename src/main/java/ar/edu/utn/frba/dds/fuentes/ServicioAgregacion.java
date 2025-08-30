@@ -6,7 +6,7 @@ import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServicioAgregacion implements Fuente{
+public class ServicioAgregacion extends Fuente{
   private final List<Fuente> fuentesQueConsidera;
   private final ArrayList<Hecho> cacheDeHechos = new ArrayList<>();
 

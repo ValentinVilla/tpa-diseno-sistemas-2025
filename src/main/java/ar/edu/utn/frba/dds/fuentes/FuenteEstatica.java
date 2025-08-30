@@ -6,7 +6,7 @@ import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuenteEstatica implements Fuente {
+public class FuenteEstatica extends Fuente {
   private final String pathArchivo;
   private final String categoria;
   private final ArrayList<String> campos;

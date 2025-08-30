@@ -40,7 +40,7 @@ public class FuenteDemo extends Fuente {
     }
     Stream<Hecho> stream = cacheHechos.stream();
     if (parametros.getColeccionId() != null) {
-      Coleccion coleccion = repo.buscarPorHandle(parametros.getColeccionId());
+      Coleccion coleccion = repo.buscarPorID(parametros.getColeccionId());
       stream = stream.filter(coleccion::hechoPertenece);
     }
     return stream.collect(Collectors.toCollection(ArrayList::new));

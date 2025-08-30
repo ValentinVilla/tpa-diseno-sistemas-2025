@@ -9,6 +9,8 @@ import java.util.UUID;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -17,15 +19,15 @@ import javax.persistence.ManyToOne;
 public class Coleccion {
   @Id
   @GeneratedValue
-  private long id;
+  public Long id;
 
   private String titulo;
   private String descripcion;
-  public String handle;
   @ManyToOne
   private Fuente fuente;
   @ManyToOne
   public Filtro criterioPertenencia;
+  @Enumerated(EnumType.STRING)
   ModoNavegacion modoNavegacion;
   @ManyToOne
   AlgoritmoConsenso algoritmoConsenso;
@@ -33,7 +35,7 @@ public class Coleccion {
   public Coleccion(){}
 
   public Coleccion(ColeccionBuilder builder) {
-    this.handle = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID().toString();
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.fuente = builder.getFuente();
@@ -48,7 +50,7 @@ public class Coleccion {
     List<Hecho> resultado = new ArrayList<>();
 
     for (Hecho hecho : hechos) {
-      if (criterioPertenencia.cumple(hecho)) { //si el hecho esta curado entonces lo agrego sino no, arrancan como no curados
+      if (criterioPertenencia.cumple(hecho)) {
         resultado.add(hecho);
       }
     }
@@ -94,6 +96,10 @@ public class Coleccion {
 
   public Filtro getFiltro() {
     return criterioPertenencia;
+  }
+
+  public Long getId() {
+    return id;
   }
 }
 

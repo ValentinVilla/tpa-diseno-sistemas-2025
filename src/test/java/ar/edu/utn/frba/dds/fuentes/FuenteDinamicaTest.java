@@ -21,7 +21,7 @@ public class FuenteDinamicaTest {
     fuente = new FuenteDinamica();
   }
 
-  private Contribuyente juan = new Contribuyente(42, 25,"juan", "perez");
+  private Contribuyente juan = new Contribuyente(42,"juan", "perez");
 
   private HechoDinamico crearHecho(String titulo) {
     HechoBuilder hechoBase = new HechoBuilder()
@@ -72,7 +72,7 @@ public class FuenteDinamicaTest {
     HechoDinamico original = crearHecho("original");
     fuente.subirHecho(original);
 
-    Contribuyente tomas = new Contribuyente(41, 25,"tomas", "perez");
+    Contribuyente tomas = new Contribuyente(41,"tomas", "perez");
 
     HechoBuilder Builder = new HechoBuilder()
         .titulo("malicioso")
