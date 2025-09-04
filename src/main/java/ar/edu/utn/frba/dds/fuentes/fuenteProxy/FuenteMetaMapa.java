@@ -1,15 +1,24 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuenteProxy;
 
 import ar.edu.utn.frba.dds.clientes.ClienteMetaMapa;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
+
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class FuenteMetaMapa extends Fuente {
+  private String urlBase;
+  @Transient
   public ClienteMetaMapa cliente;
-  private final String urlBase;
+
+  public FuenteMetaMapa(){}
 
   public FuenteMetaMapa(String urlBase) {
     this.cliente = new ClienteMetaMapa();

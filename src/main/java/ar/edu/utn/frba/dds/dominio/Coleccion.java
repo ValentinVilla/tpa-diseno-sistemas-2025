@@ -9,8 +9,11 @@ import java.util.UUID;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -18,17 +21,19 @@ public class Coleccion {
   @Id
   @GeneratedValue
   private long id;
-
   private String titulo;
   private String descripcion;
   public String handle;
   @ManyToOne
+  @JoinColumn(name = "fuente_id",  nullable = false)
   private Fuente fuente;
   @ManyToOne
   public Filtro criterioPertenencia;
-  ModoNavegacion modoNavegacion;
   @ManyToOne
+  @JoinColumn(name = "consenso_id", nullable = false)
   AlgoritmoConsenso algoritmoConsenso;
+  @Enumerated(EnumType.STRING)
+  ModoNavegacion modoNavegacion;
 
   public Coleccion(){}
 
@@ -96,5 +101,3 @@ public class Coleccion {
     return criterioPertenencia;
   }
 }
-
-

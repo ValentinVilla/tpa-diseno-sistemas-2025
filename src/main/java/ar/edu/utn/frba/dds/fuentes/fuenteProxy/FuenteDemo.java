@@ -1,6 +1,7 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuenteProxy;
 
 import ar.edu.utn.frba.dds.clientes.ClienteDemo;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
@@ -8,6 +9,7 @@ import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,13 @@ import java.util.stream.Stream;
 
 @Entity
 public class FuenteDemo extends Fuente {
-  protected ClienteDemo cliente;
   private  String direccionApi;
   private LocalDateTime ultimaConsulta;
+  @Transient
+  protected ClienteDemo cliente;
+  @Transient
   private List<Hecho> cacheHechos;
+  @Transient
   private RepositorioColecciones repo;
 
   public FuenteDemo() {}

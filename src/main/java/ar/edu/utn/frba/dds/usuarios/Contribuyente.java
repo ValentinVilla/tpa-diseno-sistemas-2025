@@ -8,7 +8,7 @@ import javax.persistence.Id;
 public class Contribuyente {
   @Id
   @GeneratedValue
-  private Long id; // usar Long en lugar de long para evitar problemas con null
+  private Long id;
 
   private Integer edad;
   private String nombre;

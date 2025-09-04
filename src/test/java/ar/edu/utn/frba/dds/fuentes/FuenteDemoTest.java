@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.clientes.ClienteDemo;
+import ar.edu.utn.frba.dds.fuentes.fuenteProxy.FuenteDemo;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;

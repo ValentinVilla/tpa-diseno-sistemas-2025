@@ -2,9 +2,11 @@ package ar.edu.utn.frba.dds.filtros;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
+@DiscriminatorValue("UBICACION")
 public class FiltroUbicacion extends Filtro {
     private double latitudMin;
     private double latitudMax;

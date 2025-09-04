@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.clientes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.AdaptadorHechoMetaMapa;
+import ar.edu.utn.frba.dds.fuentes.fuenteProxy.AdaptadorHechoMetaMapa;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import org.json.JSONArray;
 import org.json.JSONObject;

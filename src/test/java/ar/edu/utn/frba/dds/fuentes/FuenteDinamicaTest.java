@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
@@ -21,7 +22,7 @@ public class FuenteDinamicaTest {
     fuente = new FuenteDinamica();
   }
 
-  private Contribuyente juan = new Contribuyente(42, 25,"juan", "perez");
+  private final Contribuyente juan = new Contribuyente(42, "Juan", "perez");
 
   private HechoDinamico crearHecho(String titulo) {
     HechoBuilder hechoBase = new HechoBuilder()
@@ -45,13 +46,6 @@ public class FuenteDinamicaTest {
     assertEquals(1, fuente.cargarHechos(null).size());
   }
 
-  @Test
-  void puedeSubirHechoRegistrado() {
-    HechoDinamico hecho = crearHecho("hecho-registrado");
-    fuente.subirHecho(hecho);
-
-    assertEquals(42, hecho.getContribuyente().getId());
-  }
 
   @Test
   void puedeSolicitarModificarHechoDentroDelPlazo() {
@@ -72,7 +66,7 @@ public class FuenteDinamicaTest {
     HechoDinamico original = crearHecho("original");
     fuente.subirHecho(original);
 
-    Contribuyente tomas = new Contribuyente(41, 25,"tomas", "perez");
+    Contribuyente tomas = new Contribuyente(41,"tomas", "perez");
 
     HechoBuilder Builder = new HechoBuilder()
         .titulo("malicioso")

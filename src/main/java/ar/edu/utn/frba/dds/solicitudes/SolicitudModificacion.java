@@ -5,11 +5,14 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("MODIFICACION")
-
 public class SolicitudModificacion extends Solicitud{
+  @ManyToOne
+  @JoinColumn(name = "hecho_modificado_id")
   Hecho hechoModificado;
 
   public SolicitudModificacion() {}
@@ -29,10 +32,11 @@ public class SolicitudModificacion extends Solicitud{
 
   @Override
   public void aplicarRechazo() {
-
+    /*
     //hecho.setVisible(true);
     //hechoModificado.setVisible(false);
     //notificarAlAutorDelRechazoDeModificacion();
+    */
   }
 
   public void aceptarConSugerencia(String sugerencia){

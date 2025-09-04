@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
+import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.LectorCSV;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;

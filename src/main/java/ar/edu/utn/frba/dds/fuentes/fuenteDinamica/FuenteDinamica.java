@@ -1,20 +1,29 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuenteDinamica;
 
 import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuenteDinamica implements Fuente {
-  private final ArrayList<HechoDinamico> hechosDinamicos = new ArrayList<>();
+@Entity
+public class FuenteDinamica extends Fuente {
+  /*
+  Esto ya no tiene mucho sentido, habria que borrar la lista y usar la bdd.
+  Lo dejo de momento para que no rompe, pero no persisto la relacion.
+  */
+  @Transient
+  private ArrayList<HechoDinamico> hechosDinamicos = new ArrayList<>();
 
-  public FuenteDinamica() {
-  }
+  public FuenteDinamica() {}
 
   public void subirHecho(HechoDinamico hecho) {
     hechosDinamicos.add(hecho);
@@ -26,12 +35,13 @@ public class FuenteDinamica implements Fuente {
     hecho.setVisible(false);
   }
 
-
+/*
 //  public void subirHecho(int idContribuyenteCreador, HechoDinamico hecho) {
 //    hecho.setIdContribuyenteCreador(idContribuyenteCreador);
 //    repositorioHechos.guardar(this, hecho); //repostiro fuentes?? y seria guardar en la fuente
 //    //crear solicitud subida
 //  }
+*/
 
   public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
     //el contribuyente necesitaba un texto argumentativo??

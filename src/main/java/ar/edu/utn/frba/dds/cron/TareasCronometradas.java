@@ -7,7 +7,7 @@ import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
-import ar.edu.utn.frba.dds.fuentes.FuenteEstatica;
+import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
 import ar.edu.utn.frba.dds.fuentes.ServicioAgregacion;
 import java.util.ArrayList;
 import java.util.List;

@@ -377,3 +377,8 @@ A continuación se presenta el diagrama UML general del dominio del sistema, en 
 A continuación se presentan los casos de uso, que describen las interacciones entre los actores y el sistema.
 
 ![Casos de uso](/Diagramas/casosDeUso.png)
+
+
+
+## Hibernate decisions
+Usamos single table en los algoritmos de consenso, ya que, no tienen atributos propios, lo cual va a generar que no hayan campos en null en la tabla de consenso. 

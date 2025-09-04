@@ -4,19 +4,22 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Hecho {
   @Id
   @GeneratedValue
@@ -34,7 +37,7 @@ public class Hecho {
   protected boolean visible;
   protected boolean consensuado = false;
   protected LocalDate fechaModificacion;
-  @OneToMany(mappedBy = "Hecho")
+  @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
   protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
 
   public Hecho() {}
@@ -124,6 +127,10 @@ public class Hecho {
            this.longitud == otroHecho.getLongitud() &&
            this.fechaAcontecimiento.equals(otroHecho.getFechaAcontecimiento()) &&
            this.visible == otroHecho.getVisible();
+
+  }
+
+  public void setTitulo(String pruebaJUnit) {
 
   }
 }

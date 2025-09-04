@@ -5,13 +5,15 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -20,19 +22,20 @@ public abstract class Solicitud {
   @Id
   @GeneratedValue
   protected Long id;
-
-  protected EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
   protected String textoFundamentacion;
+  @Enumerated(EnumType.STRING)
+  protected EstadoSolicitud estado;
+  @Transient
   public DetectorDeSpam detector;
-
   @ManyToOne
-  @JoinColumn(name = "hecho_id")
+  @JoinColumn(name = "hecho_id", nullable = false)
   protected Hecho hecho;
 
-  protected Solicitud(){} //Cuestion de hibernate, necesita constructor vacio
+  protected Solicitud(){}
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector) {
     this.hecho = hecho;
+    this.estado = EstadoSolicitud.PENDIENTE;
     this.textoFundamentacion = sugerenciaModificacion;
     this.detector = detector;
     if(detector != null && detector.esSpam(sugerenciaModificacion)){

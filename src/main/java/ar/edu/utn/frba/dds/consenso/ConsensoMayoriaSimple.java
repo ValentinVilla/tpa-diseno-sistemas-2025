@@ -20,8 +20,6 @@ public class ConsensoMayoriaSimple extends AlgoritmoConsenso {
       }
     }
 
-    // Hay consenso si la mayoria de las fuentes contienen el hecho
-    // No hay consenso si no se alcanza la mayoría
     hecho.setConsensuado(coincidencias > (fuentes.size() / 2));
   }
 }

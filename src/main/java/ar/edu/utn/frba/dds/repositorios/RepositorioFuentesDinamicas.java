@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.repositorios;
 
 import ar.edu.utn.frba.dds.fuentes.Fuente;
-import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
+import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.fuentes.FuenteDinamica;
+import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ public class SolicitudModificacionTest {
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
-    contribuyente = new Contribuyente(42, 25, "juan", "perez");
+    contribuyente = new Contribuyente(42, "juan", "perez");
     hechoOriginal = new HechoDinamico(builderOriginal, contribuyente);
     hechoModificado = new HechoDinamico(builderModificado, contribuyente);
     solicitud = new SolicitudModificacion(hechoOriginal, "sugerenciaModificacion",new ImplementadorSpam(10),hechoModificado);

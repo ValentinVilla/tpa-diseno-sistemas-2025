@@ -16,7 +16,7 @@ public class SolicitudSubidaTest {
 
   @BeforeEach
   void setUp() {
-    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente(42, 25, "juan", "perez"));
+    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente(42, "juan", "perez"));
     hecho.setVisible(true);
     solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
   }

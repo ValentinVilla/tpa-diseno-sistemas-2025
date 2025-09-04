@@ -3,11 +3,23 @@ package ar.edu.utn.frba.dds.fuentes;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServicioAgregacion implements Fuente{
+public class ServicioAgregacion extends Fuente{
+  @ManyToMany
+  @JoinTable(
+      name = "servicio_fuentes",
+      joinColumns = @JoinColumn(name = "servicio_id"),
+      inverseJoinColumns = @JoinColumn(name = "fuente_id")
+  )
   private final List<Fuente> fuentesQueConsidera;
+  @Transient
   private final ArrayList<Hecho> cacheDeHechos = new ArrayList<>();
 
   public void actualizarCache() {
