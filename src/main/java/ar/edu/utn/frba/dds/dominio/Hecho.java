@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.dominio;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +126,10 @@ public class Hecho {
            this.fechaAcontecimiento.equals(otroHecho.getFechaAcontecimiento()) &&
            this.visible == otroHecho.getVisible();
 
+  }
+
+  public boolean tieneMismoTitulo(Hecho otroHecho) {
+    return this.titulo.equals(otroHecho.getTitulo());
   }
 
   public void setTitulo(String pruebaJUnit) {

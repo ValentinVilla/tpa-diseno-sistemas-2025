@@ -64,7 +64,6 @@ public class FuenteDinamica extends Fuente {
 
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros){
-    //solucion que no usa streams
     ArrayList<Hecho> visibles = new ArrayList<>();
     for (Hecho hecho : hechosDinamicos) {
       if (hecho.getVisible()) {

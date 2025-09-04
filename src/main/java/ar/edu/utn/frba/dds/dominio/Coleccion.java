@@ -20,7 +20,8 @@ import javax.persistence.ManyToOne;
 public class Coleccion {
   @Id
   @GeneratedValue
-  private long id;
+  public Long id;
+
   private String titulo;
   private String descripcion;
   public String handle;
@@ -38,7 +39,7 @@ public class Coleccion {
   public Coleccion(){}
 
   public Coleccion(ColeccionBuilder builder) {
-    this.handle = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID().getMostSignificantBits();
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.fuente = builder.getFuente();
@@ -53,7 +54,7 @@ public class Coleccion {
     List<Hecho> resultado = new ArrayList<>();
 
     for (Hecho hecho : hechos) {
-      if (criterioPertenencia.cumple(hecho)) { //si el hecho esta curado entonces lo agrego sino no, arrancan como no curados
+      if (criterioPertenencia.cumple(hecho)) {
         resultado.add(hecho);
       }
     }
@@ -73,7 +74,7 @@ public class Coleccion {
 
   public void ejecutarAlgoritmo(List<Hecho> hechos) {
     for (Hecho hecho : hechos) {
-      algoritmoConsenso.tieneConsenso(hecho, fuente.getFuente());//marco el hecho como curado
+      algoritmoConsenso.tieneConsenso(hecho, fuente.getFuente());
     }
   }
 
@@ -100,4 +101,10 @@ public class Coleccion {
   public Filtro getFiltro() {
     return criterioPertenencia;
   }
+
+  public Long getId() {
+    return id;
+  }
 }
+
+

@@ -11,7 +11,7 @@ public class ParametrosConsulta {
   private final LocalDate fechaAcontecimientoDesde;
   private final LocalDate fechaAcontecimientoHasta;
   private final String ubicacion;
-  private final String coleccionId;
+  private final Long coleccionId;
 
   public ParametrosConsulta() {
     this.categoria = null;
@@ -29,7 +29,7 @@ public class ParametrosConsulta {
                             LocalDate fechaAcontecimientoDesde,
                             LocalDate fechaAcontecimientoHasta,
                             String ubicacion,
-                            String coleccionId) {
+                            Long coleccionId) {
     this.categoria = categoria;
     this.fechaReporteDesde = fechaReporteDesde;
     this.fechaReporteHasta = fechaReporteHasta;
@@ -50,7 +50,7 @@ public class ParametrosConsulta {
     return map;
   }
 
-  public String getColeccionId() {
+  public Long getColeccionId() {
     return this.coleccionId;
   }
 }

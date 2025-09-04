@@ -49,7 +49,7 @@ public class FuenteMetaMapaTest {
 
   @Test
   void testCargarHechosConColeccionId() {
-    when(parametros.getColeccionId()).thenReturn("123");
+    when(parametros.getColeccionId()).thenReturn(Long.valueOf("123"));
     List<Hecho> hechosMock = List.of(new Hecho(crearHecho("Test 1.1")), new Hecho(crearHecho("Test 1.2")));
 
     when(cliente.obtenerHechosColeccion("http://example.com", "123", parametros))

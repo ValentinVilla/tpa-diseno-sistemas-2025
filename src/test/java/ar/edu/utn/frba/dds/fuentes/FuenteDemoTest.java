@@ -59,10 +59,10 @@ public class FuenteDemoTest {
     Hecho hecho = mock(Hecho.class);
     Coleccion coleccion = mock(Coleccion.class);
     ParametrosConsulta parametros = new ParametrosConsulta(
-        null, null, null, null, null, null, "123"
+        null, null, null, null, null, null, 123L
     );
     when(cliente.traerHechos("http://demo.com")).thenReturn(List.of(hecho));
-    when(repo.buscarPorHandle("123")).thenReturn(coleccion);
+    when(repo.buscarPorID(123L)).thenReturn(coleccion);
     when(coleccion.hechoPertenece(hecho)).thenReturn(true);
     List<Hecho> hechos = fuente.cargarHechos(parametros);
     assertEquals(1, hechos.size());

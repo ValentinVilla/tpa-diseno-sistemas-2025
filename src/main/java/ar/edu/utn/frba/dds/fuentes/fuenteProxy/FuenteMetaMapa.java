@@ -29,7 +29,7 @@ public class FuenteMetaMapa extends Fuente {
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
     if (parametros.getColeccionId() != null) {
       return new ArrayList<>(
-          cliente.obtenerHechosColeccion(urlBase, parametros.getColeccionId(), parametros)
+          cliente.obtenerHechosColeccion(urlBase, parametros.getColeccionId().toString(), parametros)
       );
     } else {
       return new ArrayList<>(

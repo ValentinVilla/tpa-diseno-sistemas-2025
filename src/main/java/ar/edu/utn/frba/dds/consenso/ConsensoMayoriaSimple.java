@@ -12,14 +12,15 @@ import java.util.List;
 @DiscriminatorValue("MAYORIA_SIMPLE")
 public class ConsensoMayoriaSimple extends AlgoritmoConsenso {
   @Override
-  public void tieneConsenso(Hecho hecho, List<Fuente> fuentes) { //List<Hecho> hechos
-    int coincidencias = 0;
-    for (Fuente fuente : fuentes) {
-      if (fuente.cargarHechos(null).contains(hecho)) {
-        coincidencias++;
-      }
-    }
+  public void tieneConsenso(Hecho hecho, List<Fuente> fuentes) {
 
-    hecho.setConsensuado(coincidencias > (fuentes.size() / 2));
+    long coincidencias = fuentes.stream()
+        .flatMap(fuente -> fuente.cargarHechos(null).stream())
+        .filter(h -> h.esElMismo(hecho))
+        .count();
+
+    boolean hayConsenso = coincidencias > (fuentes.size() / 2);
+
+    hecho.setConsensuado(hayConsenso);
   }
 }
