@@ -8,6 +8,9 @@ import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import java.time.LocalDate;
 
@@ -21,6 +24,9 @@ public class FuenteDinamicaTest {
   void init() {
     fuente = new FuenteDinamica();
   }
+
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+  private EntityManager entityManager = emf.createEntityManager();
 
   private final Contribuyente juan = new Contribuyente(42, "Juan", "perez");
 
@@ -49,7 +55,13 @@ public class FuenteDinamicaTest {
 
   @Test
   void puedeSolicitarModificarHechoDentroDelPlazo() {
-    HechoDinamico original = crearHecho("incendio");
+    //necesito que juan este persistido para que el hecho lo tenga asociado
+    entityManager.getTransaction().begin();
+    entityManager.persist(juan);
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+
+    HechoDinamico original = crearHecho("original");
     HechoDinamico nuevo = crearHecho("incendio-modificado");
     FuenteDinamica fuente = new FuenteDinamica();
 

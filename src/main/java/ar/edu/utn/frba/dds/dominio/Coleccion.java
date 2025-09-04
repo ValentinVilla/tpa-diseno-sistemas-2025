@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,12 +26,12 @@ public class Coleccion {
   private String titulo;
   private String descripcion;
   public String handle;
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL) // al persistir una coleccion, persiste su fuente
   @JoinColumn(name = "fuente_id",  nullable = false)
   private Fuente fuente;
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL) // misma
   public Filtro criterioPertenencia;
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL) // misma
   @JoinColumn(name = "consenso_id", nullable = false)
   AlgoritmoConsenso algoritmoConsenso;
   @Enumerated(EnumType.STRING)
@@ -39,7 +40,7 @@ public class Coleccion {
   public Coleccion(){}
 
   public Coleccion(ColeccionBuilder builder) {
-    this.id = UUID.randomUUID().getMostSignificantBits();
+    // this.id = UUID.randomUUID().getMostSignificantBits(); creo que no hace falta, lo genera JPA,
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.fuente = builder.getFuente();

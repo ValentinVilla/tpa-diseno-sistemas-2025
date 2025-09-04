@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.consenso.ConsensoDefault;
 import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
 import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.LectorCSV;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
@@ -8,6 +9,7 @@ import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
+import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileWriter;
@@ -20,7 +22,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 public class LeerCSVTest {
+
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit"); //este nombre esta en el persistence.xml
+  private EntityManager entityManager = emf.createEntityManager();
+
+
   @Test
   void puedeLeerUnArchivoCSVYDevolverHechos() throws Exception {
     // Arrange: crear archivo temporal CSV
@@ -78,11 +89,12 @@ public class LeerCSVTest {
 
     FiltroCategoria filtro = new FiltroCategoria("Emergencia");
     FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
+    AlgoritmoConsenso algoritmo = new ConsensoDefault();
 
-    RepositorioColecciones repoColeccion = new RepositorioColecciones();
+    RepositorioColecciones repoColeccion = new RepositorioColecciones(entityManager);
 
     //eliminado el uso del service
-    crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro, repoColeccion);
+    crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro, algoritmo, repoColeccion);
 
     assertNotNull(repoColeccion.listarTodas());
   }
@@ -117,13 +129,15 @@ public class LeerCSVTest {
     return fuente.cargarHechos(null);
   }
 
-  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, RepositorioColecciones repositorio) {
+  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, AlgoritmoConsenso algoritmo,  RepositorioColecciones repositorio) {
     Coleccion nueva = new ColeccionBuilder()
         .titulo(titulo)
         .descripcion(descripcion)
         .fuente(fuente)
         .criterio(criterio)
+        .algoritmoConsenso(algoritmo)
         .build();
     repositorio.guardar(nueva);
   }
+
 }
