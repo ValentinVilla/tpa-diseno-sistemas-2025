@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.fuentes.fuenteProxy;
+package ar.edu.utn.frba.dds.fuentes.fuenteProxy.AdapterOParser;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;

@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.clientes;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.fuentes.fuenteProxy.AdaptadorHechoDemo;
+import ar.edu.utn.frba.dds.fuentes.fuenteProxy.AdapterOParser.AdaptadorHechoDemo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
