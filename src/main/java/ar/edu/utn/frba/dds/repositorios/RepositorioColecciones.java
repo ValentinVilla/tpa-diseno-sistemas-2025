@@ -37,7 +37,7 @@ public class RepositorioColecciones {
     return entityManager.createQuery("SELECT c FROM Coleccion c", Coleccion.class)
         .getResultList(); // esto devuelve objetos de tipo Coleccion, no se hace select * porque
                           // es JPQL, no SQL
-  }
+  }//ESTO PARA MI HAY QUE TESTEARLO
 
   public void eliminar(Long id) {
     EntityTransaction transaction = entityManager.getTransaction();
