@@ -61,7 +61,7 @@ public class FullTextSearchTest {
   }
 
   @Test
-  void testBuscarPorTextoOrdenaPorRelevancia() {
+  void testBuscarPorTextoOrdenaPorRelevancia() throws Exception {
     // Arrange
     Hecho hecho1 = buildHecho("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia");
     Hecho hecho2 = buildHecho("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución");

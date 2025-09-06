@@ -11,7 +11,7 @@ import java.util.List;
 public class RepositorioSolicitudes {
   private final EntityManager entityManager;
 
-  private List<Solicitud> solicitudes = new ArrayList<>();
+  private final List<Solicitud> solicitudes = new ArrayList<>();
 
     public RepositorioSolicitudes(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -26,7 +26,7 @@ public class RepositorioSolicitudes {
     EntityTransaction transaction = entityManager.getTransaction();
     try {
       transaction.begin();
-      entityManager.persist(solicitud); // esto seriaun INSERT
+      entityManager.persist(solicitud);
       transaction.commit();
     } catch (Exception e) {
       if (transaction.isActive()) {
@@ -57,7 +57,7 @@ public class RepositorioSolicitudes {
     EntityTransaction transaction = entityManager.getTransaction();
     try {
       transaction.begin();
-      entityManager.merge(solicitud); // merge es como un UPDATE
+      entityManager.merge(solicitud);
       transaction.commit();
     } catch (Exception e) {
       if (transaction.isActive()) {

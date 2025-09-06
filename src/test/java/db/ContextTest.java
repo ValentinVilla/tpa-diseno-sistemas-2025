@@ -3,6 +3,7 @@ package db;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,8 @@ public class ContextTest implements SimplePersistenceTest {
         .titulo(titulo)
         .descripcion("desc")
         .categoria("cat")
-        .latitud(1.0)
-        .longitud(1.0)
+        .latitud(-34.6037)
+        .longitud(-58.3816)
         .fechaAcontecimiento(LocalDate.now())
         .fechaCarga(LocalDate.now())
         .visible(true)
@@ -41,18 +42,14 @@ public class ContextTest implements SimplePersistenceTest {
   }
 
   @Test
-  void testPersistHecho() {
+  void testPersistHecho() throws Exception {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
     EntityManager em = emf.createEntityManager();
 
-    em.getTransaction().begin();
-
+    RepositorioHechos repo = new RepositorioHechos(em);
     Hecho hecho = new Hecho(crearHecho("Prueba persistance"));
-    em.persist(hecho);
 
-    em.getTransaction().commit();
-    em.close();
-    emf.close();
+    repo.guardar(hecho);
   }
 
 }

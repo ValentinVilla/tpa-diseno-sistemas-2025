@@ -28,8 +28,8 @@ public class Hecho {
   protected String titulo;
   protected String descripcion;
   protected String categoria;
-  protected double latitud;
-  protected double longitud;
+  protected Double latitud;
+  protected Double longitud;
   protected LocalDate fechaAcontecimiento;
   protected LocalDate fechaCarga;
   @Enumerated(EnumType.STRING)
@@ -39,6 +39,7 @@ public class Hecho {
   protected LocalDate fechaModificacion;
   @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
   protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
+  private String provincia;
 
   public Hecho() {}
 
@@ -82,11 +83,11 @@ public class Hecho {
     return this.fechaAcontecimiento;
   }
 
-  public double getLatitud() {
+  public Double getLatitud() {
     return this.latitud;
   }
 
-  public double getLongitud() {
+  public Double getLongitud() {
     return this.longitud;
   }
 
@@ -136,6 +137,14 @@ public class Hecho {
 
   public void setTitulo(String pruebaJUnit) {
 
+  }
+
+  public void setProvincia(String provincia) {
+    this.provincia = provincia;
+  }
+
+  public String getProvincia() {
+    return this.provincia;
   }
 }
 

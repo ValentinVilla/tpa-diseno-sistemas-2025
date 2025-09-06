@@ -16,6 +16,7 @@ public class HechoBuilder {
   private Origen origen;
   private boolean visible = true;
   private LocalDate fechaModificacion;
+  private String provincia;
 
   public HechoBuilder titulo(String titulo) {
     this.titulo = validateNotNullOrEmpty(titulo, "El título no puede ser nulo o vacío");
@@ -78,6 +79,11 @@ public class HechoBuilder {
   }
   public HechoBuilder fechaModificacion(LocalDate fechaModificacion) {
     this.fechaModificacion = fechaModificacion;
+    return this;
+  }
+
+  public HechoBuilder provincia(String provincia) {
+    this.provincia =  provincia;
     return this;
   }
 

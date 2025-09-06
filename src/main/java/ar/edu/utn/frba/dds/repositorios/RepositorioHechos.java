@@ -7,23 +7,30 @@ package ar.edu.utn.frba.dds.repositorios;
     import javax.persistence.EntityTransaction;
     import java.util.List;
 
+    import ar.edu.utn.frba.dds.servicios.GeocodingService;
     import org.hibernate.Session;
     import org.hibernate.query.NativeQuery;
-    import java.util.List;
-    import java.util.Arrays;
-    import java.util.stream.Collectors;
 
     public class RepositorioHechos {
       private final EntityManager entityManager;
+      private final GeocodingService geocodingService = new GeocodingService();
 
       public RepositorioHechos(EntityManager entityManager) {
         this.entityManager = entityManager;
       }
 
-      public void guardar(Hecho hecho) {
+      public void guardar(Hecho hecho) throws Exception {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
           transaction.begin();
+          if (hecho.getLatitud() != null && hecho.getLongitud() != null) {
+            String provincia = geocodingService.obtenerProvincia(
+                hecho.getLatitud(), hecho.getLongitud()
+            );
+            System.out.println(provincia);
+            hecho.setProvincia(provincia);
+          }
+
           entityManager.persist(hecho);
           transaction.commit();
         } catch (Exception e) {
@@ -33,6 +40,7 @@ package ar.edu.utn.frba.dds.repositorios;
           throw e;
         }
       }
+
 
       public void eliminar(Long id) {
         EntityTransaction transaction = entityManager.getTransaction();
