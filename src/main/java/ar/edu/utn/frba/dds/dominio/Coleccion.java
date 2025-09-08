@@ -30,6 +30,7 @@ public class Coleccion {
   @JoinColumn(name = "fuente_id",  nullable = false)
   private Fuente fuente;
   @ManyToOne(cascade = CascadeType.ALL) // misma
+  @JoinColumn(name = "filtro_id", nullable = false)
   public Filtro criterioPertenencia;
   @ManyToOne(cascade = CascadeType.ALL) // misma
   @JoinColumn(name = "consenso_id", nullable = false)
