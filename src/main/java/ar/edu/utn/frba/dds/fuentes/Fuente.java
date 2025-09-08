@@ -16,7 +16,7 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) //Justificacion: decidimos usar esta estrategia de herencia ya que en ningun momento necesitamos listar todas las fuentes con un getFuentes() si hicieramos eso el motor de BD deberia realizar muchos unions lo que restaria a nivel performance
 public abstract class Fuente {
   @Id
-  @GeneratedValue //quizas convenga mas especificar que el generated value sea SEQUENCE
+  @GeneratedValue//quizas convenga mas especificar que el generated value sea SEQUENCE
   private Long id;
 
   public abstract ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros);

@@ -3,6 +3,7 @@ package db;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.servicios.HechoService;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import org.junit.jupiter.api.*;
 
@@ -20,6 +21,7 @@ public class FullTextSearchTest {
   private static EntityManagerFactory emf;
   private EntityManager em;
   private RepositorioHechos repositorioHechos;
+  private HechoService hechoService;
 
   @BeforeAll
   static void initFactory() {
@@ -37,6 +39,7 @@ public class FullTextSearchTest {
   void init() {
     em = emf.createEntityManager();
     repositorioHechos = new RepositorioHechos(em);
+    hechoService = new HechoService(repositorioHechos);
   }
 
   @AfterEach
@@ -71,11 +74,28 @@ public class FullTextSearchTest {
     repositorioHechos.guardar(hecho2);
     repositorioHechos.guardar(hecho3);
 
-    List<Hecho> resultados = repositorioHechos.buscarPorTextoEnDB("guerra & revolución");
+    List<Hecho> resultados = hechoService.buscar("guerra y revolución");
 
     assertFalse(resultados.isEmpty());
     assertEquals(2, resultados.size());
     assertEquals("Guerra y Revolución Industrial", resultados.get(0).getTitulo());
     assertEquals("La Guerra del Pacífico", resultados.get(1).getTitulo());
     }
+
+  @Test
+  void testBuscarPorTextoConFaltaDeOrtografia() {
+    Hecho hecho1 = buildHecho("Accidente de tránsito", "Choque en la ruta 9", "Transito");
+    Hecho hecho2 = buildHecho("Accidente laboral", "Herido en la fábrica", "Trabajo");
+
+    repositorioHechos.guardar(hecho1);
+    repositorioHechos.guardar(hecho2);
+
+    //busco con falta de ortografia
+    List<Hecho> resultados = hechoService.buscar("acisdente");
+
+    assertFalse(resultados.isEmpty());
+    assertEquals(2, resultados.size());
+    assertTrue(resultados.stream().anyMatch(h -> h.getTitulo().equals("Accidente de tránsito")));
+    assertTrue(resultados.stream().anyMatch(h -> h.getTitulo().equals("Accidente laboral")));
+  }
 }
