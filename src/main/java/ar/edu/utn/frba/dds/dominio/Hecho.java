@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -124,8 +125,8 @@ public class Hecho {
         this.titulo.equals(otroHecho.getTitulo()) &&
             this.descripcion.equals(otroHecho.getDescripcion()) &&
             this.categoria.equals(otroHecho.getCategoria()) &&
-           this.latitud == otroHecho.getLatitud() &&
-           this.longitud == otroHecho.getLongitud() &&
+            Objects.equals(this.latitud, otroHecho.getLatitud()) &&
+            Objects.equals(this.longitud, otroHecho.getLongitud()) &&
            this.fechaAcontecimiento.equals(otroHecho.getFechaAcontecimiento()) &&
            this.visible == otroHecho.getVisible();
 

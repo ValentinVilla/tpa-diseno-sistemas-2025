@@ -5,7 +5,12 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import org.junit.jupiter.api.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -14,29 +19,37 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RepositorioEstadisticasTest {
-  private HechoBuilder crearHecho(String provincia) {
+  private Hecho crearHecho(double latitud, double longitud) {
     return new HechoBuilder()
         .titulo("Prueba persistance")
         .descripcion("desc")
         .categoria("cat")
-        .latitud(-34.6037)
-        .longitud(-58.3816)
+        .latitud(latitud)
+        .longitud(longitud)
         .fechaAcontecimiento(LocalDate.now())
         .fechaCarga(LocalDate.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE)
-        .provincia(provincia);
+        .build();
   }
 
   @Test
   void testProvinciaConMasHechos() throws Exception {
-    // Creamos hechos de ejemplo
-    Hecho h1 = new  Hecho(crearHecho("Buenos Aires"));
-    Hecho h2 = new Hecho(crearHecho("Buenos Aires"));
-    Hecho h3 = new Hecho(crearHecho("Cordoba"));
-    Hecho h4 = new Hecho(crearHecho("Santa fe"));  // provincia desconocida
+    Hecho h1 = crearHecho(-31.4167, -64.1833);
+    Hecho h2 = crearHecho(-34.6037, -58.3816);
+    Hecho h3 = crearHecho(-31.4167, -64.1833);
+    Hecho h4 = crearHecho(-31.6333, -60.7000);
 
-    // Creamos una colección mockeando mostrarHechos()
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManager em = emf.createEntityManager();
+
+    RepositorioHechos repoHechos = new RepositorioHechos(em);
+
+    repoHechos.guardar(h1);
+    repoHechos.guardar(h2);
+    repoHechos.guardar(h3);
+    repoHechos.guardar(h4);
+
     Coleccion coleccion = new Coleccion() {
       @Override
       public List<Hecho> mostrarHechos() {
@@ -48,6 +61,6 @@ class RepositorioEstadisticasTest {
 
     String provinciaTop = repo.provinciaConMasHechos(coleccion);
 
-    assertEquals("Buenos Aires", provinciaTop, "La provincia con más hechos debería ser Buenos Aires");
+    assertEquals("Córdoba", provinciaTop, "La provincia con más hechos debería ser Buenos Aires");
   }
 }

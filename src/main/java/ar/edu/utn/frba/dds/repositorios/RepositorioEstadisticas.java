@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import java.util.*;
+
 public class RepositorioEstadisticas {
-  public String provinciaConMasHechos(Coleccion coleccion) throws Exception {
+  public String provinciaConMasHechos(Coleccion coleccion) {
     List<Hecho> hechos = coleccion.mostrarHechos();
 
     Map<String, Long> conteoPorProvincia = hechos.stream()
+        .filter(h -> h.getProvincia() != null) // evitamos nulls
         .collect(Collectors.groupingBy(
-            h -> h.getProvincia() != null ? h.getProvincia() : "Desconocido",
+            Hecho::getProvincia,
             Collectors.counting()
         ));
 

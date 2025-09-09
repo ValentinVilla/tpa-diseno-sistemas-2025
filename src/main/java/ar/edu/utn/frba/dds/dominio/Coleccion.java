@@ -26,12 +26,12 @@ public class Coleccion {
   private String titulo;
   private String descripcion;
   public String handle;
-  @ManyToOne(cascade = CascadeType.ALL) // al persistir una coleccion, persiste su fuente
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "fuente_id",  nullable = false)
   private Fuente fuente;
-  @ManyToOne(cascade = CascadeType.ALL) // misma
+  @ManyToOne(cascade = CascadeType.ALL)
   public Filtro criterioPertenencia;
-  @ManyToOne(cascade = CascadeType.ALL) // misma
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "consenso_id", nullable = false)
   AlgoritmoConsenso algoritmoConsenso;
   @Enumerated(EnumType.STRING)
