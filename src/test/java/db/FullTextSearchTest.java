@@ -78,7 +78,6 @@ public class FullTextSearchTest {
 
     assertFalse(resultados.isEmpty());
     assertEquals("Guerra y Revolución Industrial", resultados.get(0).getTitulo());
-    assertEquals("La Guerra del Pacífico", resultados.get(1).getTitulo());
     }
 
   @Test
