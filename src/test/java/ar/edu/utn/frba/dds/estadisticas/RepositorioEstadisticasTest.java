@@ -40,10 +40,7 @@ class RepositorioEstadisticasTest {
     Hecho h3 = crearHecho(-31.4167, -64.1833);
     Hecho h4 = crearHecho(-31.6333, -60.7000);
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-    EntityManager em = emf.createEntityManager();
-
-    RepositorioHechos repoHechos = new RepositorioHechos(em);
+    RepositorioHechos repoHechos = RepositorioHechos.getInstancia();
 
     repoHechos.guardar(h1);
     repoHechos.guardar(h2);

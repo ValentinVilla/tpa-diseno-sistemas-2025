@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.fuentes.fuenteEstatica;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import com.opencsv.CSVReaderHeaderAware;
 
 import java.io.FileReader;
@@ -26,6 +27,7 @@ public class LectorCSV {
         if (!hecho.getTitulo().isEmpty()) {
           String clave = hecho.getTitulo().trim().toLowerCase();
           hechosMap.put(clave, hecho);
+          RepositorioHechos.getInstancia().guardar(hecho);
         }
       }
 

@@ -4,7 +4,10 @@ import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
 import java.util.List;
 
 import ar.edu.utn.frba.dds.servicios.GeorefAPI;
@@ -12,11 +15,21 @@ import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
 public class RepositorioHechos {
-  private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
-  public RepositorioHechos(EntityManager entityManager) {
-    this.entityManager = entityManager;
-  }
+    private static RepositorioHechos instancia;
+
+    private RepositorioHechos() {
+      EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+      this.entityManager = emf.createEntityManager();
+    }
+
+    public static RepositorioHechos getInstancia() {
+      if (instancia == null) {
+        instancia = new RepositorioHechos();
+      }
+      return instancia;
+    }
 
   public void guardar(Hecho hecho) throws Exception {
     EntityTransaction transaction = entityManager.getTransaction();
@@ -39,7 +52,6 @@ public class RepositorioHechos {
       throw e;
     }
   }
-
 
   public void eliminar(Long id) {
     EntityTransaction transaction = entityManager.getTransaction();

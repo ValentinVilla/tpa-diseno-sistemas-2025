@@ -43,10 +43,8 @@ public class ContextTest implements SimplePersistenceTest {
 
   @Test
   void testPersistHecho() throws Exception {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-    EntityManager em = emf.createEntityManager();
 
-    RepositorioHechos repo = new RepositorioHechos(em);
+    RepositorioHechos repo = RepositorioHechos.getInstancia();
     Hecho hecho = new Hecho(crearHecho("Prueba persistance"));
 
     repo.guardar(hecho);

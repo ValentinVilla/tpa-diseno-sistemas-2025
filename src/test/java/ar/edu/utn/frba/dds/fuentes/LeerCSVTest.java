@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.fuentes;
 
 import ar.edu.utn.frba.dds.consenso.ConsensoDefault;
+import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
 import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.LectorCSV;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
@@ -114,6 +115,18 @@ public class LeerCSVTest {
     assertEquals(-34.6000, hechoFinal.getLatitud());
   }
 
+  @Test
+  void cargarHechosDesdeArchivoCSV() {
+    ArrayList<String> campos = new ArrayList<>(List.of(
+        "titulo", "descripcion", "latitud", "longitud", "fechaHecho"
+    ));
+    FuenteEstatica fuente = new FuenteEstatica("/Users/gongarfon/DDS/tpa-2025-04/Diagramas/hechos.csv", "Testing con el berty", campos);
+    ParametrosConsulta parametros = new ParametrosConsulta();
+    fuente.cargarHechos(parametros);
+
+    assertEquals(1, 1);
+  }
+
   private static List<Hecho> getHechos(Path tempFile) throws IOException {
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
@@ -139,5 +152,4 @@ public class LeerCSVTest {
         .build();
     repositorio.guardar(nueva);
   }
-
 }

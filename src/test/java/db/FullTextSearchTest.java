@@ -37,8 +37,7 @@ public class FullTextSearchTest {
 
   @BeforeEach
   void init() {
-    em = emf.createEntityManager();
-    repositorioHechos = new RepositorioHechos(em);
+    repositorioHechos = RepositorioHechos.getInstancia();
     hechoService = new HechoService(repositorioHechos);
   }
 
