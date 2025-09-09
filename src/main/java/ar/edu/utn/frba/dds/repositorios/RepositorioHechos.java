@@ -61,13 +61,26 @@ package ar.edu.utn.frba.dds.repositorios;
 
       public List<Hecho> buscarPorTextoEnDB(String queryText) {
         Session session = entityManager.unwrap(Session.class);
-        String sql = "SELECT *, ts_rank(fts_vector, to_tsquery('spanish', :queryText)) AS rank " +
+        String sql = "SELECT *, ts_rank(fts_vector, plainto_tsquery('spanish', :queryText)) AS rank " + // cambie a plainto_tsquery porque esto ya agrega los AND entre palabras, (lo que hacias en el hecho service)
             "FROM hecho " +
-            "WHERE fts_vector @@ to_tsquery('spanish', :queryText) " +
+            "WHERE fts_vector @@ plainto_tsquery('spanish', :queryText) " +
             "ORDER BY rank DESC";
         NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
         query.setParameter("queryText", queryText);
         return query.getResultList();
       }
 
-  }
+      public List<Hecho> buscarPorSimilitud(String queryText) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String sql = "SELECT *, similarity(titulo, :queryText) AS sim " +
+            "FROM hecho " +
+            "WHERE similarity(titulo, :queryText) > 0.1 " +   // umbral configurable, cadena identica 1.0, nada  0.0
+            "ORDER BY sim DESC";
+
+        NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
+        query.setParameter("queryText", queryText);
+        return query.getResultList();
+      }
+    }
+
