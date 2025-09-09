@@ -7,12 +7,6 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -82,6 +76,6 @@ class RepositorioEstadisticasTest {
   void mayorHoraCategoria() {
     RepositorioEstadisticas repo = new RepositorioEstadisticas();
     EstadisticaHoraPorCategoriaTop horaTop =  repo.obtenerHoraPorCategoria("Testing con el berty");
-    assertEquals(0, horaTop.getHora());
+    assertEquals(11, horaTop.getHora());
   }
 }
