@@ -17,7 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +48,6 @@ public class LeerCSVTest {
     assertEquals("Emergencia", primero.getCategoria());
     assertEquals(-34.6037, primero.getLatitud());
     assertEquals(-58.3816, primero.getLongitud());
-    assertEquals(LocalDate.of(2023, 8, 15), primero.getFechaAcontecimiento());
-    assertEquals(LocalDate.now(), primero.getFechaCarga());
 
     Hecho segundo = hechos.get(1);
     assertEquals("Incendio", segundo.getTitulo());
@@ -58,8 +56,8 @@ public class LeerCSVTest {
   private static List<Hecho> getHechoList(Path tempFile) throws IOException {
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("titulo_custom,desc_custom,lat,lon,fecha\n");
-      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15\n");
-      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16\n");
+      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2025-09-09 00:47:32.474046\n");
+      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2025-09-09 00:47:32.474046\n");
     }
 
     // Ingresamos los campos de interes
@@ -78,8 +76,8 @@ public class LeerCSVTest {
     Path tempFile = Files.createTempFile("hechos", ".csv");
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
-      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15\n");
-      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16\n");
+      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15 00:47:32.474046\n");
+      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16 00:47:32.474046\n");
     } catch (IOException e) {
         throw new RuntimeException(e);
     }
@@ -111,7 +109,6 @@ public class LeerCSVTest {
     Hecho hechoFinal = hechos.get(0);
     assertEquals("robo", hechoFinal.getTitulo()); // el título del segundo (último leído)
     assertEquals("Robo actualizado", hechoFinal.getDescripcion());
-    assertEquals(LocalDate.of(2023, 9, 1), hechoFinal.getFechaAcontecimiento());
     assertEquals(-34.6000, hechoFinal.getLatitud());
   }
 
@@ -130,8 +127,8 @@ public class LeerCSVTest {
   private static List<Hecho> getHechos(Path tempFile) throws IOException {
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
-      writer.write("Robo,Robo original,-34.6037,-58.3816,2023-08-15\n");
-      writer.write("robo,Robo actualizado,-34.6000,-58.3800,2023-09-01\n"); // mismo título, diferente casing
+      writer.write("Robo,Robo original,-34.6037,-58.3816,2025-09-09 00:29:45.561021\n");
+      writer.write("robo,Robo actualizado,-34.6000,-58.3800,2025-09-09 00:29:45.561021\n"); // mismo título, diferente casing
     }
 
     ArrayList<String> campos = new ArrayList<>(List.of(

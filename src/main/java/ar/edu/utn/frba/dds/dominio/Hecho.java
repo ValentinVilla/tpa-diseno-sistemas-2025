@@ -14,6 +14,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,8 +32,8 @@ public class Hecho {
   protected String categoria;
   protected Double latitud;
   protected Double longitud;
-  protected LocalDate fechaAcontecimiento;
-  protected LocalDate fechaCarga;
+  protected LocalDateTime fechaAcontecimiento;
+  protected LocalDateTime fechaCarga;
   @Enumerated(EnumType.STRING)
   protected Origen origen;
   protected boolean visible;
@@ -80,7 +81,7 @@ public class Hecho {
     return this.categoria;
   }
 
-  public LocalDate getFechaHecho() {
+  public LocalDateTime getFechaHecho() {
     return this.fechaAcontecimiento;
   }
 
@@ -100,11 +101,11 @@ public class Hecho {
     return this.descripcion;
   }
 
-  public LocalDate getFechaCarga() {
+  public LocalDateTime getFechaCarga() {
     return this.fechaCarga;
   }
 
-  public LocalDate getFechaAcontecimiento() {
+  public LocalDateTime getFechaAcontecimiento() {
     return this.fechaAcontecimiento;
   }
 

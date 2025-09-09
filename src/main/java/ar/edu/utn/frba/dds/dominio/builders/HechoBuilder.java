@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class HechoBuilder {
   private String titulo;
@@ -11,11 +12,11 @@ public class HechoBuilder {
   private String categoria;
   private double latitud;
   private double longitud;
-  private LocalDate fechaAcontecimiento;
-  private LocalDate fechaCarga;
+  private LocalDateTime fechaAcontecimiento;
+  private LocalDateTime fechaCarga;
   private Origen origen;
   private boolean visible = true;
-  private LocalDate fechaModificacion;
+  private LocalDateTime fechaModificacion;
   private String provincia;
 
   public HechoBuilder titulo(String titulo) {
@@ -49,7 +50,7 @@ public class HechoBuilder {
     return this;
   }
 
-  public HechoBuilder fechaAcontecimiento(LocalDate fechaAcontecimiento) {
+  public HechoBuilder fechaAcontecimiento(LocalDateTime fechaAcontecimiento) {
     if (fechaAcontecimiento == null) {
       throw new CampoInvalido("La fecha de acontecimiento no puede ser nula");
     }
@@ -57,7 +58,7 @@ public class HechoBuilder {
     return this;
   }
 
-  public HechoBuilder fechaCarga(LocalDate fechaCarga) {
+  public HechoBuilder fechaCarga(LocalDateTime fechaCarga) {
     if (fechaCarga == null) {
       throw new CampoInvalido("La fecha de carga no puede ser nula");
     }
@@ -77,7 +78,7 @@ public class HechoBuilder {
     this.visible = visible;
     return this;
   }
-  public HechoBuilder fechaModificacion(LocalDate fechaModificacion) {
+  public HechoBuilder fechaModificacion(LocalDateTime fechaModificacion) {
     this.fechaModificacion = fechaModificacion;
     return this;
   }
@@ -119,11 +120,11 @@ public class HechoBuilder {
   public String getCategoria() { return categoria; }
   public double getLatitud() { return latitud; }
   public double getLongitud() { return longitud; }
-  public LocalDate getFechaAcontecimiento() { return fechaAcontecimiento; }
-  public LocalDate getFechaCarga() { return fechaCarga; }
+  public LocalDateTime getFechaAcontecimiento() { return fechaAcontecimiento; }
+  public LocalDateTime getFechaCarga() { return fechaCarga; }
   public Origen getOrigen() { return origen; }
   public boolean isVisible() { return visible; }
-  public LocalDate getFechaModificacion() { return fechaModificacion; }
+  public LocalDateTime getFechaModificacion() { return fechaModificacion; }
 
   public static class CampoInvalido extends RuntimeException {
     public CampoInvalido(String mensaje) {

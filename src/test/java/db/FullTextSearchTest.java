@@ -10,6 +10,8 @@ import org.junit.jupiter.api.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import java.time.LocalDate;
@@ -55,8 +57,8 @@ public class FullTextSearchTest {
         .categoria(categoria)
         .latitud(-31.4167)
         .longitud(-64.1833)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE)
         .visible(true)
         .build();

@@ -14,7 +14,7 @@ import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
 import ar.edu.utn.frba.dds.fuentes.fuenteProxy.FuenteDemo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +45,8 @@ public class AlgoritmoConsensoTest {
         .categoria("Clima")
         .latitud(-34.618)
         .longitud(-58.442)
-        .fechaAcontecimiento(LocalDate.of(2025, 8, 20))
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.of(2025, 8, 20, 23, 59, 59))
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE)
         .visible(true)
         .build();

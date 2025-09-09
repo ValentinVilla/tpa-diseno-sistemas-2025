@@ -13,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,8 +38,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(1.0)
         .longitud(1.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     return new HechoDinamico(hechoBase, juan);
@@ -86,8 +87,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(1.0)
         .longitud(1.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     HechoDinamico nuevo = new HechoDinamico(Builder, tomas);
@@ -105,8 +106,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(1.0)
         .longitud(1.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now().minusDays(8)) // Simula pasaron 8 dias
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now().minusDays(8))
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     HechoDinamico hechoOriginal = new HechoDinamico(Builder, juan);
@@ -120,8 +121,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(2.0)
         .longitud(2.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now()) // no importa
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 

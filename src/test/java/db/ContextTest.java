@@ -15,6 +15,7 @@ import javax.persistence.Persistence;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ContextTest implements SimplePersistenceTest {
   private HechoBuilder crearHecho(String titulo) {
@@ -24,8 +25,8 @@ public class ContextTest implements SimplePersistenceTest {
         .categoria("cat")
         .latitud(-31.4167)
         .longitud(-64.1833)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
   }

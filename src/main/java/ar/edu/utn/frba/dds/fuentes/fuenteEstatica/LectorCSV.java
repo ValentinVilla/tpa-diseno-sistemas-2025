@@ -9,6 +9,8 @@ import com.opencsv.CSVReaderHeaderAware;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -80,7 +82,7 @@ public class LectorCSV {
         .latitud(parsearDouble(latitud))
         .longitud(parsearDouble(longitud))
         .fechaAcontecimiento(parsearFecha(fechaHecho))
-        .fechaCarga(LocalDate.now())
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
         .build();
   }
@@ -93,9 +95,10 @@ public class LectorCSV {
     }
   }
 
-  private LocalDate parsearFecha(String valor) {
+  private LocalDateTime parsearFecha(String valor) {
     try {
-      return LocalDate.parse(valor);
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+      return LocalDateTime.parse(valor, formatter);
     } catch (Exception e) {
       return null;
     }

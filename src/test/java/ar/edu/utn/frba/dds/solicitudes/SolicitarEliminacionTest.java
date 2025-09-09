@@ -9,6 +9,7 @@ import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class SolicitarEliminacionTest {
 
@@ -21,8 +22,8 @@ public class SolicitarEliminacionTest {
         .categoria("fake-news")
         .latitud(0.0)
         .longitud(0.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
         .visible(true)
         .build();
@@ -42,8 +43,8 @@ public class SolicitarEliminacionTest {
         .categoria("ambiental")
         .latitud(10.0)
         .longitud(20.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
         .visible(true)
         .build();
