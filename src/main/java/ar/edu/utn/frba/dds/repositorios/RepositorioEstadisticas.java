@@ -19,23 +19,6 @@ import java.util.stream.Collectors;
 import java.util.*;
 
 public class RepositorioEstadisticas {
-  @Transactional
-  public void refrescarCategoriaTop() {
-    EntityManager em = this.getEntityManager();
-    em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_categoria_top").executeUpdate();
-  }
-
-  @Transactional
-  public void refrescarProvinciaPorCategoriaTop() {
-    EntityManager em = this.getEntityManager();
-    em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_provincia_por_categoria_top").executeUpdate();
-  }
-
-  @Transactional
-  public void refrescarHoraPorCategoriaTop() {
-    EntityManager em = this.getEntityManager();
-    em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_hora_top_por_categoria").executeUpdate();
-  }
 
   public String provinciaConMasHechos(Coleccion coleccion) {
     List<Hecho> hechos = coleccion.mostrarHechos();
@@ -94,4 +77,16 @@ public class RepositorioEstadisticas {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
     return emf.createEntityManager();
   }
+
+  @Transactional
+  public void refrescarTodas() {
+    EntityManager em = getEntityManager();
+    em.getTransaction().begin();
+
+    em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_categoria_top").executeUpdate();
+    em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_hora_top_por_categoria").executeUpdate();
+    em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_provincia_por_categoria_top").executeUpdate();
+
+    em.getTransaction().commit();
+    }
 }
