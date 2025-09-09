@@ -37,13 +37,34 @@ public class RepositorioEstadisticas {
         "GROUP BY h.categoria " +
         "ORDER BY COUNT(h) DESC";
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-    EntityManager em = emf.createEntityManager();
+    EntityManager em = this.getEntityManager();
     TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
     query.setMaxResults(1);
 
     Object[] resultado = query.getSingleResult();
 
     return (String) resultado[0];
+  }
+
+  public String obtenerProvinciaConMasHechosPorCategoria(String categoria) {
+    String jpql = "SELECT h.provincia, COUNT(h) " +
+        "FROM Hecho h " +
+        "WHERE h.categoria = :categoria " +
+        "GROUP BY h.provincia " +
+        "ORDER BY COUNT(h) DESC";
+
+    EntityManager em = this.getEntityManager();
+    TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
+    query.setParameter("categoria", categoria);
+    query.setMaxResults(1);
+
+    Object[] resultado = query.getSingleResult();
+
+    return (String) resultado[0];
+  }
+
+  private EntityManager getEntityManager() {
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    return emf.createEntityManager();
   }
 }

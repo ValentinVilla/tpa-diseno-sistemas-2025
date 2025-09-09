@@ -68,4 +68,12 @@ class RepositorioEstadisticasTest {
 
     assertEquals("Testing con el berty", provinciaTop);
   }
+
+  @Test
+  void provinciaConMasHechosPorCategoria() {
+    RepositorioEstadisticas repo = new RepositorioEstadisticas();
+
+    String provinciaTop = repo.obtenerProvinciaConMasHechosPorCategoria("Testing con el berty");
+    assertEquals("Santa Fe", provinciaTop);
+  }
 }
