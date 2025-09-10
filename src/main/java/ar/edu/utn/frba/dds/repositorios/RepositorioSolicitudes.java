@@ -1,29 +1,36 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.solicitudes.Solicitud;
-
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import java.util.ArrayList;
+import javax.persistence.Persistence;
 import java.util.List;
 
 public class RepositorioSolicitudes {
   private final EntityManager entityManager;
 
-  private final List<Solicitud> solicitudes = new ArrayList<>();
+  private static RepositorioSolicitudes instancia;
 
-    public RepositorioSolicitudes(EntityManager entityManager) {
-        this.entityManager = entityManager;
+  private RepositorioSolicitudes() {
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    this.entityManager = emf.createEntityManager();
+  }
+
+  public static RepositorioSolicitudes getInstancia() {
+    if (instancia == null) {
+      instancia = new RepositorioSolicitudes();
     }
+    return instancia;
+  }
 
-    public List<Solicitud> obtenerTodas() {
-      return entityManager.createQuery("SELECT s FROM Solicitud s", Solicitud.class)
-          .getResultList();
+  public List<Solicitud> obtenerTodas() {
+    return entityManager.createQuery("SELECT s FROM Solicitud s", Solicitud.class)
+        .getResultList();
   }
 
   public void guardar(Solicitud solicitud) {
-    EntityTransaction transaction = entityManager.getTransaction();
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
       entityManager.persist(solicitud);
@@ -37,7 +44,7 @@ public class RepositorioSolicitudes {
   }
 
   public void eliminar(Long id) {
-    EntityTransaction transaction = entityManager.getTransaction();
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
       Solicitud solicitud = entityManager.find(Solicitud.class, id);
@@ -54,7 +61,7 @@ public class RepositorioSolicitudes {
   }
 
   public void actualizar(Solicitud solicitud) {
-    EntityTransaction transaction = entityManager.getTransaction();
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
       entityManager.merge(solicitud);
@@ -67,5 +74,7 @@ public class RepositorioSolicitudes {
     }
   }
 
-
+  private  EntityTransaction getEntity() {
+      return entityManager.getTransaction();
+  }
 }

@@ -19,6 +19,16 @@ import java.util.stream.Collectors;
 import java.util.*;
 
 public class RepositorioEstadisticas {
+  private static RepositorioEstadisticas instancia;
+
+  private RepositorioEstadisticas() {}
+
+  public static RepositorioEstadisticas getInstancia() {
+    if (instancia == null) {
+      instancia = new RepositorioEstadisticas();
+    }
+    return instancia;
+  }
 
   public String provinciaConMasHechos(Coleccion coleccion) {
     List<Hecho> hechos = coleccion.mostrarHechos();

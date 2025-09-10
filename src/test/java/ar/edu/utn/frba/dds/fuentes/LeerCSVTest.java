@@ -90,7 +90,7 @@ public class LeerCSVTest {
     FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
     AlgoritmoConsenso algoritmo = new ConsensoDefault();
 
-    RepositorioColecciones repoColeccion = new RepositorioColecciones(entityManager);
+    RepositorioColecciones repoColeccion = RepositorioColecciones.getInstancia();
 
     //eliminado el uso del service
     crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro, algoritmo, repoColeccion);

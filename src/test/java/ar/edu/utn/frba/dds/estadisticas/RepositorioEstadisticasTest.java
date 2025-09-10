@@ -49,7 +49,7 @@ class RepositorioEstadisticasTest {
       }
     };
 
-    RepositorioEstadisticas repo = new RepositorioEstadisticas();
+    RepositorioEstadisticas repo = RepositorioEstadisticas.getInstancia();
 
     String provinciaTop = repo.provinciaConMasHechos(coleccion);
 
@@ -58,7 +58,7 @@ class RepositorioEstadisticasTest {
 
   @Test
   void CategoriaConMasHechos() {
-    RepositorioEstadisticas repo = new RepositorioEstadisticas();
+    RepositorioEstadisticas repo = RepositorioEstadisticas.getInstancia();
     EstadisticaCategoriaTop provinciaTop = repo.obtenerCategoriaMasReportada();
 
     assertEquals("Testing con el berty", provinciaTop.getCategoria());
@@ -66,7 +66,7 @@ class RepositorioEstadisticasTest {
 
   @Test
   void provinciaConMasHechosPorCategoria() {
-    RepositorioEstadisticas repo = new RepositorioEstadisticas();
+    RepositorioEstadisticas repo = RepositorioEstadisticas.getInstancia();
 
      EstadisticaProvinciaPorCategoriaTop provinciaTop = repo.obtenerProvinciaPorCategoria("Testing con el berty");
     assertEquals("Santa Fe", provinciaTop.getProvincia());
@@ -74,7 +74,7 @@ class RepositorioEstadisticasTest {
 
   @Test
   void mayorHoraCategoria() {
-    RepositorioEstadisticas repo = new RepositorioEstadisticas();
+    RepositorioEstadisticas repo = RepositorioEstadisticas.getInstancia();
     EstadisticaHoraPorCategoriaTop horaTop =  repo.obtenerHoraPorCategoria("Testing con el berty");
     assertEquals(11, horaTop.getHora());
   }

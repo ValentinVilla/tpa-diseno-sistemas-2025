@@ -35,12 +35,13 @@ public abstract class Solicitud {
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector) {
     this.hecho = hecho;
-    this.estado = EstadoSolicitud.PENDIENTE;
     this.textoFundamentacion = sugerenciaModificacion;
     this.detector = detector;
     if(detector != null && detector.esSpam(sugerenciaModificacion)){
-      throw new IllegalArgumentException("La sugerencia de modificación es spam");
-    } //creo que tendriamos que implemetnar el "esSpam(textoSugerencia)" por si el texto de fundamentacion tiene 500 caracteres, enunciado E1.
+      this.estado = EstadoSolicitud.RECHAZADA;
+    } else {
+      this.estado = EstadoSolicitud.PENDIENTE;
+    }
   }
 
   public void aceptar(){

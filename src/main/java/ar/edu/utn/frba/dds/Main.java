@@ -10,7 +10,7 @@ public class Main {
 
   public static void main(String[] args) {
 
-    RepositorioEstadisticas repo = new RepositorioEstadisticas();
+    RepositorioEstadisticas repo = RepositorioEstadisticas.getInstancia();
 
     ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 

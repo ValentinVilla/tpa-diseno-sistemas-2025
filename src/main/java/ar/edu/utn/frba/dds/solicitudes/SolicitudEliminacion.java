@@ -14,11 +14,11 @@ public class SolicitudEliminacion extends Solicitud {
 
   public SolicitudEliminacion(String textoFundamentacion, Hecho hecho, DetectorDeSpam detector) {
     super(hecho, textoFundamentacion, detector);
-
   }
 
   @Override
   public void aplicarRechazo() {
+    this.estado = EstadoSolicitud.RECHAZADA;
   }
 
   @Override

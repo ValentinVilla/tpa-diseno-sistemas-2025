@@ -5,21 +5,33 @@ import java.util.List;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
 import java.util.List;
 
 public class RepositorioColecciones {
   private final EntityManager entityManager;
+  private static RepositorioColecciones instancia;
 
-  public RepositorioColecciones(EntityManager entityManager) {
-    this.entityManager = entityManager;
+  public RepositorioColecciones() {
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    this.entityManager = emf.createEntityManager();
+  }
+
+  public static RepositorioColecciones getInstancia() {
+    if (instancia == null) {
+      instancia = new RepositorioColecciones();
+    }
+    return instancia;
   }
 
   public void guardar(Coleccion coleccion) {
-    EntityTransaction transaction = entityManager.getTransaction();
+    EntityTransaction transaction = getTransaction();
     try {
       transaction.begin();
-      entityManager.persist(coleccion); // esto seriaun INSERT
+      entityManager.persist(coleccion);
       transaction.commit();
     } catch (Exception e) {
       if (transaction.isActive()) {
@@ -30,17 +42,16 @@ public class RepositorioColecciones {
   }
 
   public Coleccion buscarPorID(Long id) {
-    return entityManager.find(Coleccion.class, id); // esto seria un SELECT con WHERE id = ?
+    return entityManager.find(Coleccion.class, id);
   }
 
   public List<Coleccion> listarTodas() {
     return entityManager.createQuery("SELECT c FROM Coleccion c", Coleccion.class)
-        .getResultList(); // esto devuelve objetos de tipo Coleccion, no se hace select * porque
-                          // es JPQL, no SQL
-  }//ESTO PARA MI HAY QUE TESTEARLO
+        .getResultList();
+  }
 
   public void eliminar(Long id) {
-    EntityTransaction transaction = entityManager.getTransaction();
+    EntityTransaction transaction = getTransaction();
     try {
       transaction.begin();
       Coleccion coleccion = entityManager.find(Coleccion.class, id);
@@ -60,7 +71,7 @@ public class RepositorioColecciones {
     EntityTransaction transaction = entityManager.getTransaction();
     try {
       transaction.begin();
-      entityManager.merge(coleccion); // merge es como un UPDATE
+      entityManager.merge(coleccion);
       transaction.commit();
     } catch (Exception e) {
       if (transaction.isActive()) {
@@ -68,5 +79,9 @@ public class RepositorioColecciones {
       }
       throw e;
     }
+  }
+
+  private EntityTransaction getTransaction() {
+    return entityManager.getTransaction();
   }
 }
