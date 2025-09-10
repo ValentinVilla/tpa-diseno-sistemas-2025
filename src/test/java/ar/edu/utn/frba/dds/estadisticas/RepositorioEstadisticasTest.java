@@ -1,11 +1,15 @@
 package ar.edu.utn.frba.dds.estadisticas;
 
+import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -77,5 +81,37 @@ class RepositorioEstadisticasTest {
     RepositorioEstadisticas repo = RepositorioEstadisticas.getInstancia();
     EstadisticaHoraPorCategoriaTop horaTop =  repo.obtenerHoraPorCategoria("Testing con el berty");
     assertEquals(11, horaTop.getHora());
+  }
+
+  @Test
+  public void porcetajeDeSpamEsDel50() throws Exception {
+    Hecho hecho = crearHecho(-31.4167, -64.1833);
+
+    RepositorioHechos repoHechos = RepositorioHechos.getInstancia();
+    repoHechos.guardar(hecho);
+
+    DetectorDeSpam detectorSiempreTrue = texto -> true;
+    SolicitudEliminacion s1 = new SolicitudEliminacion("spam", hecho ,detectorSiempreTrue);
+    SolicitudEliminacion s2 = new SolicitudEliminacion("spam", hecho ,detectorSiempreTrue);
+
+    DetectorDeSpam detectorSiempreFalse = texto -> false;
+    SolicitudEliminacion s3 = new SolicitudEliminacion("no es spam", hecho ,detectorSiempreFalse);
+    SolicitudEliminacion s4 = new SolicitudEliminacion("no es spam", hecho ,detectorSiempreFalse);
+
+    SolicitudModificacion sModificacion = new SolicitudModificacion(hecho, "no se cuenta en la estadistica",detectorSiempreTrue, hecho);
+
+    RepositorioSolicitudes repo = RepositorioSolicitudes.getInstancia();
+
+    repo.guardar(s1);
+    repo.guardar(s2);
+    repo.guardar(s3);
+    repo.guardar(s4);
+    repo.guardar(sModificacion);
+
+    RepositorioEstadisticas repoEstadisticas = RepositorioEstadisticas.getInstancia();
+    EstadisticaSolicitudesSpam estadisticasSpam = repoEstadisticas.obtenerCantidadSpam();
+
+    assertEquals(4, estadisticasSpam.getCantidad());
+    assertEquals("50.00%", estadisticasSpam.getPorcentaje());
   }
 }

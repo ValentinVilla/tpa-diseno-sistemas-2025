@@ -117,7 +117,7 @@ public class LeerCSVTest {
     ArrayList<String> campos = new ArrayList<>(List.of(
         "titulo", "descripcion", "latitud", "longitud", "fechaHecho"
     ));
-    FuenteEstatica fuente = new FuenteEstatica("/Users/gongarfon/DDS/tpa-2025-04/Diagramas/hechos.csv", "Testing con el berty", campos);
+    FuenteEstatica fuente = new FuenteEstatica("/Users/gongarfon/DDS/tpa-2025-04/Diagramas/hechosChico.csv", "Testing con el berty", campos);
     ParametrosConsulta parametros = new ParametrosConsulta();
     fuente.cargarHechos(parametros);
 

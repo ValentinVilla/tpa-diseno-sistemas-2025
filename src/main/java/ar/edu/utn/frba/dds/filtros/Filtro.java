@@ -39,4 +39,4 @@ List<Object[]> resultados = entityManager.createQuery(
     )
     .setParameter("ids", idsFiltrados)
     .getResultList();
-*
+*/

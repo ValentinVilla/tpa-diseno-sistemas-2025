@@ -5,11 +5,11 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.estadisticas.EstadisticaCategoriaTop;
 import ar.edu.utn.frba.dds.estadisticas.EstadisticaHoraPorCategoriaTop;
 import ar.edu.utn.frba.dds.estadisticas.EstadisticaProvinciaPorCategoriaTop;
+import ar.edu.utn.frba.dds.estadisticas.EstadisticaSolicitudesSpam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.*;
 
 public class RepositorioEstadisticas {
+
   private static RepositorioEstadisticas instancia;
 
   private RepositorioEstadisticas() {}
@@ -83,9 +84,17 @@ public class RepositorioEstadisticas {
     return resultados.get(0);
   }
 
-  private EntityManager getEntityManager() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-    return emf.createEntityManager();
+  public EstadisticaSolicitudesSpam obtenerCantidadSpam() {
+    EntityManager em = this.getEntityManager();
+    List<EstadisticaSolicitudesSpam> resultados = em.createQuery
+        ("FROM EstadisticaSolicitudesSpam", EstadisticaSolicitudesSpam.class)
+        .getResultList();
+
+    if (resultados.isEmpty()) {
+      return null;
+    }
+
+    return resultados.get(0);
   }
 
   @Transactional
@@ -96,7 +105,13 @@ public class RepositorioEstadisticas {
     em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_categoria_top").executeUpdate();
     em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_hora_top_por_categoria").executeUpdate();
     em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_provincia_por_categoria_top").executeUpdate();
+    em.createNativeQuery("REFRESH MATERIALIZED VIEW cantidad_de_solicitudes_spam").executeUpdate();
 
     em.getTransaction().commit();
     }
+
+  private EntityManager getEntityManager() {
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    return emf.createEntityManager();
+  }
 }

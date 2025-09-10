@@ -24,6 +24,7 @@ public class SolicitudEliminacion extends Solicitud {
   @Override
   public void aplicarAceptacion() {
     hecho.setVisible(false);
+    this.estado = EstadoSolicitud.ACEPTADA;
   }
 
   public boolean estaPendiente() {
