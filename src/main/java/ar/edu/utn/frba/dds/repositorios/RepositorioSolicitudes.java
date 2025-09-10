@@ -1,27 +1,80 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.solicitudes.Solicitud;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.util.List;
 
 public class RepositorioSolicitudes {
-  private List<Solicitud> solicitudes = new ArrayList<>();
+  private final EntityManager entityManager;
+
+  private static RepositorioSolicitudes instancia;
+
+  private RepositorioSolicitudes() {
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    this.entityManager = emf.createEntityManager();
+  }
+
+  public static RepositorioSolicitudes getInstancia() {
+    if (instancia == null) {
+      instancia = new RepositorioSolicitudes();
+    }
+    return instancia;
+  }
 
   public List<Solicitud> obtenerTodas() {
-    return new ArrayList<>(solicitudes);
+    return entityManager.createQuery("SELECT s FROM Solicitud s", Solicitud.class)
+        .getResultList();
   }
 
   public void guardar(Solicitud solicitud) {
-    solicitudes.add(solicitud);
+    EntityTransaction transaction = getEntity();
+    try {
+      transaction.begin();
+      entityManager.persist(solicitud);
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
   }
 
-  public void eliminar(Solicitud solicitud) {
-    solicitudes.remove(solicitud);
+  public void eliminar(Long id) {
+    EntityTransaction transaction = getEntity();
+    try {
+      transaction.begin();
+      Solicitud solicitud = entityManager.find(Solicitud.class, id);
+      if (solicitud != null) {
+        entityManager.remove(solicitud);
+      }
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
   }
 
   public void actualizar(Solicitud solicitud) {
-    //TODO
+    EntityTransaction transaction = getEntity();
+    try {
+      transaction.begin();
+      entityManager.merge(solicitud);
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
+  }
+
+  private  EntityTransaction getEntity() {
+      return entityManager.getTransaction();
   }
 }

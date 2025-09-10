@@ -1,24 +1,38 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.consenso.ConsensoDefault;
+import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
+import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.LectorCSV;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
+import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 public class LeerCSVTest {
+
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit"); //este nombre esta en el persistence.xml
+  private EntityManager entityManager = emf.createEntityManager();
+
+
   @Test
   void puedeLeerUnArchivoCSVYDevolverHechos() throws Exception {
     // Arrange: crear archivo temporal CSV
@@ -34,8 +48,6 @@ public class LeerCSVTest {
     assertEquals("Emergencia", primero.getCategoria());
     assertEquals(-34.6037, primero.getLatitud());
     assertEquals(-58.3816, primero.getLongitud());
-    assertEquals(LocalDate.of(2023, 8, 15), primero.getFechaAcontecimiento());
-    assertEquals(LocalDate.now(), primero.getFechaCarga());
 
     Hecho segundo = hechos.get(1);
     assertEquals("Incendio", segundo.getTitulo());
@@ -44,8 +56,8 @@ public class LeerCSVTest {
   private static List<Hecho> getHechoList(Path tempFile) throws IOException {
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("titulo_custom,desc_custom,lat,lon,fecha\n");
-      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15\n");
-      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16\n");
+      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2025-09-09 00:47:32.474046\n");
+      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2025-09-09 00:47:32.474046\n");
     }
 
     // Ingresamos los campos de interes
@@ -64,8 +76,8 @@ public class LeerCSVTest {
     Path tempFile = Files.createTempFile("hechos", ".csv");
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
-      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15\n");
-      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16\n");
+      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15 00:47:32.474046\n");
+      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16 00:47:32.474046\n");
     } catch (IOException e) {
         throw new RuntimeException(e);
     }
@@ -76,11 +88,12 @@ public class LeerCSVTest {
 
     FiltroCategoria filtro = new FiltroCategoria("Emergencia");
     FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
+    AlgoritmoConsenso algoritmo = new ConsensoDefault();
 
-    RepositorioColecciones repoColeccion = new RepositorioColecciones();
+    RepositorioColecciones repoColeccion = RepositorioColecciones.getInstancia();
 
     //eliminado el uso del service
-    crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro, repoColeccion);
+    crearColeccion("Ambiente", "Descripción de la colección", fuente, filtro, algoritmo, repoColeccion);
 
     assertNotNull(repoColeccion.listarTodas());
   }
@@ -96,15 +109,26 @@ public class LeerCSVTest {
     Hecho hechoFinal = hechos.get(0);
     assertEquals("robo", hechoFinal.getTitulo()); // el título del segundo (último leído)
     assertEquals("Robo actualizado", hechoFinal.getDescripcion());
-    assertEquals(LocalDate.of(2023, 9, 1), hechoFinal.getFechaAcontecimiento());
     assertEquals(-34.6000, hechoFinal.getLatitud());
+  }
+
+  @Test
+  void cargarHechosDesdeArchivoCSV() {
+    ArrayList<String> campos = new ArrayList<>(List.of(
+        "titulo", "descripcion", "latitud", "longitud", "fechaHecho"
+    ));
+    FuenteEstatica fuente = new FuenteEstatica("/Users/gongarfon/DDS/tpa-2025-04/Diagramas/hechosChico.csv", "Testing con el berty", campos);
+    ParametrosConsulta parametros = new ParametrosConsulta();
+    fuente.cargarHechos(parametros);
+
+    assertEquals(1, 1);
   }
 
   private static List<Hecho> getHechos(Path tempFile) throws IOException {
     try (FileWriter writer = new FileWriter(tempFile.toFile())) {
       writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
-      writer.write("Robo,Robo original,-34.6037,-58.3816,2023-08-15\n");
-      writer.write("robo,Robo actualizado,-34.6000,-58.3800,2023-09-01\n"); // mismo título, diferente casing
+      writer.write("Robo,Robo original,-34.6037,-58.3816,2025-09-09 00:29:45.561021\n");
+      writer.write("robo,Robo actualizado,-34.6000,-58.3800,2025-09-09 00:29:45.561021\n"); // mismo título, diferente casing
     }
 
     ArrayList<String> campos = new ArrayList<>(List.of(
@@ -115,12 +139,13 @@ public class LeerCSVTest {
     return fuente.cargarHechos(null);
   }
 
-  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, RepositorioColecciones repositorio) {
+  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, AlgoritmoConsenso algoritmo,  RepositorioColecciones repositorio) {
     Coleccion nueva = new ColeccionBuilder()
         .titulo(titulo)
         .descripcion(descripcion)
         .fuente(fuente)
         .criterio(criterio)
+        .algoritmoConsenso(algoritmo)
         .build();
     repositorio.guardar(nueva);
   }

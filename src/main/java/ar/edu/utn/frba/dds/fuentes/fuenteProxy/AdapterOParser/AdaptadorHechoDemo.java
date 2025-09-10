@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuenteProxy.AdapterOParser;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import org.joda.time.DateTime;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class AdaptadorHechoDemo {
@@ -16,8 +17,8 @@ public class AdaptadorHechoDemo {
         .latitud((double) dato.getOrDefault("latitud", null))
         .longitud((double) dato.getOrDefault("longitud", null))
         .fechaAcontecimiento(
-            dato.get("fecha") instanceof DateTime ? ((LocalDate) dato.get("fecha")) : null
-        ).fechaCarga(LocalDate.now())
+            dato.get("fecha") instanceof DateTime ? ((LocalDateTime) dato.get("fecha")) : null
+        ).fechaCarga(LocalDateTime.now())
         .origen(Origen.SERVICIOEXTERNO)
         .build();
   }

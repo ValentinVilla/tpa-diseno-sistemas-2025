@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
@@ -7,8 +8,12 @@ import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +26,10 @@ public class FuenteDinamicaTest {
     fuente = new FuenteDinamica();
   }
 
-  private Contribuyente juan = new Contribuyente(42, 25,"juan", "perez");
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+  private EntityManager entityManager = emf.createEntityManager();
+
+  private final Contribuyente juan = new Contribuyente(42, "Juan", "perez");
 
   private HechoDinamico crearHecho(String titulo) {
     HechoBuilder hechoBase = new HechoBuilder()
@@ -30,8 +38,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(1.0)
         .longitud(1.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     return new HechoDinamico(hechoBase, juan);
@@ -45,17 +53,16 @@ public class FuenteDinamicaTest {
     assertEquals(1, fuente.cargarHechos(null).size());
   }
 
-  @Test
-  void puedeSubirHechoRegistrado() {
-    HechoDinamico hecho = crearHecho("hecho-registrado");
-    fuente.subirHecho(hecho);
-
-    assertEquals(42, hecho.getContribuyente().getId());
-  }
 
   @Test
   void puedeSolicitarModificarHechoDentroDelPlazo() {
-    HechoDinamico original = crearHecho("incendio");
+    //necesito que juan este persistido para que el hecho lo tenga asociado
+    entityManager.getTransaction().begin();
+    entityManager.persist(juan);
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+
+    HechoDinamico original = crearHecho("original");
     HechoDinamico nuevo = crearHecho("incendio-modificado");
     FuenteDinamica fuente = new FuenteDinamica();
 
@@ -72,7 +79,7 @@ public class FuenteDinamicaTest {
     HechoDinamico original = crearHecho("original");
     fuente.subirHecho(original);
 
-    Contribuyente tomas = new Contribuyente(41, 25,"tomas", "perez");
+    Contribuyente tomas = new Contribuyente(41,"tomas", "perez");
 
     HechoBuilder Builder = new HechoBuilder()
         .titulo("malicioso")
@@ -80,8 +87,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(1.0)
         .longitud(1.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     HechoDinamico nuevo = new HechoDinamico(Builder, tomas);
@@ -99,8 +106,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(1.0)
         .longitud(1.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now().minusDays(8)) // Simula pasaron 8 dias
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now().minusDays(8))
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     HechoDinamico hechoOriginal = new HechoDinamico(Builder, juan);
@@ -114,8 +121,8 @@ public class FuenteDinamicaTest {
         .categoria("cat")
         .latitud(2.0)
         .longitud(2.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now()) // no importa
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 

@@ -3,12 +3,22 @@ package ar.edu.utn.frba.dds.solicitudes;
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+@Entity
+@DiscriminatorValue("MODIFICACION")
 public class SolicitudModificacion extends Solicitud{
+  @ManyToOne
+  @JoinColumn(name = "hecho_modificado_id")
   Hecho hechoModificado;
 
+  public SolicitudModificacion() {}
+
   public SolicitudModificacion(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
-    super(hecho, sugerenciaModificacion, detector);;
+    super(hecho, sugerenciaModificacion, detector);
     this.hechoModificado = hechoModificado;
     hechoModificado.setVisible(false);
   }
@@ -18,15 +28,15 @@ public class SolicitudModificacion extends Solicitud{
   public void aplicarAceptacion() {
     hechoModificado.setVisible(true);
     hecho.setVisible(false);
-    return;
   }
 
   @Override
   public void aplicarRechazo() {
-
+    /*
     //hecho.setVisible(true);
     //hechoModificado.setVisible(false);
     //notificarAlAutorDelRechazoDeModificacion();
+    */
   }
 
   public void aceptarConSugerencia(String sugerencia){

@@ -3,12 +3,28 @@ package ar.edu.utn.frba.dds.fuentes;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServicioAgregacion implements Fuente{
-  private final List<Fuente> fuentesQueConsidera;
+@Entity
+public class ServicioAgregacion extends Fuente{
+  @ManyToMany
+  @JoinTable(
+      name = "servicio_fuentes",
+      joinColumns = @JoinColumn(name = "servicio_id"),
+      inverseJoinColumns = @JoinColumn(name = "fuente_id")
+  )
+  private List<Fuente> fuentesQueConsidera;
+  @Transient
   private final ArrayList<Hecho> cacheDeHechos = new ArrayList<>();
+
+  public ServicioAgregacion() {}
 
   public void actualizarCache() {
     //esta es la funcion para vincular al crontab
@@ -16,7 +32,7 @@ public class ServicioAgregacion implements Fuente{
     fuentesQueConsidera.forEach(fuente -> {
       ultimosNHechos(10,fuente.cargarHechos(null)).addAll(cacheDeHechos);
     });
-  }//pasa que si no le ponemos un tope de la cantidad de hechos que traer puede colgarse trayendo los muchisimos hechos que puede tener esa fuente. Es mejor que le pongamos un tope nosotros, que deje de traer hechos cuando encuentra uno repetido??
+  }
 
   private List<Hecho> ultimosNHechos(int n, List<Hecho> listaCompleta){
     int size = listaCompleta.size();

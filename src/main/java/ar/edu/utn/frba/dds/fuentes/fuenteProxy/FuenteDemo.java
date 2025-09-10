@@ -1,22 +1,33 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuenteProxy;
 
 import ar.edu.utn.frba.dds.clientes.ClienteDemo;
+import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.joda.time.LocalDateTime;
+
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FuenteDemo implements FuenteProxy {
-  protected ClienteDemo cliente;
-  private final String direccionApi;
+@Entity
+public class FuenteDemo extends Fuente {
+  private  String direccionApi;
   private LocalDateTime ultimaConsulta;
+  @Transient
+  protected ClienteDemo cliente;
+  @Transient
   private List<Hecho> cacheHechos;
-  private final RepositorioColecciones repo;
+  @Transient
+  private RepositorioColecciones repo;
+
+  public FuenteDemo() {}
 
   public FuenteDemo(ClienteDemo cliente, String direccionApi,  RepositorioColecciones repo) {
     this.cliente = cliente;
@@ -26,7 +37,6 @@ public class FuenteDemo implements FuenteProxy {
     this.repo = repo;
   }
 
-  //cada una hora
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
     if (pasoUnaHoraDesdeUltimaConsulta()) {
@@ -35,7 +45,7 @@ public class FuenteDemo implements FuenteProxy {
     }
     Stream<Hecho> stream = cacheHechos.stream();
     if (parametros.getColeccionId() != null) {
-      Coleccion coleccion = repo.buscarPorHandle(parametros.getColeccionId());
+      Coleccion coleccion = repo.buscarPorID(parametros.getColeccionId());
       stream = stream.filter(coleccion::hechoPertenece);
     }
     return stream.collect(Collectors.toCollection(ArrayList::new));
@@ -45,9 +55,8 @@ public class FuenteDemo implements FuenteProxy {
     return ultimaConsulta == null || LocalDateTime.now().isAfter(ultimaConsulta.plusHours(1));
   }
 
-  //METODO PARA TESTEAR NECESITO FORZAR O SIMULAR QUE SE PASO UNA HORA
   public void forzarExpiracionCache() {
-    ultimaConsulta = LocalDateTime.now().minusHours(2); // Simula que pasó más de una hora
+    ultimaConsulta = LocalDateTime.now().minusHours(2);
   }
 
   public List<Fuente> getFuente(){

@@ -1,35 +1,87 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
 import java.util.ArrayList;
 import java.util.List;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 
-import java.util.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
+import java.util.List;
 
 public class RepositorioColecciones {
-  private final Map<String, Coleccion> colecciones = new HashMap<>();
+  private final EntityManager entityManager;
+  private static RepositorioColecciones instancia;
 
-  public void guardar(Coleccion coleccion) {
-    colecciones.put(coleccion.handle, coleccion);
+  public RepositorioColecciones() {
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    this.entityManager = emf.createEntityManager();
   }
 
-  public Coleccion buscarPorHandle(String handle) {
-    return colecciones.get(handle);
+  public static RepositorioColecciones getInstancia() {
+    if (instancia == null) {
+      instancia = new RepositorioColecciones();
+    }
+    return instancia;
+  }
+
+  public void guardar(Coleccion coleccion) {
+    EntityTransaction transaction = getTransaction();
+    try {
+      transaction.begin();
+      entityManager.persist(coleccion);
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
+  }
+
+  public Coleccion buscarPorID(Long id) {
+    return entityManager.find(Coleccion.class, id);
   }
 
   public List<Coleccion> listarTodas() {
-    return new ArrayList<>(colecciones.values());
+    return entityManager.createQuery("SELECT c FROM Coleccion c", Coleccion.class)
+        .getResultList();
   }
 
-  public void eliminar(String handle) {
-    colecciones.remove(handle);
+  public void eliminar(Long id) {
+    EntityTransaction transaction = getTransaction();
+    try {
+      transaction.begin();
+      Coleccion coleccion = entityManager.find(Coleccion.class, id);
+      if (coleccion != null) {
+        entityManager.remove(coleccion);
+      }
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
   }
 
   public void actualizar(Coleccion coleccion) {
-    if (!colecciones.containsKey(coleccion.handle)) {
-      throw new IllegalArgumentException("No existe una colección con ese handle para actualizar.");
+    EntityTransaction transaction = entityManager.getTransaction();
+    try {
+      transaction.begin();
+      entityManager.merge(coleccion);
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
     }
-    colecciones.put(coleccion.handle, coleccion);
+  }
+
+  private EntityTransaction getTransaction() {
+    return entityManager.getTransaction();
   }
 }

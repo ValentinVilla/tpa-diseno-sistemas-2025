@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.fuentes;
 
+import ar.edu.utn.frba.dds.fuentes.fuenteProxy.FuenteMetaMapa;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +33,8 @@ public class FuenteMetaMapaTest {
         .categoria("cat")
         .latitud(1.0)
         .longitud(1.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
   }
@@ -48,7 +50,7 @@ public class FuenteMetaMapaTest {
 
   @Test
   void testCargarHechosConColeccionId() {
-    when(parametros.getColeccionId()).thenReturn("123");
+    when(parametros.getColeccionId()).thenReturn(Long.valueOf("123"));
     List<Hecho> hechosMock = List.of(new Hecho(crearHecho("Test 1.1")), new Hecho(crearHecho("Test 1.2")));
 
     when(cliente.obtenerHechosColeccion("http://example.com", "123", parametros))

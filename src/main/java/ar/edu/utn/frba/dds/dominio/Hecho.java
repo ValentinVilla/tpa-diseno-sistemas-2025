@@ -3,30 +3,49 @@ package ar.edu.utn.frba.dds.dominio;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_hecho")
 public class Hecho {
-  protected final String id;
+  @Id
+  @GeneratedValue
+  private long id;
+
   protected String titulo;
   protected String descripcion;
   protected String categoria;
-  protected double latitud;
-  protected double longitud;
-  protected LocalDate fechaAcontecimiento;
-  protected final LocalDate fechaCarga;
-  protected final Origen origen;
+  protected Double latitud;
+  protected Double longitud;
+  protected LocalDateTime fechaAcontecimiento;
+  protected LocalDateTime fechaCarga;
+  @Enumerated(EnumType.STRING)
+  protected Origen origen;
   protected boolean visible;
   protected boolean consensuado = false;
   protected LocalDate fechaModificacion;
-
-
+  @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
   protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
+  private String provincia;
+
+  public Hecho() {}
 
   public Hecho(HechoBuilder builder) {
-    this.id = UUID.randomUUID().toString();
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.categoria = builder.getCategoria();
@@ -54,7 +73,7 @@ public class Hecho {
     this.visible = visibilidad;
   }
 
-  public String getId() {
+  public long getId() {
     return id;
   }
 
@@ -62,15 +81,15 @@ public class Hecho {
     return this.categoria;
   }
 
-  public LocalDate getFechaHecho() {
+  public LocalDateTime getFechaHecho() {
     return this.fechaAcontecimiento;
   }
 
-  public double getLatitud() {
+  public Double getLatitud() {
     return this.latitud;
   }
 
-  public double getLongitud() {
+  public Double getLongitud() {
     return this.longitud;
   }
 
@@ -82,11 +101,11 @@ public class Hecho {
     return this.descripcion;
   }
 
-  public LocalDate getFechaCarga() {
+  public LocalDateTime getFechaCarga() {
     return this.fechaCarga;
   }
 
-  public LocalDate getFechaAcontecimiento() {
+  public LocalDateTime getFechaAcontecimiento() {
     return this.fechaAcontecimiento;
   }
 
@@ -107,8 +126,8 @@ public class Hecho {
         this.titulo.equals(otroHecho.getTitulo()) &&
             this.descripcion.equals(otroHecho.getDescripcion()) &&
             this.categoria.equals(otroHecho.getCategoria()) &&
-           this.latitud == otroHecho.getLatitud() &&
-           this.longitud == otroHecho.getLongitud() &&
+            Objects.equals(this.latitud, otroHecho.getLatitud()) &&
+            Objects.equals(this.longitud, otroHecho.getLongitud()) &&
            this.fechaAcontecimiento.equals(otroHecho.getFechaAcontecimiento()) &&
            this.visible == otroHecho.getVisible();
 
@@ -116,6 +135,18 @@ public class Hecho {
 
   public boolean tieneMismoTitulo(Hecho otroHecho) {
     return this.titulo.equals(otroHecho.getTitulo());
+  }
+
+  public void setTitulo(String pruebaJUnit) {
+
+  }
+
+  public void setProvincia(String provincia) {
+    this.provincia = provincia;
+  }
+
+  public String getProvincia() {
+    return this.provincia;
   }
 }
 

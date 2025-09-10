@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.fuentes;
+package ar.edu.utn.frba.dds.fuentes.fuenteProxy.AdapterOParser;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AdaptadorHechoMetaMapa {
   public Hecho desdeJson(JSONObject obj) {
@@ -16,14 +17,14 @@ public class AdaptadorHechoMetaMapa {
         .longitud(obj.optDouble("longitud", 0.0))
         .categoria(obj.optString("categoria", "otros"))
         .fechaAcontecimiento(parsearFecha(obj.optString("fechaHecho")))
-        .fechaCarga(LocalDate.now())
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.SERVICIOEXTERNO)
         .build();
   }
 
-  private LocalDate parsearFecha(String texto) {
+  private LocalDateTime parsearFecha(String texto) {
     try {
-      return LocalDate.parse(texto);
+      return LocalDateTime.parse(texto);
     } catch (Exception e) {
       return null;
     }

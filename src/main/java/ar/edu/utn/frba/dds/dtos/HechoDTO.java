@@ -2,15 +2,16 @@ package ar.edu.utn.frba.dds.dtos;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class HechoDTO {
   public String titulo;
   public String descripcion;
   public String categoria;
-  private double latitud;
-  private double longitud;
-  public LocalDate fechaReporte;
-  public LocalDate fechaAcontecimiento;
+  private final double latitud;
+  private final double longitud;
+  public LocalDateTime fechaReporte;
+  public LocalDateTime fechaAcontecimiento;
 
   public HechoDTO(Hecho hecho) {
     this.titulo = hecho.getTitulo();

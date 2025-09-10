@@ -1,24 +1,47 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
-import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
-public abstract class Solicitud {//como se yo si este Solicitud tiene que ser una clase abstracta o una interfaz???
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
-  protected EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
-  protected Hecho hecho;
-  String textoFundamentacion;
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_solicitud")
+public abstract class Solicitud {
+  @Id
+  @GeneratedValue
+  protected Long id;
+  protected String textoFundamentacion;
+  @Enumerated(EnumType.STRING)
+  protected EstadoSolicitud estado;
+  @Transient
   public DetectorDeSpam detector;
+  @ManyToOne
+  @JoinColumn(name = "hecho_id", nullable = false)
+  protected Hecho hecho;
+
+  protected Solicitud(){}
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector) {
     this.hecho = hecho;
-    this.estado = EstadoSolicitud.PENDIENTE;
     this.textoFundamentacion = sugerenciaModificacion;
     this.detector = detector;
     if(detector != null && detector.esSpam(sugerenciaModificacion)){
-      throw new IllegalArgumentException("La sugerencia de modificación es spam");
-    } //creo que tendriamos que implemetnar el "esSpam(textoSugerencia)" por si el texto de fundamentacion tiene 500 caracteres, enunciado E1.
+      this.estado = EstadoSolicitud.RECHAZADA;
+    } else {
+      this.estado = EstadoSolicitud.PENDIENTE;
+    }
   }
 
   public void aceptar(){
@@ -30,11 +53,8 @@ public abstract class Solicitud {//como se yo si este Solicitud tiene que ser un
       aplicarRechazo();
   }
 
- //metodos que implementa cada tipo de solicitud
   public abstract void aplicarAceptacion();
   public abstract void aplicarRechazo();
-    // Implementar la lógica de aceptación y rechazo en las subclases
-
 
   public String getTextoFundamentacion() {
     return textoFundamentacion;

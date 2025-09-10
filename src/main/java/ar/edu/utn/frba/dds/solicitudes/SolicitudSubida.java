@@ -3,15 +3,21 @@ package ar.edu.utn.frba.dds.solicitudes;
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("SUBIDA")
 public class SolicitudSubida extends Solicitud{
   String sugerenciaModificacion;
+
+  public SolicitudSubida() {}
 
   public SolicitudSubida(Hecho hecho, String descripcion, DetectorDeSpam detector) {
     super(hecho, descripcion, detector);
   }
 
   public void aplicarAceptacion(){
-    return;
   }
 
   public void aceptarConSugerencia(String sugerencia){

@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -7,8 +8,13 @@ import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.estadisticas.EstadisticaSolicitudesSpam;
+import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class SolicitarEliminacionTest {
 
@@ -21,17 +27,16 @@ public class SolicitarEliminacionTest {
         .categoria("fake-news")
         .latitud(0.0)
         .longitud(0.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
         .visible(true)
         .build();
 
     DetectorDeSpam detectorSiempreTrue = texto -> true;
+    SolicitudEliminacion solicitudEliminacion = new SolicitudEliminacion("spam", hecho ,detectorSiempreTrue);
 
-    assertThrows(IllegalArgumentException.class, () -> {
-      new SolicitudEliminacion("Mensaje sospechoso de spam", hecho, detectorSiempreTrue);
-    }, "Se esperaba una excepción por mensaje detectado como spam");
+    assertEquals(EstadoSolicitud.RECHAZADA, solicitudEliminacion.getEstado());
   }
 
   @Test
@@ -42,8 +47,8 @@ public class SolicitarEliminacionTest {
         .categoria("ambiental")
         .latitud(10.0)
         .longitud(20.0)
-        .fechaAcontecimiento(LocalDate.now())
-        .fechaCarga(LocalDate.now())
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
         .visible(true)
         .build();
@@ -54,7 +59,6 @@ public class SolicitarEliminacionTest {
 
     hecho.agregarSolicitud(solicitud);
 
-    //reviso la solicitud desde el hecho
     SolicitudEliminacion solicitudDesdeHecho = hecho.getSolicitudes().get(0);
 
     assertTrue(solicitudDesdeHecho.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");

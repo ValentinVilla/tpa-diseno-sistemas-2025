@@ -2,27 +2,44 @@ package ar.edu.utn.frba.dds.dominio;
 
 import ar.edu.utn.frba.dds.ModoNavegacion;
 import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.consenso.ConsensoDefault;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class Coleccion {
-  private final String titulo;
-  private final String descripcion;
-  private final Fuente fuente;
-  public Filtro criterioPertenencia;
+  @Id
+  @GeneratedValue
+  public Long id;
+
+  private String titulo;
+  private String descripcion;
   public String handle;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "fuente_id",  nullable = false)
+  private Fuente fuente;
+  @ManyToOne(cascade = CascadeType.ALL)
+  public Filtro criterioPertenencia;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "consenso_id", nullable = false)
+  AlgoritmoConsenso algoritmoConsenso;
+  @Enumerated(EnumType.STRING)
   ModoNavegacion modoNavegacion;
-  AlgoritmoConsenso algoritmoConsenso = new ConsensoDefault();
+
+  public Coleccion(){}
 
   public Coleccion(ColeccionBuilder builder) {
-    this.handle = UUID.randomUUID().toString();
     this.titulo = builder.getTitulo();
     this.descripcion = builder.getDescripcion();
     this.fuente = builder.getFuente();
@@ -37,7 +54,7 @@ public class Coleccion {
     List<Hecho> resultado = new ArrayList<>();
 
     for (Hecho hecho : hechos) {
-      if (criterioPertenencia.cumple(hecho)) { //si el hecho esta curado entonces lo agrego sino no, arrancan como no curados
+      if (criterioPertenencia.cumple(hecho)) {
         resultado.add(hecho);
       }
     }
@@ -57,7 +74,7 @@ public class Coleccion {
 
   public void ejecutarAlgoritmo(List<Hecho> hechos) {
     for (Hecho hecho : hechos) {
-      algoritmoConsenso.tieneConsenso(hecho, fuente.getFuente());//marco el hecho como curado
+      algoritmoConsenso.tieneConsenso(hecho, fuente.getFuente());
     }
   }
 
@@ -83,6 +100,10 @@ public class Coleccion {
 
   public Filtro getFiltro() {
     return criterioPertenencia;
+  }
+
+  public Long getId() {
+    return id;
   }
 }
 
