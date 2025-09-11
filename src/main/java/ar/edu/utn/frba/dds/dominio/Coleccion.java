@@ -51,15 +51,12 @@ public class Coleccion {
   public List<Hecho> mostrarHechos() {
 
     List<Hecho> hechos = fuente.cargarHechos(null);
-    List<Hecho> resultado = new ArrayList<>();
 
-    for (Hecho hecho : hechos) {
-      if (criterioPertenencia.cumple(hecho)) {
-        resultado.add(hecho);
-      }
-    }
-
-    return modoNavegacion.mostrarHechos(resultado);
+    return modoNavegacion.mostrarHechos(
+        hechos.stream()
+            .filter(hecho -> criterioPertenencia.cumple(hecho))
+            .toList()
+    );
   }
 
   public List<Hecho> hechosFiltrados(Filtro filtro) {
