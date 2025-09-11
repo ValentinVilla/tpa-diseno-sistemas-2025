@@ -15,7 +15,7 @@ public class RepositorioColecciones {
   private final EntityManager entityManager;
   private static RepositorioColecciones instancia;
 
-  public RepositorioColecciones() {
+  private RepositorioColecciones() {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
     this.entityManager = emf.createEntityManager();
   }
