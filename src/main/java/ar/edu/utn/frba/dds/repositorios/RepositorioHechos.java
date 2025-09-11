@@ -11,6 +11,7 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 import ar.edu.utn.frba.dds.servicios.GeorefAPI;
+import ar.edu.utn.frba.dds.solicitudes.Solicitud;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
@@ -32,7 +33,7 @@ public class RepositorioHechos {
     }
 
   public void guardar(Hecho hecho) throws Exception {
-    EntityTransaction transaction = entityManager.getTransaction();
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
       if (hecho.getLatitud() != null && hecho.getLongitud() != null) {
@@ -53,13 +54,27 @@ public class RepositorioHechos {
     }
   }
 
-  public void eliminar(Long id) {
-    EntityTransaction transaction = entityManager.getTransaction();
+  public void actualizar(Hecho hecho) {
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
-      Coleccion coleccion = entityManager.find(Coleccion.class, id);
-      if (coleccion != null) {
-        entityManager.remove(coleccion);
+      entityManager.merge(hecho);
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
+  }
+
+  public void eliminar(Long id) {
+    EntityTransaction transaction = getEntity();
+    try {
+      transaction.begin();
+      Hecho hecho = entityManager.find(Hecho.class, id);
+      if (hecho != null) {
+        entityManager.remove(hecho);
       }
       transaction.commit();
     } catch (Exception e) {
@@ -92,6 +107,11 @@ public class RepositorioHechos {
     NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
     query.setParameter("queryText", queryText);
     return query.getResultList();
+  }
+
+
+  private  EntityTransaction getEntity() {
+    return entityManager.getTransaction();
   }
 }
 
