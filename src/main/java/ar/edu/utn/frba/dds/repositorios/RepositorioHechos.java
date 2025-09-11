@@ -40,7 +40,6 @@ public class RepositorioHechos {
         String provincia = GeorefAPI.getProvincia(
             hecho.getLatitud(), hecho.getLongitud()
         );
-        System.out.println(provincia);
         hecho.setProvincia(provincia);
       }
 
@@ -59,6 +58,7 @@ public class RepositorioHechos {
     try {
       transaction.begin();
       entityManager.merge(hecho);
+      entityManager.flush();
       transaction.commit();
     } catch (Exception e) {
       if (transaction.isActive()) {

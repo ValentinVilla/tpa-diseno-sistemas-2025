@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import org.json.JSONObject;
 
 public class GeorefAPI {
   public static String getProvincia(double lat, double lon) throws Exception {
     String urlStr = String.format(
+        Locale.US,
         "https://apis.datos.gob.ar/georef/api/ubicacion?lat=%f&lon=%f&aplanar=true&campos=provincia",
         lat, lon
     );

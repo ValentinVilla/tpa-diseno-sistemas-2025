@@ -137,8 +137,8 @@ public class Hecho {
     return this.titulo.equals(otroHecho.getTitulo());
   }
 
-  public void setTitulo(String pruebaJUnit) {
-
+  public void setTitulo(String nuevoTitulo) {
+    this.titulo = nuevoTitulo;
   }
 
   public void setProvincia(String provincia) {

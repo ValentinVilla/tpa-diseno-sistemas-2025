@@ -105,6 +105,10 @@ public class Coleccion {
   public Long getId() {
     return id;
   }
+
+  public void setTitulo(String nuevoTitulo) {
+    this.titulo = nuevoTitulo;
+  }
 }
 
 

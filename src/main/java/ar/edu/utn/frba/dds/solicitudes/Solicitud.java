@@ -65,4 +65,8 @@ public abstract class Solicitud {
   public EstadoSolicitud getEstado() {
     return estado;
   }
+
+  public Long getId() {
+    return id;
+  }
 }
