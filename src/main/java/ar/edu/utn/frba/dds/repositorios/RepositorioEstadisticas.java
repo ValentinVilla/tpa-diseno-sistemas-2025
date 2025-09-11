@@ -51,7 +51,7 @@ public class RepositorioEstadisticas {
 
   //metodo que actualiza o llena la tabla estadistica_provincia_por_coleccion para todas las colecciones
   public void cargarTablaProvinciaConMasHechosXColeccion(){
-    RepositorioColecciones repositorioColecciones = new RepositorioColecciones();
+    RepositorioColecciones repositorioColecciones = RepositorioColecciones.getInstancia();
     List<Coleccion> todasLasColecciones = repositorioColecciones.listarTodas();
     EntityManager em = this.getEntityManager();
     todasLasColecciones.forEach(coleccion ->cargarFilaStatProvinciaXColeccion(coleccion));
@@ -157,7 +157,7 @@ public class RepositorioEstadisticas {
     EntityManager em = getEntityManager();
     em.getTransaction().begin();
 
-    em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_categoria_top").executeUpdate();//esta es la que tengo que modfificar
+    cargarTablaProvinciaConMasHechosXColeccion();//este metodo me actualiza la tabla estadistica_provincia_por_coleccion
     em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_categoria_top").executeUpdate();
     em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_hora_top_por_categoria").executeUpdate();
     em.createNativeQuery("REFRESH MATERIALIZED VIEW estadistica_provincia_por_categoria_top").executeUpdate();
