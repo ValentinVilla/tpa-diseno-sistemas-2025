@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds;
+package ar.edu.utn.frba.dds.consenso;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
 

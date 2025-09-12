@@ -1,0 +1,123 @@
+@startuml
+!theme cerulean
+skinparam backgroundcolor white
+title Diagrama de Despliegue - Sistema MetaMapa
+
+' Estilo general
+skinparam {
+  actor {
+    FontName Impact
+    FontColor #336699
+  }
+  node {
+    BackgroundColor #f0f0f0
+    BorderColor #696969
+    FontColor #333333
+  }
+  cloud {
+    BackgroundColor #ffffff
+    BorderColor #cccccc
+  }
+  database {
+    BackgroundColor #b0c4de
+    BorderColor #4682b4
+  }
+  package {
+    BackgroundColor #e6e6fa
+    BorderColor #9370db
+    FontColor #333333
+  }
+  component {
+    BackgroundColor #d3d3d3
+    BorderColor #a9a9a9
+  }
+  note {
+    BackgroundColor #ffffe0
+    BorderColor #999900
+  }
+}
+
+' Actores
+actor Visitante
+actor Contribuyente
+actor Administrador
+
+cloud "Servicio de Identidad\n(OAuth)" as OAuth
+
+' Nodos del Sistema
+node "MetaMapa" {
+
+  ' Componentes del Agregador
+  node "Agregador" {
+    component "API\n(Agregador)" as ApiAgregador
+    component "Modelo\n(Agregador)" as ModeloAgregador
+    component "UI Solicitudes" as UISolAgregador
+  }
+
+  ' Componentes de la Fuente Dinámica
+  node "Fuente de Datos\nDinámica" {
+    component "API\n(Dinámica)" as ApiDinamica
+    component "UI Editor\n(Hechos)" as UIEditor
+    component "UI Solicitudes\n(Rev.)" as UISolDinamica
+    component "Modelo\n(Dinámica)" as ModeloDinamica
+  }
+
+  ' Componentes de la Fuente Estática
+  node "Fuente de Datos\nEstática" {
+    component "API\n(Estática)" as ApiEstatica
+    component "Modelo\n(Estática)" as ModeloEstatica
+  }
+
+  ' Componentes del Servicio de Estadísticas
+  node "Servicio de\nEstadísticas" {
+    component "Generador\nEstadísticas" as GenEstadisticas
+    component "UI Visualizador" as UIVisualizador
+    component "Modelo\n(Estadísticas)" as ModeloEstadisticas
+  }
+
+  ' Componentes de la Fuente Proxy
+  node "Fuente de Datos\nProxy" {
+    component "API\n(Proxy)" as ApiProxy
+    component "Modelo\n(Proxy)" as ModeloProxy
+  }
+}
+
+' Persistencia y Servicios Externos
+database "Hechos y Solicitudes" as DB_HYS
+database "Estadísticas" as DB_Stats
+database "Dataset\n(CSV, JSON)" as Dataset
+cloud "Servicio Externo\n(API, etc.)" as ServicioExterno
+
+' Relaciones de Nodos
+ApiAgregador --> ApiDinamica
+ApiAgregador --> ApiEstatica
+ApiAgregador --> ApiProxy
+
+ApiDinamica --> DB_HYS
+ApiEstatica --> Dataset
+ApiProxy --> ServicioExterno
+
+ModeloAgregador --> DB_HYS : accede a hechos
+
+GenEstadisticas --> DB_HYS : consulta\nperiódica
+GenEstadisticas --> DB_Stats : guarda métricas
+
+' Relaciones de Actores e Interfaces de Usuario
+Visitante --> UIVisualizador
+Contribuyente --> UIEditor : crea/edita hechos
+Administrador --> UISolDinamica : revisa solicitudes
+
+UIVisualizador --> GenEstadisticas
+UIEditor --> ApiDinamica
+UISolDinamica --> ApiDinamica
+
+' Relaciones de Autenticación
+UIEditor -- OAuth : requiere autenticación
+UISolDinamica -- OAuth : requiere autenticación
+
+' Opcional: Relaciones con Agregador
+UISolAgregador --> ApiAgregador
+Visitante --> UISolAgregador
+UISolAgregador -- OAuth
+
+@enduml
