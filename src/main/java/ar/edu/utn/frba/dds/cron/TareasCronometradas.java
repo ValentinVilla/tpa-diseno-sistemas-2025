@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.cron;
 
-import ar.edu.utn.frba.dds.ModoNavegacion;
+import ar.edu.utn.frba.dds.consenso.ModoNavegacion;
 import ar.edu.utn.frba.dds.consenso.ConsensoAbsoluto;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;

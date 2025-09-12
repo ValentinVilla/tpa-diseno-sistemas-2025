@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.dominio.builders;
 
 import java.util.Objects;
 
-import ar.edu.utn.frba.dds.ModoNavegacion;
+import ar.edu.utn.frba.dds.consenso.ModoNavegacion;
 import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
