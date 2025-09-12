@@ -2,6 +2,17 @@
 
 ---
 
+# Main
+Orquesta la inicialización y ejecución continua de los procesos de actualización de estadísticas y vistas materializadas, utilizando un scheduler interno (`ScheduledExecutorService`).
+
+**Justificación:**
+- **Centralización de procesos críticos:** La clase principal actúa como punto único de entrada para la inicialización del sistema y la programación de tareas periódicas, asegurando que las estadísticas y vistas agregadas estén siempre actualizadas.
+- **Integración con persistencia y análisis de datos:** El scheduler se integra con el repositorio de estadísticas, disparando la actualización de vistas materializadas y tablas agregadas en intervalos regulares.
+- **Robustez y control de errores:** El diseño contempla el manejo de excepciones y la notificación de estado, permitiendo monitorear el correcto funcionamiento del sistema y facilitar la observabilidad y el debugging.
+- **Escalabilidad:** La arquitectura soporta la incorporación de nuevas tareas programadas o la modificación de los intervalos de ejecución sin afectar el resto del sistema.
+
+---
+
 # Paquete dominio
 
 ---
@@ -17,7 +28,6 @@ Esto permite:
 
 ## Hechos
 Modela la unidad de información principal del sistema. Pertenecen a una `Coleccion` y se obtienen de una `Fuente` de forma dinámica.
-Para asegurar la unicidad de los hechos incluso con múltiples fuentes, se utiliza un identificador único (`id`) generado mediante UUID.
 
 ### 1. Uso de enumeraciones para el origen de los hechos
 Se introdujo un `enum` llamado `Origen` que permite identificar si un hecho proviene de un archivo CSV, fue ingresado manualmente o por un contribuyente, encapsulando el origen de forma clara.
@@ -30,11 +40,20 @@ Esta clase se explica mejor en la sección de **Solicitudes**.
 ### 3. Creacion del campo Visibilidad:
 Es un booleano que nos va a permitir diferenciar cuando un hecho es valido o no ya que en el caso de no ser valido no tiene que mostrarse cuando se busquen hechos que pertenezcan a esa coleccion. Util cuando se gestionan las solicitudes.
 
+### 4. Persistencia:
+- Se definieron las relaciones en el modelo relacional: cada hecho puede estar asociado a una colección, a etiquetas (many-to-many), a un contribuyente y a solicitudes de eliminación.
+- El campo `visibilidad` se persiste para distinguir si el hecho debe ser mostrado o no, en base a la gestión de solicitudes de eliminación. Así, los hechos eliminados continúan existiendo en el sistema pero no se muestran, cumpliendo requerimientos de rendición de cuentas y auditabilidad.
+- Se implementaron índices sobre campos relevantes (título, descripción) para soportar full text search, facilitando la usabilidad.
+
 ## HechoContribuyente
 Hereda de `Hecho` agregando información de creador y lógica específica (por ejemplo, plazo de edición solo para hechos subidos por usuarios registrados).
 Esto nos permite:
 - Encapsular diferencias de comportamiento y atributos sin romper el polimorfismo para poder tratar las responsabilidades nuevas de los hechos asociados a un contribuyente.
 - Encapsular la lógica de las responsabilidades mencionadas sin que los hechos normales tengan que tener métodos y atributos que no todos usan.
+### Persistencia
+La herencia entre entidades (`HechoContribuyente` hereda de `Hecho`) se mapea en Hibernate, permitiendo:
+- Persistir de manera eficiente los atributos específicos de hechos subidos por usuarios registrados.
+- Mantener el polimorfismo en las consultas.
 
 ---
 
@@ -54,6 +73,10 @@ Se definió `Fuente` como una clase abstracta, permitiendo la implementación de
 Esto otorga mayor flexibilidad y escalabilidad en el futuro, aunque para esta empresa solo trabajamos con CSV.
 Estas fuentes estarán mejor explicadas en la sección de **Fuentes**.
 
+### 3. Persistencia
+- Las colecciones no mantienen una lista fija de hechos como atributo persistido, sino que la pertenencia se determina dinámicamente a partir de los criterios y la fuente. Esto favorece la consistencia y evita problemas de sincronización o duplicidad al persistir datos.
+- Se normalizan las relaciones entre colecciones y hechos, facilitando consultas y generación de estadísticas por colección.
+
 ---
 
 # Paquete filtros
@@ -67,6 +90,8 @@ Se define la interfaz `Filtro` con un único método `cumple(Hecho hecho)`, que 
 - Implementa el **Patrón Strategy**, permitiendo encapsular y abstraer el criterio de filtrado respecto del resto del sistema.
 - Facilita la **extensibilidad y el polimorfismo**: agregar nuevos tipos de filtros no requiere modificar código existente, solo implementar la interfaz.
 - Permite inyectar filtros tanto en colecciones (como criterio de pertenencia) como en búsquedas, haciendo el sistema mucho más flexible y desacoplado.
+- Se utiliza herencia con estrategia `SINGLE_TABLE` y discriminador (`tipo_filtro`), lo que permite centralizar todos los filtros en una única tabla, simplificando la administración, consultas y extensibilidad.
+- La persistencia permite que los filtros sean reutilizados y compartidos entre distintas colecciones y búsquedas, optimizando el acceso a criterios ya definidos.
 
 ---
 
@@ -114,6 +139,14 @@ Estas clases permiten aceptar, rechazar o aceptar con sugerencia (en cuyo caso a
 **Justificación:**
 - Facilita el feedback para un usuario contribuyente y encapsula la lógica para que un administrador pueda manejar la subida y modificación de hechos de parte de contribuyentes.
 - La lógica de visibilidad y sugerencias queda encapsulada en cada subtipo, favoreciendo la evolución futura (por ejemplo, notificaciones, auditorías, etc.).
+
+## Persistencia
+Todas las solicitudes (y sus subtipos) se persisten mediante Hibernate, utilizando herencia con estrategia `SINGLE_TABLE` y discriminador `tipo_solicitud`.  
+Esta decisión permite centralizar toda la información en una única tabla, diferenciando los tipos de solicitud y facilitando la extensibilidad y el mantenimiento.
+La relación entre solicitudes y hechos se normaliza, permitiendo la trazabilidad y la auditoría completa de todas las acciones realizadas sobre los hechos.  
+El estado de cada solicitud (pendiente, aceptada, rechazada) se persiste, garantizando la rendición de cuentas y la posibilidad de reconstruir el historial de decisiones tomadas por administradores y contribuyentes.
+El modelo evita la desnormalización y la duplicidad, y facilita la generación de estadísticas, reportes y exportación de datos, alineándose con los requerimientos de transparencia y accountability planteados por MetaMapa.
+La estructura persistente soporta la incorporación de nuevos subtipos de solicitud y nuevas acciones, sin modificar la arquitectura principal, asegurando la escalabilidad y la robustez del sistema.
 
 ---
 
@@ -178,6 +211,14 @@ Se crean adaptadores para convertir datos externos (por ejemplo, JSON, mapas de 
 - **Responsabilidades y aislamiento:** Permiten centralizar y aislar la lógica de transformación, facilitando los cambios si varía el formato externo y respetando el principio de responsabilidad única.
 - **Reutilización:** Distintos clientes/fuentes pueden reutilizar el mismo adaptador, evitando duplicación de lógica.
 
+## Persistencia
+Todas las fuentes del sistema se persisten como entidades utilizando Hibernate y la estrategia `TABLE_PER_CLASS`. Esto permite mantener un registro auditable y flexible de todos los orígenes de hechos, facilitando la trazabilidad y la rendición de cuentas.  
+Las relaciones entre fuentes (por ejemplo, en el `ServicioAgregacion`) se modelan y persisten mediante asociaciones relacionales (`@ManyToMany`), manteniendo la integridad y evitando duplicidad de datos.
+La obtención de hechos se realiza dinámicamente en base a parámetros y criterios, evitando la persistencia redundante de listas de hechos en cada fuente.  
+Componentes como el cache en memoria y las tareas programadas para actualización optimizan el rendimiento y cumplen los requerimientos funcionales y de arquitectura propuestos.
+La persistencia soporta estrategias de búsqueda por texto libre y componentes estadísticos, permitiendo integrar y analizar datos provenientes de múltiples orígenes.
+El diseño extensible y desacoplado permite incorporar fácilmente nuevas fuentes y adaptadores, evolucionando el sistema sin afectar su núcleo ni la estructura relacional principal.
+
 ---
 
 # Paquete clientes
@@ -214,9 +255,14 @@ Responsable de la integración vía HTTP con instancias externas de MetaMapa, ma
 - **Robustez y control de errores:** El cliente maneja errores de red y de parseo de manera centralizada, facilitando el manejo de fallos y la trazabilidad.
 - **Escalabilidad:** Si la API MetaMapa evoluciona, los cambios de integración quedan aislados en esta clase.
 
+## Persistencia
+Los clientes no interactúan directamente con la base de datos; su responsabilidad es obtener, transformar y adaptar datos externos al modelo de dominio, que luego será persistido por las fuentes o servicios correspondientes según las reglas de negocio.
+
 ---
 
 # Paquete repositorios
+
+---
 
 ## Patrón Repositorio y centralización de la persistencia
 Se implementan clases repositorio para abstraer y centralizar el acceso, almacenamiento y gestión de las entidades principales del dominio (colecciones, hechos y solicitudes).
@@ -225,7 +271,7 @@ Se implementan clases repositorio para abstraer y centralizar el acceso, almacen
 - **Patrón Repositorio:** Separa la lógica de acceso y manipulación de datos del resto del dominio, permitiendo que las entidades y servicios no conozcan los detalles de la persistencia.
 - **Centralización:** Todos los accesos y modificaciones sobre las colecciones, hechos y solicitudes se realizan a través de sus respectivos repositorios, evitando dispersión de lógica y facilitando el mantenimiento.
 - **Desacoplamiento:** Permite cambiar la forma de almacenamiento (de memoria a base de datos real, archivos, etc.) sin impactar en el dominio ni en los servicios que consumen los repositorios.
-- **Preparación para la persistencia real:** Si en el futuro se requiere implementar persistencia en base de datos, solo es necesario modificar o reemplazar estos componentes.
+- **Singletons:** Cada repositorio se implementa como un singleton, asegurando una única instancia que maneje la persistencia.
 
 ---
 
@@ -258,54 +304,22 @@ Puede gestionar cualquier tipo de solicitud (por ejemplo, de eliminación, revis
 
 ---
 
-# Paquete servicios
+## RepositorioEstadisticas
 
----
-
-## Separación de lógica de aplicación y dominio
-Se crean servicios de aplicación (`ColeccionService`, `HechoService`, `SolicitudService`) que encapsulan la lógica de orquestación y manipulación de las entidades del dominio, delegando la persistencia a los repositorios correspondientes.
-Esto es para el futuro manejo de exposición de APIs y la lógica de negocio que no pertenece a las entidades del dominio.
-En realidad este paquete no es necesario para el funcionamiento del sistema, pero se deja preparado para futuras entregas y para mantener una buena organización del código. Esto ocasiona que el uso de las entidades del mismo no sea extensivo actualmente.
+Gestiona el acceso y actualización de los componentes estadísticos del sistema, permitiendo responder consultas agregadas sobre hechos, colecciones, categorías, provincias, horas y solicitudes de spam.
 
 **Justificación:**
-- **Separación de responsabilidades:** Los servicios de aplicación se ocupan de coordinar operaciones y reglas de negocio, dejando a las entidades del dominio la lógica específica de cada una.
-- **Desacoplamiento:** Los servicios interactúan con los repositorios para persistir y recuperar datos, evitando acoplamiento directo a la infraestructura y facilitando el reemplazo o evolución de la capa de persistencia.
-- **Cohesión:** Cada servicio agrupa operaciones relacionadas con una entidad o área funcional específica (colecciones, hechos, solicitudes).
+- **Responsabilidad:** Centraliza la lógica de obtención, refresco y consulta de estadísticas en una única clase, facilitando mantenimiento, extensión y reutilización.
+- **Optimización y rendimiento:** Utiliza consultas nativas y vistas materializadas para calcular y almacenar resultados agregados, permitiendo responder rápidamente a consultas frecuentes y exportar a CSV sin recalcular todo el histórico.
+- **Desnormalización controlada:** Las estadísticas se almacenan en vistas materializadas separadas del modelo normalizado, lo que permite acelerar la consulta y mantener actualizados los resultados.
+- **Integridad y consistencia:** El repositorio se encarga de refrescar periódicamente los datos estadísticos y asegurar la coherencia entre los datos persistidos y los resultados mostrados en la interfaz.
+- **Extensibilidad:** Permite incorporar nuevas métricas y consultas estadísticas agregando nuevos métodos y vistas, sin modificar el modelo principal ni la lógica de negocio.
+- **Alineación con requerimientos:** Permite responder preguntas clave del dominio (top de provincias por colección, categoría más reportada, cantidad de solicitudes de spam, etc.) en forma eficiente y auditable.
 
----
-
-## ColeccionService
-Es capaz de gestionar la creación, actualización y consulta de colecciones, así como la aplicación de filtros y la obtención de hechos asociados a una colección.
-
-**Justificación:**
-- **Orquestación:** Centraliza la lógica relacionada con la gestión de colecciones, facilitando la validación y el cumplimiento de reglas de negocio.
-- **Reutilización:** Permite que la lógica de gestión de colecciones sea utilizada de manera uniforme por distintos controladores o interfaces.
-
----
-
-## HechoService
-Provee operaciones para filtrar, obtener, eliminar y actualizar hechos, delegando la persistencia al repositorio de hechos.
-
-**Justificación:**
-- **Encapsulamiento de la lógica de filtrado:** Permite centralizar y reutilizar los criterios de búsqueda y filtrado de hechos.
-- **Desacoplamiento de la lógica de presentación:** Separa la obtención y manipulación de datos de la lógica de interfaz o interacción con el usuario.
-
----
-
-## SolicitudService
-Actualmente, `SolicitudService` gestiona solicitudes de eliminación, incluyendo la detección automática de spam mediante la integración con un detector externo.
-
-**Justificación:**
-- **Automatización de reglas de negocio:** Incorpora la lógica de validación y procesamiento automático de solicitudes, como el rechazo por spam.
-- **Centralización:** Permite que toda la lógica relacionada con el ciclo de vida de las solicitudes esté centralizada, facilitando el mantenimiento y la evolución.
-- **Testabilidad:** Hace posible probar flujos completos de gestión de solicitudes sin depender de la infraestructura de persistencia.
-
-**Aclaración:**  
-Aunque en la versión actual, `SolicitudService` está orientado a solicitudes de eliminación, el diseño del repositorio de solicitudes ya fue generalizado para admitir cualquier tipo de solicitud.  
-Por lo tanto, es menester para nosotros que `SolicitudService` también evolucione para soportar operaciones genéricas sobre distintos tipos de solicitudes (por ejemplo, solicitudes de revisión, edición, etc.), siguiendo el mismo principio de flexibilidad y extensibilidad. Esto implica que para futuras entregas vamos a:
-- Generalizar las operaciones para que funcionen con la abstracción `Solicitud` en vez de tipos concretos.
-- Introducir lógica específica según el tipo de solicitud a través de polimorfismo.
-- Facilitar la incorporación de nuevas reglas de negocio asociadas a los diferentes tipos de solicitud.
+## Persistencia
+Los repositorios gestionan la persistencia de las entidades principales del dominio mediante el uso de `EntityManager` y transacciones de JPA/Hibernate.  
+Esto asegura la integridad de las operaciones y permite desacoplar el acceso a la base de datos del resto del sistema, facilitando el mantenimiento y la evolución del modelo relacional.
+Los repositorios implementan consultas especializadas para soportar búsqueda por full text search.
 
 ---
 
@@ -343,7 +357,7 @@ Encapsula los criterios de búsqueda y filtrado de hechos (categoría, fechas, u
 
 ---
 
-## Paquete DetectorSpam
+# Paquete DetectorSpam
 
 ---
 
@@ -365,7 +379,143 @@ La interfaz propuesta:
 
 ---
 
-## 📌 Diagrama de Clases General
+# Paquete Consenso
+
+---
+
+## Abstracción AlgoritmoConsenso y subtipos
+Se define la clase abstracta `AlgoritmoConsenso` como el núcleo de la lógica de consenso en MetaMapa, junto con subclases que implementan algoritmos concretos.  
+Cada uno de estos algoritmos responde a criterios distintos para determinar si un hecho debe ser considerado consensuado en el contexto de una colección.
+
+**Justificación:**
+- **Polimorfismo y extensibilidad:** El diseño permite que cada colección o servicio agregador seleccione el algoritmo de consenso más adecuado según sus necesidades, simplemente asociando una instancia concreta de `AlgoritmoConsenso`. Para agregar nuevos algoritmos solo es necesario definir una nueva subclase.
+- **Desacoplamiento:** La lógica de consenso queda separada de las colecciones y de la obtención de hechos, facilitando el mantenimiento y la evolución futura del sistema sin modificar el resto del dominio.
+- **Patrón Strategy:** Cada algoritmo puede ser intercambiado y configurado en tiempo de ejecución, cumpliendo los principios de diseño orientados a objetos y permitiendo experimentar o ajustar el nivel de confianza requerido por cada colección.
+- **Centralización y control:** La abstracción asegura que todas las decisiones de consenso se tomen a través de una única interfaz (`tieneConsenso`), favoreciendo la trazabilidad y el control de las reglas aplicadas.
+- **Persistencia y diseño relacional:** Los algoritmos de consenso se persisten mediante Hibernate usando herencia con la estrategia `SINGLE_TABLE` y discriminador de tipo, permitiendo rastrear y auditar qué algoritmo se aplicó en cada colección y facilitando la evolución del modelo relacional.
+
+---
+
+## ConsensoAbsoluto
+Exige el máximo nivel de acuerdo: un hecho debe estar presente en todas las fuentes para considerarse consensuado. Es útil para colecciones que requieren máxima confiabilidad y minimizan el riesgo de reportar información falsa o dudosa.
+
+## ConsensoMayoriaSimple
+Determina consenso cuando más de la mitad de las fuentes contienen el mismo hecho, balanceando confiabilidad y flexibilidad. Permite aceptar hechos con alta probabilidad de veracidad sin requerir unanimidad.
+
+## ConsensoMultiplesMenciones
+Apunta a reducir la desconfianza en hechos dudosos, exigiendo que al menos dos fuentes incluyan hechos con igual título y que no haya versiones contradictorias. Es útil para detectar consensos en reportes redundantes y evitar la propagación de información falsa por error o duplicación.
+
+## ConsensoDefault
+-Considera todos los hechos como consensuados, útil para colecciones que no requieren curación o para situaciones de configuración rápida. Puede ser usado como fallback.
+
+---
+
+## Persistencia y trazabilidad
+
+- **Herencia relacional:** Todos los algoritmos se persisten en una única tabla, diferenciados por un campo discriminador, facilitando la consulta, auditoría y evolución del modelo.
+- **Configurabilidad por colección:** Cada colección puede asociar el algoritmo de consenso que desee, y esto queda registrado en la base de datos, permitiendo auditar las decisiones y modificar el nivel de confianza requerido de manera sencilla.
+Usamos single table en los algoritmos de consenso, ya que, no tienen atributos propios, lo cual va a generar que no hayan campos en null en la tabla de consenso.
+
+---
+
+## ModoNavegacion
+
+Se define la enumeración `ModoNavegacion` para modelar los dos modos de navegación de hechos en una colección:
+- **Irrestricta:** muestra todos los hechos sin curación ni filtro de consenso.
+- **Curada:** muestra solo los hechos consensuados según el algoritmo especificado.
+
+**Justificación:**
+- **Claridad de interfaz:** Permite a los usuarios elegir el modo de navegación según sus preferencias de confiabilidad y exhaustividad.
+
+---
+
+# Paquete usuarios
+
+---
+
+## Contribuyente
+Se modela la clase `Contribuyente` como la entidad que representa a las personas que aportan información al sistema MetaMapa, sean anónimas o identificadas.
+
+**Justificación:**
+- **Responsabilidad y claridad:** La clase encapsula los datos personales relevantes de cada contribuyente (nombre, apellido, edad), permitiendo diferenciar entre contribuyentes anónimos (solo nombre obligatorio) y registrados (nombre, apellido y edad).
+- **Privacidad y protección de datos:** Siguiendo los lineamientos del sistema, los datos personales de los contribuyentes nunca se exponen públicamente ni se utilizan para la navegación o consulta de información. Se almacenan únicamente para fines de administración y trazabilidad, cumpliendo con las exigencias de protección de identidad.
+- **Persistencia y accountability:** Los atributos del contribuyente se persisten mediante ORM, permitiendo auditar quién aportó cada hecho y facilitando la rendición de cuentas ante solicitudes de revisión o eliminación de información, sin exponer estos datos a terceros.
+- **Extensibilidad:** El modelo permite agregar fácilmente nuevos atributos para los contribuyentes (por ejemplo, email, roles, validaciones adicionales) sin afectar la lógica principal de subida y gestión de hechos.
+- **Integración con el dominio:** La relación entre contribuyentes y hechos queda claramente establecida, permitiendo que los hechos subidos por usuarios registrados tengan funcionalidades adicionales (modificación, seguimiento de solicitudes, etc.), como requiere el sistema MetaMapa.
+- **Control de acceso y edición:** El diseño contempla la posibilidad de asignar permisos diferenciados a contribuyentes registrados (por ejemplo, edición durante un plazo determinado), alineándose con los requerimientos de colaboración y control de calidad del sistema.
+
+---
+
+# Paquete servicios
+
+---
+
+## ExportadorCSV
+Encapsula la lógica de exportación de datos estadísticos y resultados de consultas a archivos CSV, permitiendo la interoperabilidad con otras instituciones y el análisis externo de los datos del sistema.
+
+**Justificación:**
+- **Desacoplamiento y reutilización:** Centraliza la funcionalidad de exportación, evitando duplicación de lógica y permitiendo su reutilización en distintos módulos del sistema (estadísticas, reportes, backups).
+- **Interoperabilidad:** El formato CSV es ampliamente aceptado, permitiendo la integración sencilla con otras ONG, universidades o sistemas de análisis de datos.
+- **Compatibilidad con vistas materializadas:** El diseño permite exportar directamente desde vistas o tablas agregadas, optimizando la performance y facilitando la actualización periódica de los datos expuestos.
+- **Privacidad y control:** El servicio puede ser configurado para omitir o filtrar datos sensibles, alineándose con los requerimientos de protección de identidad de MetaMapa.
+
+---
+
+## GeorefAPI
+Gestiona la integración con servicios externos para obtener información geográfica (por ejemplo, provincia a partir de latitud y longitud).
+
+**Justificación:**
+- **Aislamiento de integración externa:** Encapsula el acceso a APIs externas, desacoplando la lógica de georreferenciación del resto del sistema y facilitando su evolución ante cambios en el servicio externo.
+- **Facilita el enriquecimiento de datos:** Permite agregar valor a los hechos mediante la asignación automática de información geográfica relevante para estadísticas y visualizaciones.
+- **Robustez y control de errores:** Centraliza el manejo de errores y la validación de respuestas, evitando impactos negativos sobre el dominio ante fallos o cambios en la API externa.
+
+---
+
+## HechoFTS
+Orquesta la lógica de búsqueda y consulta avanzada de hechos persistidos, integrando algoritmos de búsqueda por texto libre y similitud.
+
+**Justificación:**
+- **Centralización y claridad:** El servicio actúa como punto único de acceso para las búsquedas de hechos, simplificando la interacción desde la interfaz y otros módulos.
+- **Optimización y experiencia de usuario:** Implementa full text search para mejorar la relevancia de los resultados y la experiencia de las personas usuarias.
+- **Extensibilidad:** Permite incorporar nuevos métodos de búsqueda, filtros o criterios sin afectar el resto de la lógica de persistencia ni la interfaz de usuario.
+- **Interacción desacoplada con el repositorio:** El servicio utiliza el repositorio como backend, respetando el patrón de separación de capas y facilitando testing y mantenimiento.
+
+---
+
+# Paquete cron
+
+---
+
+## TareasCronometradas
+Encapsula la lógica de ejecución de tareas programadas en el sistema MetaMapa, permitiendo la calendarización y automatización de procesos críticos como la actualización de cachés, la curación de hechos y la sincronización periódica de fuentes externas.
+
+**Justificación:**
+- **Automatización y eficiencia:** El diseño permite que operaciones costosas (por ejemplo, actualización de cachés, curación de hechos, sincronización con fuentes proxy) se realicen en horarios de baja carga o de forma periódica, optimizando el uso de recursos y mejorando la experiencia de usuario.
+- **Desacoplamiento:** Las tareas cronometradas operan sobre servicios y entidades preexistentes (fuentes, colecciones, agregadores), manteniendo la lógica de negocio desacoplada del mecanismo de ejecución de las tareas. Esto facilita el mantenimiento y la evolución del sistema sin modificar el core.
+- **Configurabilidad y extensibilidad:** El uso de argumentos en la línea de comandos habilita la ejecución flexible de distintas rutinas desde scripts o sistemas operativos.
+- **Accountability y trazabilidad:** La ejecución programada de tareas garantiza la regularidad y el registro de procesos críticos, permitiendo auditar cuándo y cómo se realizó cada operación importante.
+
+---
+
+# Paquete estadisticas
+
+---
+
+## Componentes estadísticos y persistencia
+Se modelan entidades estadísticas específicas (`EstadisticaCategoriaTop`, `EstadisticaHoraPorCategoriaTop`, `EstadisticaProvinciaPorCategoriaTop`, `EstadisticaProvinciaPorColeccion`, `EstadisticaSolicitudesSpam`) que representan respuestas a las principales preguntas de análisis requeridas por MetaMapa.  
+Cada clase se corresponde con una consulta a una vista materializada en la base de datos, la cual se actualiza periódicamente usando tareas programadas.
+
+**Justificación:**
+- **Optimización y rendimiento:** Utilizar vistas materializadas permite precalcular y almacenar resultados agregados, optimizando el acceso y la consulta de estadísticas, especialmente cuando se trata de grandes volúmenes de datos.
+- **Modularidad y claridad:** Cada entidad estadística encapsula una métrica clave del dominio, facilitando la consulta, visualización y exportación de resultados, y permitiendo ampliar el sistema con nuevas métricas sin impactar el modelo principal.
+- **Persistencia desacoplada:** Las entidades estadísticas no modifican la información de hechos o colecciones, sino que reflejan el resultado de cálculos agregados, preservando la integridad y evitando redundancias en el modelo relacional.
+- **Actualización periódica:** Las vistas materializadas se refrescan mediante tareas programadas, asegurando que los resultados sean representativos de los datos actuales y que la carga de cálculo no impacte la experiencia de usuario.
+- **Inmutabilidad y auditoría:** Las entidades se modelan como `@Immutable`, garantizando que los resultados estadísticos sean consistentes y sólo se modifiquen mediante el refresco programado, facilitando la trazabilidad y la rendición de cuentas.
+- **Soporte para exportación:** Al estar directamente vinculadas a consultas sobre vistas materializadas, las entidades estadísticas pueden ser exportadas fácilmente en formato CSV, cumpliendo los requerimientos de interoperabilidad y análisis externo de MetaMapa.
+
+---
+
+# 📌 Diagrama de Clases General
 
 A continuación se presenta el diagrama UML general del dominio del sistema, en el que se modelan los principales conceptos como hechos, colecciones, contribuyentes, fuentes de datos y solicitudes de eliminación.
 
@@ -373,12 +523,9 @@ A continuación se presenta el diagrama UML general del dominio del sistema, en 
 
 ---
 
-## 👤 Casos de uso
+# 👤 Casos de uso
 A continuación se presentan los casos de uso, que describen las interacciones entre los actores y el sistema.
 
 ![Casos de uso](/Diagramas/casosDeUso.png)
 
-
-
-## Hibernate decisions
-Usamos single table en los algoritmos de consenso, ya que, no tienen atributos propios, lo cual va a generar que no hayan campos en null en la tabla de consenso. 
+---
