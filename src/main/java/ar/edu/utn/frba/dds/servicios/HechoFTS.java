@@ -1,16 +1,14 @@
 package ar.edu.utn.frba.dds.servicios;
 
-// HechoService.java
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class HechoService {
+import java.util.List;
+
+public class HechoFTS {
   private final RepositorioHechos repositorioHechos;
 
-  public HechoService(RepositorioHechos repositorioHechos) {
+  public HechoFTS(RepositorioHechos repositorioHechos) {
     this.repositorioHechos = repositorioHechos;
   }
 

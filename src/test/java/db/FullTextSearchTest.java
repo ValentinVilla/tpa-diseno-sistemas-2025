@@ -3,7 +3,7 @@ package db;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.servicios.HechoService;
+import ar.edu.utn.frba.dds.servicios.HechoFTS;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import org.junit.jupiter.api.*;
 
@@ -14,8 +14,6 @@ import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FullTextSearchTest {
@@ -23,7 +21,7 @@ public class FullTextSearchTest {
   private static EntityManagerFactory emf;
   private EntityManager em;
   private RepositorioHechos repositorioHechos;
-  private HechoService hechoService;
+  private HechoFTS hechoFTS;
 
   @BeforeAll
   static void initFactory() {
@@ -40,7 +38,7 @@ public class FullTextSearchTest {
   @BeforeEach
   void init() {
     repositorioHechos = RepositorioHechos.getInstancia();
-    hechoService = new HechoService(repositorioHechos);
+      hechoFTS = new HechoFTS(repositorioHechos);
   }
 
   @AfterEach
@@ -74,7 +72,7 @@ public class FullTextSearchTest {
     repositorioHechos.guardar(hecho2);
     repositorioHechos.guardar(hecho3);
 
-    List<Hecho> resultados = hechoService.buscar("guerra y revolución");
+    List<Hecho> resultados = hechoFTS.buscar("guerra y revolución");
 
     assertFalse(resultados.isEmpty());
     assertEquals("Guerra y Revolución Industrial", resultados.get(0).getTitulo());
@@ -88,7 +86,7 @@ public class FullTextSearchTest {
     repositorioHechos.guardar(hecho1);
     repositorioHechos.guardar(hecho2);
 
-    List<Hecho> resultados = hechoService.buscar("acisdente");
+    List<Hecho> resultados = hechoFTS.buscar("acisdente");
 
     assertFalse(resultados.isEmpty());
     assertTrue(resultados.stream().anyMatch(h -> h.getTitulo().equals("Accidente de tránsito")));

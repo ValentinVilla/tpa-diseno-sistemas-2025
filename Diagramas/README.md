@@ -471,7 +471,7 @@ Gestiona la integración con servicios externos para obtener información geogr�
 
 ---
 
-## HechoService
+## HechoFTS
 Orquesta la lógica de búsqueda y consulta avanzada de hechos persistidos, integrando algoritmos de búsqueda por texto libre y similitud.
 
 **Justificación:**
