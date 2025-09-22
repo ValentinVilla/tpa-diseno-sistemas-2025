@@ -30,8 +30,7 @@ public class Coleccion {
   private Fuente fuente;
   @ManyToOne(cascade = CascadeType.ALL)
   public Filtro criterioPertenencia;
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "consenso_id", nullable = false)
+  @Enumerated(EnumType.STRING)
   AlgoritmoConsenso algoritmoConsenso;
   @Enumerated(EnumType.STRING)
   ModoNavegacion modoNavegacion;

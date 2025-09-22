@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import ar.edu.utn.frba.dds.consenso.ConsensoAbsoluto;
+import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
@@ -31,7 +31,7 @@ class RepositorioColeccionesTest {
         .criterio(new FiltroCategoria())
         .handle("handle-" + titulo)
         .modoNavegacion(ModoNavegacion.IRRESTRICTA)
-        .algoritmoConsenso(new ConsensoAbsoluto())
+        .algoritmoConsenso(AlgoritmoConsenso.ABSOLUTO)
         .build();
   }
 

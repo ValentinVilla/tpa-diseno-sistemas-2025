@@ -1,11 +1,7 @@
 package ar.edu.utn.frba.dds.concenso;
 
-import ar.edu.utn.frba.dds.consenso.ConsensoAbsoluto;
-import ar.edu.utn.frba.dds.consenso.ConsensoDefault;
-import ar.edu.utn.frba.dds.consenso.ConsensoMayoriaSimple;
-import ar.edu.utn.frba.dds.consenso.ConsensoMultiplesMenciones;
-import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
@@ -55,7 +51,7 @@ public class AlgoritmoConsensoTest {
 
   @Test
   void multiplesMencionesTest() {
-    algoritmoConsenso = new ConsensoMultiplesMenciones();
+    algoritmoConsenso = AlgoritmoConsenso.MULTIPLES_MENCIONES;
     when(fuentes.get(0).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(1).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(2).cargarHechos(any())).thenReturn(new ArrayList<>());
@@ -65,8 +61,7 @@ public class AlgoritmoConsensoTest {
 
   @Test
   void multiplesMencionesNegativoTest() {
-    algoritmoConsenso = new ConsensoMultiplesMenciones();
-    // Solo una fuente lo menciona, no hay consenso
+    algoritmoConsenso = AlgoritmoConsenso.MULTIPLES_MENCIONES;
     when(fuentes.get(0).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(1).cargarHechos(any())).thenReturn(new ArrayList<>());
     when(fuentes.get(2).cargarHechos(any())).thenReturn(new ArrayList<>());
@@ -76,7 +71,7 @@ public class AlgoritmoConsensoTest {
 
   @Test
   void mayoriaSimpleTest() {
-    algoritmoConsenso = new ConsensoMayoriaSimple();
+    algoritmoConsenso = AlgoritmoConsenso.MAYORIA_SIMPLE;
     when(fuentes.get(0).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(1).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(2).cargarHechos(any())).thenReturn(new ArrayList<>());
@@ -86,8 +81,7 @@ public class AlgoritmoConsensoTest {
 
   @Test
   void mayoriaSimpleNegativoTest() {
-    algoritmoConsenso = new ConsensoMayoriaSimple();
-    // Solo una fuente lo menciona, no hay mayoría
+    algoritmoConsenso = AlgoritmoConsenso.MAYORIA_SIMPLE;
     when(fuentes.get(0).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(1).cargarHechos(any())).thenReturn(new ArrayList<>());
     when(fuentes.get(2).cargarHechos(any())).thenReturn(new ArrayList<>());
@@ -97,7 +91,7 @@ public class AlgoritmoConsensoTest {
 
   @Test
   void absolutoTest() {
-    algoritmoConsenso = new ConsensoAbsoluto();
+    algoritmoConsenso = AlgoritmoConsenso.MAYORIA_SIMPLE;
     when(fuentes.get(0).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(1).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
     when(fuentes.get(2).cargarHechos(any())).thenReturn(new ArrayList<>(List.of(hecho)));
@@ -107,7 +101,7 @@ public class AlgoritmoConsensoTest {
 
   @Test
   void defaultTest() {
-    algoritmoConsenso = new ConsensoDefault();
+    algoritmoConsenso = AlgoritmoConsenso.DEFAULT;
     algoritmoConsenso.tieneConsenso(hecho, fuentes);
     assertTrue(hecho.estaConsensuado());
   }

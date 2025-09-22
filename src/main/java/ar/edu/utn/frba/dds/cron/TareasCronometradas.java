@@ -1,7 +1,7 @@
 package ar.edu.utn.frba.dds.cron;
 
+import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.consenso.ModoNavegacion;
-import ar.edu.utn.frba.dds.consenso.ConsensoAbsoluto;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.filtros.Filtro;
@@ -19,9 +19,7 @@ public class TareasCronometradas {
         new FuenteEstatica("Hechos2.csv", "Hechos2", new ArrayList<>(List.of("id", "texto", "fecha")))
     );
 
-    // Suponiendo que ya hay una fuente y un filtro definidos
-
-    Filtro filtro = new FiltroCategoria("nombreDeLaCategoria"); // Instancia de Filtro
+    Filtro filtro = new FiltroCategoria("nombreDeLaCategoria");
 
     ServicioAgregacion servicioAgregacion = new ServicioAgregacion(fuentes);
 
@@ -31,7 +29,7 @@ public class TareasCronometradas {
         .fuente(servicioAgregacion)
         .criterio(filtro)
         .modoNavegacion(ModoNavegacion.CURADA)
-        .algoritmoConsenso(new ConsensoAbsoluto())
+        .algoritmoConsenso(AlgoritmoConsenso.ABSOLUTO)
         .build();
 
     if (args.length == 0) {
@@ -48,7 +46,6 @@ public class TareasCronometradas {
         System.out.println("Hechos curados.");
         break;
 
-        //aca faltaria la rutina para que la fuente proxi revise e incorpore nuevos hechos
       default:
         System.out.println("falta argumentos.");
     }
