@@ -8,6 +8,7 @@ import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("FUENTE_DINAMICA")
 public class FuenteDinamica extends Fuente {
   /*
   Esto ya no tiene mucho sentido, habria que borrar la lista y usar la bdd.

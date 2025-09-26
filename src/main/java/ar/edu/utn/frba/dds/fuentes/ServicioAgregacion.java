@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.fuentes;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("SERVICIO_AGREGACION")
 public class ServicioAgregacion extends Fuente{
   @ManyToMany
   @JoinTable(
