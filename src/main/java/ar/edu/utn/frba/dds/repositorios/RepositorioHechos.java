@@ -15,7 +15,7 @@ import ar.edu.utn.frba.dds.solicitudes.Solicitud;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
-public class RepositorioHechos {
+public class RepositorioHechos { //yo dejaria este repositorio de hechos solo para tests
     private final EntityManager entityManager;
 
     private static RepositorioHechos instancia;

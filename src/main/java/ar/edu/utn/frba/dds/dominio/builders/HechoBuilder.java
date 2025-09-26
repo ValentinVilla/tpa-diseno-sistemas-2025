@@ -15,7 +15,6 @@ public class HechoBuilder {
   private LocalDateTime fechaAcontecimiento;
   private LocalDateTime fechaCarga;
   private Origen origen;
-  private boolean visible = true;
   private LocalDateTime fechaModificacion;
   private String provincia;
 
@@ -74,10 +73,6 @@ public class HechoBuilder {
     return this;
   }
 
-  public HechoBuilder visible(boolean visible) {
-    this.visible = visible;
-    return this;
-  }
   public HechoBuilder fechaModificacion(LocalDateTime fechaModificacion) {
     this.fechaModificacion = fechaModificacion;
     return this;
@@ -123,7 +118,6 @@ public class HechoBuilder {
   public LocalDateTime getFechaAcontecimiento() { return fechaAcontecimiento; }
   public LocalDateTime getFechaCarga() { return fechaCarga; }
   public Origen getOrigen() { return origen; }
-  public boolean isVisible() { return visible; }
   public LocalDateTime getFechaModificacion() { return fechaModificacion; }
 
   public static class CampoInvalido extends RuntimeException {

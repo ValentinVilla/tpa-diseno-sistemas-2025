@@ -3,21 +3,19 @@ package ar.edu.utn.frba.dds.dominio;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
-@DiscriminatorValue("DINAMICO")
 public class HechoDinamico extends Hecho {
   @ManyToOne
   private Contribuyente contribuyente;//en teoria no puede ser null pero esa validacion la debemos realizar a nivel dominio
+  @Id
+  private Long id;
 
   protected HechoDinamico() {}
 
@@ -36,5 +34,13 @@ public class HechoDinamico extends Hecho {
 
   public Contribuyente getContribuyente() {
     return contribuyente;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public long getId() {
+    return id;
   }
 }

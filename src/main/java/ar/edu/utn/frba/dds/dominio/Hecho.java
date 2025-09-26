@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,12 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo_hecho")
+@MappedSuperclass
 public class Hecho {
-  @Id
-  @GeneratedValue
+
   private long id;
 
   protected String titulo;
@@ -34,12 +32,9 @@ public class Hecho {
   protected Double longitud;
   protected LocalDateTime fechaAcontecimiento;
   protected LocalDateTime fechaCarga;
-  @Enumerated(EnumType.STRING)
   protected Origen origen;
-  protected boolean visible;
   protected boolean consensuado = false;
   protected LocalDate fechaModificacion;
-  @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true)
   protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
   private String provincia;
 
@@ -54,7 +49,6 @@ public class Hecho {
     this.fechaAcontecimiento = builder.getFechaAcontecimiento();
     this.fechaCarga = builder.getFechaCarga();
     this.origen = builder.getOrigen();
-    this.visible = builder.isVisible();
   }
 
   public void agregarSolicitud(SolicitudEliminacion solicitud) {
@@ -67,10 +61,6 @@ public class Hecho {
 
   public boolean cumpleCon(Filtro filtro) {
     return filtro.cumple(this);
-  }
-
-  public void setVisible(boolean visibilidad) {
-    this.visible = visibilidad;
   }
 
   public long getId() {
@@ -109,10 +99,6 @@ public class Hecho {
     return this.fechaAcontecimiento;
   }
 
-  public boolean getVisible(){
-    return visible;
-  }
-
   public void setConsensuado(boolean b) {
     this.consensuado = b;
   }
@@ -128,9 +114,7 @@ public class Hecho {
             this.categoria.equals(otroHecho.getCategoria()) &&
             Objects.equals(this.latitud, otroHecho.getLatitud()) &&
             Objects.equals(this.longitud, otroHecho.getLongitud()) &&
-           this.fechaAcontecimiento.equals(otroHecho.getFechaAcontecimiento()) &&
-           this.visible == otroHecho.getVisible();
-
+           this.fechaAcontecimiento.equals(otroHecho.getFechaAcontecimiento()) ;
   }
 
   public boolean tieneMismoTitulo(Hecho otroHecho) {

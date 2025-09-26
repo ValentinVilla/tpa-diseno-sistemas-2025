@@ -33,10 +33,6 @@ public class FuenteDinamica extends Fuente {
     //asumo que el usuario ya viene asociado al hecho
   }
 
-  public void eliminarHecho(HechoDinamico hecho) {
-    hecho.setVisible(false);
-  }
-
 /*
 //  public void subirHecho(int idContribuyenteCreador, HechoDinamico hecho) {
 //    hecho.setIdContribuyenteCreador(idContribuyenteCreador);
@@ -73,7 +69,7 @@ public class FuenteDinamica extends Fuente {
       }
     }
     return visibles;
-  }
+  }//TODO: filtrar ese cargarHechos para que solo muestro los que no estan eliminados
 
   public List<Fuente> getFuente(){
     return List.of(this);
