@@ -20,14 +20,15 @@ public class SolicitudModificacion extends Solicitud{
   public SolicitudModificacion(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
     super(hecho, sugerenciaModificacion, detector);
     this.hechoModificado = hechoModificado;
-    hechoModificado.setVisible(false);
+    // En su lugar deberia sumarse al repo de eliminados?
+    //hechoModificado.setVisible(false);
   }
 
 
   @Override
   public void aplicarAceptacion() {
-    hechoModificado.setVisible(true);
-    hecho.setVisible(false);
+    //hechoModificado.setVisible(true);
+    //hecho.setVisible(false);
   }
 
   @Override

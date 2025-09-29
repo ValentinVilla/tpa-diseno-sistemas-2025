@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechosEliminados;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -23,7 +24,9 @@ public class SolicitudEliminacion extends Solicitud {
 
   @Override
   public void aplicarAceptacion() {
-    hecho.setVisible(false);
+    RepositorioHechosEliminados repo = RepositorioHechosEliminados.getInstancia();
+    //hay que pasar el tipo de hecho a un hecho eliminado antes de eliminarlo?
+    //repo.agregarHechoEliminado(hecho);
     this.estado = EstadoSolicitud.ACEPTADA;
   }
 

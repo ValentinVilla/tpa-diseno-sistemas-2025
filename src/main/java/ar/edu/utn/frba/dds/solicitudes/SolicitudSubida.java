@@ -6,6 +6,9 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+
+// ESTA CLASE SOLO SE USA EN LOS TESTS, NO EN LA LOGICA DE LA APP
+// REVISAR NO SOLO ERRORES SINO PROPOSITO
 @Entity
 @DiscriminatorValue("SUBIDA")
 public class SolicitudSubida extends Solicitud{
@@ -32,7 +35,7 @@ public class SolicitudSubida extends Solicitud{
 
   @Override
   public void aplicarRechazo() {
-    hecho.setVisible(false);
+    //hecho.setVisible(false);
     //notificarAlAutorDelRechazoDeModificacion();
   }
 }

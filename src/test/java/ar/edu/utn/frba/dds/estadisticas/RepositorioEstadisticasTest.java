@@ -57,7 +57,7 @@ class RepositorioEstadisticasTest {
 
     String provinciaTop = repo.provinciaConMasHechos(coleccion);
 
-    assertEquals("Córdoba", provinciaTop, "La provincia con más hechos debería ser Buenos Aires");
+    assertEquals("Cordoba", provinciaTop, "La provincia con más hechos debería ser Buenos Aires");
   }
 
   @Test

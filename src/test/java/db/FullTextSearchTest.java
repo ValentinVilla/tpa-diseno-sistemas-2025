@@ -58,7 +58,6 @@ public class FullTextSearchTest {
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE)
-        .visible(true)
         .build();
   }
 

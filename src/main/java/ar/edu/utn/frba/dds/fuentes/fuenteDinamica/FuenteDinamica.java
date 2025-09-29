@@ -9,8 +9,12 @@ import ar.edu.utn.frba.dds.repositorios.RepositorioHechosEliminados;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import java.util.ArrayList;
@@ -19,12 +23,11 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("FUENTE_DINAMICA")
 public class FuenteDinamica extends Fuente {
-  /*
-  Esto ya no tiene mucho sentido, habria que borrar la lista y usar la bdd.
-  Lo dejo de momento para que no rompe, pero no persisto la relacion.
-  */
-  @Transient
-  private ArrayList<HechoDinamico> hechosDinamicos = new ArrayList<>();
+
+  // Esto es para poder asociar la fk en HechoDinamico sin pasarle una fuente en el constructor
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @JoinColumn(name = "fuente_id") // esto crea la FK en la tabla de hechos
+  private List<HechoDinamico> hechosDinamicos = new ArrayList<>();
 
   public FuenteDinamica() {}
 

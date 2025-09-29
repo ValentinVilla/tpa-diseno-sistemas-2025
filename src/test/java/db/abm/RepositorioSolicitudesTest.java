@@ -31,7 +31,6 @@ class RepositorioSolicitudesTest {
         .longitud(-64.1833)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE)
         .build();
   }

@@ -15,10 +15,12 @@ import ar.edu.utn.frba.dds.solicitudes.Solicitud;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
-public class RepositorioHechos { //yo dejaria este repositorio de hechos solo para tests
+// EL REPOSITORIO TENDRIA QUE VOLAR, HAY QUE CORREGIR LOS TEST Y QUEDARNOS CON LAS FUNCIONALIDADES DEL FULLTEXTSEARCH
+public class RepositorioHechos {
     private final EntityManager entityManager;
 
     private static RepositorioHechos instancia;
+
 
     private RepositorioHechos() {
       EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
