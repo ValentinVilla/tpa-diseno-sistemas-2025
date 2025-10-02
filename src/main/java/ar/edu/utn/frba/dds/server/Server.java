@@ -1,33 +1,34 @@
 package ar.edu.utn.frba.dds.server;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import ar.edu.utn.frba.dds.server.templates.JavalinHandlebars;
+import ar.edu.utn.frba.dds.server.templates.JavalinRenderer;
 import io.javalin.Javalin;
-import io.javalin.json.JavalinJackson;
-import io.javalin.rendering.template.JavalinHandlebars;
-
+import io.javalin.config.JavalinConfig;
+import io.javalin.http.staticfiles.Location;
 
 public class Server {
-    public void start() {
-        //Bootstrap.init();
-        var app = Javalin.create(config -> { //crea la app web
-            config.jsonMapper(new JavalinJackson().updateMapper(mapper -> {
-                mapper.registerModule(new JavaTimeModule());
-                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-                mapper.registerModule(new Jdk8Module());
-            }));
-            config.fileRenderer(new JavalinHandlebars());
-        });
 
-        //-----MIDDLEWARES SE EXEC ANTES DE TODAS LAS REQ O DE CIERTOS PATH----------
-        app.before(ctx -> {
-            // runs before all requests
-        });
-        app.before("/path/*", ctx -> {
-            // runs before request to /path/*
-        });
-        new Router().configure(app);
-        app.start(7000);
-    }
+  public void start() {
+    var app = Javalin.create(config -> {
+      initializeStaticFiles(config);
+      initializeTemplating(config);
+    });
+
+    new Router().configure(app);
+
+    app.start(9001);
+    System.out.println("Servidor iniciado en http://localhost:9001");
+  }
+
+  private void initializeTemplating(JavalinConfig config) {
+    config.fileRenderer(new JavalinRenderer().register("hbs", new JavalinHandlebars()));
+  }
+
+  private static void initializeStaticFiles(JavalinConfig config) {
+    config.staticFiles.add(staticFileConfig -> {
+      staticFileConfig.hostedPath = "/";
+      staticFileConfig.directory = "/public";
+      staticFileConfig.location = Location.CLASSPATH;
+    });
+  }
 }
