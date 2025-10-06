@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 
 // ESTA CLASE SOLO SE USA EN LOS TESTS, NO EN LA LOGICA DE LA APP
 // REVISAR NO SOLO ERRORES SINO PROPOSITO
+
+
 @Entity
 @DiscriminatorValue("SUBIDA")
 public class SolicitudSubida extends Solicitud{
@@ -21,12 +23,16 @@ public class SolicitudSubida extends Solicitud{
   }
 
   public void aplicarAceptacion(){
+    //buscar todos los hechos dinamicos que tengan valorHecho igual a este y ponerlos visibles
+    //usar el repo de hechos la funcion buscar por query para poner todos los hechos con valores iguales a visibles
+    
+    //notificarAlAutorDeLaAceptacionDeModificacion();
   }
 
   public void aceptarConSugerencia(String sugerencia){
     sugerenciaModificacion = sugerencia;
     //generarSugerenciaDeModificacion(); esto en teoria tiene que notificar a quien realizo la modificacion
-    System.out.println("Solicitud de modificación aceptada con sugerencia: " + sugerenciaModificacion);
+    System.out.println("Solicitud de subida aceptada con sugerencia: " + sugerenciaModificacion);
   }
 
   public String getSugerenciaModificacion() {
@@ -35,7 +41,8 @@ public class SolicitudSubida extends Solicitud{
 
   @Override
   public void aplicarRechazo() {
-    //hecho.setVisible(false);
+    //Si solo los dejamos no visibles no haria nada, si los eliminamos, removeria los hechos de la funte dinamica
     //notificarAlAutorDelRechazoDeModificacion();
   }
+
 }

@@ -27,14 +27,12 @@ public abstract class Solicitud {
   protected EstadoSolicitud estado;
   @Transient
   public DetectorDeSpam detector;
-  @ManyToOne
-  @JoinColumn(name = "hecho_id", nullable = false)
-  protected Hecho hecho;
 
+  protected String valoresHecho;
   protected Solicitud(){}
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector) {
-    this.hecho = hecho;
+    this.valoresHecho =  hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
     this.textoFundamentacion = sugerenciaModificacion;
     this.detector = detector;
     if(detector != null && detector.esSpam(sugerenciaModificacion)){
@@ -59,9 +57,14 @@ public abstract class Solicitud {
   public String getTextoFundamentacion() {
     return textoFundamentacion;
   }
+
+  //refactorizar
+  /*
   public Hecho getHecho() {
     return hecho;
   }
+ */
+
   public EstadoSolicitud getEstado() {
     return estado;
   }

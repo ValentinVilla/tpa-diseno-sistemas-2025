@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ public class SolicitudModificacion extends Solicitud{
 
   public SolicitudModificacion() {}
 
-  public SolicitudModificacion(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
+  public SolicitudModificacion(HechoDinamico hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
     super(hecho, sugerenciaModificacion, detector);
     this.hechoModificado = hechoModificado;
     // En su lugar deberia sumarse al repo de eliminados?

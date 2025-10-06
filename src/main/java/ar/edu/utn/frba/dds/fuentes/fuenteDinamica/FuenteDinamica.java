@@ -32,6 +32,7 @@ public class FuenteDinamica extends Fuente {
   public FuenteDinamica() {}
 
   public void subirHecho(HechoDinamico hecho) {
+    hecho.revisarubicacion();
     hechosDinamicos.add(hecho);
     //aca habria que crear la solicitud de subida
     //asumo que el usuario ya viene asociado al hecho

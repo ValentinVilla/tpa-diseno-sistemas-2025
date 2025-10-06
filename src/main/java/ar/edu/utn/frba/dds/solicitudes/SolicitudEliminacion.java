@@ -26,7 +26,7 @@ public class SolicitudEliminacion extends Solicitud {
   public void aplicarAceptacion() {
     RepositorioHechosEliminados repo = RepositorioHechosEliminados.getInstancia();
     //hay que pasar el tipo de hecho a un hecho eliminado antes de eliminarlo?
-    //repo.agregarHechoEliminado(hecho);
+    
     this.estado = EstadoSolicitud.ACEPTADA;
   }
 

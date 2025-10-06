@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.dds.dominio;
 
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.servicios.GeorefAPI;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
 import javax.persistence.Entity;
@@ -17,7 +18,10 @@ public class HechoDinamico extends Hecho {
   @Id
   private Long id;
 
-  protected HechoDinamico() {}
+  private boolean visible = false;
+
+  protected HechoDinamico() {
+  }
 
   public HechoDinamico(HechoBuilder builder, Contribuyente contribuyente) {
     super(builder);
@@ -42,5 +46,27 @@ public class HechoDinamico extends Hecho {
 
   public long getId() {
     return id;
+  }
+
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+  }
+
+  public boolean getVisible() {
+    return visible;
+  }
+
+  public void revisarubicacion() {
+    if (this.getLatitud() != null && this.getLongitud() != null) {
+      try {
+        String provincia = GeorefAPI.getProvincia(
+            this.getLatitud(), this.getLongitud()
+        );
+        this.setProvincia(provincia);
+      } catch (Exception e) {
+        System.err.println("Error al obtener provincia: " + e.getMessage());
+        this.setProvincia("Desconocida");
+      }
+    }
   }
 }

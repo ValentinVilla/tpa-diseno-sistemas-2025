@@ -34,6 +34,8 @@ public class RepositorioHechos {
       return instancia;
     }
 
+
+    //revisar latitud y longitud
   public void guardar(Hecho hecho) throws Exception {
     EntityTransaction transaction = getEntity();
     try {
@@ -87,6 +89,9 @@ public class RepositorioHechos {
     }
   }
 
+
+
+  // Para matchear a los hechos que cumplen las solicitudes
   public List<Hecho> buscarPorTextoEnDB(String queryText) {
     Session session = entityManager.unwrap(Session.class);
     String sql = "SELECT *, ts_rank(fts_vector, plainto_tsquery('spanish', :queryText)) AS rank " +
