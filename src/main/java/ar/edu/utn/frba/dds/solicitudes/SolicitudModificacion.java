@@ -12,17 +12,13 @@ import javax.persistence.ManyToOne;
 @Entity
 @DiscriminatorValue("MODIFICACION")
 public class SolicitudModificacion extends Solicitud{
-  @ManyToOne
-  @JoinColumn(name = "hecho_modificado_id")
-  Hecho hechoModificado;
+  String valorHechoModificado;
 
   public SolicitudModificacion() {}
 
   public SolicitudModificacion(HechoDinamico hecho, String sugerenciaModificacion, DetectorDeSpam detector, Hecho hechoModificado) {
     super(hecho, sugerenciaModificacion, detector);
-    this.hechoModificado = hechoModificado;
-    // En su lugar deberia sumarse al repo de eliminados?
-    //hechoModificado.setVisible(false);
+    this.valoresHecho =  hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
   }
 
 

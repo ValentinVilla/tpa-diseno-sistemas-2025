@@ -3,7 +3,6 @@ package ar.edu.utn.frba.dds.fuentes.fuenteEstatica;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechosEliminados;
 
 import javax.persistence.DiscriminatorValue;

@@ -19,15 +19,10 @@ public class SolicitudEliminacion extends Solicitud {
 
   @Override
   public void aplicarRechazo() {
-    this.estado = EstadoSolicitud.RECHAZADA;
   }
 
   @Override
   public void aplicarAceptacion() {
-    RepositorioHechosEliminados repo = RepositorioHechosEliminados.getInstancia();
-    //hay que pasar el tipo de hecho a un hecho eliminado antes de eliminarlo?
-    
-    this.estado = EstadoSolicitud.ACEPTADA;
   }
 
   public boolean estaPendiente() {
