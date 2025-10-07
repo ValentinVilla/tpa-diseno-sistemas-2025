@@ -29,7 +29,6 @@ public class LectorCSV {
         if (!hecho.getTitulo().isEmpty()) {
           String clave = hecho.getTitulo().trim().toLowerCase();
           hechosMap.put(clave, hecho);
-          RepositorioHechos.getInstancia().guardar(hecho);
         }
       }
 

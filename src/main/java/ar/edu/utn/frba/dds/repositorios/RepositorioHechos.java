@@ -15,13 +15,14 @@ import ar.edu.utn.frba.dds.solicitudes.Solicitud;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
+// CONVERSION DEL REPO HECHOS AL PATRON DAO
 // EL REPOSITORIO TENDRIA QUE VOLAR, HAY QUE CORREGIR LOS TEST Y QUEDARNOS CON LAS FUNCIONALIDADES DEL FULLTEXTSEARCH
 public class RepositorioHechos {
     private final EntityManager entityManager;
 
     private static RepositorioHechos instancia;
 
-
+    //VUELA
     private RepositorioHechos() {
       EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
       this.entityManager = emf.createEntityManager();
@@ -35,8 +36,8 @@ public class RepositorioHechos {
     }
 
 
-    //revisar latitud y longitud
-  public void guardar(Hecho hecho) throws Exception {
+    //VUELA
+    public void guardar(Hecho hecho) throws Exception {
     EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
@@ -57,6 +58,7 @@ public class RepositorioHechos {
     }
   }
 
+  //VUELA
   public void actualizar(Hecho hecho) {
     EntityTransaction transaction = getEntity();
     try {
@@ -72,6 +74,7 @@ public class RepositorioHechos {
     }
   }
 
+  //VUELA
   public void eliminar(Long id) {
     EntityTransaction transaction = getEntity();
     try {
@@ -92,6 +95,19 @@ public class RepositorioHechos {
 
 
   // Para matchear a los hechos que cumplen las solicitudes
+  public int actualizarVisibilidadPorTexto(String queryText, boolean visible) {
+    Session session = entityManager.unwrap(Session.class);
+    String sql = """
+        UPDATE hecho
+        SET visible = :visible
+        WHERE fts_vector @@ plainto_tsquery('spanish', :queryText)
+    """;
+    NativeQuery<?> query = session.createNativeQuery(sql);
+    query.setParameter("visible", visible);
+    query.setParameter("queryText", queryText);
+    return query.executeUpdate(); // devuelve la cantidad de filas modificadas
+  }
+
   public List<Hecho> buscarPorTextoEnDB(String queryText) {
     Session session = entityManager.unwrap(Session.class);
     String sql = "SELECT *, ts_rank(fts_vector, plainto_tsquery('spanish', :queryText)) AS rank " +

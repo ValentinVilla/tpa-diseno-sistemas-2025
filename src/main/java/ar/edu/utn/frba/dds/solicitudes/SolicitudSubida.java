@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -14,7 +15,6 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("SUBIDA")
 public class SolicitudSubida extends Solicitud{
-  String sugerenciaModificacion;
 
   public SolicitudSubida() {}
 
@@ -23,20 +23,9 @@ public class SolicitudSubida extends Solicitud{
   }
 
   public void aplicarAceptacion(){
-    //buscar todos los hechos dinamicos que tengan valorHecho igual a este y ponerlos visibles
-    //usar el repo de hechos la funcion buscar por query para poner todos los hechos con valores iguales a visibles
-    
+    RepositorioHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHecho, true);
+
     //notificarAlAutorDeLaAceptacionDeModificacion();
-  }
-
-  public void aceptarConSugerencia(String sugerencia){
-    sugerenciaModificacion = sugerencia;
-    //generarSugerenciaDeModificacion(); esto en teoria tiene que notificar a quien realizo la modificacion
-    System.out.println("Solicitud de subida aceptada con sugerencia: " + sugerenciaModificacion);
-  }
-
-  public String getSugerenciaModificacion() {
-    return sugerenciaModificacion;
   }
 
   @Override
