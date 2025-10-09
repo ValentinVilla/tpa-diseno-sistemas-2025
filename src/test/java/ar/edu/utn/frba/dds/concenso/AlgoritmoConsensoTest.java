@@ -1,13 +1,13 @@
 package ar.edu.utn.frba.dds.concenso;
 
-import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.fuentes.Fuente;
-import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
-import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
-import ar.edu.utn.frba.dds.fuentes.fuenteProxy.FuenteDemo;
+import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.fuentes.Fuente;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteEstatica.FuenteEstatica;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteProxy.FuenteDemo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;

@@ -1,15 +1,16 @@
 package ar.edu.utn.frba.dds.fuentes;
 
-import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
-import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.LectorCSV;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
-import ar.edu.utn.frba.dds.filtros.Filtro;
-import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.model.fuentes.Fuente;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteEstatica.FuenteEstatica;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteEstatica.LectorCSV;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.builders.ColeccionBuilder;
+import ar.edu.utn.frba.dds.model.filtros.Filtro;
+import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
-import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
 import org.junit.jupiter.api.Test;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -118,7 +119,7 @@ public class LeerCSVTest {
     return fuente.cargarHechos(null);
   }
 
-  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, AlgoritmoConsenso algoritmo,  RepositorioColecciones repositorio) {
+  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, AlgoritmoConsenso algoritmo, RepositorioColecciones repositorio) {
     Coleccion nueva = new ColeccionBuilder()
         .titulo(titulo)
         .descripcion(descripcion)

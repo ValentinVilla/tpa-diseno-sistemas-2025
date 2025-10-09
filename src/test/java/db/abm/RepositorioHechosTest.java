@@ -1,9 +1,9 @@
 package db.abm;
 
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
-import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 

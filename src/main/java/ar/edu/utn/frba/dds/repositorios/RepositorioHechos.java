@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -10,8 +9,7 @@ import javax.persistence.Persistence;
 
 import java.util.List;
 
-import ar.edu.utn.frba.dds.servicios.GeorefAPI;
-import ar.edu.utn.frba.dds.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.model.servicios.GeorefAPI;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 

@@ -4,16 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaSolicitudesSpam;
-import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
-import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 public class SolicitarEliminacionTest {

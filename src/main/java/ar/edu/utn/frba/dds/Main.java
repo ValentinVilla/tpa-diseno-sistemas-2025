@@ -56,7 +56,7 @@ public class Main {
       if (nombre == null) {
         nombre = "invitado";
       }
-      ctx.render("saludo.hbs", Map.of("nombre", nombre));
+      ctx.render("logueo.hbs", Map.of("nombre", nombre));
     });*/
 
 

@@ -1,15 +1,19 @@
 package ar.edu.utn.frba.dds.estadisticas;
 
-import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaHoraPorCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaProvinciaPorCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaSolicitudesSpam;
 import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
-import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
-import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudModificacion;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.Arrays;

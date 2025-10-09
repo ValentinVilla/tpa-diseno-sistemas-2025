@@ -1,15 +1,12 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import java.util.ArrayList;
 import java.util.List;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-
-import java.util.List;
 
 public class RepositorioColecciones {
   private final EntityManager entityManager;

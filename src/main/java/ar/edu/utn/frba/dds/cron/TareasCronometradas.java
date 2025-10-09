@@ -1,14 +1,14 @@
 package ar.edu.utn.frba.dds.cron;
 
-import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.consenso.ModoNavegacion;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
-import ar.edu.utn.frba.dds.filtros.Filtro;
-import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
-import ar.edu.utn.frba.dds.fuentes.Fuente;
-import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
-import ar.edu.utn.frba.dds.fuentes.ServicioAgregacion;
+import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.builders.ColeccionBuilder;
+import ar.edu.utn.frba.dds.model.filtros.Filtro;
+import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
+import ar.edu.utn.frba.dds.model.fuentes.Fuente;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteEstatica.FuenteEstatica;
+import ar.edu.utn.frba.dds.model.fuentes.ServicioAgregacion;
 import java.util.ArrayList;
 import java.util.List;
 

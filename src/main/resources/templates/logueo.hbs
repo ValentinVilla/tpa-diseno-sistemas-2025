@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Página de inicio</title>
+    <link rel="stylesheet" href="/styles/saludo.css">
+</head>
+<body>
+<h2>Bienvenido, le pedimos que inicie sesión</h2>
+<form action="/login" method="post">
+    <label for="usuario">Usuario:</label>
+    <input type="text" id="usuario" name="usuario" required>
+    <br>
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" name="contrasena" required>
+    <br>
+    <button type="submit">Iniciar sesión</button>
+</form>
+<hr>
+<div style="display: flex; align-items: center; gap: 8px;">
+    <span>¿No tiene un usuario? Entonces regístrese</span>
+    <form action="/registrarse" method="get" style="margin: 0;">
+        <button type="submit">Registrarse</button>
+    </form>
+</div>
+</body>
+</html>
+

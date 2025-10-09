@@ -1,12 +1,11 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaCategoriaTop;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaHoraPorCategoriaTop;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaProvinciaPorCategoriaTop;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaProvinciaPorColeccion;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaSolicitudesSpam;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaHoraPorCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaProvinciaPorCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaSolicitudesSpam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,8 +15,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import java.util.*;
 
 public class RepositorioEstadisticas {
 

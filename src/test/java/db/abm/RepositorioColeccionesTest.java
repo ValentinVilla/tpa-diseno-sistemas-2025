@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
-import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
-import ar.edu.utn.frba.dds.consenso.ModoNavegacion;
-import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
+import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.builders.ColeccionBuilder;
+import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
+import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
