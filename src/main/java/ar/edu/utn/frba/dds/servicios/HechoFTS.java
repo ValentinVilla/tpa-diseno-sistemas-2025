@@ -1,14 +1,14 @@
 package ar.edu.utn.frba.dds.servicios;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 
 import java.util.List;
 
 public class HechoFTS {
-  private final RepositorioHechos repositorioHechos;
+  private final DAOHechos repositorioHechos;
 
-  public HechoFTS(RepositorioHechos repositorioHechos) {
+  public HechoFTS(DAOHechos repositorioHechos) {
     this.repositorioHechos = repositorioHechos;
   }
 

@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.fuentes.fuenteEstatica;
 import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechosEliminados;
 
 import javax.persistence.DiscriminatorValue;
@@ -30,7 +31,7 @@ public class FuenteEstatica extends Fuente {
 
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
-     RepositorioHechosEliminados repo = RepositorioHechosEliminados.getInstancia();
+     DAOHechos repo = DAOHechos.getInstancia();
      ArrayList<Hecho> hechosCSV = new LectorCSV().leerDesde(pathArchivo, categoria, campos);
      return repo.losQueNoFueronEliminados(hechosCSV);
   }

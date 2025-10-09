@@ -6,7 +6,7 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
@@ -39,7 +39,7 @@ class RepositorioEstadisticasTest {
     Hecho h3 = crearHecho(-31.4167, -64.1833);
     Hecho h4 = crearHecho(-31.6333, -60.7000);
 
-    RepositorioHechos repoHechos = RepositorioHechos.getInstancia();
+    DAOHechos repoHechos = DAOHechos.getInstancia();
 
     repoHechos.guardar(h1);
     repoHechos.guardar(h2);
@@ -87,7 +87,7 @@ class RepositorioEstadisticasTest {
   public void porcetajeDeSpamEsDel50() throws Exception {
     Hecho hecho = crearHecho(-31.4167, -64.1833);
 
-    RepositorioHechos repoHechos = RepositorioHechos.getInstancia();
+    DAOHechos repoHechos = DAOHechos.getInstancia();
     repoHechos.guardar(hecho);
 
     DetectorDeSpam detectorSiempreTrue = texto -> true;

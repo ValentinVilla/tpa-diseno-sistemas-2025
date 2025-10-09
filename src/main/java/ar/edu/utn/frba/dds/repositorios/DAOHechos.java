@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 
 import javax.persistence.EntityManager;
@@ -8,34 +7,35 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import ar.edu.utn.frba.dds.servicios.GeorefAPI;
-import ar.edu.utn.frba.dds.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.dominio.HechoEliminado;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
 // CONVERSION DEL REPO HECHOS AL PATRON DAO
 // EL REPOSITORIO TENDRIA QUE VOLAR, HAY QUE CORREGIR LOS TEST Y QUEDARNOS CON LAS FUNCIONALIDADES DEL FULLTEXTSEARCH
-public class RepositorioHechos {
+public class DAOHechos {
     private final EntityManager entityManager;
 
-    private static RepositorioHechos instancia;
+    private static DAOHechos instancia;
 
-    //VUELA
-    private RepositorioHechos() {
+    private DAOHechos() {
       EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
       this.entityManager = emf.createEntityManager();
     }
 
-    public static RepositorioHechos getInstancia() {
+    public static DAOHechos getInstancia() {
       if (instancia == null) {
-        instancia = new RepositorioHechos();
+        instancia = new DAOHechos();
       }
       return instancia;
     }
 
-
+/*
     //VUELA
     public void guardar(Hecho hecho) throws Exception {
     EntityTransaction transaction = getEntity();
@@ -91,7 +91,7 @@ public class RepositorioHechos {
       throw e;
     }
   }
-
+*/
 
 
   // Para matchear a los hechos que cumplen las solicitudes
@@ -132,9 +132,39 @@ public class RepositorioHechos {
     return query.getResultList();
   }
 
+  // GESTOR LAS ELIMINACIONES APROBADAS----------------------
+  //TODO: que traiga todos los "hechos" de las solicitudes de eliminacion con estado aprobada
+
+  public boolean fueEliminado(Hecho hecho) {
+    List<HechoEliminado> hechosEliminados = entityManager.createQuery("SELECT h FROM HechoEliminado h", HechoEliminado.class)
+        .getResultList();
+    return hechosEliminados.stream().anyMatch(hechoEliminado -> hechoEliminado.correspondeA(hecho));
+  }
+
+
+  public ArrayList<Hecho> losQueNoFueronEliminados(ArrayList<Hecho> hechos) {
+    List<HechoEliminado> hechosEliminados = entityManager.createQuery("SELECT h FROM HechoEliminado h", HechoEliminado.class)
+        .getResultList();
+    return hechos.stream()
+        .filter(hecho -> hechosEliminados.stream()
+            .noneMatch(hechoEliminado -> hechoEliminado.correspondeA(hecho)))
+        .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  public ArrayList<HechoDinamico> losQueNoFueronEliminadosDinamicos(ArrayList<HechoDinamico> hechos) {
+    List<HechoEliminado> hechosEliminados = entityManager.createQuery("SELECT h FROM HechoEliminado h", HechoEliminado.class)
+        .getResultList();
+    return hechos.stream()
+        .filter(hecho -> hechosEliminados.stream()
+            .noneMatch(hechoEliminado -> hechoEliminado.correspondeA(hecho)))
+        .collect(Collectors.toCollection(ArrayList::new));
+  }
+
 
   private  EntityTransaction getEntity() {
     return entityManager.getTransaction();
   }
+
+  //TODO: QUE TODAS LAS FUENTES ANTES DE CARGAR HECHOS FILTREN POR LOS QUE NO ESTAN ELIMINADOS (USAR EL REPO DE HECHOS ELIMINADOS)
 }
 

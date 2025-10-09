@@ -4,7 +4,7 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.servicios.HechoFTS;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import org.junit.jupiter.api.*;
 
 import javax.persistence.EntityManager;
@@ -20,7 +20,7 @@ public class FullTextSearchTest {
 
   private static EntityManagerFactory emf;
   private EntityManager em;
-  private RepositorioHechos repositorioHechos;
+  private DAOHechos repositorioHechos;
   private HechoFTS hechoFTS;
 
   @BeforeAll
@@ -37,7 +37,7 @@ public class FullTextSearchTest {
 
   @BeforeEach
   void init() {
-    repositorioHechos = RepositorioHechos.getInstancia();
+    repositorioHechos = DAOHechos.getInstancia();
       hechoFTS = new HechoFTS(repositorioHechos);
   }
 

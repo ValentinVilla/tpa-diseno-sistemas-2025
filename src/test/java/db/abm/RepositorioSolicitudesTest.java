@@ -2,7 +2,7 @@ package db.abm;
 
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.dominio.Hecho;
@@ -38,7 +38,7 @@ class RepositorioSolicitudesTest {
   @Test
   void testGuardarSolicitud() throws Exception {
     Hecho hecho = crearHecho();
-    RepositorioHechos.getInstancia().guardar(hecho);
+    DAOHechos.getInstancia().guardar(hecho);
 
     Solicitud solicitud = new SolicitudEliminacion("Prueba", hecho, null);
     repo.guardar(solicitud);
@@ -50,7 +50,7 @@ class RepositorioSolicitudesTest {
   @Test
   void testEliminarSolicitud() throws Exception {
     Hecho hecho = crearHecho();
-    RepositorioHechos.getInstancia().guardar(hecho);
+    DAOHechos.getInstancia().guardar(hecho);
 
     Solicitud solicitud = new SolicitudEliminacion("Prueba", hecho, null);
     repo.guardar(solicitud);
@@ -63,7 +63,7 @@ class RepositorioSolicitudesTest {
   @Test
   void testActualizarSolicitud() throws Exception {
     Hecho hecho = crearHecho();
-    RepositorioHechos.getInstancia().guardar(hecho);
+    DAOHechos.getInstancia().guardar(hecho);
 
     Solicitud solicitud = new SolicitudEliminacion("Prueba", hecho, null);
     repo.guardar(solicitud);

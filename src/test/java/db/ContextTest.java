@@ -3,18 +3,12 @@ package db;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ContextTest implements SimplePersistenceTest {
@@ -44,7 +38,7 @@ public class ContextTest implements SimplePersistenceTest {
   @Test
   void testPersistHecho() throws Exception {
 
-    RepositorioHechos repo = RepositorioHechos.getInstancia();
+    DAOHechos repo = DAOHechos.getInstancia();
     Hecho hecho = new Hecho(crearHecho("Prueba persistance"));
 
     repo.guardar(hecho);

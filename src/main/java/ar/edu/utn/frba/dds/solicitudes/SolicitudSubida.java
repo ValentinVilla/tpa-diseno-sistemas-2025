@@ -2,7 +2,7 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -23,9 +23,7 @@ public class SolicitudSubida extends Solicitud{
   }
 
   public void aplicarAceptacion(){
-    RepositorioHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHecho, true);
-
-    //notificarAlAutorDeLaAceptacionDeModificacion();
+    DAOHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHecho, true);
   }
 
   @Override

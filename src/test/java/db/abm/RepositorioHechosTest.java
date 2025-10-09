@@ -2,7 +2,7 @@ package db.abm;
 
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 
 class RepositorioHechosTest {
 
-  private RepositorioHechos repo;
+  private DAOHechos repo;
 
   @BeforeEach
   void setUp() {
-    repo = RepositorioHechos.getInstancia();
+    repo = DAOHechos.getInstancia();
   }
 
   private Hecho crearHecho(String titulo) {

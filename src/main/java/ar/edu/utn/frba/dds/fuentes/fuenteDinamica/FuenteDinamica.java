@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioHechosEliminados;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
@@ -65,7 +66,7 @@ public class FuenteDinamica extends Fuente {
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros){
     ArrayList<Hecho> hechosNoEliminados = new ArrayList<>();
-    RepositorioHechosEliminados repo = RepositorioHechosEliminados.getInstancia();
+    DAOHechos repo = DAOHechos.getInstancia();
     for (Hecho hecho : hechosDinamicos) {
       if (!repo.fueEliminado(hecho)) {
         hechosNoEliminados.add(hecho);
