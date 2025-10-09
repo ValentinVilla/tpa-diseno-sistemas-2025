@@ -133,31 +133,41 @@ public class DAOHechos {
   }
 
   // GESTOR LAS ELIMINACIONES APROBADAS----------------------
-  //TODO: que traiga todos los "hechos" de las solicitudes de eliminacion con estado aprobada
+  //TODO(YA REALIZADO): que traiga todos los "hechos" de las solicitudes de eliminacion con estado aprobada
 
   public boolean fueEliminado(Hecho hecho) {
-    List<HechoEliminado> hechosEliminados = entityManager.createQuery("SELECT h FROM HechoEliminado h", HechoEliminado.class)
-        .getResultList();
-    return hechosEliminados.stream().anyMatch(hechoEliminado -> hechoEliminado.correspondeA(hecho));
+    List<String> valoresHechosEliminados = entityManager.createQuery(
+      "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
+      .setParameter("estado", EstadoSoS.ACEPTADA)
+      .getResultList();
+    String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
+    return valoresHechosEliminados.contains(valorHecho);
   }
 
-
   public ArrayList<Hecho> losQueNoFueronEliminados(ArrayList<Hecho> hechos) {
-    List<HechoEliminado> hechosEliminados = entityManager.createQuery("SELECT h FROM HechoEliminado h", HechoEliminado.class)
-        .getResultList();
+    List<String> valoresHechosEliminados = entityManager.createQuery(
+      "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
+      .setParameter("estado", EstadoSolicitud.ACEPTADA)
+      .getResultList();
     return hechos.stream()
-        .filter(hecho -> hechosEliminados.stream()
-            .noneMatch(hechoEliminado -> hechoEliminado.correspondeA(hecho)))
-        .collect(Collectors.toCollection(ArrayList::new));
+      .filter(hecho -> {
+        String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
+        return !valoresHechosEliminados.contains(valorHecho);
+      })
+      .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public ArrayList<HechoDinamico> losQueNoFueronEliminadosDinamicos(ArrayList<HechoDinamico> hechos) {
-    List<HechoEliminado> hechosEliminados = entityManager.createQuery("SELECT h FROM HechoEliminado h", HechoEliminado.class)
-        .getResultList();
+    List<String> valoresHechosEliminados = entityManager.createQuery(
+      "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
+      .setParameter("estado", EstadoSolicitud.ACEPTADA)
+      .getResultList();
     return hechos.stream()
-        .filter(hecho -> hechosEliminados.stream()
-            .noneMatch(hechoEliminado -> hechoEliminado.correspondeA(hecho)))
-        .collect(Collectors.toCollection(ArrayList::new));
+      .filter(hecho -> {
+        String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
+        return !valoresHechosEliminados.contains(valorHecho);
+      })
+      .collect(Collectors.toCollection(ArrayList::new));
   }
 
 
@@ -165,6 +175,5 @@ public class DAOHechos {
     return entityManager.getTransaction();
   }
 
-  //TODO: QUE TODAS LAS FUENTES ANTES DE CARGAR HECHOS FILTREN POR LOS QUE NO ESTAN ELIMINADOS (USAR EL REPO DE HECHOS ELIMINADOS)
 }
 
