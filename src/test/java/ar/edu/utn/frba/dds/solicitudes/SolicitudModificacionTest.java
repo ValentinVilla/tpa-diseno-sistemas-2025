@@ -47,7 +47,7 @@ public class SolicitudModificacionTest {
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
-    contribuyente = new Contribuyente("facu", "jorge", 1127856432,"perez", 12);
+    contribuyente = new Contribuyente("facu", "jorge", 1127856432,"perez", 12, "micontrasenia3");
     hechoOriginal = new HechoDinamico(builderOriginal, contribuyente);
     hechoModificado = new HechoDinamico(builderModificado, contribuyente);
     solicitud = new SolicitudModificacion(hechoOriginal, "sugerenciaModificacion",new ImplementadorSpam(10),hechoModificado);

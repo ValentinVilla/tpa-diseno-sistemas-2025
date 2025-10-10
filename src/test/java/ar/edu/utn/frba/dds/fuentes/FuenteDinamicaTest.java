@@ -28,7 +28,7 @@ public class FuenteDinamicaTest {
   private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
   private EntityManager entityManager = emf.createEntityManager();
 
-  private final Contribuyente juan = new Contribuyente("juan", "cito", 1127564192, "perez", 20);
+  private final Contribuyente juan = new Contribuyente("juan", "cito", 1127564192, "perez", 20, "micontrasenia2");
 
   private HechoDinamico crearHecho(String titulo) {
     HechoBuilder hechoBase = new HechoBuilder()
@@ -77,7 +77,7 @@ public class FuenteDinamicaTest {
     HechoDinamico original = crearHecho("original");
     fuente.subirHecho(original);
 
-    Contribuyente tomas = new Contribuyente("tomas","tomas", 1127587659, "hola@gmail.com", 18);
+    Contribuyente tomas = new Contribuyente("tomas","tomas", 1127587659, "hola@gmail.com", 18, "micontrasenia");
 
     HechoBuilder Builder = new HechoBuilder()
         .titulo("malicioso")

@@ -14,7 +14,7 @@ public class SolicitudSubidaTest {
 
   @BeforeEach
   void setUp() {
-    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente("tobi", "juan", 1127587650, "tobi@gmail.com", 21));
+    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente("tobi", "juan", 1127587650, "tobi@gmail.com", 21, "micontrasenia"));
     solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
   }
   // PARA QUE ESTOS TEST TENGAN SENTIDO PODRIAMOS COMPARAR SI EL HECHO EXISTE EN HECHOS ELIMINADOS ANTES Y DESPUES DE LA SOLICITUD

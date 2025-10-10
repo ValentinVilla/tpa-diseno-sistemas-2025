@@ -15,15 +15,17 @@ public class Contribuyente {
   private Integer telefono;
   private String mail;
   private Integer edad;
+  private String password;
 
   protected Contribuyente() {}
 
-  public Contribuyente(String nombre, String apellido, Integer telefono, String mail, Integer edad) {
+  public Contribuyente(String nombre, String apellido, Integer telefono, String mail, Integer edad, String password) {
     this.nombre = nombre;
     this.apellido = apellido;
     this.telefono = telefono;
     this.mail = mail;
     this.edad = edad;
+    this.password = password;
   }
 
   public Long getId() {
