@@ -7,10 +7,10 @@ import io.javalin.http.Context;
 import java.util.Objects;
 
 public class UsuariosController {
-  RepositorioUsuarios repositorioUsuarios;
-  public UsuariosController() {
-    this.repositorioUsuarios = RepositorioUsuarios.getInstancia();
-  }
+  //RepositorioUsuarios repositorioUsuarios;
+  //public UsuariosController() {
+  //  this.repositorioUsuarios = RepositorioUsuarios.getInstancia();
+  //}
 
   public void crearUsuario(Context ctx) {
     String nombre = ctx.formParam("nombre");
@@ -22,7 +22,7 @@ public class UsuariosController {
 
     Contribuyente usuarioCreado = new Contribuyente(nombre, apellido, telefono, mail, edad, password);
 
-    repositorioUsuarios.guardar(usuarioCreado);
+    //repositorioUsuarios.guardar(usuarioCreado);
     ctx.redirect("/login");
   }
 } //TODO: ROMPE CUANDO PONGO EL REPO DE USUARIOS, falta que guarde la entidad que acabo de crear en la base de datos

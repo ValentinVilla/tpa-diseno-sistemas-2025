@@ -19,7 +19,6 @@ public class RepositorioHechos {
 
     private static RepositorioHechos instancia;
 
-
     private RepositorioHechos() {
       EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
       this.entityManager = emf.createEntityManager();

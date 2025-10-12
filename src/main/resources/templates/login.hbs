@@ -1,20 +1,59 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenido</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
+
+    <!--=============== CSS ===============-->
     <link rel="stylesheet" href="/styles/login.css">
+
+    <title>MetaMapa</title>
 </head>
 <body>
-<div class="container">
-    <h1>Bienvenido</h1>
-    <form action="/logueo" method="post">
-        <input type="text" name="usuario" placeholder="Usuario" required>
-        <input type="password" name="password" placeholder="Contraseña" required>
-        <button type="submit">Iniciar sesión</button>
-    </form>
-    <div class="divider">¿No tienes cuenta?</div>
-    <a href="/register" class="register-btn">Registrarse</a>
-</div>
+
+<!-- LOGIN CHECKBOX -->
+<input type="checkbox" id="login-checkbox" hidden>
+
+<main>
+    <!-- LOGIN POPUP -->
+    <div class="login">
+        <form action="/logueo" method="post" class="login__form">
+            <h2 class="login__title">Iniciar Sesión</h2>
+
+            <div class="login__group">
+                <div>
+                    <label for="usuario" class="login__label">Usuario</label>
+                    <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu email" class="login__input"
+                           required>
+                </div>
+
+                <div>
+                    <label for="password" class="login__label">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña"
+                           class="login__input" required>
+                </div>
+            </div>
+
+            <div class="login__actions">
+                <p class="login__signup">
+                    ¿No tienes una cuenta? <a href="/signup">Crear una</a>
+                </p>
+
+                <a href="/forgot-password" class="login__forgot">
+                    ¿Olvidaste tu contraseña?
+                </a>
+
+                <button type="submit" class="login__button">Iniciar sesión</button>
+            </div>
+        </form>
+
+        <!-- CLOSE BUTTON -->
+        <label for="login-checkbox" class="login__close-label">
+            <i class="ri-close-line"></i>
+        </label>
+    </div>
+</main>
+
 </body>
 </html>

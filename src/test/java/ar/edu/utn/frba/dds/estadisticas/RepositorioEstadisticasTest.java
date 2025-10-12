@@ -31,7 +31,6 @@ class RepositorioEstadisticasTest {
         .longitud(longitud)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE)
         .build();
   }

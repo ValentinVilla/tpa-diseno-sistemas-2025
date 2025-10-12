@@ -16,10 +16,10 @@ public class Router  {
       ctx.render("home.hbs", Map.of("nombre", "Tobias"));
     });
 
-    app.get("/login", ctx -> ctx.render("login.hbs"));
-    app.post("/login", ctx -> ctx.render("helloworld"));
-    app.get("/register", ctx -> ctx.render("register.hbs"));
-    app.post("/register", ctx -> usuariosController.crearUsuario(ctx));
+    app.get("/login", ctx -> ctx.render("login.hbs", Map.of("nombre", "Tobias")));
+    //app.post("/login", ctx -> ctx.render("helloworld"));
+    //app.get("/register", ctx -> ctx.render("register.hbs"));
+    //app.post("/register", ctx -> usuariosController.crearUsuario(ctx));
     //app.post("/usuarios", ctx -> usuariosController.crearUsuario(ctx)); todo: implementar con repo y todo
   }
 }

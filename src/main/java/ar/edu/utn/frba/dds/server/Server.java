@@ -9,6 +9,7 @@ import io.javalin.http.staticfiles.Location;
 public class Server {
 
   public void start() {
+    //Bootstrap.init();
     var app = Javalin.create(config -> {
       initializeStaticFiles(config);
       initializeTemplating(config);

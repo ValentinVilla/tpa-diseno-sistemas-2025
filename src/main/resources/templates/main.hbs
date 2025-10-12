@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Sistema de mapeo colaborativo</title>
+    <link rel="stylesheet" href="styles/landing.css">
+
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet/dist/leaflet.css"
+    />
+</head>
+<body>
+{{>templates/header }}
+
+{{#block "contenido"}}
+{{/block}}
+
+{{>templates/mapa}}
+
+{{#block "acerca"}}
+{{/block}}
+
+{{>templates/footer }}
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="js/map.js"></script>
+</body>
+</html>
