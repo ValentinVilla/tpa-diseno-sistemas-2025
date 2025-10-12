@@ -12,14 +12,14 @@ public class Contribuyente {
 
   private String nombre;
   private String apellido;
-  private Integer telefono;
+  private String telefono;
   private String mail;
   private Integer edad;
   private String password;
 
   protected Contribuyente() {}
 
-  public Contribuyente(String nombre, String apellido, Integer telefono, String mail, Integer edad, String password) {
+  public Contribuyente(String nombre, String apellido, String telefono, String mail, Integer edad, String password) {
     this.nombre = nombre;
     this.apellido = apellido;
     this.telefono = telefono;

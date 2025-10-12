@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenido</title>
+    <link rel="stylesheet" href="/styles/login.css">
+</head>
+<body>
+<div class="container">
+    <h1>Bienvenido</h1>
+    <form action="/logueo" method="post">
+        <input type="text" name="usuario" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit">Iniciar sesión</button>
+    </form>
+    <div class="divider">¿No tienes cuenta?</div>
+    <a href="/register" class="register-btn">Registrarse</a>
+</div>
+</body>
+</html>

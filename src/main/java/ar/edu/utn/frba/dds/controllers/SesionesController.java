@@ -14,7 +14,7 @@ public class SesionesController {
         if("true".equals(ctx.queryParam("error"))) {
             modelo.put("error", "usuario o contrasenia incorrectos");
         }
-        ctx.render("loguin.hbs", modelo);
+        ctx.render("login.hbs", modelo);
     }
 
 
@@ -28,7 +28,7 @@ public class SesionesController {
         }catch(Exception e){
             Map<String, Object> modelo = new HashMap<>();
             modelo.put("error", "usuario o contrasenia incorrectos");
-            //ctx.render("loguin.hbs", modelo); esto no conviene mejor redirijir pq me va a repetir el post del form cosa q no quiero pq produce el efecto duplicado
+            //ctx.render("login.hbs", modelo); esto no conviene mejor redirijir pq me va a repetir el post del form cosa q no quiero pq produce el efecto duplicado
             ctx.redirect("/loguin?error=true");
         }//hay otra opcion mas...
     }

@@ -77,7 +77,7 @@ public class FuenteDinamicaTest {
     HechoDinamico original = crearHecho("original");
     fuente.subirHecho(original);
 
-    Contribuyente tomas = new Contribuyente("tomas","tomas", 1127587659, "hola@gmail.com", 18, "micontrasenia");
+    Contribuyente tomas = new Contribuyente("tomas","tomas", "1127587659", "hola@gmail.com", 18, "micontrasenia");
 
     HechoBuilder Builder = new HechoBuilder()
         .titulo("malicioso")

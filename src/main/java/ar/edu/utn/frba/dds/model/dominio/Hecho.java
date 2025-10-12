@@ -16,7 +16,7 @@ import java.util.Objects;
 @MappedSuperclass
 public class Hecho {
 
-  private long id;
+  private long Id;
 
   protected String titulo;
   protected String descripcion;
@@ -57,7 +57,7 @@ public class Hecho {
   }
 
   public long getId() {
-    return id;
+    return Id;
   }
 
   public String getCategoria() {
