@@ -20,20 +20,10 @@ public class SolicitudSubidaTest {
     solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
   }
   // PARA QUE ESTOS TEST TENGAN SENTIDO PODRIAMOS COMPARAR SI EL HECHO EXISTE EN HECHOS ELIMINADOS ANTES Y DESPUES DE LA SOLICITUD
-/*
-  @Test
-  void testAceptarConSugerenciaGuardaTextoCorrectamente() {
-    solicitud.aceptarConSugerencia("Agregar fuente de datos oficial");
-
-    assertEquals("Agregar fuente de datos oficial", solicitud.getSugerenciaModificacion());
-
-  }
 
   @Test
   void testAplicarRechazoMarcaHechoComoNoVisible() {
     assertTrue(hecho.getVisible(), "El hecho debería ser visible inicialmente");
-
-    solicitud.aplicarRechazo();
 
     assertFalse(hecho.getVisible(), "El hecho debería quedar no visible tras el rechazo");
   }
@@ -46,5 +36,4 @@ public class SolicitudSubidaTest {
 
     assertTrue(hecho.getVisible(), "La visibilidad no debería cambiar con aceptación directa");
   }
-  */
 }

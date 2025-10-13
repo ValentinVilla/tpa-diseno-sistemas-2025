@@ -35,7 +35,6 @@ public class FuenteMetaMapaTest {
         .longitud(1.0)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
   }
 

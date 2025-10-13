@@ -7,12 +7,14 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
-import ar.edu.utn.frba.dds.dominio.HechoEliminado;
+import ar.edu.utn.frba.dds.solicitudes.EstadoSolicitud;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
@@ -94,84 +96,113 @@ public class DAOHechos {
 */
 
 
-  // Para matchear a los hechos que cumplen las solicitudes
-  public int actualizarVisibilidadPorTexto(String queryText, boolean visible) {
-    Session session = entityManager.unwrap(Session.class);
-    String sql = """
-        UPDATE hecho
-        SET visible = :visible
-        WHERE fts_vector @@ plainto_tsquery('spanish', :queryText)
-    """;
-    NativeQuery<?> query = session.createNativeQuery(sql);
-    query.setParameter("visible", visible);
-    query.setParameter("queryText", queryText);
-    return query.executeUpdate(); // devuelve la cantidad de filas modificadas
-  }
+    // Para matchear a los hechos que cumplen las solicitudes
+    public int actualizarVisibilidadPorTexto(String hechoBuscado, boolean visible) {
+      Session session = entityManager.unwrap(Session.class);
+      String sql = """
+          UPDATE hechoDinamico
+          SET visible = :visible
+          WHERE fts_vector @@ plainto_tsquery('spanish', :queryText)
+      """;
+      NativeQuery<?> query = session.createNativeQuery(sql);
+      query.setParameter("visible", visible);
+      query.setParameter("queryText", hechoBuscado);
+      return query.executeUpdate(); // devuelve la cantidad de filas modificadas
+    }
 
-  public List<Hecho> buscarPorTextoEnDB(String queryText) {
-    Session session = entityManager.unwrap(Session.class);
-    String sql = "SELECT *, ts_rank(fts_vector, plainto_tsquery('spanish', :queryText)) AS rank " +
-        "FROM hecho " +
-        "WHERE fts_vector @@ plainto_tsquery('spanish', :queryText) " +
-        "ORDER BY rank DESC";
-    NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
-    query.setParameter("queryText", queryText);
-    return query.getResultList();
-  }
+    public void actualizarHechoModificado(String hechoBuscado, String valoresActualizacion){
+      String[] camposHecho = valoresActualizacion.split(";");
+      LocalDate fechaModificacion = LocalDate.now();
 
-  public List<Hecho> buscarPorSimilitud(String queryText) {
-    Session session = entityManager.unwrap(Session.class);
+      Session session = entityManager.unwrap(Session.class);
+      String sql = """
+          UPDATE hechoDinamico
+          SET titulo = :camposHecho[0],
+              descripcion = :camposHecho[1],
+              categoria = :camposHecho[2],
+              latitud = :camposHecho[3],
+              longitud = :camposHecho[4],
+              fechaAcontecimiento= :camposHecho[5],
+              provincia = :camposHecho[6],
+              fechaModificacion = :fechaModiciacion
+          WHERE fts_vector @@ plainto_tsquery('spanish', :hechoBuscado)
+      """;
+      NativeQuery<?> query = session.createNativeQuery(sql);
+      query.setParameter("titulo", camposHecho[0]);
+      query.setParameter("descripcion", camposHecho[1]);
+      query.setParameter("categoria", camposHecho[2]);
+      query.setParameter("latitud", camposHecho[3]);
+      query.setParameter("longitud", camposHecho[4]);
+      query.setParameter("fechaAcontecimiento", camposHecho[5]);
+      query.setParameter("provincia", camposHecho[6]);
+      query.setParameter("fechaModificacion", fechaModificacion);
+      query.setParameter("queryText", hechoBuscado);
+      query.executeUpdate();
+    }
 
-    String sql = "SELECT *, similarity(titulo, :queryText) AS sim " +
-        "FROM hecho " +
-        "WHERE similarity(titulo, :queryText) > 0.1 " +
-        "ORDER BY sim DESC";
+    public List<Hecho> buscarPorTextoEnDB(String queryText) {
+      Session session = entityManager.unwrap(Session.class);
+      String sql = "SELECT *, ts_rank(fts_vector, plainto_tsquery('spanish', :queryText)) AS rank " +
+          "FROM hecho " +
+          "WHERE fts_vector @@ plainto_tsquery('spanish', :queryText) " +
+          "ORDER BY rank DESC";
+      NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
+      query.setParameter("queryText", queryText);
+      return query.getResultList();
+    }
 
-    NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
-    query.setParameter("queryText", queryText);
-    return query.getResultList();
-  }
+    public List<Hecho> buscarPorSimilitud(String queryText) {
+      Session session = entityManager.unwrap(Session.class);
 
-  // GESTOR LAS ELIMINACIONES APROBADAS----------------------
-  //TODO(YA REALIZADO): que traiga todos los "hechos" de las solicitudes de eliminacion con estado aprobada
+      String sql = "SELECT *, similarity(titulo, :queryText) AS sim " +
+          "FROM hecho " +
+          "WHERE similarity(titulo, :queryText) > 0.1 " +
+          "ORDER BY sim DESC";
 
-  public boolean fueEliminado(Hecho hecho) {
-    List<String> valoresHechosEliminados = entityManager.createQuery(
-      "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
-      .setParameter("estado", EstadoSoS.ACEPTADA)
-      .getResultList();
-    String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
-    return valoresHechosEliminados.contains(valorHecho);
-  }
+      NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
+      query.setParameter("queryText", queryText);
+      return query.getResultList();
+    }
 
-  public ArrayList<Hecho> losQueNoFueronEliminados(ArrayList<Hecho> hechos) {
-    List<String> valoresHechosEliminados = entityManager.createQuery(
-      "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
-      .setParameter("estado", EstadoSolicitud.ACEPTADA)
-      .getResultList();
-    return hechos.stream()
-      .filter(hecho -> {
-        String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
-        return !valoresHechosEliminados.contains(valorHecho);
-      })
-      .collect(Collectors.toCollection(ArrayList::new));
-  }
+    //------------------- GESTOR LAS ELIMINACIONES APROBADAS --------------------//
 
-  public ArrayList<HechoDinamico> losQueNoFueronEliminadosDinamicos(ArrayList<HechoDinamico> hechos) {
-    List<String> valoresHechosEliminados = entityManager.createQuery(
-      "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
-      .setParameter("estado", EstadoSolicitud.ACEPTADA)
-      .getResultList();
-    return hechos.stream()
-      .filter(hecho -> {
-        String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
-        return !valoresHechosEliminados.contains(valorHecho);
-      })
-      .collect(Collectors.toCollection(ArrayList::new));
-  }
+    public boolean fueEliminado(Hecho hecho) {
+      List<String> valoresHechosEliminados = entityManager.createQuery(
+        "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
+        .setParameter("estado", EstadoSolicitud.ACEPTADA)
+        .getResultList();
+      String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
+      return valoresHechosEliminados.contains(valorHecho);
+    }
+
+    public ArrayList<Hecho> losQueNoFueronEliminados(ArrayList<Hecho> hechos) {
+      List<String> valoresHechosEliminados = entityManager.createQuery(
+        "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
+        .setParameter("estado", EstadoSolicitud.ACEPTADA)
+        .getResultList();
+      return hechos.stream()
+        .filter(hecho -> {
+          String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
+          return !valoresHechosEliminados.contains(valorHecho);
+        })
+        .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<HechoDinamico> losQueNoFueronEliminadosDinamicos(ArrayList<HechoDinamico> hechos) {
+      List<String> valoresHechosEliminados = entityManager.createQuery(
+        "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
+        .setParameter("estado", EstadoSolicitud.ACEPTADA)
+        .getResultList();
+      return hechos.stream()
+        .filter(hecho -> {
+          String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
+          return !valoresHechosEliminados.contains(valorHecho);
+        })
+        .collect(Collectors.toCollection(ArrayList::new));
+    }
 
 
-  private  EntityTransaction getEntity() {
+    private  EntityTransaction getEntity() {
     return entityManager.getTransaction();
   }
 

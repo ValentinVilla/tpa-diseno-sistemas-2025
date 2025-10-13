@@ -32,6 +32,29 @@ class RepositorioEstadisticasTest {
         .build();
   }
 
+  private HechoDinamico crearHechoDinamico(String titulo) {
+    HechoBuilder hechoBase = new HechoBuilder()
+        .titulo(titulo)
+        .descripcion("desc")
+        .categoria("cat")
+        .latitud(1.0)
+        .longitud(1.0)
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
+        .origen(Origen.CONTRIBUYENTE);
+    return new HechoDinamico(hechoBase, new Contribuyente(42, "Juan", "Plomero"));
+  }
+
+  private void guardar(Hecho hecho){
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManager entityManager = emf.createEntityManager();
+
+    entityManager.getTransaction().begin();
+    entityManager.persist(hecho);
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+  }
+
   @Test
   void testProvinciaConMasHechos() throws Exception {
     Hecho h1 = crearHecho(-31.4167, -64.1833);

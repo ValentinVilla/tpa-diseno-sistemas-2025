@@ -32,7 +32,6 @@ public class SolicitudModificacionTest {
         .longitud(1.0)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
     HechoBuilder builderModificado = new HechoBuilder()
@@ -59,13 +58,6 @@ public class SolicitudModificacionTest {
     assertEquals(solicitud.estado, EstadoSolicitud.RECHAZADA);
     assertTrue(hechoOriginal.getVisible());
     assertFalse(hechoModificado.getVisible());
-  }
-
-  @Test
-  void aceptarConSugerenciaGuardaSugerencia() {
-    solicitud.aceptarConSugerencia("Mejorar ubicación");
-
-    assertEquals("Mejorar ubicación", solicitud.getTextoFundamentacion());
   }
 
 }

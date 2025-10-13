@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -19,6 +20,8 @@ public class HechoDinamico extends Hecho {
   private Long id;
 
   private boolean visible = false;
+
+  private LocalDate fechaModificacion;
 
   protected HechoDinamico() {
   }
@@ -38,14 +41,6 @@ public class HechoDinamico extends Hecho {
 
   public Contribuyente getContribuyente() {
     return contribuyente;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public long getId() {
-    return id;
   }
 
   public void setVisible(boolean visible) {
@@ -69,4 +64,9 @@ public class HechoDinamico extends Hecho {
       }
     }
   }
+
+  public void setModificacion() {
+    this.fechaModificacion = LocalDate.now();
+  }
+
 }

@@ -18,10 +18,6 @@ public class SolicitudEliminacion extends Solicitud {
   }
 
   @Override
-  public void aplicarRechazo() {
-  }
-
-  @Override
   public void aplicarAceptacion() {
     DAOHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHecho, false);
   }

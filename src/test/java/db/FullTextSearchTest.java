@@ -20,26 +20,31 @@ public class FullTextSearchTest {
 
   private static EntityManagerFactory emf;
   private EntityManager em;
-  private DAOHechos repositorioHechos;
+  private DAOHechos DAOhechos;
   private HechoFTS hechoFTS;
-
-  @BeforeAll
-  static void initFactory() {
-    emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-  }
-
-  @AfterAll
-  static void closeFactory() {
-    if (emf != null) {
-      emf.close();
-    }
-  }
 
   @BeforeEach
   void init() {
-    repositorioHechos = DAOHechos.getInstancia();
-      hechoFTS = new HechoFTS(repositorioHechos);
-  }
+      EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+      EntityManager entityManager = emf.createEntityManager();
+
+      hechoFTS = new HechoFTS(DAOhechos);
+
+      Hecho hecho1 = buildHecho("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia");
+      Hecho hecho2 = buildHecho("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución");
+      Hecho hecho3 = buildHecho("Femicidio", "El concepto de desconstrucción social.", "Sociedad");
+      Hecho hecho4 = buildHecho("Accidente de tránsito", "Choque en la ruta 9", "Transito");
+      Hecho hecho5 = buildHecho("Accidente laboral", "Herido en la fábrica", "Trabajo");
+
+      entityManager.getTransaction().begin();
+      entityManager.persist(hecho1);
+      entityManager.persist(hecho2);
+      entityManager.persist(hecho3);
+      entityManager.persist(hecho4);
+      entityManager.persist(hecho5);
+      entityManager.flush();
+      entityManager.getTransaction().commit();
+}
 
   @AfterEach
   void close() {
@@ -79,12 +84,6 @@ public class FullTextSearchTest {
 
   @Test
   void testBuscarPorTextoConFaltaDeOrtografia() throws Exception {
-    Hecho hecho1 = buildHecho("Accidente de tránsito", "Choque en la ruta 9", "Transito");
-    Hecho hecho2 = buildHecho("Accidente laboral", "Herido en la fábrica", "Trabajo");
-
-    repositorioHechos.guardar(hecho1);
-    repositorioHechos.guardar(hecho2);
-
     List<Hecho> resultados = hechoFTS.buscar("acisdente");
 
     assertFalse(resultados.isEmpty());

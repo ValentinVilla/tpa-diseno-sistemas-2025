@@ -59,7 +59,8 @@ public class ClienteMetaMapa {
     conn.setRequestProperty("Content-Type", "application/json");
 
     JSONObject json = new JSONObject();
-    json.put("idHecho", solicitud.getHecho().getId());
+    //TODO: revisar proposito
+    //json.put("idHecho", solicitud.getHecho().getId());
     json.put("fundamento", solicitud.getTextoFundamentacion());
 
     try (OutputStream os = conn.getOutputStream()) {

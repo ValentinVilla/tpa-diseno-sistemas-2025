@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -23,7 +24,9 @@ import java.util.Objects;
 @MappedSuperclass
 public class Hecho {
 
-  private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  protected long id;
 
   protected String titulo;
   protected String descripcion;
@@ -51,20 +54,17 @@ public class Hecho {
     this.origen = builder.getOrigen();
   }
 
-  public void agregarSolicitud(SolicitudEliminacion solicitud) {
+  /*public void agregarSolicitud(SolicitudEliminacion solicitud) {
     this.solicitudes.add(solicitud);
   }
+  */
 
-  public List<SolicitudEliminacion> getSolicitudes() {
+  /*public List<SolicitudEliminacion> getSolicitudes() {
     return this.solicitudes;
-  }
+  }*/
 
   public boolean cumpleCon(Filtro filtro) {
     return filtro.cumple(this);
-  }
-
-  public long getId() {
-    return id;
   }
 
   public String getCategoria() {
@@ -133,4 +133,5 @@ public class Hecho {
     return this.provincia;
   }
 }
+
 

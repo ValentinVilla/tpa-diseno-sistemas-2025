@@ -26,10 +26,4 @@ public class SolicitudSubida extends Solicitud{
     DAOHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHecho, true);
   }
 
-  @Override
-  public void aplicarRechazo() {
-    //Si solo los dejamos no visibles no haria nada, si los eliminamos, removeria los hechos de la funte dinamica
-    //notificarAlAutorDelRechazoDeModificacion();
-  }
-
 }

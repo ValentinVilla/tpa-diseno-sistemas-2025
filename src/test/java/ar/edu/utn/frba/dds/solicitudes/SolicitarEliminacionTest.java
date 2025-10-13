@@ -25,7 +25,6 @@ public class SolicitarEliminacionTest {
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
-        .visible(true)
         .build();
 
     DetectorDeSpam detectorSiempreTrue = texto -> true;
@@ -50,12 +49,8 @@ public class SolicitarEliminacionTest {
 
     DetectorDeSpam detectorSiempreFalse = texto -> false;
 
-    SolicitudEliminacion solicitud = new SolicitudEliminacion("Texto valido y claro", hecho, detectorSiempreFalse);
+    SolicitudEliminacion solicitud = new SolicitudEliminacion( hecho ,"Texto valido y claro", detectorSiempreFalse);
 
-    hecho.agregarSolicitud(solicitud);
-
-    SolicitudEliminacion solicitudDesdeHecho = hecho.getSolicitudes().get(0);
-
-    assertTrue(solicitudDesdeHecho.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");
+    assertTrue(solicitud.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");
   }
 }

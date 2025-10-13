@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 class RepositorioSolicitudesTest {
 
   private RepositorioSolicitudes repo;
+  private Hecho hecho = crearHecho();
+  private Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba solicitudes", null);
 
   @BeforeEach
   void setUp() {

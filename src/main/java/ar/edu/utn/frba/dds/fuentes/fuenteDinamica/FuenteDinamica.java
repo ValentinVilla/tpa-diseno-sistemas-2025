@@ -35,8 +35,12 @@ public class FuenteDinamica extends Fuente {
   public void subirHecho(HechoDinamico hecho) {
     hecho.revisarubicacion();
     hechosDinamicos.add(hecho);
-    //aca habria que crear la solicitud de subida
-    //asumo que el usuario ya viene asociado al hecho
+
+    //crear solicitud subida
+    Solicitud soliciudSubida = new SolicitudSubida(hecho, "", new ImplementadorSpam(10));
+
+    RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
+    repoSolicitudes.guardar(soliciudSubida);
   }
 
 /*
@@ -48,16 +52,24 @@ public class FuenteDinamica extends Fuente {
 */
 
   public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
-    //el contribuyente necesitaba un texto argumentativo??
     if (!puedeModificar(hechoOriginal, hechoNuevo.getContribuyente())) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     } else {
       SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal, textoArg, new ImplementadorSpam(15),hechoNuevo);
+      RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
+      repoSolicitudes.guardar(solicitudModificacion);
       //crea solicitud y esa solicitud espera a ser aceptada por un administrador, una vez que se acepta la solicitud se pone en visible el nuevo y se pone en no visible el anterior
     }
   }
 
-  public boolean puedeModificar(HechoDinamico hecho, Contribuyente contribuyenteModificador) {
+  public void solicitarEliminacionHecho(HechoDinamico hecho){
+    Solicitud soliciudEliminacion = new SolicitudEliminacion(hecho, "", new ImplementadorSpam(10));
+
+    RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
+    repoSolicitudes.guardar(soliciudEliminacion);
+  }
+
+  private boolean puedeModificar(HechoDinamico hecho, Contribuyente contribuyenteModificador) {
     return hecho.getContribuyente().getId().equals(contribuyenteModificador.getId())
         && contribuyenteModificador.getId()!=null
         && hecho.estaDentroDePlazo();

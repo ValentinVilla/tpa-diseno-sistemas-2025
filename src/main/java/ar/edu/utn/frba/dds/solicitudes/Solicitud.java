@@ -48,11 +48,9 @@ public abstract class Solicitud {
   }
   public void rechazar(){
       this.estado = EstadoSolicitud.RECHAZADA;
-      aplicarRechazo();
   }
 
   public abstract void aplicarAceptacion();
-  public abstract void aplicarRechazo();
 
   public String getTextoFundamentacion() {
     return textoFundamentacion;

@@ -40,7 +40,6 @@ public class FuenteDinamicaTest {
         .longitud(1.0)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     return new HechoDinamico(hechoBase, juan);
   }
@@ -89,7 +88,6 @@ public class FuenteDinamicaTest {
         .longitud(1.0)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     HechoDinamico nuevo = new HechoDinamico(Builder, tomas);
 
@@ -108,7 +106,6 @@ public class FuenteDinamicaTest {
         .longitud(1.0)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now().minusDays(8))
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
     HechoDinamico hechoOriginal = new HechoDinamico(Builder, juan);
 
@@ -123,21 +120,11 @@ public class FuenteDinamicaTest {
         .longitud(2.0)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
     HechoDinamico hechoNuevo = new HechoDinamico(Builder2, juan);
 
     // Esperamos excepcion al intentar modificar fuera del plazo
     assertThrows(RuntimeException.class, () -> fuente.solicitarModificarHecho(hechoOriginal, hechoNuevo, "texto del motivo"));
-  }
-  @Test
-  void puedeEliminarHecho() {
-    HechoDinamico hecho = crearHecho("para borrar");
-    fuente.subirHecho(hecho);
-
-    fuente.eliminarHecho(hecho);
-
-    assertFalse(hecho.getVisible());
   }
 }
