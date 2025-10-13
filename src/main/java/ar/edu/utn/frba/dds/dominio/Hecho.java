@@ -26,7 +26,7 @@ public class Hecho {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  protected long id;
+  private long id;
 
   protected String titulo;
   protected String descripcion;
