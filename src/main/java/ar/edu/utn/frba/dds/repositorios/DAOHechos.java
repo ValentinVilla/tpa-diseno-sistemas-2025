@@ -97,7 +97,9 @@ public class DAOHechos {
 
 
     // Para matchear a los hechos que cumplen las solicitudes
-    public int actualizarVisibilidadPorTexto(String hechoBuscado, boolean visible) {
+    public void actualizarVisibilidadPorTexto(String hechoBuscado, boolean visible) {
+      EntityTransaction transaction = getEntity();
+      transaction.begin();
       Session session = entityManager.unwrap(Session.class);
       String sql = """
           UPDATE hechoDinamico
@@ -187,20 +189,6 @@ public class DAOHechos {
         })
         .collect(Collectors.toCollection(ArrayList::new));
     }
-
-    public ArrayList<HechoDinamico> losQueNoFueronEliminadosDinamicos(ArrayList<HechoDinamico> hechos) {
-      List<String> valoresHechosEliminados = entityManager.createQuery(
-        "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
-        .setParameter("estado", EstadoSolicitud.ACEPTADA)
-        .getResultList();
-      return hechos.stream()
-        .filter(hecho -> {
-          String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
-          return !valoresHechosEliminados.contains(valorHecho);
-        })
-        .collect(Collectors.toCollection(ArrayList::new));
-    }
-
 
     private  EntityTransaction getEntity() {
     return entityManager.getTransaction();

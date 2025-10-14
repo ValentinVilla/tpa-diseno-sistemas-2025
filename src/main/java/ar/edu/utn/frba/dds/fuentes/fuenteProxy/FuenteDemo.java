@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.fuentes.Fuente;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.joda.time.LocalDateTime;
 
@@ -48,7 +49,8 @@ public class FuenteDemo extends Fuente {
       Coleccion coleccion = repo.buscarPorID(parametros.getColeccionId());
       stream = stream.filter(coleccion::hechoPertenece);
     }
-    return stream.collect(Collectors.toCollection(ArrayList::new));
+    DAOHechos repo = DAOHechos.getInstancia();
+    return repo.losQueNoFueronEliminados(stream.collect(Collectors.toCollection(ArrayList::new)));
   }
 
   boolean pasoUnaHoraDesdeUltimaConsulta() {

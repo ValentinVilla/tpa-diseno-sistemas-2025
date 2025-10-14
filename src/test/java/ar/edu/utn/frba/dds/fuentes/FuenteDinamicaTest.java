@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO: consultar con el roli como manejar el entity manager con la fuente dinamica y sus hechos
+
 public class FuenteDinamicaTest {
 
   private FuenteDinamica fuente;
@@ -29,15 +31,14 @@ public class FuenteDinamicaTest {
   private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
   private EntityManager entityManager = emf.createEntityManager();
 
-  private final Contribuyente juan = new Contribuyente(42, "Juan", "perez");
 
   private HechoDinamico crearHecho(String titulo) {
     HechoBuilder hechoBase = new HechoBuilder()
         .titulo(titulo)
         .descripcion("desc")
         .categoria("cat")
-        .latitud(1.0)
-        .longitud(1.0)
+        .latitud(-34.65890546258081)
+        .longitud(-58.467261290470084)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE);
@@ -46,9 +47,15 @@ public class FuenteDinamicaTest {
 
   @Test
   void puedeSubirHechoAnonimo() {
+    entityManager.getTransaction().begin();
+    entityManager.persist(fuente);
+    entityManager.persist(juan);
+
     HechoDinamico hecho = crearHecho("hecho-anonimo");
     fuente.subirHecho(hecho);
 
+    entityManager.flush();
+    entityManager.getTransaction().commit();
     assertEquals(1, fuente.cargarHechos(null).size());
   }
 
@@ -57,9 +64,8 @@ public class FuenteDinamicaTest {
   void puedeSolicitarModificarHechoDentroDelPlazo() {
     //necesito que juan este persistido para que el hecho lo tenga asociado
     entityManager.getTransaction().begin();
+    entityManager.persist(fuente);
     entityManager.persist(juan);
-    entityManager.flush();
-    entityManager.getTransaction().commit();
 
     HechoDinamico original = crearHecho("original");
     HechoDinamico nuevo = crearHecho("incendio-modificado");
@@ -69,7 +75,9 @@ public class FuenteDinamicaTest {
     fuente.subirHecho(original);
     fuente.solicitarModificarHecho(original, nuevo, "motivo por el cual quiero realizar la modificacion");
 
-    //se crea el nuevo modificado pero se pone en false
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+
     assertFalse(nuevo.getVisible());
   }
 

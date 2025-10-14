@@ -19,21 +19,45 @@ public class SolicitudSubidaTest {
     hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente(42, "juan", "perez"));
     solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
   }
-  // PARA QUE ESTOS TEST TENGAN SENTIDO PODRIAMOS COMPARAR SI EL HECHO EXISTE EN HECHOS ELIMINADOS ANTES Y DESPUES DE LA SOLICITUD
 
-  @Test
-  void testAplicarRechazoMarcaHechoComoNoVisible() {
-    assertTrue(hecho.getVisible(), "El hecho debería ser visible inicialmente");
-
-    assertFalse(hecho.getVisible(), "El hecho debería quedar no visible tras el rechazo");
+  private HechoDinamico crearHecho(String titulo) {
+    HechoBuilder hechoBase = new HechoBuilder()
+        .titulo(titulo)
+        .descripcion("desc")
+        .categoria("cat")
+        .latitud(-34.65890546258081)
+        .longitud(-58.467261290470084)
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
+        .origen(Origen.CONTRIBUYENTE);
+    return new HechoDinamico(hechoBase, pablito = new Contribuyente(16, "Pablo", "Perez"));
   }
 
+  //esta cheackeado que si hace lo que se le pide pero falla por ordenes de persistencia (preguntarle a tomi)
   @Test
-  void testAplicarAceptacionNoModificaVisibilidad() {
-    assertTrue(hecho.getVisible());
+  void puedeAceptarUltimaSolicitud() {
+    HechoDinamico hechoDinamico = crearHecho("Pablito se robo un auto");
+    // subir hecho (crea solicitud enestado PENDIENTE)
+    entityManager.getTransaction().begin();
+    entityManager.persist(pablito);
+    entityManager.persist(fuenteDinamica);
 
-    solicitud.aplicarAceptacion();
+    // Crea la soli
+    fuenteDinamica.subirHecho(hechoDinamico);
 
-    assertTrue(hecho.getVisible(), "La visibilidad no debería cambiar con aceptación directa");
+    // agarrar la última solicitud
+    RepositorioSolicitudes repo = RepositorioSolicitudes.getInstancia();
+    ArrayList<Solicitud> solicitudes = new ArrayList<>(repo.obtenerTodas());
+    Solicitud ultimaSolicitud = solicitudes.get(solicitudes.size() - 1);
+
+    // simular aceptación
+    ultimaSolicitud.aceptar();
+
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+    // verificar que el hecho quedó visible
+    assertTrue(hechoDinamico.getVisible());
   }
+
+
 }

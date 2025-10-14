@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -48,6 +49,7 @@ public abstract class Solicitud {
   }
   public void rechazar(){
       this.estado = EstadoSolicitud.RECHAZADA;
+      RepositorioSolicitudes.getInstancia().actualizar(this);
   }
 
   public abstract void aplicarAceptacion();
