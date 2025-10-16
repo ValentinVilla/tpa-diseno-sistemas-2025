@@ -33,7 +33,7 @@ public class Hecho {
   protected Origen origen;
   protected boolean consensuado = false;
   protected LocalDate fechaModificacion;
-  protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
+  //protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
   private String provincia;
 
   public Hecho() {}

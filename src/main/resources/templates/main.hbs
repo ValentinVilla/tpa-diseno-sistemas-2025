@@ -4,15 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MetaMapa - Sistema de mapeo colaborativo</title>
-    <link rel="stylesheet" href="styles/landing.css">
+    <link rel="stylesheet" href="styles/landing2.css">
+    <link rel="stylesheet" href="styles/login.css">
 
     <link
             rel="stylesheet"
             href="https://unpkg.com/leaflet/dist/leaflet.css"
     />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css"
+    />
+
 </head>
 <body>
 {{>templates/header }}
+{{>templates/login }}
 
 {{#block "contenido"}}
 {{/block}}
@@ -27,5 +34,6 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script src="js/map.js"></script>
+<script src="js/login.js"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 @Entity
 public class HechoDinamico extends Hecho {
   @ManyToOne
-  private Contribuyente contribuyente;//en teoria no puede ser null pero esa validacion la debemos realizar a nivel dominio
+  private Contribuyente contribuyente;
   @Id
   private Long id;
 
