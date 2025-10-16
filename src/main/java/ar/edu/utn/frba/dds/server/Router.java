@@ -17,6 +17,7 @@ public class Router  {
     });
 
     app.get("/login", ctx -> ctx.render("login.hbs", Map.of("nombre", "Tobias")));
+    app.get("/logueo", ctx -> ctx.render("logueo.hbs"));
     //app.post("/login", ctx -> ctx.render("helloworld"));
     app.get("/register", ctx -> ctx.render("register.hbs"));
     app.post("/register", ctx -> usuariosController.crearUsuario(ctx));
