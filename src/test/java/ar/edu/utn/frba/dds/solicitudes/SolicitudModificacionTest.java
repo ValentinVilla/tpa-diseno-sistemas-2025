@@ -42,7 +42,6 @@ public class SolicitudModificacionTest {
         .longitud(1.5)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
     contribuyente = new Contribuyente(42, "juan", "perez");

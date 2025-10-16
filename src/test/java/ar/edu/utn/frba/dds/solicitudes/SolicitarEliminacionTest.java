@@ -44,7 +44,6 @@ public class SolicitarEliminacionTest {
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
-        .visible(true)
         .build();
 
     DetectorDeSpam detectorSiempreFalse = texto -> false;

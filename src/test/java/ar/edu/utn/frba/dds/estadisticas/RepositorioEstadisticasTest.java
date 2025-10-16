@@ -3,6 +3,7 @@ package ar.edu.utn.frba.dds.estadisticas;
 import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.dominio.Coleccion;
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
@@ -27,7 +28,6 @@ class RepositorioEstadisticasTest {
         .longitud(longitud)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE)
         .build();
   }

@@ -44,7 +44,6 @@ public class AlgoritmoConsensoTest {
         .fechaAcontecimiento(LocalDateTime.of(2025, 8, 20, 23, 59, 59))
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE)
-        .visible(true)
         .build();
 
   }

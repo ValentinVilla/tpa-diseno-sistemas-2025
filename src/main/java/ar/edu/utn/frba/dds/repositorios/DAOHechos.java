@@ -8,7 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,8 +17,6 @@ import ar.edu.utn.frba.dds.solicitudes.EstadoSolicitud;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
-// CONVERSION DEL REPO HECHOS AL PATRON DAO
-// EL REPOSITORIO TENDRIA QUE VOLAR, HAY QUE CORREGIR LOS TEST Y QUEDARNOS CON LAS FUNCIONALIDADES DEL FULLTEXTSEARCH
 public class DAOHechos {
     private final EntityManager entityManager;
 
@@ -37,65 +34,6 @@ public class DAOHechos {
       return instancia;
     }
 
-/*
-    //VUELA
-    public void guardar(Hecho hecho) throws Exception {
-    EntityTransaction transaction = getEntity();
-    try {
-      transaction.begin();
-      if (hecho.getLatitud() != null && hecho.getLongitud() != null) {
-        String provincia = GeorefAPI.getProvincia(
-            hecho.getLatitud(), hecho.getLongitud()
-        );
-        hecho.setProvincia(provincia);
-      }
-
-      entityManager.persist(hecho);
-      transaction.commit();
-    } catch (Exception e) {
-      if (transaction.isActive()) {
-        transaction.rollback();
-      }
-      throw e;
-    }
-  }
-
-  //VUELA
-  public void actualizar(Hecho hecho) {
-    EntityTransaction transaction = getEntity();
-    try {
-      transaction.begin();
-      entityManager.merge(hecho);
-      entityManager.flush();
-      transaction.commit();
-    } catch (Exception e) {
-      if (transaction.isActive()) {
-        transaction.rollback();
-      }
-      throw e;
-    }
-  }
-
-  //VUELA
-  public void eliminar(Long id) {
-    EntityTransaction transaction = getEntity();
-    try {
-      transaction.begin();
-      Hecho hecho = entityManager.find(Hecho.class, id);
-      if (hecho != null) {
-        entityManager.remove(hecho);
-      }
-      transaction.commit();
-    } catch (Exception e) {
-      if (transaction.isActive()) {
-        transaction.rollback();
-      }
-      throw e;
-    }
-  }
-*/
-
-
     // Para matchear a los hechos que cumplen las solicitudes
     public void actualizarVisibilidadPorTexto(String hechoBuscado, boolean visible) {
       EntityTransaction transaction = getEntity();
@@ -109,7 +47,7 @@ public class DAOHechos {
       NativeQuery<?> query = session.createNativeQuery(sql);
       query.setParameter("visible", visible);
       query.setParameter("queryText", hechoBuscado);
-      return query.executeUpdate(); // devuelve la cantidad de filas modificadas
+      query.executeUpdate();
     }
 
     public void actualizarHechoModificado(String hechoBuscado, String valoresActualizacion){

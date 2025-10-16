@@ -2,12 +2,17 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class SolicitudSubidaTest {
 
