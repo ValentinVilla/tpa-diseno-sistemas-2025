@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;

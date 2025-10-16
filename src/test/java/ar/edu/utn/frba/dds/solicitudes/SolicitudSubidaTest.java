@@ -1,13 +1,11 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
-import ar.edu.utn.frba.dds.dominio.HechoDinamico;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.model.DetectorSpam.ImplementadorSpam;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class SolicitudSubidaTest {
 
@@ -16,7 +14,7 @@ public class SolicitudSubidaTest {
 
   @BeforeEach
   void setUp() {
-    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente(42, "juan", "perez"));
+    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente("tobi", "juan", 1127587650, "tobi@gmail.com", 21, "micontrasenia"));
     solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
   }
 

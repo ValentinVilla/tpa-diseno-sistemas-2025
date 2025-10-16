@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.fuentes;
 
-import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
-import ar.edu.utn.frba.dds.dominio.HechoDinamico;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

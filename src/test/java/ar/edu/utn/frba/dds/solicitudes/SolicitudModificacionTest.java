@@ -1,15 +1,16 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
-import ar.edu.utn.frba.dds.dominio.HechoDinamico;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
-import ar.edu.utn.frba.dds.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.model.DetectorSpam.ImplementadorSpam;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
+import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +46,7 @@ public class SolicitudModificacionTest {
         .visible(true)
         .origen(Origen.CONTRIBUYENTE);
 
-    contribuyente = new Contribuyente(42, "juan", "perez");
+    contribuyente = new Contribuyente("facu", "jorge", 1127856432,"perez", 12, "micontrasenia3");
     hechoOriginal = new HechoDinamico(builderOriginal, contribuyente);
     hechoModificado = new HechoDinamico(builderModificado, contribuyente);
     solicitud = new SolicitudModificacion(hechoOriginal, "sugerenciaModificacion",new ImplementadorSpam(10),hechoModificado);

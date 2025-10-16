@@ -1,6 +1,6 @@
 package db;
 
-import ar.edu.utn.frba.dds.servicios.ExportadorCSV;
+import ar.edu.utn.frba.dds.model.servicios.ExportadorCSV;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

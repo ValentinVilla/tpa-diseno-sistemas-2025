@@ -1,20 +1,15 @@
 package ar.edu.utn.frba.dds.repositorios;
-
-import ar.edu.utn.frba.dds.dominio.Hecho;
-
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ar.edu.utn.frba.dds.dominio.HechoDinamico;
-import ar.edu.utn.frba.dds.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
@@ -109,7 +104,7 @@ public class DAOHechos {
       NativeQuery<?> query = session.createNativeQuery(sql);
       query.setParameter("visible", visible);
       query.setParameter("queryText", hechoBuscado);
-      return query.executeUpdate(); // devuelve la cantidad de filas modificadas
+      query.executeUpdate();
     }
 
     public void actualizarHechoModificado(String hechoBuscado, String valoresActualizacion){
