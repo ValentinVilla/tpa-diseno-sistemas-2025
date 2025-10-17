@@ -1,13 +1,17 @@
 package db;
 
 import ar.edu.utn.frba.dds.dominio.Hecho;
+import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.servicios.HechoFTS;
 import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,31 +24,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FullTextSearchTest {
 
-  private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");;
-  private EntityManager entityManager = emf.createEntityManager();
-  private DAOHechos DAOhechos;
+  private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");  private EntityManager entityManager;
+  private DAOHechos daoHechos;
   private HechoFTS hechoFTS;
-  private FuenteDinamica fuenteDinamica = new FuenteDinamica();
-  private Contribuyente juan = new Contribuyente(40,"juan", "perez");
-  @BeforeEach
-  void init() {
-      hechoFTS = new HechoFTS(DAOhechos);
 
-      Hecho hecho1 = buildHecho("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia");
-      Hecho hecho2 = buildHecho("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución");
-      Hecho hecho3 = buildHecho("Femicidio", "El concepto de desconstrucción social.", "Sociedad");
-      Hecho hecho4 = buildHecho("Accidente de tránsito", "Choque en la ruta 9", "Transito");
-      Hecho hecho5 = buildHecho("Accidente laboral", "Herido en la fábrica", "Trabajo");
+  @BeforeAll
+  static void setUp() {
+      EntityManager entityManager = emf.createEntityManager();
+
+      FuenteDinamica fuenteDinamica = new FuenteDinamica();
+      Contribuyente juan = new Contribuyente(42, "Juan Martin", "DelPotro");
 
       entityManager.getTransaction().begin();
-      entityManager.persist(hecho1);
-      entityManager.persist(hecho2);
-      entityManager.persist(hecho3);
-      entityManager.persist(hecho4);
-      entityManager.persist(hecho5);
-      entityManager.flush();
+      entityManager.persist(juan);
+      entityManager.persist(fuenteDinamica);
+
+      fuenteDinamica.subirHecho(buildHechoDinamico("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("Femicidio", "El concepto de desconstrucción social.", "Sociedad", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("Accidente de tránsito", "Choque en la ruta 9", "Transito", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("Accidente laboral", "Herido en la fábrica", "Trabajo" , juan));
+
       entityManager.getTransaction().commit();
-}
+      entityManager.close();
+  }
+  @BeforeEach
+  void init() {
+    daoHechos = DAOHechos.getInstancia();
+    hechoFTS = new HechoFTS(daoHechos);
+  }
 
   @AfterEach
   void close() {
@@ -53,8 +61,8 @@ public class FullTextSearchTest {
     }
   }
 
-  private Hecho buildHecho(String titulo, String descripcion, String categoria) {
-    return new HechoBuilder()
+  private static HechoDinamico buildHechoDinamico(String titulo, String descripcion, String categoria, Contribuyente contribuyente) {
+    HechoBuilder builder = new HechoBuilder()
         .titulo(titulo)
         .descripcion(descripcion)
         .categoria(categoria)
@@ -62,24 +70,12 @@ public class FullTextSearchTest {
         .longitud(-64.1833)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .origen(Origen.CONTRIBUYENTE)
-        .build();
+        .origen(Origen.CONTRIBUYENTE);
+    return new HechoDinamico(builder, contribuyente);
   }
 
   @Test
-  void testBuscarPorTextoOrdenaPorRelevancia() throws Exception {
-    entityManager.getTransaction().begin();
-    entityManager.persist(fuenteDinamica);
-    entityManager.persist(juan);
-
-    Hecho hecho1 = buildHecho("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia");
-    Hecho hecho2 = buildHecho("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución");
-    Hecho hecho3 = buildHecho("Femicidio", "El concepto de desconstrucción social.", "Sociedad");
-
-    repositorioHechos.guardar(hecho1);
-    repositorioHechos.guardar(hecho2);
-    repositorioHechos.guardar(hecho3);
-
+  void testBuscarPorTextoOrdenaPorRelevancia(){
     List<Hecho> resultados = hechoFTS.buscar("guerra y revolución");
 
     assertFalse(resultados.isEmpty());

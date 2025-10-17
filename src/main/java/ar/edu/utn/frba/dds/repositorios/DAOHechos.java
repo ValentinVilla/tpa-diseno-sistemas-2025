@@ -83,25 +83,26 @@ public class DAOHechos {
     public List<Hecho> buscarPorTextoEnDB(String queryText) {
       Session session = entityManager.unwrap(Session.class);
       String sql = "SELECT *, ts_rank(fts_vector, plainto_tsquery('spanish', :queryText)) AS rank " +
-          "FROM hecho " +
+          "FROM hechoDinamico " +
           "WHERE fts_vector @@ plainto_tsquery('spanish', :queryText) " +
           "ORDER BY rank DESC";
-      NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
+      NativeQuery<HechoDinamico> query = session.createNativeQuery(sql, HechoDinamico.class);
       query.setParameter("queryText", queryText);
-      return query.getResultList();
+
+      return new ArrayList<>(query.getResultList());
     }
 
     public List<Hecho> buscarPorSimilitud(String queryText) {
       Session session = entityManager.unwrap(Session.class);
 
       String sql = "SELECT *, similarity(titulo, :queryText) AS sim " +
-          "FROM hecho " +
+          "FROM hechoDinamico " +
           "WHERE similarity(titulo, :queryText) > 0.1 " +
           "ORDER BY sim DESC";
 
-      NativeQuery<Hecho> query = session.createNativeQuery(sql, Hecho.class);
+      NativeQuery<HechoDinamico> query = session.createNativeQuery(sql, HechoDinamico.class);
       query.setParameter("queryText", queryText);
-      return query.getResultList();
+      return new ArrayList<>(query.getResultList());
     }
 
     //------------------- GESTOR LAS ELIMINACIONES APROBADAS --------------------//

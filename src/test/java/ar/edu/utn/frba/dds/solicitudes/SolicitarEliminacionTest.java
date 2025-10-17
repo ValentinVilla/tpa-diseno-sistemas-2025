@@ -28,7 +28,7 @@ public class SolicitarEliminacionTest {
         .build();
 
     DetectorDeSpam detectorSiempreTrue = texto -> true;
-    SolicitudEliminacion solicitudEliminacion = new SolicitudEliminacion("spam", hecho ,detectorSiempreTrue);
+    SolicitudEliminacion solicitudEliminacion = new SolicitudEliminacion(hecho ,"spam", detectorSiempreTrue);
 
     assertEquals(EstadoSolicitud.RECHAZADA, solicitudEliminacion.getEstado());
   }
