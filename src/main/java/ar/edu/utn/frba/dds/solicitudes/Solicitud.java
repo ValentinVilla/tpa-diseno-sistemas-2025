@@ -58,13 +58,6 @@ public abstract class Solicitud {
     return textoFundamentacion;
   }
 
-  //refactorizar
-  /*
-  public Hecho getHecho() {
-    return hecho;
-  }
- */
-
   public EstadoSolicitud getEstado() {
     return estado;
   }

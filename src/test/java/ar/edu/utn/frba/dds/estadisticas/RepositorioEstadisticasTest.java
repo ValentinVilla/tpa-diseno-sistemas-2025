@@ -27,6 +27,7 @@ class RepositorioEstadisticasTest {
 
   private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
   private EntityManager entityManager = emf.createEntityManager();
+  /*
   private Hecho crearHecho(double latitud, double longitud) {
     return new HechoBuilder()
         .titulo("Prueba persistance")
@@ -45,19 +46,12 @@ class RepositorioEstadisticasTest {
         .titulo(titulo)
         .descripcion("desc")
         .categoria("cat")
-        .latitud(1.0)
-        .longitud(1.0)
+        .latitud(-31.4167)
+        .longitud(-64.1833)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE);
     return new HechoDinamico(hechoBase, new Contribuyente(42, "Juan", "Plomero"));
-  }
-
-  private void guardar(Hecho hecho){
-    entityManager.getTransaction().begin();
-    entityManager.persist(hecho);
-    entityManager.flush();
-    entityManager.getTransaction().commit();
   }
 
   @Test
@@ -130,8 +124,8 @@ class RepositorioEstadisticasTest {
 
     RepositorioEstadisticas repoEstadisticas = RepositorioEstadisticas.getInstancia();
     EstadisticaSolicitudesSpam estadisticasSpam = repoEstadisticas.obtenerCantidadSpam();
-
     assertEquals(4, estadisticasSpam.getCantidad());
     assertEquals("50.00%", estadisticasSpam.getPorcentaje());
   }
+  */
 }

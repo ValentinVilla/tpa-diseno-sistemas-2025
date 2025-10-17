@@ -37,47 +37,64 @@ public class DAOHechos {
     // Para matchear a los hechos que cumplen las solicitudes
     public void actualizarVisibilidadPorTexto(String hechoBuscado, boolean visible) {
       EntityTransaction transaction = getEntity();
-      transaction.begin();
-      Session session = entityManager.unwrap(Session.class);
-      String sql = """
+      try {
+        transaction.begin();
+        Session session = entityManager.unwrap(Session.class);
+        String sql = """
           UPDATE hechoDinamico
           SET visible = :visible
           WHERE fts_vector @@ plainto_tsquery('spanish', :queryText)
       """;
-      NativeQuery<?> query = session.createNativeQuery(sql);
-      query.setParameter("visible", visible);
-      query.setParameter("queryText", hechoBuscado);
-      query.executeUpdate();
+        NativeQuery<?> query = session.createNativeQuery(sql);
+        query.setParameter("visible", visible);
+        query.setParameter("queryText", hechoBuscado);
+        query.executeUpdate();
+        transaction.commit();
+      } catch(Exception e) {
+        if (transaction.isActive()) {
+          transaction.rollback();
+        }
+        throw e;
+      }
     }
 
     public void actualizarHechoModificado(String hechoBuscado, String valoresActualizacion){
       String[] camposHecho = valoresActualizacion.split(";");
       LocalDate fechaModificacion = LocalDate.now();
-
-      Session session = entityManager.unwrap(Session.class);
-      String sql = """
-          UPDATE hechoDinamico
-          SET titulo = :camposHecho[0],
-              descripcion = :camposHecho[1],
-              categoria = :camposHecho[2],
-              latitud = :camposHecho[3],
-              longitud = :camposHecho[4],
-              fechaAcontecimiento= :camposHecho[5],
-              provincia = :camposHecho[6],
-              fechaModificacion = :fechaModiciacion
-          WHERE fts_vector @@ plainto_tsquery('spanish', :hechoBuscado)
-      """;
-      NativeQuery<?> query = session.createNativeQuery(sql);
-      query.setParameter("titulo", camposHecho[0]);
-      query.setParameter("descripcion", camposHecho[1]);
-      query.setParameter("categoria", camposHecho[2]);
-      query.setParameter("latitud", camposHecho[3]);
-      query.setParameter("longitud", camposHecho[4]);
-      query.setParameter("fechaAcontecimiento", camposHecho[5]);
-      query.setParameter("provincia", camposHecho[6]);
-      query.setParameter("fechaModificacion", fechaModificacion);
-      query.setParameter("queryText", hechoBuscado);
-      query.executeUpdate();
+      EntityTransaction transaction = getEntity();
+      try {
+        transaction.begin();
+        Session session = entityManager.unwrap(Session.class);
+        String sql = """
+            UPDATE hechoDinamico
+            SET titulo = :camposHecho[0],
+                descripcion = :camposHecho[1],
+                categoria = :camposHecho[2],
+                latitud = :camposHecho[3],
+                longitud = :camposHecho[4],
+                fechaAcontecimiento= :camposHecho[5],
+                provincia = :camposHecho[6],
+                fechaModificacion = :fechaModiciacion
+            WHERE fts_vector @@ plainto_tsquery('spanish', :hechoBuscado)
+        """;
+        NativeQuery<?> query = session.createNativeQuery(sql);
+        query.setParameter("titulo", camposHecho[0]);
+        query.setParameter("descripcion", camposHecho[1]);
+        query.setParameter("categoria", camposHecho[2]);
+        query.setParameter("latitud", camposHecho[3]);
+        query.setParameter("longitud", camposHecho[4]);
+        query.setParameter("fechaAcontecimiento", camposHecho[5]);
+        query.setParameter("provincia", camposHecho[6]);
+        query.setParameter("fechaModificacion", fechaModificacion);
+        query.setParameter("queryText", hechoBuscado);
+        query.executeUpdate();
+        transaction.commit();
+      } catch(Exception e) {
+        if (transaction.isActive()) {
+          transaction.rollback();
+        }
+        throw e;
+      }
     }
 
     public List<Hecho> buscarPorTextoEnDB(String queryText) {
