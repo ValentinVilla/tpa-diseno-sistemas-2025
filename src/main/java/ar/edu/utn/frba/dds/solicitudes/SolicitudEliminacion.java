@@ -13,7 +13,7 @@ public class SolicitudEliminacion extends Solicitud {
   public SolicitudEliminacion() {
   }
 
-  public SolicitudEliminacion(String textoFundamentacion, Hecho hecho, DetectorDeSpam detector) {
+  public SolicitudEliminacion(Hecho hecho, String textoFundamentacion, DetectorDeSpam detector) {
     super(hecho, textoFundamentacion, detector);
   }
 

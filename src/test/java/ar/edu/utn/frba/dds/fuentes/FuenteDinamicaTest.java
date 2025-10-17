@@ -30,7 +30,7 @@ public class FuenteDinamicaTest {
 
   private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
   private EntityManager entityManager = emf.createEntityManager();
-
+  private Contribuyente juan = new Contribuyente(40,"juan", "perez");
 
   private HechoDinamico crearHecho(String titulo) {
     HechoBuilder hechoBase = new HechoBuilder()

@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,12 +12,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SolicitudSubidaTest {
 
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+  private EntityManager entityManager = emf.createEntityManager();
   private HechoDinamico hecho;
+  private FuenteDinamica fuenteDinamica = new FuenteDinamica();;
+  private Contribuyente pablito = new Contribuyente(16, "Pablo", "Perez");
   private SolicitudSubida solicitud;
 
   @BeforeEach
@@ -35,7 +43,7 @@ public class SolicitudSubidaTest {
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE);
-    return new HechoDinamico(hechoBase, pablito = new Contribuyente(16, "Pablo", "Perez"));
+    return new HechoDinamico(hechoBase, pablito);
   }
 
   //esta cheackeado que si hace lo que se le pide pero falla por ordenes de persistencia (preguntarle a tomi)

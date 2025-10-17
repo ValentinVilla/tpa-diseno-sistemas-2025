@@ -37,8 +37,6 @@ public class Hecho {
   protected LocalDateTime fechaCarga;
   protected Origen origen;
   protected boolean consensuado = false;
-  protected LocalDate fechaModificacion;
-  protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
   private String provincia;
 
   public Hecho() {}
@@ -54,14 +52,6 @@ public class Hecho {
     this.origen = builder.getOrigen();
   }
 
-  /*public void agregarSolicitud(SolicitudEliminacion solicitud) {
-    this.solicitudes.add(solicitud);
-  }
-  */
-
-  /*public List<SolicitudEliminacion> getSolicitudes() {
-    return this.solicitudes;
-  }*/
 
   public boolean cumpleCon(Filtro filtro) {
     return filtro.cumple(this);
@@ -131,6 +121,10 @@ public class Hecho {
 
   public String getProvincia() {
     return this.provincia;
+  }
+
+  public long getId() {
+    return id;
   }
 }
 

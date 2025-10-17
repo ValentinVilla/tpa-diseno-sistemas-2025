@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -18,7 +19,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 class RepositorioEstadisticasTest {
+
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+  private EntityManager entityManager = emf.createEntityManager();
   private Hecho crearHecho(double latitud, double longitud) {
     return new HechoBuilder()
         .titulo("Prueba persistance")
@@ -46,9 +54,6 @@ class RepositorioEstadisticasTest {
   }
 
   private void guardar(Hecho hecho){
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-    EntityManager entityManager = emf.createEntityManager();
-
     entityManager.getTransaction().begin();
     entityManager.persist(hecho);
     entityManager.flush();
@@ -63,11 +68,6 @@ class RepositorioEstadisticasTest {
     Hecho h4 = crearHecho(-31.6333, -60.7000);
 
     DAOHechos repoHechos = DAOHechos.getInstancia();
-
-    repoHechos.guardar(h1);
-    repoHechos.guardar(h2);
-    repoHechos.guardar(h3);
-    repoHechos.guardar(h4);
 
     Coleccion coleccion = new Coleccion() {
       @Override
@@ -108,18 +108,15 @@ class RepositorioEstadisticasTest {
 
   @Test
   public void porcetajeDeSpamEsDel50() throws Exception {
-    Hecho hecho = crearHecho(-31.4167, -64.1833);
-
-    DAOHechos repoHechos = DAOHechos.getInstancia();
-    repoHechos.guardar(hecho);
+    HechoDinamico hecho = crearHechoDinamico("hecho dinamico de prueba");
 
     DetectorDeSpam detectorSiempreTrue = texto -> true;
-    SolicitudEliminacion s1 = new SolicitudEliminacion("spam", hecho ,detectorSiempreTrue);
-    SolicitudEliminacion s2 = new SolicitudEliminacion("spam", hecho ,detectorSiempreTrue);
+    SolicitudEliminacion s1 = new SolicitudEliminacion(hecho, "spam", detectorSiempreTrue);
+    SolicitudEliminacion s2 = new SolicitudEliminacion(hecho, "spam", detectorSiempreTrue);
 
     DetectorDeSpam detectorSiempreFalse = texto -> false;
-    SolicitudEliminacion s3 = new SolicitudEliminacion("no es spam", hecho ,detectorSiempreFalse);
-    SolicitudEliminacion s4 = new SolicitudEliminacion("no es spam", hecho ,detectorSiempreFalse);
+    SolicitudEliminacion s3 = new SolicitudEliminacion(hecho, "spam", detectorSiempreFalse);
+    SolicitudEliminacion s4 = new SolicitudEliminacion(hecho, "spam", detectorSiempreFalse);
 
     SolicitudModificacion sModificacion = new SolicitudModificacion(hecho, "no se cuenta en la estadistica",detectorSiempreTrue, hecho);
 

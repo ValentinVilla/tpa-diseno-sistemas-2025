@@ -3,8 +3,10 @@ package db;
 import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.Origen;
 import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.servicios.HechoFTS;
 import ar.edu.utn.frba.dds.repositorios.DAOHechos;
+import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 import org.junit.jupiter.api.*;
 
 import javax.persistence.EntityManager;
@@ -18,16 +20,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FullTextSearchTest {
 
-  private static EntityManagerFactory emf;
-  private EntityManager em;
+  private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");;
+  private EntityManager entityManager = emf.createEntityManager();
   private DAOHechos DAOhechos;
   private HechoFTS hechoFTS;
-
+  private FuenteDinamica fuenteDinamica = new FuenteDinamica();
+  private Contribuyente juan = new Contribuyente(40,"juan", "perez");
   @BeforeEach
   void init() {
-      EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-      EntityManager entityManager = emf.createEntityManager();
-
       hechoFTS = new HechoFTS(DAOhechos);
 
       Hecho hecho1 = buildHecho("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia");
@@ -48,8 +48,8 @@ public class FullTextSearchTest {
 
   @AfterEach
   void close() {
-    if (em != null) {
-      em.close();
+    if (entityManager != null) {
+      entityManager.close();
     }
   }
 
@@ -68,6 +68,10 @@ public class FullTextSearchTest {
 
   @Test
   void testBuscarPorTextoOrdenaPorRelevancia() throws Exception {
+    entityManager.getTransaction().begin();
+    entityManager.persist(fuenteDinamica);
+    entityManager.persist(juan);
+
     Hecho hecho1 = buildHecho("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia");
     Hecho hecho2 = buildHecho("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución");
     Hecho hecho3 = buildHecho("Femicidio", "El concepto de desconstrucción social.", "Sociedad");

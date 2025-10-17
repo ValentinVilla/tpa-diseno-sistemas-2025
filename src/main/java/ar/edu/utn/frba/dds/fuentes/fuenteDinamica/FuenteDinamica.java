@@ -6,8 +6,11 @@ import ar.edu.utn.frba.dds.dominio.Hecho;
 import ar.edu.utn.frba.dds.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.repositorios.DAOHechos;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechosEliminados;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.solicitudes.SolicitudSubida;
 import ar.edu.utn.frba.dds.usuarios.Contribuyente;
 
 import javax.persistence.CascadeType;
@@ -16,7 +19,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +44,6 @@ public class FuenteDinamica extends Fuente {
     RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
     repoSolicitudes.guardar(soliciudSubida);
   }
-
-/*
-//  public void subirHecho(int idContribuyenteCreador, HechoDinamico hecho) {
-//    hecho.setIdContribuyenteCreador(idContribuyenteCreador);
-//    repositorioHechos.guardar(this, hecho); //repostiro fuentes?? y seria guardar en la fuente
-//    //crear solicitud subida
-//  }
-*/
 
   public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
     if (!puedeModificar(hechoOriginal, hechoNuevo.getContribuyente())) {

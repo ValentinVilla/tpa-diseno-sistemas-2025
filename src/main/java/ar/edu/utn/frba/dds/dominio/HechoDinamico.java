@@ -16,8 +16,6 @@ import java.time.temporal.ChronoUnit;
 public class HechoDinamico extends Hecho {
   @ManyToOne
   private Contribuyente contribuyente;//en teoria no puede ser null pero esa validacion la debemos realizar a nivel dominio
-  @Id
-  private Long id;
 
   private boolean visible = false;
 
@@ -63,10 +61,6 @@ public class HechoDinamico extends Hecho {
         this.setProvincia("Desconocida");
       }
     }
-  }
-
-  public void setModificacion() {
-    this.fechaModificacion = LocalDate.now();
   }
 
 }
