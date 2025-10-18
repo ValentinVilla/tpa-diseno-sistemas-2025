@@ -2,19 +2,13 @@ package ar.edu.utn.frba.dds.model.dominio;
 
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.filtros.Filtro;
-import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-
 
 @MappedSuperclass
 public class Hecho {
@@ -32,8 +26,6 @@ public class Hecho {
   protected LocalDateTime fechaCarga;
   protected Origen origen;
   protected boolean consensuado = false;
-  protected LocalDate fechaModificacion;
-  //protected final List<SolicitudEliminacion> solicitudes = new ArrayList<>();
   private String provincia;
 
   public Hecho() {}
@@ -49,14 +41,6 @@ public class Hecho {
     this.origen = builder.getOrigen();
   }
 
-  /*public void agregarSolicitud(SolicitudEliminacion solicitud) {
-    this.solicitudes.add(solicitud);
-  }
-  */
-
-  /*public List<SolicitudEliminacion> getSolicitudes() {
-    return this.solicitudes;
-  }*/
 
   public boolean cumpleCon(Filtro filtro) {
     return filtro.cumple(this);
@@ -132,3 +116,5 @@ public class Hecho {
     return id;
   }
 }
+
+

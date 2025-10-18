@@ -1,15 +1,20 @@
 package ar.edu.utn.frba.dds.server;
 
 import ar.edu.utn.frba.dds.controllers.ColeccionesController;
+import ar.edu.utn.frba.dds.controllers.HechosController;
 import ar.edu.utn.frba.dds.controllers.SesionesController;
 import ar.edu.utn.frba.dds.controllers.UsuariosController;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import io.javalin.Javalin;
+import io.javalin.http.Handler;
 
+import java.util.List;
 import java.util.Map;
 
 public class Router  {
   UsuariosController usuariosController = new UsuariosController();
   ColeccionesController coleccionesController = new ColeccionesController();
+  HechosController hechosController = new HechosController();
   //SesionesController sesionesController = new SesionesController(); todo:si lo pongo rompe todo
 
   public void configure(Javalin app) {
@@ -25,5 +30,6 @@ public class Router  {
     app.post("/register", ctx -> usuariosController.crearUsuario(ctx));
     //app.post("/usuarios", ctx -> usuariosController.crearUsuario(ctx)); todo: implementar con repo y todo
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
+    app.get("/hechos", hechosController::mostrarHechos);
   }
 }

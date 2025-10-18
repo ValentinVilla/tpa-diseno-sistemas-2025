@@ -7,10 +7,10 @@ import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
-import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
-import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 
 import javax.persistence.CascadeType;
@@ -38,20 +38,11 @@ public class FuenteDinamica extends Fuente {
     hecho.revisarubicacion();
     hechosDinamicos.add(hecho);
 
-    //crear solicitud subida
     Solicitud soliciudSubida = new SolicitudSubida(hecho, "", new ImplementadorSpam(10));
 
     RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
     repoSolicitudes.guardar(soliciudSubida);
   }
-
-/*
-//  public void subirHecho(int idContribuyenteCreador, HechoDinamico hecho) {
-//    hecho.setIdContribuyenteCreador(idContribuyenteCreador);
-//    repositorioHechos.guardar(this, hecho); //repostiro fuentes?? y seria guardar en la fuente
-//    //crear solicitud subida
-//  }
-*/
 
   public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
     if (!puedeModificar(hechoOriginal, hechoNuevo.getContribuyente())) {
@@ -60,12 +51,11 @@ public class FuenteDinamica extends Fuente {
       SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal, textoArg, new ImplementadorSpam(15),hechoNuevo);
       RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
       repoSolicitudes.guardar(solicitudModificacion);
-      //crea solicitud y esa solicitud espera a ser aceptada por un administrador, una vez que se acepta la solicitud se pone en visible el nuevo y se pone en no visible el anterior
     }
   }
 
   public void solicitarEliminacionHecho(HechoDinamico hecho){
-    Solicitud soliciudEliminacion = new SolicitudEliminacion("", hecho, new ImplementadorSpam(10));
+    Solicitud soliciudEliminacion = new SolicitudEliminacion(hecho, "", new ImplementadorSpam(10));
 
     RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
     repoSolicitudes.guardar(soliciudEliminacion);

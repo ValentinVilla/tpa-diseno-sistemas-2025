@@ -1,13 +1,11 @@
 package ar.edu.utn.frba.dds.model.dominio;
 
+
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.servicios.GeorefAPI;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
-
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -15,9 +13,7 @@ import java.time.temporal.ChronoUnit;
 @Entity
 public class HechoDinamico extends Hecho {
   @ManyToOne
-  private Contribuyente contribuyente;
-  @Id
-  private Long id;
+  private Contribuyente contribuyente;//en teoria no puede ser null pero esa validacion la debemos realizar a nivel dominio
 
   private boolean visible = false;
 
@@ -64,9 +60,4 @@ public class HechoDinamico extends Hecho {
       }
     }
   }
-
-  public void setModificacion() {
-    this.fechaModificacion = LocalDate.now();
-  }
-
 }

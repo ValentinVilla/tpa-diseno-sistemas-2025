@@ -2,20 +2,36 @@ package ar.edu.utn.frba.dds.solicitudes;
 
 import ar.edu.utn.frba.dds.model.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
+import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class SolicitudSubidaTest {
 
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+  private EntityManager entityManager = emf.createEntityManager();
   private HechoDinamico hecho;
-  private SolicitudSubida solicitud;
+  private FuenteDinamica fuenteDinamica = new FuenteDinamica();;
+  private Contribuyente pablito = new Contribuyente("pablito","Garcia", "2324455667", "Pablito@gmail.com", 18, "123456");
 
   @BeforeEach
   void setUp() {
-    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente("tobi", "juan", 1127587650, "tobi@gmail.com", 21, "micontrasenia"));
-    solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
+    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente("Gonzalo","Garcia", "2324455667", "gonza@gmail.com", 18, "123456"));
+    SolicitudSubida solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
   }
 
   private HechoDinamico crearHecho(String titulo) {
@@ -28,7 +44,7 @@ public class SolicitudSubidaTest {
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE);
-    return new HechoDinamico(hechoBase, pablito = new Contribuyente(16, "Pablo", "Perez"));
+    return new HechoDinamico(hechoBase, pablito);
   }
 
   //esta cheackeado que si hace lo que se le pide pero falla por ordenes de persistencia (preguntarle a tomi)

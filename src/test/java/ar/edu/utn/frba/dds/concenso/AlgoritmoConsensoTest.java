@@ -1,8 +1,8 @@
 package ar.edu.utn.frba.dds.concenso;
 
 import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
-import ar.edu.utn.frba.dds.model.dominio.Origen;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
@@ -21,9 +21,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AlgoritmoConsensoTest {
-    private AlgoritmoConsenso algoritmoConsenso;
-    private final ArrayList<Fuente> fuentes =  new ArrayList<>();
-    private Hecho hecho;
+  private AlgoritmoConsenso algoritmoConsenso;
+  private final ArrayList<Fuente> fuentes =  new ArrayList<>();
+  private Hecho hecho;
 
 
   @BeforeEach
@@ -44,7 +44,6 @@ public class AlgoritmoConsensoTest {
         .fechaAcontecimiento(LocalDateTime.of(2025, 8, 20, 23, 59, 59))
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CONTRIBUYENTE)
-        .visible(true)
         .build();
 
   }

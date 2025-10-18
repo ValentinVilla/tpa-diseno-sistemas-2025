@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +29,7 @@ public class FuenteDinamicaTest {
 
   private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
   private EntityManager entityManager = emf.createEntityManager();
-
+  private Contribuyente juan = new Contribuyente("Gonzalo","Garcia", "2324455667", "gonza@gmail.com", 18, "123456");
 
   private HechoDinamico crearHecho(String titulo) {
     HechoBuilder hechoBase = new HechoBuilder()
@@ -86,7 +85,7 @@ public class FuenteDinamicaTest {
     HechoDinamico original = crearHecho("original");
     fuente.subirHecho(original);
 
-    Contribuyente tomas = new Contribuyente(41,"tomas", "perez");
+    Contribuyente tomas = new Contribuyente("Gonzalo","Garcia", "2324455667", "gonza@gmail.com", 18, "123456");
 
     HechoBuilder Builder = new HechoBuilder()
         .titulo("malicioso")

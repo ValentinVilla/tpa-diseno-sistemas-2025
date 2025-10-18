@@ -1,9 +1,10 @@
-const map = L.map('map').setView([-34.6037, -58.3816], 12);
+const map = L.map('map').setView([-34.6037, -58.3816], 5);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
+
 
 const hechos = [
     {
@@ -34,17 +35,28 @@ const hechos = [
 
 
 /*
-LA IDEA OBVIAMENTE A HACERLO CONTRA LA API, PERO NO ESTA DE MOMENTO
-fetch('/api/hechos')
+fetch('/hechos')
     .then(res => res.json())
     .then(hechos => {
+        if (hechos.length === 0) {
+            console.warn("No hay hechos con coordenadas para mostrar.");
+        }
         hechos.forEach(h => {
+            const contenido = `
+                <strong>${h.titulo}</strong><br>
+                <em>Categoría:</em> ${h.categoria}<br>
+                <em>Fecha:</em> ${h.fecha}<br>
+                <p>${h.descripcion}</p>
+            `;
+
             L.marker([h.lat, h.lon])
                 .addTo(map)
-                .bindPopup(`<strong>${h.titulo}</strong>`);
+                .bindPopup(contenido);
         });
-    });
+    })
+    .catch(err => console.error("Error cargando los hechos:", err));
 */
+
 
 hechos.forEach(h => {
     const contenido = `

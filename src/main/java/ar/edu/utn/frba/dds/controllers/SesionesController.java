@@ -7,7 +7,6 @@ import java.util.Map;
 import ar.edu.utn.frba.dds.repositorios.RepositorioUsuarios;
 
 public class SesionesController {
-    RepositorioUsuarios repositorioUsuarios;
 
     public void mostrar(Context ctx) {
         Map<String, Object> modelo = new HashMap<>();
@@ -20,7 +19,7 @@ public class SesionesController {
 
     public void crear(Context ctx){
         try{
-            var usuario = repositorioUsuarios.getInstancia().buscarUsuario(
+            var usuario = RepositorioUsuarios.getInstancia().buscarUsuario(
                 ctx.formParam("nombre"),
                 ctx.formParam("contrasenia")
             );
@@ -32,9 +31,4 @@ public class SesionesController {
             ctx.redirect("/loguin?error=true");
         }//hay otra opcion mas...
     }
-
-    public SesionesController(){
-        this.repositorioUsuarios = RepositorioUsuarios.getInstancia();
-    }
-
 }
