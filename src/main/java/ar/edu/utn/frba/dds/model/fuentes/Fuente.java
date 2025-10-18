@@ -24,4 +24,3 @@ public abstract class Fuente {
   public abstract ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros);
   public abstract List<Fuente> getFuente();
 }
-
