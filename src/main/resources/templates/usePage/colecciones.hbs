@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Colecciones</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+        }
+
+        .coleccion {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .titulo {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0070f3;
+        }
+
+        .desc {
+            color: #555;
+            margin: 0.5rem 0;
+        }
+
+        .info {
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<h1>📚 Colecciones</h1>
+
+<div class="section-header">
+    <h2 class="section-title">Nuestras Colecciones</h2>
+</div>
+
+{{#each colecciones}}
+    <section class="collections-section">
+        <div class="collections-grid">
+            <article class="collection-card">
+                <div class="card-content">
+                    <h3 class="card-title">titulo</h3>
+                    <p class="card-description">descripcion</p>
+                    <div class="card-meta">
+                        <span class="meta-item">fechaCarga</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-count">124 items</span>
+                        <button class="card-btn">Ver más</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+{{/each}}
+</body>
+</html>

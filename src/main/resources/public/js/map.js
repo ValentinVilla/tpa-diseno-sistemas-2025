@@ -1,4 +1,8 @@
+if (L.DomUtil.get('map') != null) {
+    L.DomUtil.get('map')._leaflet_id = null; // resetea el div
+}
 const map = L.map('map').setView([-34.6037, -58.3816], 5);
+
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,

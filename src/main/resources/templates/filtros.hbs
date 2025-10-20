@@ -1,0 +1,43 @@
+
+    <div class="sidebar-header">
+        <h2>Hechos</h2>
+        <button class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Nuevo Hecho
+        </button>
+    </div>
+
+    <div class="filtros">
+        <div class="filtro-group">
+            <label for="busqueda" class="label">Búsqueda</label>
+            <input type="text" id="busqueda" class="input" placeholder="Buscar hechos...">
+        </div>
+
+        <div class="filtro-group">
+            <label for="categoria" class="label">Categoría</label>
+            <input type="text" id="categoria" class="input" placeholder="Ingrese la categoria...">
+        </div>
+
+        <div class="filtro-group">
+            <label for="coleccion" class="label">Colección</label>
+            <select id="coleccion" class="select">
+                <option value="">Todas las colecciones</option>
+                <option value="1">Que las busque el back y me traiga</option>
+            </select>
+        </div>
+
+        <div class="filtro-group-row">
+            <div class="filtro-group">
+                <label for="fechaDesde" class="label">Desde</label>
+                <input type="date" id="fechaDesde" class="input">
+            </div>
+            <div class="filtro-group">
+                <label for="fechaHasta" class="label">Hasta</label>
+                <input type="date" id="fechaHasta" class="input">
+            </div>
+        </div>
+
+        <button class="btn btn-ghost">Aplicar Filtros</button>
+    </div>
