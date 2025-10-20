@@ -104,6 +104,8 @@ public class Coleccion {
   public void setTitulo(String nuevoTitulo) {
     this.titulo = nuevoTitulo;
   }
+
+  public Filtro getCriterio(){
+    return criterioPertenencia;
+  }
 }
-
-
