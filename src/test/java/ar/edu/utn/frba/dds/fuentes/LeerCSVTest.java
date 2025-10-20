@@ -57,21 +57,12 @@ public class LeerCSVTest {
 
   @Test
   void administradorPuedeCrearUnaColeccion() throws IOException {
-    Path tempFile = Files.createTempFile("hechos", ".csv");
-    try (FileWriter writer = new FileWriter(tempFile.toFile())) {
-      writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
-      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15 00:47:32.474046\n");
-      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16 00:47:32.474046\n");
-    } catch (IOException e) {
-        throw new RuntimeException(e);
-    }
-
     ArrayList<String> campos = new ArrayList<>(List.of(
-        "Título", "Descripción", "Latitud", "Longitud", "Fecha del hecho"
+        "titulo","descripcion","latitud","longitud","fechaHecho"
     ));
 
     FiltroCategoria filtro = new FiltroCategoria("Emergencia");
-    FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
+    FuenteEstatica fuente = new FuenteEstatica("/home/berty/UTN/DSI/tpa-2025-04/Diagramas/hechos_argentina.csv", "Emergencia", campos);
     AlgoritmoConsenso algoritmo = AlgoritmoConsenso.DEFAULT;
 
     RepositorioColecciones repoColeccion = RepositorioColecciones.getInstancia();
@@ -97,9 +88,9 @@ public class LeerCSVTest {
   @Test
   void cargarHechosDesdeArchivoCSV() {
     ArrayList<String> campos = new ArrayList<>(List.of(
-        "titulo", "descripcion", "latitud", "longitud", "fechaHecho"
+        "titulo","descripcion","latitud","longitud","fechaHecho"
     ));
-    FuenteEstatica fuente = new FuenteEstatica("Diagramas/hechosChico.csv", "Testing con el berty", campos);
+    FuenteEstatica fuente = new FuenteEstatica("/home/berty/UTN/DSI/tpa-2025-04/Diagramas/hechos_argentina.csv", "Testing con el berty", campos);
     ParametrosConsulta parametros = new ParametrosConsulta();
     fuente.cargarHechos(parametros);
   }

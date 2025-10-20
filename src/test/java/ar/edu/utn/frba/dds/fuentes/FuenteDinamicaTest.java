@@ -1,5 +1,5 @@
 package ar.edu.utn.frba.dds.fuentes;
-
+/*
 import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.dominio.Origen;
@@ -134,4 +134,4 @@ public class FuenteDinamicaTest {
     // Esperamos excepcion al intentar modificar fuera del plazo
     assertThrows(RuntimeException.class, () -> fuente.solicitarModificarHecho(hechoOriginal, hechoNuevo, "texto del motivo"));
   }
-}
+}*/

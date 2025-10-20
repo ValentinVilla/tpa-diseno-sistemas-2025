@@ -97,7 +97,7 @@ public class LectorCSV {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
       return LocalDateTime.parse(valor, formatter);
     } catch (Exception e) {
-      return null;
+      throw new RuntimeException("Error parseando fecha: " + valor, e);
     }
   }
 }

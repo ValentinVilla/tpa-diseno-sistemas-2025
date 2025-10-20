@@ -428,8 +428,8 @@ body {
     height: 500px;
     border-radius: 1rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    margin: 0 auto;
     z-index: 10;
+    margin: 0 auto var(--spacing-3xl);
 }
 
 @media (min-width: 768px) {

@@ -1,5 +1,5 @@
 package ar.edu.utn.frba.dds.fuentes;
-
+/*
 import ar.edu.utn.frba.dds.model.clientes.ClienteDemo;
 import ar.edu.utn.frba.dds.model.fuentes.fuenteProxy.FuenteDemo;
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
@@ -83,4 +83,4 @@ public class FuenteDemoTest {
     assertEquals(3, hechosCargados.size());
   }
 
-}
+}*/

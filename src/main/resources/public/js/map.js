@@ -6,35 +6,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 
-const hechos = [
-    {
-        titulo: "Incendio forestal en Córdoba",
-        lat: -31.4201,
-        lon: -64.1888,
-        descripcion: "Foco de incendio reportado en zona montañosa, sin víctimas hasta el momento.",
-        categoria: "Incendio forestal",
-        fecha: "2025-01-15"
-    },
-    {
-        titulo: "Contaminación del río Reconquista",
-        lat: -34.6090,
-        lon: -58.3950,
-        descripcion: "Vertido de residuos industriales detectado en el cauce del río.",
-        categoria: "Contaminación",
-        fecha: "2025-02-10"
-    },
-    {
-        titulo: "Desaparición forzada",
-        lat: -34.6150,
-        lon: -58.3800,
-        descripcion: "Se reporta desaparición de persona en zona urbana, se buscan testigos.",
-        categoria: "Derechos Humanos",
-        fecha: "2025-03-05"
-    }
-];
-
-
-/*
 fetch('/hechos')
     .then(res => res.json())
     .then(hechos => {
@@ -54,19 +25,4 @@ fetch('/hechos')
                 .bindPopup(contenido);
         });
     })
-    .catch(err => console.error("Error cargando los hechos:", err));
-*/
-
-
-hechos.forEach(h => {
-    const contenido = `
-        <strong>${h.titulo}</strong><br>
-        <em>Categoría:</em> ${h.categoria}<br>
-        <em>Fecha:</em> ${h.fecha}<br>
-        <p>${h.descripcion}</p>
-    `;
-
-    L.marker([h.lat, h.lon])
-        .addTo(map)
-        .bindPopup(contenido);
-});
+    .catch(err => console.error("Error cargando los hechos:", err));;

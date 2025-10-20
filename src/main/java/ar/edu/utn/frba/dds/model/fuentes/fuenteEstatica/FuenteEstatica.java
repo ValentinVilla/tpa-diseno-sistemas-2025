@@ -17,10 +17,10 @@ import java.util.List;
 public class FuenteEstatica extends Fuente {
   private String pathArchivo;
   private String categoria;
-  @Transient
   private ArrayList<String> campos;
 
-  public FuenteEstatica() {}
+  public FuenteEstatica() {
+  }
 
   public FuenteEstatica(String pathArchivo, String categoria, ArrayList<String> campos) {
     this.pathArchivo = pathArchivo;
@@ -30,12 +30,14 @@ public class FuenteEstatica extends Fuente {
 
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros) {
-     DAOHechos repo = DAOHechos.getInstancia();
-     ArrayList<Hecho> hechosCSV = new LectorCSV().leerDesde(pathArchivo, categoria, campos);
-     return repo.losQueNoFueronEliminados(hechosCSV);
+    DAOHechos repo = DAOHechos.getInstancia();
+    LectorCSV lector = new LectorCSV();
+    ArrayList<Hecho> hechosCSV = lector.leerDesde(this.pathArchivo, this.categoria, this.campos);
+    //return repo.losQueNoFueronEliminados(hechosCSV);
+    return hechosCSV;
   }
 
-  public List<Fuente> getFuente(){
+  public List<Fuente> getFuente() {
     return List.of(this);
   }
 }

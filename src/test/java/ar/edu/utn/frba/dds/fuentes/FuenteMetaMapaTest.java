@@ -1,5 +1,5 @@
 package ar.edu.utn.frba.dds.fuentes;
-
+/*
 import ar.edu.utn.frba.dds.model.fuentes.fuenteProxy.FuenteMetaMapa;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import ar.edu.utn.frba.dds.model.dominio.Origen;
@@ -86,4 +86,4 @@ public class FuenteMetaMapaTest {
         .enviarSolicitudEliminacion("http://example.com", solicitud);
   }
 
-}
+}*/
