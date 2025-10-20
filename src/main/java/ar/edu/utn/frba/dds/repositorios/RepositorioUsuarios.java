@@ -52,6 +52,20 @@ public class RepositorioUsuarios {
         }
     }
 
+    public Contribuyente buscarPorId(Long id){
+      if (entityManager == null){
+        System.err.println("EntityManager is null or closed");
+        return null;
+      }
+      try {
+          System.out.println("Ejecutando query y buscando contribuyente por id: " + id);
+            return entityManager.find(Contribuyente.class, id);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
 
     private  EntityTransaction getEntity() {
         return entityManager.getTransaction();
