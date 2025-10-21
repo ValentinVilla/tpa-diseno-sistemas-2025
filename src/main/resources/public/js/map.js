@@ -10,7 +10,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 
-fetch('/hechos')
+fetch('/hechosMapa')
     .then(res => res.json())
     .then(hechos => {
         if (hechos.length === 0) {

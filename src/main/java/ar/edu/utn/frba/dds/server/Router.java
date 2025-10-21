@@ -30,7 +30,9 @@ public class Router  {
     app.post("/register", ctx -> usuariosController.crearUsuario(ctx));
     //app.post("/usuarios", ctx -> usuariosController.crearUsuario(ctx)); todo: implementar con repo y todo
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
+    app.get("/hechosMapa", hechosController::hechosParaMapa);
+    app.post("/usuarios/{id}/hechos", ctx -> hechosController.crearHecho(ctx));
 
-    app.get("/layout", ctx -> ctx.render("layout.hbs",  hechosController.mostrarHechos(ctx)));
+    app.get("/hechos", ctx -> ctx.render("layout.hbs",  hechosController.mostrarHechos(ctx)));
   }
 }

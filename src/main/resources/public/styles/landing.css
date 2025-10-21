@@ -259,7 +259,7 @@ body {
 }
 
 .btn-ghost {
-    background: #69AF88;
+    background: transparent;
     color: var(--color-foreground);
 }
 
