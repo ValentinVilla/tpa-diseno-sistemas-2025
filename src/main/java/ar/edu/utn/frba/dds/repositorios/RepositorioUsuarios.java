@@ -52,6 +52,17 @@ public class RepositorioUsuarios {
         }
     }
 
+    public Contribuyente buscarPorEmail(String email){
+      try {
+          return entityManager.createQuery(
+                  "SELECT c FROM Contribuyente c WHERE c.mail = :email", Contribuyente.class)
+              .setParameter("email", email)
+              .getSingleResult();
+      } catch (Exception e) {
+          return null;
+      }
+    }
+
     public Contribuyente buscarPorId(Long id){
       if (entityManager == null){
         System.err.println("EntityManager is null or closed");

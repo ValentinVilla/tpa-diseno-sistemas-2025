@@ -4,33 +4,40 @@ import ar.edu.utn.frba.dds.controllers.ColeccionesController;
 import ar.edu.utn.frba.dds.controllers.HechosController;
 import ar.edu.utn.frba.dds.controllers.SesionesController;
 import ar.edu.utn.frba.dds.controllers.UsuariosController;
-import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import io.javalin.Javalin;
-import io.javalin.http.Handler;
 
-import java.util.List;
 import java.util.Map;
 
 public class Router  {
   UsuariosController usuariosController = new UsuariosController();
   ColeccionesController coleccionesController = new ColeccionesController();
   HechosController hechosController = new HechosController();
-  //SesionesController sesionesController = new SesionesController(); todo:si lo pongo rompe todo
+  SesionesController sesionesController = new SesionesController();
 
   public void configure(Javalin app) {
+    // --- Home ---
     app.get("/", ctx -> ctx.redirect("/home"));
-    app.get("/home", ctx -> {
-      ctx.render("home.hbs", Map.of("nombre", "Tobias"));
-    });
+    app.get("/home", sesionesController::mostrarHome);
 
-    app.get("/login", ctx -> ctx.render("login.hbs", Map.of("nombre", "Tobias")));
-    app.get("/logueo", ctx -> ctx.render("login.hbs"));
-    //app.post("/login", ctx -> ctx.render("helloworld"));
-    app.get("/register", ctx -> ctx.render("register.hbs"));
-    app.post("/register", ctx -> usuariosController.crearUsuario(ctx));
-    //app.post("/usuarios", ctx -> usuariosController.crearUsuario(ctx)); todo: implementar con repo y todo
-    app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
+    // --- Sesiones (Login) ---
+    app.get("/login", sesionesController::mostrarLogin);
+    app.get("/logueo", sesionesController::mostrarLogin);
+    app.get("/logout", sesionesController::cerrarSesion);
+          //app.get("/login", ctx -> ctx.render("login.hbs", Map.of("nombre", "Tobias")));
+          //app.get("/logueo", ctx -> ctx.render("login.hbs"));
+    app.post("/login", ctx -> sesionesController.iniciarSesion(ctx));
+
+    // --- Registro (Usuarios) ---
+    app.get("/register", usuariosController::mostrarRegistro);
+    app.post("/register", usuariosController::crearUsuario);
+
+    // --- Hechos ---
     app.get("/hechos", hechosController::mostrarHechos);
-    app.post("/usuarios/{id}/hechos", ctx -> hechosController.crearHecho(ctx));
+    app.get("/hechos/nuevo", hechosController::mostrarFormularioNuevoHecho);
+    app.post("/usuarios/{id}/hechos", hechosController::crearHecho);  // // La ruta POST que RECIBE el formulario de nuevo hecho
+
+    // --- Colecciones ---
+    app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
+
   }
 }

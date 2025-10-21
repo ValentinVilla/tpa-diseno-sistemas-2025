@@ -5,18 +5,52 @@ import io.javalin.http.Context;
 import java.util.HashMap;
 import java.util.Map;
 import ar.edu.utn.frba.dds.repositorios.RepositorioUsuarios;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 
 public class SesionesController {
 
-    public void mostrar(Context ctx) {
-        Map<String, Object> modelo = new HashMap<>();
-        if("true".equals(ctx.queryParam("error"))) {
-            modelo.put("error", "usuario o contrasenia incorrectos");
+    public void mostrarHome(Context ctx) {
+        Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
+        Map<String, Object> model = new HashMap<>();
+        if(usuario != null) {
+            model.put("nombre", usuario.getNombre());
         }
-        ctx.render("login.hbs", modelo);
+        ctx.render("home.hbs", model);
     }
 
+    public void mostrarLogin(Context ctx) {
+        Map<String, Object> model = new HashMap<>();
+        if("true".equals(ctx.queryParam("error"))) {
+            model.put("error", "Usuario o contraseña incorrectos");
+        }
+        ctx.render("login.hbs", model);
+    }
 
+    public void iniciarSesion(Context ctx) {
+        String email = ctx.formParam("email");
+        String password = ctx.formParam("password");
+
+        try {
+            Contribuyente usuario = RepositorioUsuarios.getInstancia().buscarPorEmail(email);
+
+            if (usuario != null && usuario.getPassword().equals(password)) {
+                ctx.sessionAttribute("usuario_logueado", usuario);
+                ctx.redirect("/home");
+            } else {
+                ctx.redirect("/login?error=true");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ctx.redirect("/login?error=true");
+        }
+    }
+
+    public void cerrarSesion(Context ctx) {
+        ctx.sessionAttribute("usuario_logueado", null);
+        ctx.redirect("/login");
+    }
+
+    /*
     public void crear(Context ctx){
         try{
             var usuario = RepositorioUsuarios.getInstancia().buscarUsuario(
@@ -31,4 +65,6 @@ public class SesionesController {
             ctx.redirect("/loguin?error=true");
         }//hay otra opcion mas...
     }
+    */
+
 }
