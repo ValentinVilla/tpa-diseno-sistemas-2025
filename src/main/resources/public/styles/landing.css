@@ -63,6 +63,14 @@ body {
     gap: var(--spacing-md);
 }
 
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .logo-icon {
     width: 3rem;
     height: 3rem;
