@@ -25,5 +25,9 @@ public class UsuariosController {
     repositorioUsuarios.guardar(usuarioCreado);
     ctx.redirect("/logueo");
   }
+
+  public void mostrarRegistro(Context ctx) {
+    ctx.render("register.hbs");
+  }
 }
 

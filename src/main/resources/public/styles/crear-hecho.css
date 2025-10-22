@@ -1,0 +1,76 @@
+@import "variables.css";
+
+body {
+    background: var(--color-background);
+    font-family: var(--body-font, Arial, sans-serif);
+    color: var(--color-foreground);
+}
+
+.hecho-container {
+    background: var(--color-card);
+    width: 450px;
+    margin: 60px auto;
+    padding: 30px 40px;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid var(--color-border);
+}
+
+.hecho-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--color-card-foreground);
+    font-size: var(--h2-font-size);
+}
+
+.hecho-container label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-muted-foreground);
+    font-weight: var(--font-medium);
+    font-size: var(--normal-font-size);
+}
+
+.hecho-container input[type="text"],
+.hecho-container input[type="number"],
+.hecho-container input[type="datetime-local"],
+.hecho-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-muted);
+    color: var(--color-foreground);
+    font-family: inherit;
+}
+
+.hecho-container textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+.form-row > div {
+    flex: 1;
+}
+
+.hecho-container button {
+    width: 100%;
+    padding: 10px;
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: var(--font-semi-bold);
+    cursor: pointer;
+    margin-top: var(--spacing-sm);
+}
+
+.hecho-container button:hover {
+    background: var(--color-secondary);
+}

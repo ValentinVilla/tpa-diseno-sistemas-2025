@@ -104,21 +104,13 @@ public class HechosController {
       Contribuyente contribuyente = RepositorioUsuarios.getInstancia().buscarPorId(Long.parseLong(userId));
       System.out.println("Creando hecho para el usuario: " + contribuyente.getNombre());
 
-      CreateHechoRequest req = null;
-      try {
-        req = ctx.bodyAsClass(CreateHechoRequest.class);
-        System.out.println("Request parsed as JSON into CreateHechoRequest.");
-      } catch (Exception ex) {
-        System.out.println("No JSON body parsed (or invalid JSON)." + ex.getMessage());
-      }
+      String titulo = ctx.formParam("titulo");
+      String descripcion = ctx.formParam("descripcion");
+      String categoria = ctx.formParam("categoria");
+      double latitud = Double.parseDouble(ctx.formParam("latitud"));
+      double longitud = Double.parseDouble(ctx.formParam("longitud"));
+      LocalDateTime fechaAcontecimiento = LocalDateTime.parse(ctx.formParam("fechaAcontecimiento"));
 
-      assert req != null;
-      String titulo = req.titulo;
-      String descripcion = req.descripcion;
-      String categoria = req.categoria;
-      double latitud = req.latitud;
-      double longitud = req.longitud;
-      LocalDateTime fechaAcontecimiento = LocalDateTime.parse(req.fechaAcontecimiento);
       LocalDateTime fechaCarga = LocalDateTime.now();
       Origen origen = Origen.CARGAMANUAL;
 
@@ -136,10 +128,26 @@ public class HechosController {
       FuenteDinamica fuente = new FuenteDinamica();
       fuente.subirHecho(hechoDinamico);
 
-      ctx.status(201).result("Hecho creado exitosamente.");
+      ctx.status(201);
+      ctx.redirect("/home?exi to=true");
     } catch (Exception e) {
       e.printStackTrace();
-      ctx.status(500).result("Error al crear el hecho: " + e.getMessage());
+      ctx.status(500);
+      ctx.redirect("/hechos/nuevo?error=true");
     }
   }
+
+  public void mostrarFormularioNuevoHecho(Context ctx) {
+    Contribuyente usuarioLogueado = ctx.sessionAttribute("usuario_logueado");
+    if (usuarioLogueado == null) {
+      ctx.sessionAttribute("returnTo", ctx.path()); // Guarda la URL a la que el usuario quería ir
+      ctx.redirect("/login");
+      return;
+    }
+    Long idDelUsuario = usuarioLogueado.getId();
+    Map<String, Object> model = new HashMap<>();
+    model.put("userId", idDelUsuario);
+    ctx.render("crear-hecho.hbs", model);
+  }
+
 }

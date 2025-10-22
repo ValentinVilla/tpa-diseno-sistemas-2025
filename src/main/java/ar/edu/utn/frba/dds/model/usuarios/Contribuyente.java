@@ -35,6 +35,7 @@ public class Contribuyente {
   public Integer getEdad() { return edad; }
   public String getNombre() { return nombre; }
   public String getApellido() { return apellido; }
+  public String getPassword() { return password; }
 
   public void setEdad(Integer edad) { this.edad = edad; }
   public void setNombre(String nombre) { this.nombre = nombre; }
