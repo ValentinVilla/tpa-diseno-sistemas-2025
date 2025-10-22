@@ -37,7 +37,8 @@ public class FuenteMetaMapa extends Fuente {
     } else {
       hechosMetaMapa = new ArrayList<>(cliente.obtenerHechos(urlBase, parametros));
     }
-    return repo.losQueNoFueronEliminados(hechosMetaMapa);
+    ArrayList<Hecho> hechosNoEliminados = repo.losQueNoFueronEliminados(hechosMetaMapa);
+    return filtrarHechos(hechosNoEliminados, parametros);
   }
 
   public void enviarSolicitudEliminacion(String url, SolicitudEliminacion solicitud) {

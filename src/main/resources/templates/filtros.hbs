@@ -1,42 +1,54 @@
 <div class="sidebar-header">
     <h2>Hechos</h2>
     <button id="toggle-filtros" class="btn-icon" title="Mostrar filtros">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+             stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round" class="icon icon-filter">
             <polygon points="22 3 2 3 10 12 10 19 14 21 14 12 22 3"></polygon>
         </svg>
     </button>
 </div>
 
-<div id="filtros-panel" class="filtros oculto">
-    <div class="filtro-group">
-        <label for="busqueda" class="label">Búsqueda</label>
-        <input type="text" id="busqueda" class="input" placeholder="Buscar hechos...">
-    </div>
-
-    <div class="filtro-group">
-        <label for="categoria" class="label">Categoría</label>
-        <input type="text" id="categoria" class="input" placeholder="Ingrese la categoria...">
-    </div>
-
-    <div class="filtro-group">
-        <label for="coleccion" class="label">Colección</label>
-        <select id="coleccion" class="select">
-            <option value="">Todas las colecciones</option>
-            <option value="1">Que las busque el back y me traiga</option>
-        </select>
-    </div>
-
-    <div class="filtro-group-row">
+<form action="/hechos" method="GET">
+    <div id="filtros-panel" class="filtros oculto">
         <div class="filtro-group">
-            <label for="fechaDesde" class="label">Desde</label>
-            <input type="date" id="fechaDesde" class="input">
+            <label for="busqueda" class="label">Buscar</label>
+            <input
+                    type="text"
+                    id="busqueda"
+                    name="busqueda"
+                    class="input"
+                    placeholder="Buscar hechos..."
+                    value="{{busqueda}}"
+            >
         </div>
+
         <div class="filtro-group">
-            <label for="fechaHasta" class="label">Hasta</label>
-            <input type="date" id="fechaHasta" class="input">
+            <label for="categoria" class="label">Categoría</label>
+            <input type="text" id="categoria" name="categoria" class="input" placeholder="Ingrese la categoría...">
+        </div>
+
+        <div class="filtro-group">
+            <label for="coleccion" class="label">Colección</label>
+            <select id="coleccion" name="coleccion" class="select">
+                <option value="">Todas las colecciones</option>
+                <option value="1">Que las busque el back y me traiga</option>
+            </select>
+        </div>
+
+        <div class="filtro-group-row">
+            <div class="filtro-group">
+                <label for="fechaDesde" class="label">Desde</label>
+                <input type="date" id="fechaDesde" name="fechaDesde" class="input">
+            </div>
+            <div class="filtro-group">
+                <label for="fechaHasta" class="label">Hasta</label>
+                <input type="date" id="fechaHasta" name="fechaHasta" class="input">
+            </div>
+        </div>
+        <div class="filtro-group-row">
+            <a href="/hechos" class="btn btn-clear">Limpiar filtros</a>
+            <button class="btn btn-apply" type="submit">Aplicar Filtros</button>
         </div>
     </div>
-
-    <button class="btn btn-ghost">Aplicar Filtros</button>
-</div>
+</form>

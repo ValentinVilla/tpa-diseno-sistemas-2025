@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
+import ar.edu.utn.frba.dds.model.servicios.HechoFTS;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudModificacion;
@@ -76,7 +77,13 @@ public class FuenteDinamica extends Fuente {
         hechosNoEliminados.add(hecho);
       }
     }
-    return hechosNoEliminados;
+    return filtrarHechos(hechosNoEliminados, parametros);
+  }
+
+  @Override
+  public List<Hecho> filtrarBusquedaTexto(List<Hecho> hechos, String titulo){
+    HechoFTS fullTextSearch = new HechoFTS(DAOHechos.getInstancia());
+    return fullTextSearch.buscar(titulo);
   }
 
   public List<Fuente> getFuente(){

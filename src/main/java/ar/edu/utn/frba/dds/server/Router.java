@@ -31,6 +31,7 @@ public class Router  {
 
     // --- Hechos ---
     app.get("/hechos", ctx -> ctx.render("layout.hbs",  hechosController.mostrarHechos(ctx)));
+    app.get("hechosMapa", ctx -> hechosController.hechosParaMapa(ctx));
     app.get("/hechos/nuevo", hechosController::mostrarFormularioNuevoHecho);
     app.post("/usuarios/{id}/hechos", hechosController::crearHecho);  // La ruta POST que RECIBE el formulario de nuevo hecho
 

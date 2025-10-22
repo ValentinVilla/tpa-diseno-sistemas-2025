@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.dominio.Origen;
@@ -10,15 +9,13 @@ import ar.edu.utn.frba.dds.model.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import ar.edu.utn.frba.dds.repositorios.RepositorioFuentes;
 import ar.edu.utn.frba.dds.repositorios.RepositorioUsuarios;
 import io.javalin.http.Context;
@@ -32,11 +29,30 @@ public class HechosController {
     List<Hecho> hechos = new ArrayList<>();
 
     try {
+      String busqueda = ctx.queryParam("busqueda");
+      String categoria = ctx.queryParam("categoria");
+      String fechaDesdeStr = ctx.queryParam("fechaDesde");
+      String fechaHastaStr = ctx.queryParam("fechaHasta");
+
+      ParametrosConsulta filtros = new ParametrosConsulta();
+      if(!Objects.equals(busqueda, "")){
+        filtros.setTexto(busqueda);
+      }
+      if (!Objects.equals(categoria, "")) {
+        filtros.setCategoria(categoria);
+      }
+      if (!Objects.equals(fechaDesdeStr, "") && fechaDesdeStr != null) {
+        filtros.setFechaAcontecimientoDesde(LocalDate.parse(fechaDesdeStr));
+      }
+      if (!Objects.equals(fechaHastaStr, "") && fechaHastaStr != null) {
+        filtros.setFechaAcontecimientoHasta(LocalDate.parse(fechaHastaStr));
+      }
+
       List<Fuente> fuentes = RepositorioFuentes.getInstancia().listarTodas();
 
       for (Fuente fuente : fuentes) {
         try {
-          List<Hecho> hechosFuente = fuente.cargarHechos(new ParametrosConsulta());
+          List<Hecho> hechosFuente = fuente.cargarHechos(filtros);
           hechos.addAll(hechosFuente);
         } catch (Exception ignored) {
         }
@@ -85,7 +101,6 @@ public class HechosController {
     }
   }
 
-  // DTO to map incoming JSON
   public static class CreateHechoRequest {
     public String titulo;
     public String descripcion;
@@ -149,5 +164,4 @@ public class HechosController {
     model.put("userId", idDelUsuario);
     ctx.render("crear-hecho.hbs", model);
   }
-
 }

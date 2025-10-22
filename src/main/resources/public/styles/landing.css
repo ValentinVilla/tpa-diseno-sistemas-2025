@@ -272,7 +272,44 @@ body {
 }
 
 .btn-ghost:hover {
-    background: #49A078;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.btn-clear {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    padding: 0.625rem 1.25rem;  /* menos padding que btn base */
+    font-size: 0.875rem;
+}
+
+.btn-clear:hover {
+    background-color: var(--color-primary); /* fondo al pasar el mouse */
+    color: white;                            /* texto blanco al hover */
+    transform: translateY(-1px);             /* pequeño efecto */
+}
+
+.btn-clear:active {
+    transform: translateY(0);                /* vuelve a posición original al click */
+    opacity: 0.9;                            /* efecto de pulsación */
+}
+
+.btn-apply {
+    background-color: var(--color-primary); /* fondo principal */
+    color: white;                             /* texto blanco */
+    border: 2px solid var(--color-primary);  /* borde del mismo color */
+}
+
+.btn-apply:hover {
+    background-color: white;                  /* fondo blanco al pasar mouse */
+    color: var(--color-primary);              /* texto del color principal */
+    border-color: var(--color-primary);       /* mantiene el borde */
+    transform: translateY(-1px);             /* pequeño efecto */
+}
+
+.btn-apply:active {
+    transform: translateY(0);                 /* vuelve a posición original al click */
+    opacity: 0.9;                             /* efecto de pulsación */
 }
 
 /*=============================*/

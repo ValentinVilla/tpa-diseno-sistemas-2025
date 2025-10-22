@@ -5,15 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParametrosConsulta {
-  private final String categoria;
-  private final LocalDate fechaReporteDesde;
-  private final LocalDate fechaReporteHasta;
-  private final LocalDate fechaAcontecimientoDesde;
-  private final LocalDate fechaAcontecimientoHasta;
-  private final String ubicacion;
-  private final Long coleccionId;
+  private String texto;
+  private String categoria;
+  private LocalDate fechaReporteDesde;
+  private LocalDate fechaReporteHasta;
+  private LocalDate fechaAcontecimientoDesde;
+  private LocalDate fechaAcontecimientoHasta;
+  private String ubicacion;
+  private Long coleccionId;
 
   public ParametrosConsulta() {
+    this.texto = null;
     this.categoria = null;
     this.fechaReporteDesde = null;
     this.fechaReporteHasta = null;
@@ -21,22 +23,6 @@ public class ParametrosConsulta {
     this.fechaAcontecimientoHasta = null;
     this.ubicacion = null;
     this.coleccionId = null;
-  }
-
-  public ParametrosConsulta(String categoria,
-                            LocalDate fechaReporteDesde,
-                            LocalDate fechaReporteHasta,
-                            LocalDate fechaAcontecimientoDesde,
-                            LocalDate fechaAcontecimientoHasta,
-                            String ubicacion,
-                            Long coleccionId) {
-    this.categoria = categoria;
-    this.fechaReporteDesde = fechaReporteDesde;
-    this.fechaReporteHasta = fechaReporteHasta;
-    this.fechaAcontecimientoDesde = fechaAcontecimientoDesde;
-    this.fechaAcontecimientoHasta = fechaAcontecimientoHasta;
-    this.ubicacion = ubicacion;
-    this.coleccionId = coleccionId;
   }
 
   public Map<String, String> comoMapa() {
@@ -52,5 +38,65 @@ public class ParametrosConsulta {
 
   public Long getColeccionId() {
     return this.coleccionId;
+  }
+
+  public void setCategoria(String categoria) {
+    this.categoria = categoria;
+  }
+
+  public void setFechaReporteDesde(LocalDate fechaReporteDesde) {
+    this.fechaReporteDesde = fechaReporteDesde;
+  }
+
+  public void setFechaReporteHasta(LocalDate fechaReporteHasta) {
+    this.fechaReporteHasta = fechaReporteHasta;
+  }
+
+  public void setFechaAcontecimientoDesde(LocalDate fechaAcontecimientoDesde) {
+    this.fechaAcontecimientoDesde = fechaAcontecimientoDesde;
+  }
+
+  public void setFechaAcontecimientoHasta(LocalDate fechaAcontecimientoHasta) {
+    this.fechaAcontecimientoHasta = fechaAcontecimientoHasta;
+  }
+
+  public void setUbicacion(String ubicacion) {
+    this.ubicacion = ubicacion;
+  }
+
+  public void setColeccionId(Long coleccionId) {
+    this.coleccionId = coleccionId;
+  }
+
+  public String getCategoria() {
+    return this.categoria;
+  }
+
+  public LocalDate getFechaReporteDesde() {
+    return this.fechaReporteDesde;
+  }
+
+  public LocalDate getFechaReporteHasta() {
+    return this.fechaReporteHasta;
+  }
+
+  public LocalDate getFechaAcontecimientoDesde() {
+    return this.fechaAcontecimientoDesde;
+  }
+
+  public LocalDate getFechaAcontecimientoHasta() {
+    return this.fechaAcontecimientoHasta;
+  }
+
+  public String getUbicacion() {
+    return this.ubicacion;
+  }
+
+  public void setTexto(String busqueda) {
+    this.texto = busqueda;
+  }
+
+  public String getTexto() {
+    return this.texto;
   }
 }

@@ -29,7 +29,6 @@ public class ServicioAgregacion extends Fuente{
   public ServicioAgregacion() {}
 
   public void actualizarCache() {
-    //esta es la funcion para vincular al crontab
     cacheDeHechos.clear();
     fuentesQueConsidera.forEach(fuente -> {
       ultimosNHechos(10,fuente.cargarHechos(null)).addAll(cacheDeHechos);

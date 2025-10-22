@@ -33,8 +33,8 @@ public class FuenteEstatica extends Fuente {
     DAOHechos repo = DAOHechos.getInstancia();
     LectorCSV lector = new LectorCSV();
     ArrayList<Hecho> hechosCSV = lector.leerDesde(this.pathArchivo, this.categoria, this.campos);
-    //return repo.losQueNoFueronEliminados(hechosCSV);
-    return hechosCSV;
+    ArrayList<Hecho> hechosNoEliminados = repo.losQueNoFueronEliminados(hechosCSV);
+    return filtrarHechos(hechosNoEliminados, parametros);
   }
 
   public List<Fuente> getFuente() {
