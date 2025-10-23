@@ -83,7 +83,7 @@ public class FuenteDinamica extends Fuente {
   @Override
   public List<Hecho> filtrarBusquedaTexto(List<Hecho> hechos, String titulo){
     HechoFTS fullTextSearch = new HechoFTS(DAOHechos.getInstancia());
-    return fullTextSearch.buscar(titulo);
+    return fullTextSearch.buscarPorFuente(titulo, this.id);
   }
 
   public List<Fuente> getFuente(){

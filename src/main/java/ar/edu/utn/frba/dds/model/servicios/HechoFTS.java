@@ -21,4 +21,14 @@ public class HechoFTS {
 
     return resultados;
   }
+
+  public List<Hecho> buscarPorFuente(String textoBusqueda, Long fuenteId) {
+    List<Hecho> resultados = repositorioHechos.buscarPorTextoPorFuente(textoBusqueda, fuenteId);
+
+    if (resultados.isEmpty()) {
+      resultados = repositorioHechos.buscarPorSimilitudPorFuente(textoBusqueda,  fuenteId);
+    }
+
+    return resultados;
+  }
 }

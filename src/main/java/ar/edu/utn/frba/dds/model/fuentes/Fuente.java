@@ -24,7 +24,7 @@ import javax.persistence.InheritanceType;
 public abstract class Fuente {
   @Id
   @GeneratedValue
-  private Long id;
+  protected Long id;
 
   public abstract ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros);
 

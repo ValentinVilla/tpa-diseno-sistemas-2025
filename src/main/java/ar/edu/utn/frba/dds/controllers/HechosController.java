@@ -35,7 +35,7 @@ public class HechosController {
       String fechaHastaStr = ctx.queryParam("fechaHasta");
 
       ParametrosConsulta filtros = new ParametrosConsulta();
-      if(!Objects.equals(busqueda, "")){
+      if (!Objects.equals(busqueda, "")) {
         filtros.setTexto(busqueda);
       }
       if (!Objects.equals(categoria, "")) {
