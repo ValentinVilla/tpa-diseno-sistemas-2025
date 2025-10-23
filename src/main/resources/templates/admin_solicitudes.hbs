@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Sistema de mapeo colaborativo</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/landing2.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <h1 class="page-title">Panel de Administración</h1>
+        <p class="subtitle">Gestioná las solicitudes pendientes del sistema</p>
+
+        <!-- Pestañas -->
+        <nav class="admin-tabs">
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link" href="#subida">Subidas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#modificacion">Modificaciones</a></li>
+                <li class="nav-item"><a class="nav-link" href="#eliminacion">Eliminaciones</a></li>
+            </ul>
+        </nav>
+
+        <!-- Solicitudes de Subida -->
+        <div class="admin-section">
+            <h2 id="subida">Solicitudes de Subida</h2>
+            <div class="scroll-container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Fuente</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each solicitudesSubida}}
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.usuario}}</td>
+                            <td>{{this.fuente}}</td>
+                            <td>{{this.fecha}}</td>
+                            <td>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Solicitudes de Modificación -->
+        <div class="admin-section">
+            <h2 id="modificacion">Solicitudes de Modificación</h2>
+            <div class="scroll-container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Hecho Original</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each solicitudesModificacion}}
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.usuario}}</td>
+                            <td>{{this.hecho}}</td>
+                            <td>{{this.fecha}}</td>
+                            <td>
+                                <a href="/admin/solicitudes/modificacion/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="/admin/solicitudes/modificacion/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Solicitudes de Eliminación -->
+        <div class="admin-section">
+            <h2 id="eliminacion">Solicitudes de Eliminación</h2>
+            <div class="scroll-container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Hecho Asociado</th>
+                        <th>Motivo</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each solicitudesEliminacion}}
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.usuario}}</td>
+                            <td>{{this.hecho}}</td>
+                            <td>{{this.motivo}}</td>
+                            <td>{{this.fecha}}</td>
+                            <td>
+                                <a href="/admin/solicitudes/eliminacion/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="/admin/solicitudes/eliminacion/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+</body>
+</html>
