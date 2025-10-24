@@ -1,26 +1,56 @@
-<div class="hechos-lista">
-    {{#each hechos}}
-        <div class="hecho-card">
-            <div class="hecho-header">
-                <span class="badge badge-desastre">{{categoria}}</span>
-                <span class="hecho-fecha">{{fechaCarga}}</span>
-            </div>
-            <h3 class="hecho-titulo">{{titulo}}</h3>
-            <p class="hecho-descripcion">{{descripcion}}</p>
-            <div class="hecho-footer">
-                                <span class="hecho-ubicacion">
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                        <path d="M7 1C4.79 1 3 2.79 3 5C3 8.5 7 13 7 13C7 13 11 8.5 11 5C11 2.79 9.21 1 7 1Z"
-                                              stroke="currentColor" stroke-width="1.5"/>
-                                    </svg>
-                                  {{provincia}}
-                                </span>
-                <button class="btn-icon" title="Solicitar eliminación">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M2 4H14M6 7V11M10 7V11M3 4L4 13H12L13 4" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    {{/each}}
-</div>
+{{#partial "header"}}
+    {{> templates/nav }}
+{{/partial}}
+
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
+
+{{#partial "contenido"}}
+    <main class="main">
+        <section id="mapa" class="section-mapa active">
+            <aside class="mapa-container">
+                <aside class="sidebar">
+                    {{> templates/filtros }}
+                    <div class="hechos-lista">
+                        {{#each hechos}}
+                            <div class="hecho-card">
+                                <div class="hecho-header">
+                                    <span class="badge badge-desastre">{{categoria}}</span>
+                                    <span class="hecho-fecha">{{fechaCarga}}</span>
+                                    </div>
+                                        <h3 class="hecho-titulo">{{titulo}}</h3>
+                                        <p class="hecho-descripcion">{{descripcion}}</p>
+                                        <div class="hecho-footer">
+                                            <span class="hecho-ubicacion">
+                                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                    <path d="M7 1C4.79 1 3 2.79 3 5C3 8.5 7 13 7 13C7 13 11 8.5 11 5C11 2.79 9.21 1 7 1Z"
+                                                      stroke="currentColor" stroke-width="1.5"/>
+                                                </svg>
+                                                {{provincia}}
+                                            </span>
+                                            <button class="btn-icon" title="Solicitar eliminación">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M2 4H14M6 7V11M10 7V11M3 4L4 13H12L13 4" stroke="currentColor" stroke-width="1.5"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                 </div>
+                        {{/each}}
+                    </div>
+                </aside>
+
+                <div class="mapa-view">
+                    <div id="map" class="map"></div>
+                </div>
+
+            </aside>
+        </section>
+    </main>
+{{/partial}}
+
+{{#partial "scripts"}}
+    <script src="/js/map.js"></script>
+    <script src="/js/filtros.js"></script>
+{{/partial}}
+
+{{> templates/main }}

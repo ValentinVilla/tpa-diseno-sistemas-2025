@@ -26,6 +26,15 @@ public class HechosController {
 
   public Map<String, Object> mostrarHechos(Context ctx) {
     Map<String, Object> modelo = new HashMap<>();
+
+    // Añadimos la información del usuario al modelo
+    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
+    if(usuario != null) {
+      modelo.put("nombre", usuario.getNombre());
+    }
+
+    ctx.sessionAttribute("returnTo", ctx.path());
+
     List<Hecho> hechos = new ArrayList<>();
 
     try {
@@ -115,9 +124,14 @@ public class HechosController {
 
   public void crearHecho(Context ctx) {
     try {
-      String userId = ctx.pathParam("id");
-      Contribuyente contribuyente = RepositorioUsuarios.getInstancia().buscarPorId(Long.parseLong(userId));
-      System.out.println("Creando hecho para el usuario: " + contribuyente.getNombre());
+      // Obtenemos el usuario DE LA SESIÓN. Puede ser null.
+      Contribuyente contribuyente = ctx.sessionAttribute("usuario_logueado");
+
+      if(contribuyente != null) {
+        System.out.println("Creando hecho para el usuario: " + contribuyente.getNombre());
+      } else {
+        System.out.println("Creando hecho anónimo.");
+      }
 
       String titulo = ctx.formParam("titulo");
       String descripcion = ctx.formParam("descripcion");
@@ -144,7 +158,7 @@ public class HechosController {
       fuente.subirHecho(hechoDinamico);
 
       ctx.status(201);
-      ctx.redirect("/home?exi to=true");
+      ctx.redirect("/hechos");
     } catch (Exception e) {
       e.printStackTrace();
       ctx.status(500);
@@ -153,15 +167,7 @@ public class HechosController {
   }
 
   public void mostrarFormularioNuevoHecho(Context ctx) {
-    Contribuyente usuarioLogueado = ctx.sessionAttribute("usuario_logueado");
-    if (usuarioLogueado == null) {
-      ctx.sessionAttribute("returnTo", ctx.path()); // Guarda la URL a la que el usuario quería ir
-      ctx.redirect("/login");
-      return;
-    }
-    Long idDelUsuario = usuarioLogueado.getId();
-    Map<String, Object> model = new HashMap<>();
-    model.put("userId", idDelUsuario);
-    ctx.render("crear-hecho.hbs", model);
+    // Ya no comprobamos la sesión, solo mostramos el formulario
+    ctx.render("crear-hecho.hbs");
   }
 }

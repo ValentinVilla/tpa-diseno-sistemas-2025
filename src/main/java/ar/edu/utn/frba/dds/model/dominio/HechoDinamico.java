@@ -6,14 +6,16 @@ import ar.edu.utn.frba.dds.model.servicios.GeorefAPI;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
 public class HechoDinamico extends Hecho {
-  @ManyToOne
-  private Contribuyente contribuyente;//en teoria no puede ser null pero esa validacion la debemos realizar a nivel dominio
+  @ManyToOne(optional = true)
+  @JoinColumn(name = "contribuyente_id", nullable = true) //permito los null para poder guardar hechos anonimos
+  private Contribuyente contribuyente;
 
   private boolean visible = false;
 
@@ -24,9 +26,7 @@ public class HechoDinamico extends Hecho {
 
   public HechoDinamico(HechoBuilder builder, Contribuyente contribuyente) {
     super(builder);
-    if(contribuyente == null) {
-      throw new IllegalArgumentException("El contribuyente no puede ser null");
-    }
+    // pues ahora el contribuyente puede ser null (no logueado)
     this.contribuyente = contribuyente;
   }
 
@@ -37,6 +37,10 @@ public class HechoDinamico extends Hecho {
 
   public Contribuyente getContribuyente() {
     return contribuyente;
+  }
+
+  public boolean esAnonimo() {
+    return this.contribuyente == null;
   }
 
   public void setVisible(boolean visible) {

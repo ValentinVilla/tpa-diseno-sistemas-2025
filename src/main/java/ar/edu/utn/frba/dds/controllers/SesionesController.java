@@ -15,6 +15,7 @@ public class SesionesController {
         if(usuario != null) {
             model.put("nombre", usuario.getNombre());
         }
+        ctx.sessionAttribute("returnTo", ctx.path());
         ctx.render("home.hbs", model);
     }
 
@@ -56,24 +57,7 @@ public class SesionesController {
 
     public void cerrarSesion(Context ctx) {
         ctx.sessionAttribute("usuario_logueado", null);
-        ctx.redirect("/login");
+        ctx.redirect("/");
     }
-
-    /*
-    public void crear(Context ctx){
-        try{
-            var usuario = RepositorioUsuarios.getInstancia().buscarUsuario(
-                ctx.formParam("nombre"),
-                ctx.formParam("contrasenia")
-            );
-
-        }catch(Exception e){
-            Map<String, Object> modelo = new HashMap<>();
-            modelo.put("error", "usuario o contrasenia incorrectos");
-            //ctx.render("login.hbs", modelo); esto no conviene mejor redirijir pq me va a repetir el post del form cosa q no quiero pq produce el efecto duplicado
-            ctx.redirect("/loguin?error=true");
-        }//hay otra opcion mas...
-    }
-    */
 
 }

@@ -18,8 +18,15 @@
             </nav>
         </div>
         <div class="header-actions">
-            <a href="#" class="btn btn-ghost" id="login-btn">Iniciar Sesión</a>
-            <a href="/register" class="btn btn-primary">Registrarse</a>
+            {{#if nombre}}
+                    {{! Si está logueado, muestra su nombre y logout }}
+                    <span style="margin-right: 15px; color: #333; font-weight: 500;">Hola, {{nombre}}</span>
+                    <a href="/logout" class="btn btn-ghost">Cerrar Sesión</a>
+                {{else}}
+                    {{! Si es anónimo, muestra los botones de login y registro }}
+                    <a href="#" class="btn btn-ghost" id="login-btn">Iniciar Sesión</a>
+                    <a href="/register" class="btn btn-primary">Registrarse</a>
+                {{/if}}
         </div>
     </div>
 </header>

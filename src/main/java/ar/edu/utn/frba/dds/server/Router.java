@@ -30,10 +30,10 @@ public class Router {
     app.post("/register", usuariosController::crearUsuario);
 
     // --- Hechos ---
-    app.get("/hechos", ctx -> ctx.render("layout.hbs", hechosController.mostrarHechos(ctx)));
+    app.get("/hechos", ctx -> ctx.render("hechos.hbs", hechosController.mostrarHechos(ctx)));
     app.get("hechosMapa", ctx -> hechosController.hechosParaMapa(ctx));
     app.get("/hechos/nuevo", hechosController::mostrarFormularioNuevoHecho);
-    app.post("/usuarios/{id}/hechos", hechosController::crearHecho);  // La ruta POST que RECIBE el formulario de nuevo hecho
+    app.post("/hechos", hechosController::crearHecho);  // un visualizador puede crear hechos sin estar log
 
     // --- Colecciones ---
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
