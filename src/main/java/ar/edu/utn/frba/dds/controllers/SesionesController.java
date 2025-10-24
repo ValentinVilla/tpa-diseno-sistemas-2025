@@ -20,6 +20,11 @@ public class SesionesController {
     }
 
     public void mostrarLogin(Context ctx) {
+        if(ctx.sessionAttribute("usuario_logueado") != null) {
+            ctx.redirect("/home");
+            return;
+        }
+        
         Map<String, Object> model = new HashMap<>();
         if("true".equals(ctx.queryParam("error"))) {
             model.put("error", "Usuario o contraseña incorrectos");
