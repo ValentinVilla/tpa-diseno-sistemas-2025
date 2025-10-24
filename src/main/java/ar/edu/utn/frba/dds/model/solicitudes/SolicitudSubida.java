@@ -2,28 +2,33 @@ package ar.edu.utn.frba.dds.model.solicitudes;
 
 import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Arrays;
 
-
-// ESTA CLASE SOLO SE USA EN LOS TESTS, NO EN LA LOGICA DE LA APP
-// REVISAR NO SOLO ERRORES SINO PROPOSITO
 @Entity
 @DiscriminatorValue("SUBIDA")
 public class SolicitudSubida extends Solicitud{
 
   public SolicitudSubida() {}
 
-  public SolicitudSubida(Hecho hecho, String descripcion, DetectorDeSpam detector) {
-    super(hecho, descripcion, detector);
+  public SolicitudSubida(HechoDinamico hecho, String descripcion, DetectorDeSpam detector, Contribuyente contribuyente) {
+    super(hecho, descripcion, detector, contribuyente);
   }
 
   public void aplicarAceptacion(){
-    DAOHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHecho, true);
+    String[] partes = valoresHecho.split(";");
+    String valoresHechoSinContribuyente = String.join(";", Arrays.copyOf(partes, partes.length - 1));
+
+    DAOHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHechoSinContribuyente, true);
     RepositorioSolicitudes.getInstancia().actualizar(this);
   }
+
+  //todo: discutir que hacer con el hecho si se rechaza la subida (se elimina de la fuente?)
 
 }

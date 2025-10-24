@@ -9,7 +9,9 @@ import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import ar.edu.utn.frba.dds.model.dominio.Origen;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
@@ -30,7 +32,7 @@ public class SolicitarEliminacionTest {
         .build();
 
     DetectorDeSpam detectorSiempreTrue = texto -> true;
-    SolicitudEliminacion solicitudEliminacion = new SolicitudEliminacion(hecho ,"spam", detectorSiempreTrue);
+    SolicitudEliminacion solicitudEliminacion = new SolicitudEliminacion(hecho ,"spam", detectorSiempreTrue, new Contribuyente("juan","","","",11,""));
 
     assertEquals(EstadoSolicitud.RECHAZADA, solicitudEliminacion.getEstado());
   }
@@ -50,7 +52,7 @@ public class SolicitarEliminacionTest {
 
     DetectorDeSpam detectorSiempreFalse = texto -> false;
 
-    SolicitudEliminacion solicitud = new SolicitudEliminacion( hecho ,"Texto valido y claro", detectorSiempreFalse);
+    Solicitud solicitud = new SolicitudEliminacion( hecho ,"Texto valido y claro", detectorSiempreFalse,  new Contribuyente("juan","","","",11,""));
 
     assertTrue(solicitud.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");
   }

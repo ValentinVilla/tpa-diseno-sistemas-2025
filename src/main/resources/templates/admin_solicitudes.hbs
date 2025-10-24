@@ -31,23 +31,25 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Usuario</th>
-                        <th>Fuente</th>
                         <th>Fecha</th>
+                        <th>Contribuyente</th>
+                        <th>Titulo</th>
+                        <th>Descripción</th>
+                        <th>Categoria</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     {{#each solicitudesSubida}}
                         <tr>
-                            <td>{{this.id}}</td>
-                            <td>{{this.usuario}}</td>
-                            <td>{{this.fuente}}</td>
                             <td>{{this.fecha}}</td>
+                            <td>{{this.contribuyente}}</td>
+                            <td>{{this.titulo}}</td>
+                            <td>{{this.descripcion}}</td>
+                            <td>{{this.categoria}}</td>
                             <td>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" data-url="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" data-url="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
                             </td>
                         </tr>
                     {{/each}}
@@ -63,23 +65,27 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Usuario</th>
-                        <th>Hecho Original</th>
                         <th>Fecha</th>
+                        <th>Contribuyente</th>
+                        <th>Fundamentación</th>
+                        <th>Titulo</th>
+                        <th>Descripción</th>
+                        <th>Categoria</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     {{#each solicitudesModificacion}}
                         <tr>
-                            <td>{{this.id}}</td>
-                            <td>{{this.usuario}}</td>
-                            <td>{{this.hecho}}</td>
                             <td>{{this.fecha}}</td>
+                            <td>{{this.contribuyente}}</td>
+                            <td>{{this.fundamentacion}}</td>
+                            <td>{{this.titulo}}</td>
+                            <td>{{this.descripcion}}</td>
+                            <td>{{this.categoria}}</td>
                             <td>
-                                <a href="/admin/solicitudes/modificacion/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
-                                <a href="/admin/solicitudes/modificacion/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" data-url="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" data-url="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
                             </td>
                         </tr>
                     {{/each}}
@@ -95,25 +101,27 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Usuario</th>
-                        <th>Hecho Asociado</th>
-                        <th>Motivo</th>
                         <th>Fecha</th>
+                        <th>Contribuyente</th>
+                        <th>Fundamentación</th>
+                        <th>Titulo</th>
+                        <th>Descripción</th>
+                        <th>Categoria</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     {{#each solicitudesEliminacion}}
                         <tr>
-                            <td>{{this.id}}</td>
-                            <td>{{this.usuario}}</td>
-                            <td>{{this.hecho}}</td>
-                            <td>{{this.motivo}}</td>
                             <td>{{this.fecha}}</td>
+                            <td>{{this.contribuyente}}</td>
+                            <td>{{this.fundamentacion}}</td>
+                            <td>{{this.titulo}}</td>
+                            <td>{{this.descripcion}}</td>
+                            <td>{{this.categoria}}</td>
                             <td>
-                                <a href="/admin/solicitudes/eliminacion/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
-                                <a href="/admin/solicitudes/eliminacion/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" data-url="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" data-url="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
                             </td>
                         </tr>
                     {{/each}}

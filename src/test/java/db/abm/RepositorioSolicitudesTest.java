@@ -66,7 +66,7 @@ class RepositorioSolicitudesTest {
     entityManager.persist(hecho);
     entityManager.getTransaction().commit();
 
-    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de guardado", null);
+    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de guardado", null,  new Contribuyente("juan","","","",11,""));
     repo.guardar(solicitud);
 
     assertTrue(repo.obtenerTodas().stream()
@@ -80,7 +80,7 @@ class RepositorioSolicitudesTest {
     entityManager.persist(hecho);
     entityManager.getTransaction().commit();
 
-    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de eliminación", null);
+    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de eliminación", null,  new Contribuyente("juan","","","",11,""));
     repo.guardar(solicitud);
 
     repo.eliminar(solicitud.getId());
@@ -96,7 +96,7 @@ class RepositorioSolicitudesTest {
     entityManager.persist(hecho);
     entityManager.getTransaction().commit();
 
-    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de actualización", null);
+    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de actualización", null,  new Contribuyente("juan","","","",11,""));
     repo.guardar(solicitud);
 
     solicitud.aceptar();

@@ -11,6 +11,22 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-success, .btn-danger').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault(); // evita que el <a> navegue
+            const url = btn.dataset.url || btn.getAttribute('href');
+            try {
+                await fetch(url, { method: 'POST' }); // llamás al endpoint
+                window.location.reload(); // recargás la tabla
+            } catch (err) {
+                console.error('Error al procesar la solicitud', err);
+            }
+        });
+    });
+});
+
 window.onload = () => {
     window.scrollTo(0, 0);
 };
+
