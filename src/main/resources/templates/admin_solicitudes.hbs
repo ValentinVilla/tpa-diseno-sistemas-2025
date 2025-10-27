@@ -53,7 +53,7 @@
                                     <input type="hidden" name="id" value="{{this.id}}">
                                     <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
                                 </form>
-                                <form action="/admin/solicitudes/rechazadas" method="post" target="hidden_iframe" style="display:inline">
+                                <form action="/admin/solicitudes/rechazadas" method="post"  style="display:inline">
                                     <input type="hidden" name="id" value="{{this.id}}">
                                     <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
                                 </form>
@@ -133,11 +133,11 @@
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>
                             <td>
-                                <form action="/admin/solicitudes/aprobadas" method="post" target="hidden_iframe" style="display:inline">
+                                <form action="/admin/solicitudes/aprobadas" method="post"  style="display:inline">
                                     <input type="hidden" name="id" value="{{this.id}}">
                                     <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
                                 </form>
-                                <form action="/admin/solicitudes/rechazadas" method="post" target="hidden_iframe" style="display:inline">
+                                <form action="/admin/solicitudes/rechazadas" method="post" style="display:inline">
                                     <input type="hidden" name="id" value="{{this.id}}">
                                     <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
                                 </form>
