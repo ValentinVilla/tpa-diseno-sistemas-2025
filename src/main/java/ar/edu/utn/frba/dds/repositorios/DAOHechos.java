@@ -42,7 +42,7 @@ public class DAOHechos {
           SET visible = :visible
           WHERE similarity(titulo, :titulo) > 0.1 
           AND similarity(categoria, :categoria) > 0.1 
-          AND descripcion = :descripcion 
+          AND descripcion = :descripcion
       """;
         NativeQuery<?> query = session.createNativeQuery(sql);
         query.setParameter("visible", visible);
