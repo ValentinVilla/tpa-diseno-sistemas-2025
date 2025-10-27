@@ -64,7 +64,8 @@ public class AdminSolicitudesController {
     ctx.render("admin_solicitudes.hbs", model);
   }
 
-  public void aprobar(Context ctx) {
+  //estas de aca abajo no andan todavia
+  /*public void aprobar(Context ctx) {
     String tipo = ctx.pathParam("tipo");
     Long id = Long.parseLong(ctx.pathParam("id"));
     Solicitud solicitud = repo.obtenerTodas().stream()
@@ -75,9 +76,127 @@ public class AdminSolicitudesController {
       solicitud.aceptar();
       repo.actualizar(solicitud); // persiste el cambio
     }
-    ctx.redirect("/admin/solicitudes?tab=" + tipo + "&msg=Aprobado:" + id);
+    ctx.redirect("/home");
+  }*/
+
+  public void aprobar(Context ctx) {
+    System.out.println("Entré al método aprobar - " + ctx.method() + " " + ctx.path());
+
+    // leer id (form param primero, si no existe intentamos path param)
+    String idStr = ctx.formParam("id");
+    System.out.println("id recibido: " + idStr);
+
+    if (idStr == null || idStr.isBlank()) {
+      ctx.status(400).result("id faltante");
+      return;
+    }
+
+    Long id;
+    try {
+      id = Long.parseLong(idStr);
+    } catch (NumberFormatException e) {
+      ctx.status(400).result("id inválido");
+      return;
+    }
+
+    // buscar solicitud
+    Solicitud solicitud = repo.obtenerTodas().stream()
+        .filter(s -> s.getId() != null && s.getId().equals(id))
+        .findFirst()
+        .orElse(null);
+
+    if (solicitud == null) {
+      System.out.println("Solicitud " + id + " no encontrada");
+      ctx.status(404).result("Solicitud no encontrada");
+      return;
+    }
+
+    // intentar aceptar y persistir todo: esto es lo que no estafuncionando acutualmente
+    /*try {
+      solicitud.aceptar();
+      repo.actualizar(solicitud);
+      System.out.println("Solicitud " + id + " aceptada y actualizada en repo");
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al procesar la solicitud: " + e.getMessage());
+      return;
+    }*/
+
+    // evitar recarga del iframe en UI; cambiar a redirect si querés navegar
+    ctx.status(204).result("");
+
+    /* FORMAS DE VER QUE ME LLEGA DE LA REQUEST
+    // path param
+    //System.out.println("pathParam id: " + ctx.pathParam("id"));
+
+    // query params
+    System.out.println("Query params:");
+    ctx.queryParamMap().forEach((k, v) -> System.out.println("  " + k + " = " + v));
+
+    // form params (si el formulario usa POST)
+    System.out.println("Form params:");
+    ctx.formParamMap().forEach((k, v) -> System.out.println("  " + k + " = " + v));
+
+    // headers
+    System.out.println("Headers:");
+    ctx.headerMap().forEach((k, v) -> System.out.println("  " + k + " = " + v));
+
+    // body
+    String body = ctx.body();
+    System.out.println("Body length: " + (body == null ? 0 : body.length()));
+    System.out.println("Body content:\n" + (body == null ? "<empty>" : body));*/
+
+    // evitar recarga del iframe mientras debuggeás
   }
 
+  public void rechazar(Context ctx) {
+    System.out.println("Entré al método rechazar -" + ctx.method() + " " + ctx.path());
+
+    // leer id (form param primero, si no existe intentamos path param)
+    String idStr = ctx.formParam("id");
+    System.out.println("id recibido: " + idStr);
+
+    if (idStr == null || idStr.isBlank()) {
+      ctx.status(400).result("id faltante");
+      return;
+    }
+
+    Long id;
+    try {
+      id = Long.parseLong(idStr);
+    } catch (NumberFormatException e) {
+      ctx.status(400).result("id inválido");
+      return;
+    }
+
+    // buscar solicitud
+    Solicitud solicitud = repo.obtenerTodas().stream()
+        .filter(s -> s.getId() != null && s.getId().equals(id))
+        .findFirst()
+        .orElse(null);
+
+    if (solicitud == null) {
+      System.out.println("Solicitud " + id + " no encontrada");
+      ctx.status(404).result("Solicitud no encontrada");
+      return;
+    }
+
+    // intentar aceptar y persistir
+    /*try {
+      solicitud.rechazar();
+      repo.actualizar(solicitud);
+      System.out.println("Solicitud " + id + " rechazada y actualizada en repo");
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al procesar la solicitud: " + e.getMessage());
+      return;
+    }*/
+
+    // evitar recarga del iframe en UI; cambiar a redirect si querés navegar
+    ctx.status(204).result("");
+  }
+
+  /* verdion: tomi
   public void rechazar(Context ctx) {
     String tipo = ctx.pathParam("tipo");
     Long id = Long.parseLong(ctx.pathParam("id"));
@@ -90,6 +209,6 @@ public class AdminSolicitudesController {
       repo.actualizar(solicitud); // persiste el cambio
     }
     ctx.redirect("/admin/solicitudes?tab=" + tipo + "&msg=Rechazado:" + id);
-  }
+  }*/
 
 }

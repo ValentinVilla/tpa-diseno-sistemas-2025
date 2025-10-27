@@ -20,6 +20,8 @@ public class Router  {
   AdminSolicitudesController adminSolicitudesController = new AdminSolicitudesController();
 
   public void configure(Javalin app) {
+    app.before("/admin/solicitudes/*", ctx -> System.out.println("REQ -> " + ctx.method() + " " + ctx.path()));
+
     app.get("/", ctx -> ctx.redirect("/home"));
     app.get("/home", ctx -> {
       ctx.render("home.hbs", Map.of("nombre", "Tobias"));
@@ -37,8 +39,8 @@ public class Router  {
 
     // --- Rutas administrativas para solicitudes (UI por ahora) ---
     app.get("/admin/solicitudes", adminSolicitudesController::mostrarPanel);
-    // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar)
-    app.get("/admin/solicitudes/{tipo}/{id}/aprobar", adminSolicitudesController::aprobar);
-    app.get("/admin/solicitudes/{tipo}/{id}/rechazar", adminSolicitudesController::rechazar);
+    // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar) todo: ver que funcione esto de abajo
+    app.post("/admin/solicitudes/aprobadas", adminSolicitudesController::aprobar);
+    app.post("/admin/solicitudes/rechazadas", adminSolicitudesController::rechazar);
   }
 }

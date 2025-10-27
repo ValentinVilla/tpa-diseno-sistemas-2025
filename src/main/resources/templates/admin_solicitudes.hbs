@@ -15,7 +15,6 @@
         <h1 class="page-title">Panel de Administración</h1>
         <p class="subtitle">Gestioná las solicitudes pendientes del sistema</p>
 
-        <!-- Pestañas -->
         <nav class="admin-tabs">
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="#subida">Subidas</a></li>
@@ -23,6 +22,8 @@
                 <li class="nav-item"><a class="nav-link" href="#eliminacion">Eliminaciones</a></li>
             </ul>
         </nav>
+
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
 
         <!-- Solicitudes de Subida -->
         <div class="admin-section">
@@ -41,15 +42,21 @@
                     </thead>
                     <tbody>
                     {{#each solicitudesSubida}}
-                        <tr>
+                        <tr id="row-{{this.id}}">
                             <td>{{this.fecha}}</td>
                             <td>{{this.contribuyente}}</td>
                             <td>{{this.titulo}}</td>
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>
                             <td>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" data-url="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" data-url="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                                <form action="/admin/solicitudes/aprobadas" method="post" target="hidden_iframe" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
+                                </form>
+                                <form action="/admin/solicitudes/rechazadas" method="post" target="hidden_iframe" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Rechazar</button>
+                                </form>
                             </td>
                         </tr>
                     {{/each}}
@@ -76,7 +83,7 @@
                     </thead>
                     <tbody>
                     {{#each solicitudesModificacion}}
-                        <tr>
+                        <tr id="row-{{this.id}}">
                             <td>{{this.fecha}}</td>
                             <td>{{this.contribuyente}}</td>
                             <td>{{this.fundamentacion}}</td>
@@ -84,8 +91,14 @@
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>
                             <td>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" data-url="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" data-url="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                                <form action="/admin/solicitudes/aprobadas" method="post" target="hidden_iframe" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
+                                </form>
+                                <form action="/admin/solicitudes/rechazadas" method="post" target="hidden_iframe" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Rechazar</button>
+                                </form>
                             </td>
                         </tr>
                     {{/each}}
@@ -112,7 +125,7 @@
                     </thead>
                     <tbody>
                     {{#each solicitudesEliminacion}}
-                        <tr>
+                        <tr id="row-{{this.id}}">
                             <td>{{this.fecha}}</td>
                             <td>{{this.contribuyente}}</td>
                             <td>{{this.fundamentacion}}</td>
@@ -120,8 +133,14 @@
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>
                             <td>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/aprobar" data-url="/admin/solicitudes/subida/{{this.id}}/aprobar" class="btn btn-success btn-sm">Aprobar</a>
-                                <a href="/admin/solicitudes/subida/{{this.id}}/rechazar" data-url="/admin/solicitudes/subida/{{this.id}}/rechazar" class="btn btn-danger btn-sm">Rechazar</a>
+                                <form action="/admin/solicitudes/aprobadas" method="post" target="hidden_iframe" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
+                                </form>
+                                <form action="/admin/solicitudes/rechazadas" method="post" target="hidden_iframe" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
+                                </form>
                             </td>
                         </tr>
                     {{/each}}
