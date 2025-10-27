@@ -107,6 +107,7 @@ public class AdminSolicitudesController {
     }
 
     // evitar recarga del iframe en UI; cambiar a redirect si querés navegar
+    ctx.redirect("/admin/solicitudes");
     ctx.status(204).result("");
 
     /* FORMAS DE VER QUE ME LLEGA DE LA REQUEST
