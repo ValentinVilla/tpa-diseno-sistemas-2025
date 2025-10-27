@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.model.dominio.Origen;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import org.junit.jupiter.api.AfterEach;
@@ -58,7 +60,7 @@ class RepositorioSolicitudesTest {
   }
 
   @Test
-  void testGuardarSolicitud() throws Exception {
+  void testGuardarSolicitudEliminacion() throws Exception {
     HechoDinamico hecho = crearHechoDinamico();
 
     //solo para testear
@@ -67,6 +69,38 @@ class RepositorioSolicitudesTest {
     entityManager.getTransaction().commit();
 
     Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de guardado", null,  new Contribuyente("juan","","","",11,""));
+    repo.guardar(solicitud);
+
+    assertTrue(repo.obtenerTodas().stream()
+        .anyMatch(s -> s.getId().equals(solicitud.getId())));
+  }
+
+  @Test
+  void testGuardarSolicitudSubida() throws Exception {
+    HechoDinamico hecho = crearHechoDinamico();
+
+    //solo para testear
+    entityManager.getTransaction().begin();
+    entityManager.persist(hecho);
+    entityManager.getTransaction().commit();
+
+    Solicitud solicitud = new SolicitudSubida(hecho, "Prueba de guardado", null,  new Contribuyente("juan","","","",11,""));
+    repo.guardar(solicitud);
+
+    assertTrue(repo.obtenerTodas().stream()
+        .anyMatch(s -> s.getId().equals(solicitud.getId())));
+  }
+
+  @Test
+  void testGuardarSolicitudModificacion() throws Exception {
+    HechoDinamico hecho = crearHechoDinamico();
+
+    //solo para testear
+    entityManager.getTransaction().begin();
+    entityManager.persist(hecho);
+    entityManager.getTransaction().commit();
+
+    Solicitud solicitud = new SolicitudModificacion(hecho, "Prueba de guardado", null,  new Contribuyente("juan","","","",11,""));
     repo.guardar(solicitud);
 
     assertTrue(repo.obtenerTodas().stream()
@@ -88,6 +122,8 @@ class RepositorioSolicitudesTest {
     assertFalse(repo.obtenerTodas().stream()
         .anyMatch(s -> s.getId().equals(solicitud.getId())));
   }
+
+
 
   @Test
   void testActualizarSolicitud() throws Exception {

@@ -64,21 +64,6 @@ public class AdminSolicitudesController {
     ctx.render("admin_solicitudes.hbs", model);
   }
 
-  //estas de aca abajo no andan todavia
-  /*public void aprobar(Context ctx) {
-    String tipo = ctx.pathParam("tipo");
-    Long id = Long.parseLong(ctx.pathParam("id"));
-    Solicitud solicitud = repo.obtenerTodas().stream()
-        .filter(s -> s.getId().equals(id))
-        .findFirst()
-        .orElse(null);
-    if (solicitud != null) {
-      solicitud.aceptar();
-      repo.actualizar(solicitud); // persiste el cambio
-    }
-    ctx.redirect("/home");
-  }*/
-
   public void aprobar(Context ctx) {
     System.out.println("Entré al método aprobar - " + ctx.method() + " " + ctx.path());
 
@@ -111,8 +96,7 @@ public class AdminSolicitudesController {
       return;
     }
 
-    // intentar aceptar y persistir todo: esto es lo que no estafuncionando acutualmente
-    /*try {
+    try {
       solicitud.aceptar();
       repo.actualizar(solicitud);
       System.out.println("Solicitud " + id + " aceptada y actualizada en repo");
@@ -120,7 +104,7 @@ public class AdminSolicitudesController {
       e.printStackTrace();
       ctx.status(500).result("Error al procesar la solicitud: " + e.getMessage());
       return;
-    }*/
+    }
 
     // evitar recarga del iframe en UI; cambiar a redirect si querés navegar
     ctx.status(204).result("");
@@ -182,7 +166,7 @@ public class AdminSolicitudesController {
     }
 
     // intentar aceptar y persistir
-    /*try {
+    try {
       solicitud.rechazar();
       repo.actualizar(solicitud);
       System.out.println("Solicitud " + id + " rechazada y actualizada en repo");
@@ -190,25 +174,9 @@ public class AdminSolicitudesController {
       e.printStackTrace();
       ctx.status(500).result("Error al procesar la solicitud: " + e.getMessage());
       return;
-    }*/
+    }
 
     // evitar recarga del iframe en UI; cambiar a redirect si querés navegar
     ctx.status(204).result("");
   }
-
-  /* verdion: tomi
-  public void rechazar(Context ctx) {
-    String tipo = ctx.pathParam("tipo");
-    Long id = Long.parseLong(ctx.pathParam("id"));
-    Solicitud solicitud = repo.obtenerTodas().stream()
-        .filter(s -> s.getId().equals(id))
-        .findFirst()
-        .orElse(null);
-    if (solicitud != null) {
-      solicitud.rechazar();
-      repo.actualizar(solicitud); // persiste el cambio
-    }
-    ctx.redirect("/admin/solicitudes?tab=" + tipo + "&msg=Rechazado:" + id);
-  }*/
-
 }
