@@ -32,10 +32,9 @@ public class SolicitudModificacion extends Solicitud{
 
   @Override
   public void aplicarAceptacion() {
-    String[] partes = valoresHecho.split(";");
-    String valoresHechoSinContribuyente = String.join(";", Arrays.copyOf(partes, partes.length - 1));
+    String[] partesHecho = valoresHecho.split(";");
     DAOHechos daoHechos = DAOHechos.getInstancia();
-    daoHechos.actualizarHechoModificado(valoresHechoSinContribuyente, valorHechoModificado);
+    daoHechos.actualizarHechoModificado(partesHecho[0], partesHecho[1], partesHecho[2], valorHechoModificado);
   }
 
   //TODO: si existiera sugerencia informarsela al usuario, no creemos que eso se deba persistir

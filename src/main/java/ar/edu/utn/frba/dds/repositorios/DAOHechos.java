@@ -32,7 +32,7 @@ public class DAOHechos {
     }
 
     // Para matchear a los hechos que cumplen las solicitudes
-    public void actualizarVisibilidadPorTexto(String hechoBuscado, boolean visible) {
+    public void actualizarVisibilidadPorTexto(String titulo, String descripcion, String categoria, boolean visible) {
       EntityTransaction transaction = getEntity();
       try {
         transaction.begin();
@@ -40,11 +40,15 @@ public class DAOHechos {
         String sql = """
           UPDATE hechoDinamico
           SET visible = :visible
-          WHERE fts_vector @@ plainto_tsquery('spanish', :queryText)
+          WHERE similarity(titulo, :titulo) > 0.1 
+          AND similarity(categoria, :categoria) > 0.1 
+          AND descripcion = :descripcion 
       """;
         NativeQuery<?> query = session.createNativeQuery(sql);
         query.setParameter("visible", visible);
-        query.setParameter("queryText", hechoBuscado);
+        query.setParameter("titulo", titulo);
+        query.setParameter("categoria", categoria);
+        query.setParameter("descripcion", descripcion);
         query.executeUpdate();
         transaction.commit();
       } catch(Exception e) {
@@ -55,7 +59,7 @@ public class DAOHechos {
       }
     }
 
-    public void actualizarHechoModificado(String hechoBuscado, String valoresActualizacion){
+    public void actualizarHechoModificado(String titulo, String descripcion, String categoria, String valoresActualizacion){
       String[] camposHecho = valoresActualizacion.split(";");
       LocalDate fechaModificacion = LocalDate.now();
       EntityTransaction transaction = getEntity();
@@ -72,7 +76,9 @@ public class DAOHechos {
                 fechaAcontecimiento= :camposHecho[5],
                 provincia = :camposHecho[6],
                 fechaModificacion = :fechaModiciacion
-            WHERE fts_vector @@ plainto_tsquery('spanish', :hechoBuscado)
+            WHERE similarity(titulo, :titulo) > 0.1 
+            AND similarity(categoria, :categoria) > 0.1 
+            AND descripcion = :descripcion 
         """;
         NativeQuery<?> query = session.createNativeQuery(sql);
         query.setParameter("titulo", camposHecho[0]);
@@ -83,7 +89,9 @@ public class DAOHechos {
         query.setParameter("fechaAcontecimiento", camposHecho[5]);
         query.setParameter("provincia", camposHecho[6]);
         query.setParameter("fechaModificacion", fechaModificacion);
-        query.setParameter("queryText", hechoBuscado);
+        query.setParameter("titulo", titulo);
+        query.setParameter("categoria", categoria);
+        query.setParameter("descripcion", descripcion);
         query.executeUpdate();
         transaction.commit();
       } catch(Exception e) {

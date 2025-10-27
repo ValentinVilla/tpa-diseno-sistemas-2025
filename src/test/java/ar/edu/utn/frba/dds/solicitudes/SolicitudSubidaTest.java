@@ -63,11 +63,10 @@ public class SolicitudSubidaTest {
     RepositorioSolicitudes repo = RepositorioSolicitudes.getInstancia();
     ArrayList<Solicitud> solicitudes = new ArrayList<>(repo.obtenerTodas());
     Solicitud ultimaSolicitud = solicitudes.get(solicitudes.size() - 1);
-
+    entityManager.flush();
     // simular aceptación
     ultimaSolicitud.aceptar();
 
-    entityManager.flush();
     entityManager.getTransaction().commit();
     // verificar que el hecho quedó visible
     assertTrue(hechoDinamico.getVisible());

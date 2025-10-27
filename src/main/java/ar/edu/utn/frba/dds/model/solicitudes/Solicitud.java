@@ -34,7 +34,7 @@ public abstract class Solicitud {
   protected Solicitud(){}
 
   public Solicitud(Hecho hecho, String sugerenciaModificacion, DetectorDeSpam detector, Contribuyente contribuyente) {
-    this.valoresHecho =  hecho.getTitulo() + " ; " + hecho.getDescripcion() + " ; " + hecho.getCategoria() + " ; " + contribuyente.getNombreCompleto();
+    this.valoresHecho =  hecho.getTitulo() + ";" + hecho.getDescripcion() + ";" + hecho.getCategoria() + ";" + contribuyente.getNombreCompleto();
     this.textoFundamentacion = sugerenciaModificacion;
     this.detector = detector;
     fecha = LocalDate.now();

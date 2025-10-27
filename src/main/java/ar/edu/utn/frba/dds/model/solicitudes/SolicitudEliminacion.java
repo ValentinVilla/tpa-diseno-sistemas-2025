@@ -24,10 +24,9 @@ public class SolicitudEliminacion extends Solicitud {
 
   @Override
   public void aplicarAceptacion() {
-    String[] partes = valoresHecho.split(";");
-    String valoresHechoSinContribuyente = String.join(";", Arrays.copyOf(partes, partes.length - 1));
+    String[] partesHecho = valoresHecho.split(";");
 
-    DAOHechos.getInstancia().actualizarVisibilidadPorTexto(valoresHechoSinContribuyente, false);
+    DAOHechos.getInstancia().actualizarVisibilidadPorTexto(partesHecho[0], partesHecho[1], partesHecho[2],false);
     RepositorioSolicitudes.getInstancia().actualizar(this);
   }
 }
