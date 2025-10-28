@@ -5,6 +5,7 @@ import ar.edu.utn.frba.dds.controllers.HechosController;
 import ar.edu.utn.frba.dds.controllers.SesionesController;
 import ar.edu.utn.frba.dds.controllers.UsuariosController;
 import ar.edu.utn.frba.dds.controllers.AdminSolicitudesController;
+import ar.edu.utn.frba.dds.controllers.AdminController;
 import io.javalin.Javalin;
 
 import java.util.Map;
@@ -15,6 +16,7 @@ public class Router {
   HechosController hechosController = new HechosController();
   SesionesController sesionesController = new SesionesController();
   AdminSolicitudesController adminSolicitudesController = new AdminSolicitudesController();
+  AdminController adminController = new AdminController();
 
   public void configure(Javalin app) {
     // --- Home ---
@@ -41,6 +43,7 @@ public class Router {
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
 
     // --- Rutas Admin ---
+    app.get("/admin", adminController::mostrarAdmin);
     app.get("/admin/solicitudes", adminSolicitudesController::mostrarPanel);
     // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar) todo: ver que funcione esto de abajo
     app.post("/admin/solicitudes/aprobadas", adminSolicitudesController::aprobar);

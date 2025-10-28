@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Panel de Administración</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/landing2.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <h1 class="page-title">Panel de Administración</h1>
+        <p class="subtitle">Gestioná los recursos y configuraciones del sistema</p>
+
+        <div class="admin-grid">
+            <!-- GESTIÓN DE COLECCIONES -->
+            <div class="admin-card">
+                <h2>Gestión de Colecciones</h2>
+                <p>Creá nuevas colecciones a partir de fuentes estáticas, dinámicas o proxy.</p>
+                <div class="actions">
+                    <a href="/admin/colecciones/nueva" class="btn btn-primary">Crear colección</a>
+                    <a href="/admin/colecciones" class="btn btn-secondary">Ver todas</a>
+                </div>
+            </div>
+
+            <!-- CONFIGURACIÓN DE CONSENSO -->
+            <div class="admin-card">
+                <h2>Configuración de Consenso y Fuentes</h2>
+                <p>Definí criterios de consenso y gestioná las fuentes asociadas a cada colección.</p>
+                <div class="actions">
+                    <a href="/admin/configuracion/consenso" class="btn btn-primary">Configurar consenso</a>
+                    <a href="/admin/configuracion/fuentes" class="btn btn-secondary">Gestionar fuentes</a>
+                </div>
+            </div>
+
+            <!-- SOLICITUDES DE ELIMINACIÓN -->
+            <div class="admin-card">
+                <h2>Gestión de Solicitudes</h2>
+                <p>Revisá y aprobá o rechazá las solicitudes de eliminación pendientes.</p>
+                <div class="actions">
+                    <a href="/admin/solicitudes" class="btn btn-primary">Ver Solicitudes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
