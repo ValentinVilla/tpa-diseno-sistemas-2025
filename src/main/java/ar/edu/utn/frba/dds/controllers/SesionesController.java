@@ -48,7 +48,7 @@ public class SesionesController {
                     ctx.sessionAttribute("returnTo", null);
                     ctx.redirect(returnTo);
                 } else {
-                    // 4. Si no la hay,te manda al home (comportamiento por defecto)
+                    // Si no la hay,te manda al home (comportamiento por defecto)
                     ctx.redirect("/home");
                 }
             } else {

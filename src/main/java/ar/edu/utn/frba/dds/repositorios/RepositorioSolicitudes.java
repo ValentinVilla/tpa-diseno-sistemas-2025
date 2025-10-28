@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
+import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,7 +26,13 @@ public class RepositorioSolicitudes {
   }
 
   public List<Solicitud> obtenerTodas() {
-    return entityManager.createQuery("SELECT s FROM Solicitud s", Solicitud.class)
+    return entityManager.createQuery("SELECT s FROM Solicitud s ORDER BY fecha ASC NULLS LAST", Solicitud.class)
+        .getResultList();
+  }
+
+  public List<Solicitud> obtenerTodasPendientes() {
+    return entityManager.createQuery("SELECT s FROM Solicitud s WHERE s.estado = :estado ORDER BY fecha ASC NULLS LAST", Solicitud.class)
+        .setParameter("estado", EstadoSolicitud.PENDIENTE)
         .getResultList();
   }
 

@@ -23,7 +23,14 @@ public class UsuariosController {
     Contribuyente usuarioCreado = new Contribuyente(nombre, apellido, telefono, mail, edad, password);
 
     repositorioUsuarios.guardar(usuarioCreado);
-    ctx.redirect("/logueo");
+    ctx.sessionAttribute("usuario_logueado", usuarioCreado);
+    String returnTo = ctx.sessionAttribute("returnTo");
+    if (returnTo != null && !returnTo.isEmpty()) {
+      ctx.sessionAttribute("returnTo", null);
+      ctx.redirect(returnTo);
+    } else {
+      ctx.redirect("/home");
+    }
   }
 
   public void mostrarRegistro(Context ctx) {
