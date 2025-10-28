@@ -45,8 +45,11 @@ public class Router {
     // --- Rutas Admin ---
     app.get("/admin", adminController::mostrarAdmin);
     app.get("/admin/solicitudes", adminSolicitudesController::mostrarPanel);
-    // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar) todo: ver que funcione esto de abajo
+    app.get("admin/colecciones/nueva", adminController::mostarCrearColeccion); //posiblemente en las que son solamente mostrar una pestaña no haces adminController sino que metes un ctx render y chau por eso pasar la logica de adminSlocitudes a un Solicitudes Controller o directamente a Admin Controller
+    //app.post("/admin/colecciones", adminController::crearColeccion);
+    // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar
     app.post("/admin/solicitudes/aprobadas", adminSolicitudesController::aprobar);
     app.post("/admin/solicitudes/rechazadas", adminSolicitudesController::rechazar);
+
   }
 }

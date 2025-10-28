@@ -189,3 +189,116 @@
     gap: 0.5rem;
 }
 
+/* Botones con el verde de la app */
+.btn-eseverde {
+    background-color: #10b981;
+    color: #ffffff;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform .08s ease, opacity .08s ease;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.btn-eseverde:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+.btn-eseverde:active {
+    transform: translateY(0);
+    opacity: 0.9;
+}
+
+.btn-eseverde:focus {
+    outline: 3px solid rgba(0,0,0,0.08);
+    outline-offset: 2px;
+}
+
+.admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Botón "volver" explícito */
+.admin-header-actions .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.56rem 0.9rem;
+    border-radius: 8px;
+    border: 2px solid var(--color-secondary);
+    background: transparent;
+    color: var(--color-secondary);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(14,106,61,0.06);
+    transition: background-color .12s ease, color .12s ease, transform .08s ease, box-shadow .12s ease;
+    white-space: nowrap;
+}
+
+/* añade una flecha antes si querés más énfasis (no obligatorio si ya la tienes en el texto) */
+.admin-header-actions .btn-back::before {
+    content: "←";
+    font-size: 1rem;
+    line-height: 1;
+    margin-right: 0.25rem;
+    color: inherit;
+}
+
+/* estado hover/activo/focus */
+.admin-header-actions .btn-back:hover {
+    background: var(--color-secondary);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(14,106,61,0.12);
+}
+
+.admin-header-actions .btn-back:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(14,106,61,0.06);
+}
+
+.admin-header-actions .btn-back:focus-visible {
+    outline: 3px solid rgba(14,106,61,0.12);
+    outline-offset: 3px;
+}
+
+/* ACA VAN COSAS DE LA PESTAÑA DE CREAR COLECCIONES DE UN ADMIN*/
+/* Formulario de colecciones (sin JavaScript) */
+.colecciones-form .form-row {
+    margin-bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 720px;
+}
+
+.colecciones-form .input {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.08);
+    font-size: 0.98rem;
+}
+
+.colecciones-form label {
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--color-secondary);
+}
+
+.colecciones-form .muted {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+details summary.btn {
+    cursor: pointer;
+    list-style: none;
+}
+
+details[open] summary::marker { content: ""; } /* evitar marker por defecto en algunos navegadores */
