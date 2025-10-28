@@ -37,8 +37,9 @@
         <div class="filtro-group">
             <label for="coleccion" class="label">Colección</label>
             <select id="coleccion" name="coleccion" class="select">
-                <option value="">Todas las colecciones</option>
-                <option value="1">Que las busque el back y me traiga</option>
+                {{#each colecciones}}
+                    <option value="{{id}}">{{titulo}}</option>
+                {{/each}}
             </select>
         </div>
 

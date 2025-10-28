@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.dominio.Origen;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import ar.edu.utn.frba.dds.repositorios.RepositorioFuentes;
 import io.javalin.http.Context;
 
@@ -27,11 +29,14 @@ public class HechosController {
     Map<String, Object> modelo = new HashMap<>();
 
     try {
+      List<Coleccion> colecciones = RepositorioColecciones.getInstancia().listarTodas(); 
       ParametrosConsulta filtros = this.armarFiltro(ctx);
       List<Hecho> hechos = this.getHechos(filtros);
       modelo.put("cantidad", hechos.size());
 
       modelo.put("hechos", hechos);
+      
+      modelo.put("colecciones", colecciones);
 
       Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
       if (usuario != null) modelo.put("nombre", usuario.getNombre());
