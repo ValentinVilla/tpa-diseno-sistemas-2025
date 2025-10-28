@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.server;
 
+import ar.edu.utn.frba.dds.controllers.AdminController;
 import ar.edu.utn.frba.dds.controllers.AdminSolicitudesController;
 import ar.edu.utn.frba.dds.controllers.ColeccionesController;
 import ar.edu.utn.frba.dds.controllers.HechosController;
@@ -17,6 +18,7 @@ public class Router  {
   ColeccionesController coleccionesController = new ColeccionesController();
   HechosController hechosController = new HechosController();
   //SesionesController sesionesController = new SesionesController(); todo:si lo pongo rompe todo
+  AdminController adminController = new AdminController();
   AdminSolicitudesController adminSolicitudesController = new AdminSolicitudesController();
 
   public void configure(Javalin app) {
@@ -36,7 +38,7 @@ public class Router  {
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
     app.get("/hechos", hechosController::mostrarHechos);
 
-
+    app.get("/admin", adminController::mostrarAdmin);
     // --- Rutas administrativas para solicitudes (UI por ahora) ---
     app.get("/admin/solicitudes", adminSolicitudesController::mostrarPanel);
     // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar) todo: ver que funcione esto de abajo
