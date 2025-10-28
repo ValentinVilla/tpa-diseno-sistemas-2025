@@ -53,7 +53,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.3rem;
+    padding: 1rem;
 }
 
 .header-left {
@@ -72,15 +72,12 @@ body {
 }
 
 .logo-icon {
-    width: 3rem;
-    height: 3rem;
-    background: linear-gradient(135deg, #10b981 0%, #064e3b 100%);
-    border-radius: 1rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+    gap: var(--spacing-sm);
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
 }
 
 .logo-text {
@@ -241,6 +238,22 @@ body {
     padding: 0.875rem 1.75rem;
     font-size: 0.9375rem;
     font-weight: 700;
+    border-radius: var(--radius);
+    border: 2px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    letter-spacing: -0.01em;
+}
+
+.btn-small{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+    font-weight: 600;
     border-radius: var(--radius);
     border: 2px solid transparent;
     cursor: pointer;

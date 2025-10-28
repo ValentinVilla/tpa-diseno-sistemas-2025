@@ -1,3 +1,10 @@
+html, body {
+    height: 100%;       /* ocupa toda la altura de la ventana */
+    margin: 0;          /* quitar márgenes por defecto */
+    padding: 0;         /* quitar padding por defecto */
+    overflow: hidden;   /* elimina scroll vertical y horizontal */
+}
+
 /* ===========================
    🧱 ESTRUCTURA PRINCIPAL
 =========================== */
@@ -21,8 +28,9 @@
 }
 
 .sidebar-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 700;
+    color: var(--color-foreground);
 }
 
 /* ===========================
@@ -88,6 +96,35 @@
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/*
+Search bar de filtros
+*/
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-right: var(--spacing-md);
+    margin-left: var(--spacing-md);
+}
+
+.search-bar .filtro-group {
+    flex: 1;
+}
+
+.search-bar .btn-icon {
+    flex: 0 0 auto;
+}
+
+.cant-hechos {
+    margin-left: 1.3rem;
+    font-size: 0.875rem;
+    color: var(--color-card-foreground);
+    font-weight: 500;
+}
+
+.cant-hechos p {
+    margin: 0;
 }
 
 /* ===========================
@@ -218,8 +255,12 @@
 }
 
 .icon-filter {
-    width: 18px;
-    height: 18px;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.delete-icon:hover {
+    color: #ce2222;
 }
 
 /* ===========================

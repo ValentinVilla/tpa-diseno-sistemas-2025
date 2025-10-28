@@ -7,14 +7,13 @@
 
     <link rel="stylesheet" href="/styles/landing.css">
     <link rel="stylesheet" href="/styles/login.css">
-    <link rel="stylesheet" href="/styles/mainLayout.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css"/>
+    {{#block "css"}}{{/block}}
 </head>
 <body>
 
 {{#block "header"}}
-    {{> templates/header-home }}
 {{/block}}
 
 {{> templates/login }}
@@ -28,7 +27,8 @@
 {{#block "acerca"}}
 {{/block}}
 
-{{> templates/footer }}
+{{#block "footer"}}
+{{/block}}
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="/js/login.js"></script>

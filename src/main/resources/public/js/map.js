@@ -1,32 +1,46 @@
-if (L.DomUtil.get('map') != null) {
-    L.DomUtil.get('map')._leaflet_id = null; // resetea el div
-}
-const map = L.map('map').setView([-34.6037, -58.3816], 5);
-
+const centroInicial = [-34.6037, -58.3816];
+const map = L.map('map').setView(centroInicial, 5);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
+let markers = [];
 
-fetch('/hechosMapa')
-    .then(res => res.json())
-    .then(hechos => {
-        if (hechos.length === 0) {
-            console.warn("No hay hechos con coordenadas para mostrar.");
-        }
-        hechos.forEach(h => {
-            const contenido = `
-                <strong>${h.titulo}</strong><br>
-                <em>Categoría:</em> ${h.categoria}<br>
-                <em>Fecha:</em> ${h.fecha}<br>
-                <p>${h.descripcion}</p>
-            `;
+function renderHechosMapa(hechos) {
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
 
-            L.marker([h.lat, h.lon])
+    hechos.forEach(h => {
+        if (h.lat != null && h.lon != null) {
+            const marker = L.marker([h.lat, h.lon])
                 .addTo(map)
-                .bindPopup(contenido);
-        });
-    })
-    .catch(err => console.error("Error cargando los hechos:", err));;
+                .bindPopup(`<strong>${h.titulo}</strong><br>${h.categoria}<br>${h.fecha}`);
+            markers.push(marker);
+        }
+    });
+
+    if (markers.length > 0) {
+        const group = L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.2));
+    } else {
+        map.setView(centroInicial, 5);
+    }
+}
+
+function obtenerParametrosUrl() {
+    const searchParams = new URLSearchParams(window.location.search);
+    const params = {};
+    for (const [key, value] of searchParams.entries()) {
+        params[key] = value;
+    }
+    return params;
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+    const params = obtenerParametrosUrl();
+    const res = await fetch(`/hechos.json?${new URLSearchParams(params)}`);
+    const hechos = await res.json();
+    renderHechosMapa(hechos);
+});

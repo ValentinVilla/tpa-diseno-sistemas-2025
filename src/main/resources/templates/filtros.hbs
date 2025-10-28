@@ -1,18 +1,16 @@
 <div class="sidebar-header">
     <h2>Hechos</h2>
-    <button id="toggle-filtros" class="btn-icon" title="Mostrar filtros">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
-             stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round" class="icon icon-filter">
-            <polygon points="22 3 2 3 10 12 10 19 14 21 14 12 22 3"></polygon>
+    <a href="/hechos/nuevo" class="btn-small btn-primary">
+        <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
+            <path d="M10 3V17M3 10H17" stroke="currentColor" stroke-width="2"/>
         </svg>
-    </button>
+        Subir Hecho
+    </a>
 </div>
 
 <form action="/hechos" method="GET">
-    <div id="filtros-panel" class="filtros oculto">
+    <div class="search-bar">
         <div class="filtro-group">
-            <label for="busqueda" class="label">Buscar</label>
             <input
                     type="text"
                     id="busqueda"
@@ -22,7 +20,15 @@
                     value="{{busqueda}}"
             >
         </div>
+        <button id="toggle-filtros" class="btn-icon" type="button" title="Mostrar filtros">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-filter">
+                <polygon points="22 3 2 3 10 12 10 19 14 21 14 12 22 3"></polygon>
+            </svg>
+        </button>
+    </div>
 
+    <div id="filtros-panel" class="filtros oculto">
         <div class="filtro-group">
             <label for="categoria" class="label">Categoría</label>
             <input type="text" id="categoria" name="categoria" class="input" placeholder="Ingrese la categoría...">
@@ -46,6 +52,7 @@
                 <input type="date" id="fechaHasta" name="fechaHasta" class="input">
             </div>
         </div>
+
         <div class="filtro-group-row">
             <a href="/hechos" class="btn btn-clear">Limpiar filtros</a>
             <button class="btn btn-apply" type="submit">Aplicar Filtros</button>

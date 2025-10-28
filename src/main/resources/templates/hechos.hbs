@@ -1,3 +1,7 @@
+{{#partial "css"}}
+    <link rel="stylesheet" href="/styles/mainLayout.css">
+{{/partial}}
+
 {{#partial "header"}}
     {{> templates/nav }}
 {{/partial}}
@@ -11,6 +15,9 @@
             <aside class="mapa-container">
                 <aside class="sidebar">
                     {{> templates/filtros }}
+                    <div class="cant-hechos">
+                        <p>📍 Se encontraron {{cantidad}} hechos</p>
+                    </div>
                     <div class="hechos-lista">
                         {{#each hechos}}
                             <div class="hecho-card">
@@ -28,7 +35,7 @@
                                                 </svg>
                                                 {{provincia}}
                                             </span>
-                                            <button class="btn-icon" title="Solicitar eliminación">
+                                            <button class="btn-icon delete-icon" title="Solicitar eliminación">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                 <path d="M2 4H14M6 7V11M10 7V11M3 4L4 13H12L13 4" stroke="currentColor" stroke-width="1.5"/>
                                                 </svg>
@@ -47,6 +54,8 @@
         </section>
     </main>
 {{/partial}}
+
+{{#partial "footer"}}{{/partial}}
 
 {{#partial "scripts"}}
     <script src="/js/map.js"></script>
