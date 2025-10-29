@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Login modal
   const login = document.getElementById('login');
   const loginBtn = document.getElementById('login-btn');
   const loginClose = document.getElementById('login-close');
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Header menus (mobile nav + profile dropdown)
   const menuToggle = document.getElementById('menu-toggle');
   const primaryNav = document.getElementById('primary-navigation');
   if (menuToggle && primaryNav) {
@@ -41,4 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // Responsive reset: ensure nav state is correct when changing viewport size
+  function updateResponsiveNav() {
+    if (!menuToggle || !primaryNav) return;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    if (!isMobile) {
+      primaryNav.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+  }
+  updateResponsiveNav();
+  window.addEventListener('resize', updateResponsiveNav);
 });
