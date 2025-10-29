@@ -1,11 +1,44 @@
-const login = document.getElementById("login"),
-  loginBtn = document.getElementById("login-btn"),
-  loginClose = document.getElementById("login-close");
+document.addEventListener('DOMContentLoaded', function() {
+  // Login modal
+  const login = document.getElementById('login');
+  const loginBtn = document.getElementById('login-btn');
+  const loginClose = document.getElementById('login-close');
+  if (login && loginBtn) {
+    loginBtn.addEventListener('click', () => {
+      login.classList.add('show-login');
+    });
+  }
+  if (login && loginClose) {
+    loginClose.addEventListener('click', () => {
+      login.classList.remove('show-login');
+    });
+  }
 
-loginBtn.addEventListener("click", () => {
-  login.classList.add("show-login");
-});
+  // Header menus (mobile nav + profile dropdown)
+  const menuToggle = document.getElementById('menu-toggle');
+  const primaryNav = document.getElementById('primary-navigation');
+  if (menuToggle && primaryNav) {
+    menuToggle.addEventListener('click', () => {
+      const open = primaryNav.classList.toggle('is-open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+  }
 
-loginClose.addEventListener("click", () => {
-  login.classList.remove("show-login");
+  const profileBtn = document.getElementById('profile-btn');
+  const profileMenu = document.getElementById('profile-menu');
+  if (profileBtn && profileMenu) {
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = profileMenu.classList.toggle('is-open');
+      profileBtn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', (e) => {
+      if (!profileMenu.classList.contains('is-open')) return;
+      if (e.target === profileBtn || profileBtn.contains(e.target)) return;
+      if (!profileMenu.contains(e.target)) {
+        profileMenu.classList.remove('is-open');
+        profileBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 });

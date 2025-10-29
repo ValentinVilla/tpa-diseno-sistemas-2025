@@ -42,8 +42,12 @@ function initNavigation() {
 
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href') || '';
+            const isAnchor = href.startsWith('#');
+            if (!isAnchor) { return; }
+
             e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
+            const targetId = href.substring(1);
 
             // Actualizar links activos
             navLinks.forEach(l => l.classList.remove('active'));
@@ -62,6 +66,8 @@ function initNavigation() {
         });
     });
 }
+
+
 
 // Modales
 function initModals() {
