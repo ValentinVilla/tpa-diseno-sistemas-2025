@@ -17,33 +17,15 @@
 
         <div class="admin-grid">
             <!-- GESTIÓN DE COLECCIONES -->
-            <div class="admin-card">
+            <div class="admin-card" onclick="window.location.href='/admin/colecciones'">
                 <h2>Gestión de Colecciones</h2>
                 <p>Creá nuevas colecciones a partir de fuentes estáticas, dinámicas o proxy.</p>
-                <div class="actions">
-                    <a href="/admin/colecciones/nueva" class="btn btn-eseverde">Crear colección</a>
-                    <a href="/admin/colecciones" class="btn btn-eseverde">Ver todas</a>
-                </div>
-            </div>
-
-            <!-- CONFIGURACIÓN DE CONSENSO -->
-            <div class="admin-card">
-                <h2>Configuración de Consenso y Fuentes</h2>
-                <p>Definí criterios de consenso y gestioná las fuentes asociadas a cada colección.</p>
-                <div class="actions">
-                    <a href="/admin/configuracion/consenso" class="btn btn-eseverde">Configurar consenso</a>
-                    <a href="/admin/configuracion/fuentes" class="btn btn-eseverde">Gestionar fuentes</a>
-                </div>
             </div>
 
             <!-- SOLICITUDES DE ELIMINACIÓN -->
-            <div class="admin-card">
+            <div class="admin-card" onclick="window.location.href='/admin/solicitudes'">
                 <h2>Gestión de Solicitudes</h2>
                 <p>Revisá y aprobá o rechazá las solicitudes de eliminación pendientes asociadas a una fuente.</p>
-
-                <div class="actions">
-                    <a href="/admin/solicitudes" class="btn btn-eseverde">Ver Solicitudes</a>
-                </div>
             </div>
         </div>
     </div>

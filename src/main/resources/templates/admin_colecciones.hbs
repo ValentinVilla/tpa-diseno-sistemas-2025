@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Colecciones</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+    <link rel="stylesheet" href="/styles/admin-colecciones.css">
+</head>
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <h1 class="page-title">Colecciones Disponibles</h1>
+        <p class="subtitle">Colecciones actualmente registradas en el sistema</p>
+        <div class="scroll-container">
+            <a href="/admin" class="btn-back">← Volver al Panel</a>
+            <a id="abrir-crear-coleccion" class="btn-new">+ Crear colección</a>
+            <div class="admin-grid">
+                {{#each colecciones}}
+                    <div class="admin-card coleccion-card" onclick="handleColeccionClick('{{this.id}}')">
+                        <h2>{{this.titulo}}</h2>
+                        <p>{{this.descripcion}}</p>
+                        <p><strong>Fuente:</strong> {{this.fuente.nombre}}</p>
+                        <p><strong>Criterio:</strong> {{this.criterioPertenencia.nombre}}</p>
+                        <p><strong>Modo:</strong> {{this.modoNavegacion}}</p>
+                        <p><strong>Consenso:</strong> {{this.algoritmoConsenso}}</p>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal de opciones de colección -->
+<div class="coleccion-modal" id="coleccion-modal">
+    <div class="coleccion-modal__content">
+        <h2 class="coleccion-modal__title">¿Qué deseas hacer con esta colección?</h2>
+        <div class="coleccion-modal__buttons">
+            <button class="coleccion-btn gestionar" onclick="irA('gestionar')">Gestionar fuentes</button>
+            <button class="coleccion-btn configurar" onclick="irA('configurar')">Configurar consenso</button>
+            <button class="coleccion-btn ver" onclick="irA('ver')">Ver</button>
+        </div>
+        <button class="coleccion-modal__close" id="coleccion-modal-close">×</button>
+    </div>
+</div>
+
+<!-- Modal para crear nueva colección -->
+<div class="coleccion-modal" id="crear-coleccion-modal">
+    <div class="coleccion-modal__content">
+        <h2 class="coleccion-modal__title">Nueva colección</h2>
+
+        <form action="/admin/colecciones" method="post" class="colecciones-form">
+            <div class="form-row">
+                <label for="titulo">Título</label>
+                <input id="titulo" name="titulo" type="text" required class="input" />
+            </div>
+
+            <div class="form-row">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="3" class="input"></textarea>
+            </div>
+
+            <div class="form-row">
+                <label for="fuentes">Fuentes</label>
+                <select id="fuentes" name="fuentes" multiple size="4" class="input" required>
+                    <option value="fuente_estatica">Fuente Estática</option>
+                    <option value="fuente_dinamica">Fuente Dinámica</option>
+                    <option value="fuente_proxy">Fuente Proxy</option>
+                    <option value="fuente_externa">Fuente Externa</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="criterio">Criterio de pertenencia</label>
+                <select id="criterio" name="criterio" class="input" required>
+                    <option value="filtro_geografico">Filtro geográfico</option>
+                    <option value="filtro_categoria">Filtro por categoría</option>
+                    <option value="filtro_fecha">Filtro por fecha</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="algoritmo">Algoritmo de consenso</label>
+                <select id="algoritmo" name="algoritmo" class="input" required>
+                    <option value="mayoria">Mayoría</option>
+                    <option value="unanimidad">Unanimidad</option>
+                    <option value="ponderado">Ponderado</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="modo">Modo de navegación</label>
+                <select id="modo" name="modo" class="input" required>
+                    <option value="lista">Lista</option>
+                    <option value="mapa">Mapa</option>
+                    <option value="paginado">Paginado</option>
+                </select>
+            </div>
+
+            <div class="form-row" style="margin-top:1rem; display:flex; gap:0.5rem;">
+                <button type="submit" class="btn btn-eseverde">Crear</button>
+                <button type="button" class="btn btn-danger" id="cancelar-crear">Cancelar</button>
+            </div>
+        </form>
+
+        <button class="coleccion-modal__close" id="cerrar-crear-coleccion">×</button>
+    </div>
+</div>
+
+<script>
+    let coleccionSeleccionada = null;
+
+    function handleColeccionClick(id) {
+        coleccionSeleccionada = id;
+        document.getElementById('coleccion-modal').classList.add('show-modal');
+    }
+
+    function irA(accion) {
+        const id = coleccionSeleccionada;
+        if (!id) return;
+        if (accion === 'gestionar') window.location.href = `/admin/colecciones/${id}/gestionar`;
+        else if (accion === 'configurar') window.location.href = `/admin/colecciones/${id}/configurar`;
+        else window.location.href = `/admin/colecciones/${id}`;
+    }
+
+    document.getElementById('coleccion-modal-close').onclick = function() {
+        document.getElementById('coleccion-modal').classList.remove('show-modal');
+    }
+
+    // Abrir modal de creación
+    document.getElementById('abrir-crear-coleccion').onclick = function() {
+        document.getElementById('crear-coleccion-modal').classList.add('show-modal');
+    };
+
+    // Cerrar modal con X o cancelar
+    document.getElementById('cerrar-crear-coleccion').onclick = cerrarModalCrear;
+    document.getElementById('cancelar-crear').onclick = cerrarModalCrear;
+
+    function cerrarModalCrear() {
+        document.getElementById('crear-coleccion-modal').classList.remove('show-modal');
+    }
+</script>
+
+</body>
+</html>
