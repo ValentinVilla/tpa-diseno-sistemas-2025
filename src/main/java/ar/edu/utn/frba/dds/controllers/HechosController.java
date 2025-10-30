@@ -19,9 +19,13 @@ import java.util.Map;
 
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import ar.edu.utn.frba.dds.repositorios.RepositorioFuentes;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
 import io.javalin.http.Context;
 
 import java.util.*;
+import javax.swing.*;
 
 public class HechosController {
 
@@ -40,6 +44,24 @@ public class HechosController {
 
       Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
       if (usuario != null) modelo.put("nombre", usuario.getNombre());
+
+      String solicitudStatus = ctx.queryParam("solicitud");
+      if (solicitudStatus != null) {
+        Map<String, String> notificacion = new HashMap<>();
+        if (solicitudStatus.equals("exito")) {
+          notificacion.put("tipo", "exito");
+          notificacion.put("mensaje", "Solicitud enviada correctamente.");
+        }
+        modelo.put("notificacion", notificacion);
+      }
+
+      String creacionStatus = ctx.queryParam("creacion");
+      if (creacionStatus != null && creacionStatus.equals("exito")) {
+        Map<String, String> notificacion = new HashMap<>();
+        notificacion.put("tipo", "exito");
+        notificacion.put("mensaje", "Hecho creado correctamente.");
+        modelo.put("notificacion", notificacion);
+      }
 
       ctx.render("hechos.hbs", modelo);
     } catch (Exception e) {
@@ -101,7 +123,7 @@ public class HechosController {
       fuente.subirHecho(hechoDinamico);
 
       ctx.status(201);
-      ctx.redirect("/hechos");
+      ctx.redirect("/hechos?creacion=exito");
     } catch (Exception e) {
       ctx.status(500);
       ctx.redirect("/hechos/nuevo?error=true");
@@ -120,6 +142,60 @@ public class HechosController {
     }
 
     ctx.render("crear-hecho.hbs", model);
+  }
+
+  public void mostrarFormularioEliminacion(Context ctx) {
+    Map<String, Object> model = new HashMap<>();
+
+    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
+    if (usuario != null) {
+      model.put("nombre", usuario.getNombre());
+    }
+
+    Map<String, String> hecho = new HashMap<>();
+    hecho.put("titulo", ctx.queryParam("titulo"));
+    hecho.put("descripcion", ctx.queryParam("descripcion"));
+    hecho.put("categoria", ctx.queryParam("categoria"));
+
+    model.put("hecho", hecho);
+
+    ctx.render("solicitud-eliminacion.hbs", model);
+  }
+
+  public void crearSolicitudEliminacion(Context ctx) {
+    try {
+      String titulo = ctx.formParam("titulo");
+      String descripcion = ctx.formParam("descripcion");
+      String categoria = ctx.formParam("categoria");
+      String justificacion = ctx.formParam("justificacion");
+
+      Contribuyente contribuyente = ctx.sessionAttribute("usuario_logueado");
+
+      HechoDinamico hechoTemporal = new HechoDinamico(
+          new HechoBuilder()
+              .titulo(titulo)
+              .descripcion(descripcion)
+              .categoria(categoria),
+          contribuyente
+      );
+
+      DetectorDeSpam detectorSiempreFalse = texto -> false; // TODO: chequear q carajo hacer con el detector de spam
+
+      SolicitudEliminacion solicitud = new SolicitudEliminacion(
+          hechoTemporal,
+          justificacion,
+          detectorSiempreFalse
+      );
+
+      RepositorioSolicitudes.getInstancia().guardar(solicitud);
+
+      ctx.status(201);
+      ctx.redirect("/hechos?solicitud=exito");
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500).result("Error al procesar la solicitud: " + e.getMessage());
+      ctx.redirect("/hechos?solicitud=error");
+    }
   }
 
   private List<Hecho> getHechos(ParametrosConsulta filtros) {

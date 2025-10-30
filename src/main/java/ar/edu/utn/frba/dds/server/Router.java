@@ -30,10 +30,12 @@ public class Router {
     app.post("/register", usuariosController::crearUsuario);
 
     // --- Hechos ---
-    app.get("/hechos", hechosController::mostrarHechos);
     app.get("/hechos.json", hechosController::mostrarHechosMapa);
+    app.get("/hechos", hechosController::mostrarHechos);
     app.get("/hechos/nuevo", hechosController::mostrarFormularioNuevoHecho);
-    app.post("/hechos", hechosController::crearHecho);  // un visualizador puede crear hechos sin estar log
+    app.post("/hechos", hechosController::crearHecho);
+    app.get("/hechos/delete", hechosController::mostrarFormularioEliminacion);
+    app.post("/hechos/delete", hechosController::crearSolicitudEliminacion);
 
     // --- Colecciones ---
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones(ctx)));

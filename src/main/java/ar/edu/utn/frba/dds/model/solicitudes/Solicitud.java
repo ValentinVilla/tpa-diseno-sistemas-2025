@@ -15,6 +15,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.persistence.Column;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -23,6 +24,7 @@ public abstract class Solicitud {
   @Id
   @GeneratedValue
   protected Long id;
+  @Column(columnDefinition = "TEXT")
   protected String textoFundamentacion;
   @Enumerated(EnumType.STRING)
   protected EstadoSolicitud estado;

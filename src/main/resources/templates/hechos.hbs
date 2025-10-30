@@ -1,15 +1,25 @@
 {{#partial "css"}}
 <link rel="stylesheet" href="/styles/mainLayout.css">
+<link rel="stylesheet" href="/styles/notificacion.css">
 {{/partial}}
 
 {{#partial "header"}}
-{{>templates/nav }}
+    {{>templates/nav }}
 {{/partial}}
 
 {{#partial "mapa-home"}}{{/partial}}
 {{#partial "acerca"}}{{/partial}}
 
 {{#partial "contenido"}}
+{{#if notificacion}}
+    <div class="notificacion-toast {{notificacion.tipo}}">
+        <p class="toast-mensaje">{{notificacion.mensaje}}</p>
+        <button class="toast-cerrar"
+                onclick="this.parentElement.style.display='none';"
+                aria-label="Cerrar">&times;</button>
+    </div>
+{{/if}}
+
 <main class="main">
     <section id="mapa" class="section-mapa active">
         <aside class="mapa-container">
@@ -51,12 +61,15 @@
                                     </svg>
                                     {{provincia}}
                                 </span>
-                                <button class="btn-icon delete-icon" aria-label="Solicitar eliminación de {{titulo}}" title="Solicitar eliminación">
+                                <a href="/hechos/delete?titulo={{titulo}}&descripcion={{descripcion}}&categoria={{categoria}}"
+                                   class="btn-icon delete-icon"
+                                   aria-label="Solicitar eliminación de {{titulo}}"
+                                   title="Solicitar eliminación">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                         <path d="M2 4H14M6 7V11M10 7V11M3 4L4 13H12L13 4" stroke="currentColor"
                                             stroke-width="1.5" />
                                     </svg>
-                                </button>
+                                </a>
                             </div>
                         </article>
                         {{/each}}

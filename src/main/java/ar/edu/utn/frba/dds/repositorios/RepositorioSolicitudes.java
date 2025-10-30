@@ -8,13 +8,12 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 public class RepositorioSolicitudes {
-  private final EntityManager entityManager;
+  private final EntityManagerFactory emf;
 
   private static RepositorioSolicitudes instancia;
 
   private RepositorioSolicitudes() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-    this.entityManager = emf.createEntityManager();
+    this.emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
   }
 
   public static RepositorioSolicitudes getInstancia() {
@@ -25,56 +24,66 @@ public class RepositorioSolicitudes {
   }
 
   public List<Solicitud> obtenerTodas() {
-    return entityManager.createQuery("SELECT s FROM Solicitud s", Solicitud.class)
-        .getResultList();
+    EntityManager em = emf.createEntityManager();
+    try {
+      return em.createQuery("SELECT s FROM Solicitud s", Solicitud.class)
+          .getResultList();
+    } finally {
+      em.close();
+    }
   }
 
   public void guardar(Solicitud solicitud) {
-    EntityTransaction transaction = getEntity();
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction transaction = em.getTransaction();
     try {
       transaction.begin();
-      entityManager.persist(solicitud);
+      em.persist(solicitud);
       transaction.commit();
     } catch (Exception e) {
-      if (transaction.isActive()) {
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
       throw e;
+    } finally {
+      em.close();
     }
   }
 
   public void eliminar(Long id) {
-    EntityTransaction transaction = getEntity();
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction transaction = em.getTransaction();
     try {
       transaction.begin();
-      Solicitud solicitud = entityManager.find(Solicitud.class, id);
+      Solicitud solicitud = em.find(Solicitud.class, id);
       if (solicitud != null) {
-        entityManager.remove(solicitud);
+        em.remove(solicitud);
       }
       transaction.commit();
     } catch (Exception e) {
-      if (transaction.isActive()) {
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
       throw e;
+    } finally {
+      em.close();
     }
   }
 
   public void actualizar(Solicitud solicitud) {
-    EntityTransaction transaction = getEntity();
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction transaction = em.getTransaction();
     try {
       transaction.begin();
-      entityManager.merge(solicitud);
+      em.merge(solicitud);
       transaction.commit();
     } catch (Exception e) {
-      if (transaction.isActive()) {
+      if (transaction != null && transaction.isActive()) {
         transaction.rollback();
       }
       throw e;
+    } finally {
+      em.close();
     }
-  }
-
-  private  EntityTransaction getEntity() {
-      return entityManager.getTransaction();
   }
 }
