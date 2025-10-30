@@ -1,50 +1,65 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Cargar Hecho</title>
+{{#partial "css"}}
     <link rel="stylesheet" href="/styles/crear-hecho.css">
-</head>
-<body>
-<div class="hecho-container">
-    <h2>Cargar Nuevo Hecho</h2>
+{{/partial}}
 
-    <form action="/hechos" method="post">
+{{#partial "header"}}
+    {{> templates/nav }}
+{{/partial}}
 
-        <label for="fuenteId">Fuente destino</label>
-        <select id="fuenteId" name="fuenteId" required>
-            <option value="" disabled selected>Seleccioná una fuente dinámica</option>
-            {{#each fuentesDinamicas}}
-                <option value="{{id}}">Fuente dinámica #{{id}}</option>
-            {{/each}}
-        </select>
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
 
-        <label for="titulo">Título</label>
-        <input type="text" id="titulo" name="titulo" placeholder="Título del hecho" required>
+{{#partial "contenido"}}
+    <div class="hecho-container">
+        <svg class="registro-logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16 4L4 10L16 16L28 10L16 4Z" fill="currentColor"/>
+            <path d="M4 16L16 22L28 16" stroke="currentColor" stroke-width="2"/>
+            <path d="M4 22L16 28L28 22" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <h2>Cargar Nuevo Hecho</h2>
 
-        <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" name="descripcion" placeholder="Describe lo que sucedió..."></textarea>
+        <form action="/hechos" method="post">
 
-        <label for="categoria">Categoría</label>
-        <input type="text" id="categoria" name="categoria" placeholder="Ej: Incendio, Robo, Etc..." required>
+            <label for="fuenteId">Fuente destino</label>
+            <select id="fuenteId" name="fuenteId" required>
+                <option value="" disabled selected>Seleccioná una fuente dinámica</option>
+                {{#each fuentesDinamicas}}
+                    <option value="{{id}}">Fuente dinámica #{{id}}</option>
+                {{/each}}
+            </select>
 
-        <div class="form-row">
-            <div>
-                <label for="latitud">Latitud</label>
-                <input type="number" step="any" id="latitud" name="latitud" placeholder="Ej: -34.603851" required>
+            <label for="titulo">Título</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Título del hecho" required>
+
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" name="descripcion" placeholder="Describe lo que sucedió..."></textarea>
+
+            <label for="categoria">Categoría</label>
+            <input type="text" id="categoria" name="categoria" placeholder="Ej: Incendio, Robo, Etc..." required>
+
+            <div class="form-row">
+                <div>
+                    <label for="latitud">Latitud</label>
+                    <input type="number" step="any" id="latitud" name="latitud" placeholder="Ej: -34.603851" required>
+                </div>
+                <div>
+                    <label for="longitud">Longitud</label>
+                    <input type="number" step="any" id="longitud" name="longitud" placeholder="Ej: -58.381775" required>
+                </div>
             </div>
-            <div>
-                <label for="longitud">Longitud</label>
-                <input type="number" step="any" id="longitud" name="longitud" placeholder="Ej: -58.381775" required>
-            </div>
-        </div>
 
-        <label for="fechaAcontecimiento">Fecha y Hora del Hecho</label>
-        <input type="datetime-local" id="fechaAcontecimiento" name="fechaAcontecimiento" required>
+            <label for="fechaAcontecimiento">Fecha y Hora del Hecho</label>
+            <input type="datetime-local" id="fechaAcontecimiento" name="fechaAcontecimiento" required>
 
-        <button type="submit">Crear Hecho</button>
+            <button type="submit">Crear Hecho</button>
 
-    </form>
-</div>
-</body>
-</html>
+        </form>
+    </div>
+{{/partial}}
+
+{{#partial "footer"}}
+    {{> templates/footer}}
+{{/partial}}
+
+{{> templates/main }}
+

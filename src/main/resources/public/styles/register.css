@@ -4,13 +4,15 @@ body {
     background: linear-gradient(135deg, rgba(0,0,0,0.04), rgba(0,0,0,0)) , var(--color-background);
     font-family: Arial, sans-serif;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
 }
 .registro-page {
     width: 100%;
     padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
 }
 .registro-container {
     background: var(--color-card);

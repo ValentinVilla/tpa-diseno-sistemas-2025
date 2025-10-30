@@ -4,6 +4,8 @@ import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import ar.edu.utn.frba.dds.repositorios.RepositorioUsuarios;
 import io.javalin.http.Context;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class UsuariosController {
@@ -23,11 +25,25 @@ public class UsuariosController {
     Contribuyente usuarioCreado = new Contribuyente(nombre, apellido, telefono, mail, edad, password);
 
     repositorioUsuarios.guardar(usuarioCreado);
-    ctx.redirect("/logueo");
+
+    ctx.sessionAttribute("usuario_logueado", usuarioCreado);
+    String returnTo = ctx.sessionAttribute("returnTo");
+    if (returnTo != null && !returnTo.isEmpty()) {
+      ctx.sessionAttribute("returnTo", null);
+      ctx.redirect(returnTo);
+    } else {
+      ctx.redirect("/home");
+    }
   }
 
   public void mostrarRegistro(Context ctx) {
-    ctx.render("register.hbs");
+    Map<String, Object> model = new HashMap<>();
+    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
+    if (usuario != null) {
+      model.put("nombre", usuario.getNombre());
+    }
+
+    ctx.render("register.hbs", model);
   }
 }
 

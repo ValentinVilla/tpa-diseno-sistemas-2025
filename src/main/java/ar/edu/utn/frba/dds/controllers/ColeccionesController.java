@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.controllers;
 
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ public class ColeccionesController {
     Map<String, Object> modelo = new HashMap<>();
     modelo.put("cantidad",  colecciones.size());
     modelo.put("colecciones", colecciones);
+    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
+    if (usuario != null) {
+      modelo.put("nombre", usuario.getNombre());
+    }
 
     return modelo;
   }

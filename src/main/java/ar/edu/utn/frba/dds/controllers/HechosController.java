@@ -114,6 +114,11 @@ public class HechosController {
     Map<String, Object> model = new HashMap<>();
     model.put("fuentesDinamicas", fuentesDinamicas);
 
+    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
+    if (usuario != null) {
+      model.put("nombre", usuario.getNombre());
+    }
+
     ctx.render("crear-hecho.hbs", model);
   }
 

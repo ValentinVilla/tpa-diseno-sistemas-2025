@@ -6,9 +6,18 @@ body {
     color: var(--color-foreground);
 }
 
+.registro-logo {
+    display: block;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 8px auto;
+    color: var(--color-primary);
+}
+
 .hecho-container {
     background: var(--color-card);
-    width: 450px;
+    width: 100%;
+    max-width: 560px;
     margin: 60px auto;
     padding: 30px 40px;
     border-radius: var(--radius);
