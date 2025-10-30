@@ -6,20 +6,52 @@
     <link rel="stylesheet" href="/styles/register.css">
 </head>
 <body>
-<div class="registro-container">
-    <h2>Registro</h2>
-    <form action="/register" method="post">
-        <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
-        <input type="text" id="apellido" name="apellido" placeholder="Apellido" required>
-        <input type="text" id="telefono" name="telefono" placeholder="Teléfono" required>
-        <input type="text" id="email" name="email" placeholder="Correo electrónico" required>
-        <input type="number" id="edad" name="edad" placeholder="Edad" required>
-        <input type="password" id="password" name="password" placeholder="Contraseña" required>
+<div class="registro-page">
+    <div class="registro-container">
+        <svg class="registro-logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16 4L4 10L16 16L28 10L16 4Z" fill="currentColor"/>
+            <path d="M4 16L16 22L28 16" stroke="currentColor" stroke-width="2"/>
+            <path d="M4 22L16 28L28 22" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <h2>Crear cuenta</h2>
+        <p class="registro-subtitle">Únete para reportar y explorar hechos en tu ciudad.</p>
 
-        <button type="submit">Registrarse</button>
-    </form>
+        <form action="/register" method="post" novalidate>
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                </div>
+                <div class="form-field">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" id="apellido" name="apellido" placeholder="Tu apellido" required>
+                </div>
+                <div class="form-field">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="Ej: +54 11 1234-5678" required>
+                </div>
+                <div class="form-field">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="tunombre@ejemplo.com" required>
+                </div>
+                <div class="form-field">
+                    <label for="edad">Edad</label>
+                    <input type="number" id="edad" name="edad" placeholder="Tu edad" min="0" required>
+                </div>
+                <div class="form-field">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" minlength="8" required>
+                </div>
+            </div>
 
-    <a class="login-link" href="/login">¿Ya tienes cuenta? Inicia sesión</a>
+            <div class="form-actions">
+                <button type="submit">Crear cuenta</button>
+            </div>
+        </form>
+
+        <div class="divider"><span>o</span></div>
+        <a class="login-link" href="/logueo">¿Ya tienes cuenta? Inicia sesión</a>
+    </div>
 </div>
 </body>
 </html>

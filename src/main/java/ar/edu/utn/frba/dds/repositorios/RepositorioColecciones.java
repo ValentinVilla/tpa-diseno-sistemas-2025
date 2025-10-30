@@ -1,7 +1,9 @@
 package ar.edu.utn.frba.dds.repositorios;
 
 import java.util.List;
+
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -44,6 +46,13 @@ public class RepositorioColecciones {
 
   public List<Coleccion> listarTodas() {
     return entityManager.createQuery("SELECT c FROM Coleccion c", Coleccion.class)
+        .getResultList();
+  }
+
+  public List<Coleccion> listarColecciones(ParametrosConsulta parametrosConsulta) {
+    String jpql = "SELECT c FROM Coleccion c WHERE c.titulo = :texto";
+    return entityManager.createQuery(jpql, Coleccion.class)
+        .setParameter("texto", parametrosConsulta.getTexto())
         .getResultList();
   }
 

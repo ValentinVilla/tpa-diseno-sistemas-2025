@@ -36,6 +36,6 @@ public class Router {
     app.post("/hechos", hechosController::crearHecho);  // un visualizador puede crear hechos sin estar log
 
     // --- Colecciones ---
-    app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones()));
+    app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones(ctx)));
   }
 }

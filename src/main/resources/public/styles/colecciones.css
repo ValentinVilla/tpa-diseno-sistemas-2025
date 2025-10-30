@@ -256,6 +256,28 @@ body {
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
 }
 
+.empty-state {
+    grid-column: 1 / -1;        /* ocupar todas las columnas del grid padre */
+    justify-self: center;       /* centrar el bloque dentro de la fila */
+    width: 100%;                /* tomar todo el ancho de la fila */
+    display: grid;
+    place-items: center;        /* centra hijos en ambos ejes */
+    place-content: center;      /* opcional: centra el contenido del grid */
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--color-text-secondary);
+    min-height: 55vh;           /* o 100% si el padre tiene altura definida */
+}
+
+.empty-state h3 {
+    margin: var(--spacing-sm) 0 0 0;
+    color: var(--color-text);
+}
+
+.empty-illustration {
+    font-size: 2rem;
+}
+
 @media (max-width: 1280px) {
     .collections-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
