@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.repositorios;
 
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,6 +27,12 @@ public class RepositorioFuentes {
 
   public List<Fuente> listarTodas() {
     return entityManager.createQuery("FROM Fuente", Fuente.class)
+        .getResultList();
+  }
+
+  public List<FuenteDinamica> listarFuentesDinamicas() {
+    String sql = "SELECT * FROM fuente WHERE tipo_fuente = 'FUENTE_DINAMICA'";
+    return entityManager.createNativeQuery(sql, FuenteDinamica.class)
         .getResultList();
   }
 }

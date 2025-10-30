@@ -11,6 +11,14 @@
 
     <form action="/hechos" method="post">
 
+        <label for="fuenteId">Fuente destino</label>
+        <select id="fuenteId" name="fuenteId" required>
+            <option value="" disabled selected>Seleccioná una fuente dinámica</option>
+            {{#each fuentesDinamicas}}
+                <option value="{{id}}">Fuente dinámica #{{id}}</option>
+            {{/each}}
+        </select>
+
         <label for="titulo">Título</label>
         <input type="text" id="titulo" name="titulo" placeholder="Título del hecho" required>
 

@@ -85,7 +85,12 @@ public class HechosController {
   }
 
   public void mostrarFormularioNuevoHecho(Context ctx) {
-    ctx.render("crear-hecho.hbs");
+    List<FuenteDinamica> fuentesDinamicas = RepositorioFuentes.getInstancia().listarFuentesDinamicas();
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("fuentesDinamicas", fuentesDinamicas);
+
+    ctx.render("crear-hecho.hbs", model);
   }
 
   private List<Hecho> getHechos(ParametrosConsulta filtros) {

@@ -34,7 +34,8 @@ body {
 .hecho-container input[type="text"],
 .hecho-container input[type="number"],
 .hecho-container input[type="datetime-local"],
-.hecho-container textarea {
+.hecho-container textarea,
+.hecho-container select{
     width: 100%;
     padding: 10px;
     margin-bottom: var(--spacing-md);
