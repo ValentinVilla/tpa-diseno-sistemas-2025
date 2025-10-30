@@ -73,7 +73,31 @@ public class HechosController {
       HechoBuilder hechoBuilder = this.construirBuilder(ctx);
       HechoDinamico hechoDinamico = new HechoDinamico(hechoBuilder, contribuyente);
 
-      FuenteDinamica fuente = new FuenteDinamica();
+      String fuenteIdStr = ctx.formParam("fuenteId");
+      if (fuenteIdStr == null || fuenteIdStr.isBlank()) {
+        // Bad request: no se seleccionó fuente
+        ctx.status(400);
+        ctx.redirect("/hechos/nuevo?error=true");
+        return;
+      }
+
+      Long fuenteId;
+      try {
+        fuenteId = Long.parseLong(fuenteIdStr);
+      } catch (NumberFormatException nfe) {
+        ctx.status(400);
+        ctx.redirect("/hechos/nuevo?error=true");
+        return;
+      }
+
+      // Recuperar la fuente dinámica existente (no crear una nueva)
+      FuenteDinamica fuente = RepositorioFuentes.getInstancia().buscarFuenteDinamicaPorId(fuenteId);
+      if (fuente == null) {
+        ctx.status(400);
+        ctx.redirect("/hechos/nuevo?error=fuente_no_encontrada");
+        return;
+      }
+
       fuente.subirHecho(hechoDinamico);
 
       ctx.status(201);

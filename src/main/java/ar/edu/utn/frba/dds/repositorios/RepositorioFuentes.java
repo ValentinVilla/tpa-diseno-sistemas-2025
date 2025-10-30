@@ -35,4 +35,8 @@ public class RepositorioFuentes {
     return entityManager.createNativeQuery(sql, FuenteDinamica.class)
         .getResultList();
   }
+
+  public FuenteDinamica buscarFuenteDinamicaPorId(Long id) {
+    return entityManager.find(FuenteDinamica.class, id);
+  }
 }
