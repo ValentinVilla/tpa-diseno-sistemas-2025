@@ -29,7 +29,6 @@ public class SesionesController {
         if("true".equals(ctx.queryParam("error"))) {
             model.put("error", "Usuario o contraseña incorrectos");
         }
-        ctx.render("login.hbs", model);
     }
 
     public void iniciarSesion(Context ctx) {

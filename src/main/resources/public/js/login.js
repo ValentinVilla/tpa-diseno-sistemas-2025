@@ -5,11 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
   if (login && loginBtn) {
     loginBtn.addEventListener('click', () => {
       login.classList.add('show-login');
+      history.pushState(null, '', '/login');
     });
   }
   if (login && loginClose) {
     loginClose.addEventListener('click', () => {
       login.classList.remove('show-login');
+      history.pushState(null, '', '/home');
     });
   }
 
