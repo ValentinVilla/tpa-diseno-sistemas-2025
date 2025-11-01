@@ -11,135 +11,184 @@
 <body>
 <section class="admin-panel">
     <div class="container">
-        <h1 class="page-title">Colecciones Disponibles</h1>
-        <p class="subtitle">Colecciones actualmente registradas en el sistema</p>
-        <div class="scroll-container">
-            <a href="/admin" class="btn-back">← Volver al Panel</a>
-            <a id="abrir-crear-coleccion" class="btn-new">+ Crear colección</a>
-            <div class="admin-grid">
-                {{#each colecciones}}
-                    <div class="admin-card coleccion-card" onclick="handleColeccionClick('{{this.id}}')">
-                        <h2>{{this.titulo}}</h2>
-                        <p>{{this.descripcion}}</p>
-                        <p><strong>Fuente:</strong> {{this.fuente.nombre}}</p>
-                        <p><strong>Criterio:</strong> {{this.criterioPertenencia.nombre}}</p>
-                        <p><strong>Modo:</strong> {{this.modoNavegacion}}</p>
-                        <p><strong>Consenso:</strong> {{this.algoritmoConsenso}}</p>
-                    </div>
-                {{/each}}
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Colecciones</h1>
+                <p class="subtitle">Crear y gestionar colecciones desde el panel administrativo</p>
+            </div>
+            <div>
+                <a href="/admin/colecciones/nueva" class="btn-new">+ Nueva colección</a>
+                <a href="/admin" class="btn-back">← Volver al Panel</a>
             </div>
         </div>
+
+        <div style="margin:1rem 0 1.5rem; display:flex; gap:0.75rem; align-items:center;">
+            <input id="search" aria-label="Buscar colecciones" type="search" placeholder="Buscar por título, descripción, fuente..." class="input" style="flex:1; padding:0.6rem;" />
+            <select id="filter-fuente" aria-label="Filtrar por fuente" class="input" style="width:220px;">
+                <option value="">Todas las fuentes</option>
+                <option value="Fuente Estática">Fuente Estática</option>
+                <option value="Fuente Dinámica">Fuente Dinámica</option>
+                <option value="Fuente Proxy">Fuente Proxy</option>
+            </select>
+        </div>
+
+        <div class="scroll-container">
+            <table class="table" id="colecciones-table" style="width:100%; border-collapse:collapse;">
+                <thead>
+                <tr>
+                    <th style="text-align:left; padding:0.75rem">Título</th>
+                    <th style="text-align:left; padding:0.75rem">Descripción</th>
+                    <th style="text-align:left; padding:0.75rem">Fuente</th>
+                    <th style="text-align:left; padding:0.75rem">Criterio</th>
+                    <th style="text-align:left; padding:0.75rem">Modo</th>
+                    <th style="text-align:left; padding:0.75rem">Consenso</th>
+                    <th style="text-align:center; padding:0.75rem">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each colecciones}}
+                    <tr id="row-{{this.id}}">
+                        <td style="padding:0.75rem; vertical-align:top">{{this.titulo}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{this.descripcion}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{#if this.fuente}}{{this.fuente.nombre}}{{else}}-{{/if}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{#if this.criterioPertenencia}}{{this.criterioPertenencia.nombre}}{{else}}-{{/if}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{this.modoNavegacion}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{this.algoritmoConsenso}}</td>
+                        <td style="padding:0.75rem; text-align:center; vertical-align:top">
+                            <button class="btn btn-sm" onclick="irA('gestionar','{{this.id}}')">Gestionar</button>
+                            <button class="btn btn-sm btn-eseverde" onclick="abrirConfig('{{this.id}}', '{{this.algoritmoConsenso}}', '{{#if this.fuente}}{{this.fuente.getClass.name}}{{else}}null{{/if}}')">Configurar</button>
+                            <button class="btn btn-sm" onclick="irA('ver','{{this.id}}')">Ver</button>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+
+            {{#unless colecciones}}
+                <p style="padding:1rem;">No hay colecciones registradas.</p>
+            {{/unless}}
+        </div>
+
     </div>
 </section>
 
-<!-- Modal de opciones de colección -->
-<div class="coleccion-modal" id="coleccion-modal">
+<!-- Modal configuración rápida -->
+<div id="config-modal" class="coleccion-modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="coleccion-modal__content">
-        <h2 class="coleccion-modal__title">¿Qué deseas hacer con esta colección?</h2>
-        <div class="coleccion-modal__buttons">
-            <button class="coleccion-btn gestionar" onclick="irA('gestionar')">Gestionar fuentes</button>
-            <button class="coleccion-btn configurar" onclick="irA('configurar')">Configurar consenso</button>
-            <button class="coleccion-btn ver" onclick="irA('ver')">Ver</button>
-        </div>
-        <button class="coleccion-modal__close" id="coleccion-modal-close">×</button>
-    </div>
-</div>
+        <button class="coleccion-modal__close" onclick="cerrarConfig()">×</button>
+        <h3 class="coleccion-modal__title">Configurar colección</h3>
+        <form id="config-form" method="post">
+            <input type="hidden" id="config-id" name="id">
 
-<!-- Modal para crear nueva colección -->
-<div class="coleccion-modal" id="crear-coleccion-modal">
-    <div class="coleccion-modal__content">
-        <h2 class="coleccion-modal__title">Nueva colección</h2>
-
-        <form action="/admin/colecciones" method="post" class="colecciones-form">
             <div class="form-row">
-                <label for="titulo">Título</label>
-                <input id="titulo" name="titulo" type="text" required class="input" />
+                <label for="config-algoritmo">Algoritmo de consenso</label>
+                <select id="config-algoritmo" name="algoritmo" class="input">
+                    <option value="MAYORIA_SIMPLE">Mayoría simple</option>
+                    <option value="ABSOLUTO">Absoluto</option>
+                    <option value="MULTIPLES_MENCIONES">Múltiples menciones</option>
+                    <option value="DEFAULT">Default</option>
+                </select>
             </div>
 
             <div class="form-row">
-                <label for="descripcion">Descripción</label>
-                <textarea id="descripcion" name="descripcion" rows="3" class="input"></textarea>
-            </div>
-
-            <div class="form-row">
-                <label for="fuentes">Fuentes</label>
-                <select id="fuentes" name="fuentes" multiple size="4" class="input" required>
+                <label for="config-fuente">Tipo de fuente</label>
+                <select id="config-fuente" name="fuenteTipo" class="input">
                     <option value="fuente_estatica">Fuente Estática</option>
                     <option value="fuente_dinamica">Fuente Dinámica</option>
                     <option value="fuente_proxy">Fuente Proxy</option>
-                    <option value="fuente_externa">Fuente Externa</option>
                 </select>
             </div>
 
-            <div class="form-row">
-                <label for="criterio">Criterio de pertenencia</label>
-                <select id="criterio" name="criterio" class="input" required>
-                    <option value="filtro_geografico">Filtro geográfico</option>
-                    <option value="filtro_categoria">Filtro por categoría</option>
-                    <option value="filtro_fecha">Filtro por fecha</option>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="algoritmo">Algoritmo de consenso</label>
-                <select id="algoritmo" name="algoritmo" class="input" required>
-                    <option value="mayoria">Mayoría</option>
-                    <option value="unanimidad">Unanimidad</option>
-                    <option value="ponderado">Ponderado</option>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="modo">Modo de navegación</label>
-                <select id="modo" name="modo" class="input" required>
-                    <option value="lista">Lista</option>
-                    <option value="mapa">Mapa</option>
-                    <option value="paginado">Paginado</option>
-                </select>
-            </div>
-
-            <div class="form-row" style="margin-top:1rem; display:flex; gap:0.5rem;">
-                <button type="submit" class="btn btn-eseverde">Crear</button>
-                <button type="button" class="btn btn-danger" id="cancelar-crear">Cancelar</button>
+            <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-end;">
+                <button type="button" class="btn" onclick="cerrarConfig()">Cancelar</button>
+                <button type="submit" class="btn btn-eseverde">Guardar</button>
             </div>
         </form>
-
-        <button class="coleccion-modal__close" id="cerrar-crear-coleccion">×</button>
     </div>
 </div>
 
 <script>
-    let coleccionSeleccionada = null;
+    // Filtrado simple en el cliente para facilitar búsquedas rápidas
+    const searchInput = document.getElementById('search');
+    const filterFuente = document.getElementById('filter-fuente');
+    const tableBody = document.querySelector('#colecciones-table tbody');
 
-    function handleColeccionClick(id) {
-        coleccionSeleccionada = id;
-        document.getElementById('coleccion-modal').classList.add('show-modal');
+    function normalize(text) {
+        return (text || '').toString().toLowerCase();
     }
 
-    function irA(accion) {
-        const id = coleccionSeleccionada;
+    function filterRows() {
+        const q = normalize(searchInput.value);
+        const fuenteFilter = filterFuente.value.toLowerCase();
+        const rows = tableBody.querySelectorAll('tr');
+
+        rows.forEach(row => {
+            const title = normalize(row.cells[0].textContent);
+            const desc = normalize(row.cells[1].textContent);
+            const fuente = normalize(row.cells[2].textContent);
+
+            const matchesQuery = q === '' || title.includes(q) || desc.includes(q) || fuente.includes(q);
+            const matchesFuente = fuenteFilter === '' || fuente.includes(fuenteFilter);
+
+            if (matchesQuery && matchesFuente) row.style.display = '';
+            else row.style.display = 'none';
+        });
+    }
+
+    searchInput.addEventListener('input', filterRows);
+    filterFuente.addEventListener('change', filterRows);
+
+    // Navegación a acciones de colección
+    function irA(accion, id) {
         if (!id) return;
         if (accion === 'gestionar') window.location.href = `/admin/colecciones/${id}/gestionar`;
         else if (accion === 'configurar') window.location.href = `/admin/colecciones/${id}/configurar`;
         else window.location.href = `/admin/colecciones/${id}`;
     }
 
-    document.getElementById('coleccion-modal-close').onclick = function() {
-        document.getElementById('coleccion-modal').classList.remove('show-modal');
+    function abrirConfig(id, algoritmo, fuenteClass) {
+        const modal = document.getElementById('config-modal');
+        document.getElementById('config-id').value = id;
+        const selectAlg = document.getElementById('config-algoritmo');
+        // Intentamos seleccionar la opción si coincide
+        for (const opt of selectAlg.options) {
+            if (opt.value === algoritmo) {
+                opt.selected = true; break;
+            }
+        }
+        // Fuente: no intentamos mapear la clase perfecta acá, dejamos que admin elija
+        document.getElementById('config-fuente').value = 'fuente_estatica';
+
+        modal.classList.add('show-modal');
+        modal.setAttribute('aria-hidden','false');
     }
 
-    // Abrir modal de creación
-    document.getElementById('abrir-crear-coleccion').onclick = function() {
-        document.getElementById('crear-coleccion-modal').classList.add('show-modal');
-    };
-
-    // Cerrar modal con X o cancelar
-    document.getElementById('cerrar-crear-coleccion').onclick = cerrarModalCrear;
-    document.getElementById('cancelar-crear').onclick = cerrarModalCrear;
-
-    function cerrarModalCrear() {
-        document.getElementById('crear-coleccion-modal').classList.remove('show-modal');
+    function cerrarConfig(){
+        const modal = document.getElementById('config-modal');
+        modal.classList.remove('show-modal');
+        modal.setAttribute('aria-hidden','true');
     }
+
+    // Envío del formulario de config a la ruta apropiada
+    document.getElementById('config-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        const id = document.getElementById('config-id').value;
+        const algoritmo = document.getElementById('config-algoritmo').value;
+        const fuenteTipo = document.getElementById('config-fuente').value;
+
+        // POST usando fetch para /admin/colecciones/:id/configurar
+        fetch(`/admin/colecciones/${id}/configurar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ algoritmo: algoritmo, fuenteTipo: fuenteTipo })
+        }).then(r => {
+            if (r.ok) {
+                window.location.reload();
+            } else {
+                alert('Error al guardar la configuración');
+            }
+        });
+    });
 </script>
 
 </body>

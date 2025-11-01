@@ -8,8 +8,6 @@ import ar.edu.utn.frba.dds.controllers.AdminSolicitudesController;
 import ar.edu.utn.frba.dds.controllers.AdminController;
 import io.javalin.Javalin;
 
-import java.util.Map;
-
 public class Router {
   UsuariosController usuariosController = new UsuariosController();
   ColeccionesController coleccionesController = new ColeccionesController();
@@ -46,8 +44,9 @@ public class Router {
     app.get("/admin", adminController::mostrarAdmin);
     app.get("/admin/solicitudes", adminSolicitudesController::mostrarPanel);
     app.get("/admin/colecciones", ctx -> ctx.render("admin_colecciones.hbs", coleccionesController.mostrarColecciones()));
-    app.get("admin/colecciones/nueva", adminController::mostarCrearColeccion); //posiblemente en las que son solamente mostrar una pestaña no haces adminController sino que metes un ctx render y chau por eso pasar la logica de adminSlocitudes a un Solicitudes Controller o directamente a Admin Controller
-    //app.post("/admin/colecciones", adminController::crearColeccion);
+    app.get("/admin/colecciones/nueva", adminController::mostarCrearColeccion);
+    app.post("/admin/colecciones", adminController::crearColeccion);
+    app.post("/admin/colecciones/{id}/configurar", adminController::configurarColeccion);
     // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar
     app.post("/admin/solicitudes/aprobadas", adminSolicitudesController::aprobar);
     app.post("/admin/solicitudes/rechazadas", adminSolicitudesController::rechazar);

@@ -81,6 +81,19 @@ public class Coleccion {
     this.criterioPertenencia = filtro;
   }
 
+   // Setters añadidos para permitir edición desde el panel admin
+  public void setFuente(Fuente fuente) {
+    this.fuente = fuente;
+  }
+
+  public void setAlgoritmoConsenso(AlgoritmoConsenso algoritmoConsenso) {
+    this.algoritmoConsenso = algoritmoConsenso;
+  }
+
+  public void setModoNavegacion(ModoNavegacion modoNavegacion) {
+    this.modoNavegacion = modoNavegacion;
+  }
+
   public String getTitulo() {
     return titulo;
   }
