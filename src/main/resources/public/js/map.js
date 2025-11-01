@@ -1,6 +1,9 @@
 const centroInicial = [-34.6037, -58.3816];
 const map = L.map('map').setView(centroInicial, 5);
 
+// Hacer el mapa accesible globalmente para poder redimensionarlo
+window.map = map;
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors'
@@ -39,8 +42,24 @@ function obtenerParametrosUrl() {
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
-    const params = obtenerParametrosUrl();
-    const res = await fetch(`/hechos.json?${new URLSearchParams(params)}`);
+    let url;
+    // Si estamos en una página de colección específica, usar ese endpoint
+    if (window.coleccionId) {
+        url = `/colecciones/${window.coleccionId}/hechos.json`;
+    } else {
+        // Usar el endpoint general de hechos
+        const params = obtenerParametrosUrl();
+        url = `/hechos.json?${new URLSearchParams(params)}`;
+    }
+    
+    const res = await fetch(url);
     const hechos = await res.json();
     renderHechosMapa(hechos);
+    
+    // Redimensionar el mapa después de cargar los hechos
+    setTimeout(() => {
+        if (window.map) {
+            window.map.invalidateSize();
+        }
+    }, 100);
 });

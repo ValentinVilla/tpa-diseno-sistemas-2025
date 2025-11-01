@@ -6,8 +6,6 @@ import ar.edu.utn.frba.dds.controllers.SesionesController;
 import ar.edu.utn.frba.dds.controllers.UsuariosController;
 import io.javalin.Javalin;
 
-import java.util.Map;
-
 public class Router {
   UsuariosController usuariosController = new UsuariosController();
   ColeccionesController coleccionesController = new ColeccionesController();
@@ -38,5 +36,7 @@ public class Router {
 
     // --- Colecciones ---
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones(ctx)));
+    app.get("/colecciones/{id}", coleccionesController::mostrarColeccionPorId);
+    app.get("/colecciones/{id}/hechos.json", coleccionesController::mostrarHechosColeccionJson);
   }
 }

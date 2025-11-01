@@ -9,23 +9,19 @@ import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import ar.edu.utn.frba.dds.repositorios.RepositorioFuentes;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
 import io.javalin.http.Context;
-
 import java.util.*;
-import javax.swing.*;
 
 public class HechosController {
 

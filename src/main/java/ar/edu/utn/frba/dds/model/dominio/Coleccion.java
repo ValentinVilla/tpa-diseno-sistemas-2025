@@ -64,6 +64,7 @@ public class Coleccion {
         resultado.add(hecho);
       }
     }
+
     return resultado;
   }
 
