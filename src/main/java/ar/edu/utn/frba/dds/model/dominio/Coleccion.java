@@ -121,4 +121,16 @@ public class Coleccion {
   public Filtro getCriterio(){
     return criterioPertenencia;
   }
+
+  public Filtro getCriterioPertenencia() {
+    return this.criterioPertenencia;
+  }
+
+  public AlgoritmoConsenso getAlgoritmoConsenso() {
+    return this.algoritmoConsenso;
+  }
+
+  public ModoNavegacion getModoNavegacion() {
+    return this.modoNavegacion;
+  }
 }

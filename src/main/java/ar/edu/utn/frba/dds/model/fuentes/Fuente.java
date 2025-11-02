@@ -11,6 +11,7 @@ import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.model.filtros.FiltroFecha;
 import ar.edu.utn.frba.dds.model.filtros.FiltroTexto;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,9 +27,20 @@ public abstract class Fuente {
   @GeneratedValue
   protected Long id;
 
+  @Column(name = "nombre")
+  protected String nombre;
+
   public abstract ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros);
 
   public abstract List<Fuente> getFuente();
+
+  // Devuelve el nombre si fue seteado, si no el nombre de la clase
+  public String getNombre() {
+    if (this.nombre != null && !this.nombre.isBlank()) return this.nombre;
+    return this.getClass().getSimpleName();
+  }
+
+  public void setNombre(String nombre) { this.nombre = nombre; }
 
   protected ArrayList<Hecho> filtrarHechos(List<Hecho> hechos, ParametrosConsulta p) {
     FiltroFecha filtroFecha = new FiltroFecha(p.getFechaAcontecimientoDesde(), p.getFechaAcontecimientoHasta());

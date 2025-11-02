@@ -19,5 +19,11 @@ public abstract class Filtro {
   private Long id;
 
   public abstract boolean cumple(Hecho hecho);
+
+  public String getDescripcion() {
+    return getClass().getSimpleName();
+  }
 }
+
+
 

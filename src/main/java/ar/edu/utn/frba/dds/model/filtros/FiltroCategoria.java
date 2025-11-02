@@ -19,4 +19,14 @@ public class FiltroCategoria extends Filtro {
   public boolean cumple(Hecho hecho) {
     return hecho.getCategoria().equalsIgnoreCase(categoria);
   }
+
+  public String getCategoria() {
+    return categoria;
+  }
+
+  @Override
+  public String getDescripcion() {
+    return "Categoría: " + (categoria != null ? categoria : "-");
+  }
 }
+

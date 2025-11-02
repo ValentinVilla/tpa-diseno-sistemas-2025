@@ -26,9 +26,9 @@
             <input id="search" aria-label="Buscar colecciones" type="search" placeholder="Buscar por título, descripción, fuente..." class="input" style="flex:1; padding:0.6rem;" />
             <select id="filter-fuente" aria-label="Filtrar por fuente" class="input" style="width:220px;">
                 <option value="">Todas las fuentes</option>
-                <option value="Fuente Estática">Fuente Estática</option>
-                <option value="Fuente Dinámica">Fuente Dinámica</option>
-                <option value="Fuente Proxy">Fuente Proxy</option>
+                <option value="FuenteEstatica">Fuente Estática</option>
+                <option value="FuenteDinamica">Fuente Dinámica</option>
+                <option value="FuenteProxy">Fuente Proxy</option>
             </select>
         </div>
 
@@ -47,16 +47,16 @@
                 </thead>
                 <tbody>
                 {{#each colecciones}}
-                    <tr id="row-{{this.id}}">
+                    <tr id="row-{{this.id}}" data-fuente-class="{{this.fuenteClass}}">
                         <td style="padding:0.75rem; vertical-align:top">{{this.titulo}}</td>
                         <td style="padding:0.75rem; vertical-align:top">{{this.descripcion}}</td>
-                        <td style="padding:0.75rem; vertical-align:top">{{#if this.fuente}}{{this.fuente.nombre}}{{else}}-{{/if}}</td>
-                        <td style="padding:0.75rem; vertical-align:top">{{#if this.criterioPertenencia}}{{this.criterioPertenencia.nombre}}{{else}}-{{/if}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{#if this.fuente.nombre}}{{this.fuente.nombre}}{{else}}{{this.fuente}}{{/if}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{#if this.criterioPertenencia.nombre}}{{this.criterioPertenencia.nombre}}{{else}}{{this.criterioPertenencia}}{{/if}}</td>
                         <td style="padding:0.75rem; vertical-align:top">{{this.modoNavegacion}}</td>
                         <td style="padding:0.75rem; vertical-align:top">{{this.algoritmoConsenso}}</td>
                         <td style="padding:0.75rem; text-align:center; vertical-align:top">
                             <button class="btn btn-sm" onclick="irA('gestionar','{{this.id}}')">Gestionar</button>
-                            <button class="btn btn-sm btn-eseverde" onclick="abrirConfig('{{this.id}}', '{{this.algoritmoConsenso}}', '{{#if this.fuente}}{{this.fuente.getClass.name}}{{else}}null{{/if}}')">Configurar</button>
+                            <button class="btn btn-sm btn-eseverde" onclick="abrirConfig('{{this.id}}', '{{this.algoritmoConsenso}}', '{{#if this.fuente}}{{this.fuente}}{{else}}null{{/if}}')">Configurar</button>
                             <button class="btn btn-sm" onclick="irA('ver','{{this.id}}')">Ver</button>
                         </td>
                     </tr>
@@ -123,12 +123,15 @@
         const rows = tableBody.querySelectorAll('tr');
 
         rows.forEach(row => {
-            const title = normalize(row.cells[0].textContent);
-            const desc = normalize(row.cells[1].textContent);
-            const fuente = normalize(row.cells[2].textContent);
+            // buscar en todas las celdas de la fila
+            const cells = Array.from(row.cells);
+            const rowText = cells.map(c => normalize(c.textContent)).join(' ');
 
-            const matchesQuery = q === '' || title.includes(q) || desc.includes(q) || fuente.includes(q);
-            const matchesFuente = fuenteFilter === '' || fuente.includes(fuenteFilter);
+            // además tomar la clase de la fuente expuesta en data-fuente-class
+            const fuenteClass = (row.getAttribute('data-fuente-class') || '').toString().toLowerCase();
+
+            const matchesQuery = q === '' || rowText.includes(q);
+            const matchesFuente = fuenteFilter === '' || fuenteClass.includes(fuenteFilter);
 
             if (matchesQuery && matchesFuente) row.style.display = '';
             else row.style.display = 'none';

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
@@ -24,16 +25,24 @@ class RepositorioColeccionesTest {
   }
 
   private Coleccion crearColeccion(String titulo) {
+    // Creamos un filtro con categoría real
+    FiltroCategoria filtro = new FiltroCategoria("Noticias");
+
+    // Creamos la fuente dinámica y le agregamos algunos hechos de prueba
+    FuenteDinamica fuente = new FuenteDinamica();
+
+
     return new ColeccionBuilder()
         .titulo(titulo)
         .descripcion("Descripción de prueba")
-        .fuente(new FuenteDinamica())
-        .criterio(new FiltroCategoria())
+        .fuente(fuente)
+        .criterio(filtro)
         .handle("handle-" + titulo)
         .modoNavegacion(ModoNavegacion.IRRESTRICTA)
         .algoritmoConsenso(AlgoritmoConsenso.ABSOLUTO)
         .build();
   }
+
 
   @Test
   void testGuardarColeccion() {

@@ -6,6 +6,7 @@ import ar.edu.utn.frba.dds.controllers.SesionesController;
 import ar.edu.utn.frba.dds.controllers.UsuariosController;
 import ar.edu.utn.frba.dds.controllers.AdminSolicitudesController;
 import ar.edu.utn.frba.dds.controllers.AdminController;
+import ar.edu.utn.frba.dds.controllers.AdminColeccionesController;
 import io.javalin.Javalin;
 
 public class Router {
@@ -15,6 +16,7 @@ public class Router {
   SesionesController sesionesController = new SesionesController();
   AdminSolicitudesController adminSolicitudesController = new AdminSolicitudesController();
   AdminController adminController = new AdminController();
+  AdminColeccionesController adminColeccionesController = new AdminColeccionesController();
 
   public void configure(Javalin app) {
     // --- Home ---
@@ -43,7 +45,7 @@ public class Router {
     // --- Rutas Admin ---
     app.get("/admin", adminController::mostrarAdmin);
     app.get("/admin/solicitudes", adminSolicitudesController::mostrarPanel);
-    app.get("/admin/colecciones", ctx -> ctx.render("admin_colecciones.hbs", coleccionesController.mostrarColecciones()));
+    app.get("/admin/colecciones", ctx -> ctx.render("admin_colecciones.hbs", adminColeccionesController.mostrarColecciones()));
     app.get("/admin/colecciones/nueva", adminController::mostarCrearColeccion);
     app.post("/admin/colecciones", adminController::crearColeccion);
     app.post("/admin/colecciones/{id}/configurar", adminController::configurarColeccion);

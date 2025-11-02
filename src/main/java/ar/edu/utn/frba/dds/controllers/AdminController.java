@@ -33,6 +33,7 @@ public class AdminController {
     String criterio = ctx.formParam("criterio");
     String algoritmo = ctx.formParam("algoritmo");
     String modo = ctx.formParam("modo");
+    String fuenteNombre = ctx.formParam("fuenteNombre");
 
     // Mapea la primera fuente seleccionada a una implementación concreta.
     String fuenteSeleccionada = !fuentes.isEmpty() ? fuentes.get(0) : null;
@@ -45,6 +46,11 @@ public class AdminController {
         case "fuente_proxy" -> fuenteObj = new FuenteMetaMapa();
         default -> fuenteObj = new FuenteEstatica();
       }
+    }
+
+    // Asignar nombre de fuente si fue provisto
+    if (fuenteObj != null && fuenteNombre != null && !fuenteNombre.isBlank()) {
+      try { fuenteObj.setNombre(fuenteNombre); } catch (Exception ignored) {}
     }
 
     // Mapea criterio a un Filtro simple
@@ -137,6 +143,12 @@ public class AdminController {
         case "fuente_proxy" -> nuevaFuente = new FuenteMetaMapa();
         default -> nuevaFuente = new FuenteEstatica();
       }
+
+      // Si payload trae nombre, setearlo
+      if (payload.fuenteNombre != null && !payload.fuenteNombre.isBlank()) {
+        try { nuevaFuente.setNombre(payload.fuenteNombre);} catch (Exception ignored){}
+      }
+
       coleccion.setFuente(nuevaFuente);
     }
 
@@ -147,6 +159,7 @@ public class AdminController {
   public static class ConfigPayload {
     public String algoritmo;
     public String fuenteTipo;
+    public String fuenteNombre;
 
     public ConfigPayload() {}
 
@@ -154,5 +167,7 @@ public class AdminController {
     public void setAlgoritmo(String algoritmo) { this.algoritmo = algoritmo; }
     public String getFuenteTipo() { return fuenteTipo; }
     public void setFuenteTipo(String fuenteTipo) { this.fuenteTipo = fuenteTipo; }
+    public String getFuenteNombre() { return fuenteNombre; }
+    public void setFuenteNombre(String fuenteNombre) { this.fuenteNombre = fuenteNombre; }
   }
 }
