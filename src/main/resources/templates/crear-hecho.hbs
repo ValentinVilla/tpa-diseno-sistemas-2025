@@ -18,7 +18,7 @@
         </svg>
         <h2>Cargar Nuevo Hecho</h2>
 
-        <form action="/hechos" method="post">
+        <form action="/hechos" method="post" enctype="multipart/form-data" novalidate>
 
             <label for="fuenteId">Fuente destino</label>
             <select id="fuenteId" name="fuenteId" required>
@@ -50,6 +50,33 @@
 
             <label for="fechaAcontecimiento">Fecha y Hora del Hecho</label>
             <input type="datetime-local" id="fechaAcontecimiento" name="fechaAcontecimiento" required>
+
+            <fieldset class="multimedia-fieldset" aria-labelledby="multimediaLegend">
+                <legend id="multimediaLegend">Archivos multimedia</legend>
+
+                <p class="hint">
+                    Podés adjuntar hasta <strong id="maxFilesLabel">10</strong> archivos.
+                    Máximo <strong id="maxFileSizeLabel">20MB</strong> por archivo.
+
+                    Tipos permitidos: <em>jpg, png, webp, mp4, webm, ogg</em>.
+
+                </p>
+
+                <input type="file"
+                       id="medias"
+                       name="medias"
+                       multiple
+                       accept="image/*,video/*"
+                       aria-describedby="mediasHelp" />
+
+                <div id="mediasHelp" class="sr-only">
+                    Adjuntar archivos multimedia. El formulario se enviará como multipart/form-data.
+                </div>
+
+                <div id="previewList" class="preview-list" aria-live="polite"></div>
+
+                <div id="mediasErrors" class="medias-errors" role="alert" aria-atomic="true"></div>
+            </fieldset>
 
             <button type="submit">Crear Hecho</button>
 

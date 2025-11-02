@@ -43,8 +43,10 @@ body {
 .hecho-container input[type="text"],
 .hecho-container input[type="number"],
 .hecho-container input[type="datetime-local"],
+.hecho-container input[type="file"],
 .hecho-container textarea,
-.hecho-container select{
+.hecho-container select,
+.hecho-container fieldset{
     width: 100%;
     padding: 10px;
     margin-bottom: var(--spacing-md);
@@ -83,4 +85,36 @@ body {
 
 .hecho-container button:hover {
     background: var(--color-secondary);
+}
+
+.multimedia-fieldset {
+    padding-top: 10px;
+    margin-top: 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    box-sizing: border-box;
+}
+
+.multimedia-fieldset legend {
+    display: block;
+    margin: 0 0 0.5rem 0;
+    padding: 0;
+    color: var(--color-muted-foreground);
+    font-weight: var(--font-medium);
+    font-size: var(--normal-font-size);
+    line-height: 1.2;
+    width: 100%;
+}
+
+.multimedia-fieldset legend[aria-labelledby],
+.multimedia-fieldset legend#multimediaLegend {
+    position: static;
+}
+
+.multimedia-fieldset .hint {
+    margin-top: 0.25rem;
+    margin-bottom: 0.6rem;
+    color: var(--color-muted-foreground);
+    font-size: 0.92rem;
 }
