@@ -24,6 +24,8 @@ public class AdminColeccionesController {
 
       String fuenteStr = "-";
       String fuenteClass = "-";
+      String fuenteNombre = "-";
+      String fuenteTipo = ""; // normalized for selects: fuente_estatica, fuente_dinamica, fuente_proxy
       try {
         Fuente f = c.getFuente();
         if (f != null) {
@@ -32,6 +34,15 @@ public class AdminColeccionesController {
           try { nombre = f.getNombre(); } catch (Exception ignored) {}
           fuenteStr = nombre != null && !nombre.isBlank() ? tipo + " - " + nombre : tipo;
           fuenteClass = tipo; // guardamos el simple nombre de la clase para filtrado
+          fuenteNombre = nombre != null && !nombre.isBlank() ? nombre : "";
+
+          // Normalizar tipo para selects y forms
+          switch (tipo) {
+            case "FuenteEstatica" -> fuenteTipo = "fuente_estatica";
+            case "FuenteDinamica" -> fuenteTipo = "fuente_dinamica";
+            case "FuenteMetaMapa", "FuenteProxy" -> fuenteTipo = "fuente_proxy";
+            default -> fuenteTipo = "fuente_estatica";
+          }
         }
       } catch (Exception e) {
         fuenteStr = "-";
@@ -39,6 +50,8 @@ public class AdminColeccionesController {
       }
       m.put("fuente", fuenteStr);
       m.put("fuenteClass", fuenteClass);
+      m.put("fuenteNombre", fuenteNombre);
+      m.put("fuenteTipo", fuenteTipo);
 
       Filtro filtro = c.getCriterio();
       String criterioStr = (filtro != null) ? filtro.getDescripcion() : "-";

@@ -9,12 +9,15 @@ import ar.edu.utn.frba.dds.model.fuentes.fuenteProxy.FuenteMetaMapa;
 import ar.edu.utn.frba.dds.model.filtros.Filtro;
 import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.model.filtros.FiltroFecha;
+import ar.edu.utn.frba.dds.model.filtros.FiltroTexto;
 import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import io.javalin.http.Context;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdminController {
 
@@ -152,14 +155,52 @@ public class AdminController {
       coleccion.setFuente(nuevaFuente);
     }
 
+    // Mapear criterio textual (si viene)
+    if (payload.criterio != null) {
+      if (payload.criterio.isBlank()) {
+        coleccion.setCriterio(null);
+      } else {
+        coleccion.setCriterio(new FiltroTexto(payload.criterio));
+      }
+    }
+
     RepositorioColecciones.getInstancia().actualizar(coleccion);
-    ctx.status(200).result("OK");
+    // Preparar respuesta JSON con los valores actualizados para que el frontend actualice el DOM
+    Map<String, Object> resp = new HashMap<>();
+    resp.put("id", coleccion.getId());
+    String alg = coleccion.getAlgoritmoConsenso() != null ? coleccion.getAlgoritmoConsenso().name() : "DEFAULT";
+    resp.put("algoritmoConsenso", alg);
+
+    String fuenteTipoResp = "";
+    String fuenteNombreResp = "";
+    String fuenteClassResp = "-";
+    try {
+      if (coleccion.getFuente() != null) {
+        fuenteClassResp = coleccion.getFuente().getClass().getSimpleName();
+        fuenteNombreResp = coleccion.getFuente().getNombre() != null ? coleccion.getFuente().getNombre() : "";
+        switch (fuenteClassResp) {
+          case "FuenteEstatica" -> fuenteTipoResp = "fuente_estatica";
+          case "FuenteDinamica" -> fuenteTipoResp = "fuente_dinamica";
+          default -> fuenteTipoResp = "fuente_proxy";
+        }
+      }
+    } catch (Exception ignored) {}
+
+    resp.put("fuenteTipo", fuenteTipoResp);
+    resp.put("fuenteNombre", fuenteNombreResp);
+    resp.put("fuenteClass", fuenteClassResp);
+
+    String criterioDesc = coleccion.getCriterio() != null ? coleccion.getCriterio().getDescripcion() : "-";
+    resp.put("criterioPertenencia", criterioDesc);
+
+    ctx.json(resp);
   }
 
   public static class ConfigPayload {
     public String algoritmo;
     public String fuenteTipo;
     public String fuenteNombre;
+    public String criterio;
 
     public ConfigPayload() {}
 
@@ -169,5 +210,58 @@ public class AdminController {
     public void setFuenteTipo(String fuenteTipo) { this.fuenteTipo = fuenteTipo; }
     public String getFuenteNombre() { return fuenteNombre; }
     public void setFuenteNombre(String fuenteNombre) { this.fuenteNombre = fuenteNombre; }
+    public String getCriterio() { return criterio; }
+    public void setCriterio(String criterio) { this.criterio = criterio; }
+  }
+
+  // Nueva vista: mostrar la página de gestión avanzada de una colección
+  public void mostrarGestionColeccion(Context ctx) {
+    String idStr = ctx.pathParam("id");
+    Long id;
+    try { id = Long.parseLong(idStr); } catch (Exception e) { ctx.status(400).result("ID inválido"); return; }
+
+    Coleccion coleccion = RepositorioColecciones.getInstancia().buscarPorID(id);
+    if (coleccion == null) { ctx.status(404).result("Colección no encontrada"); return; }
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("id", coleccion.getId());
+    model.put("titulo", coleccion.getTitulo());
+    model.put("descripcion", coleccion.getDescripcion());
+
+    // Fuente
+    String fuenteTipo = "";
+    String fuenteNombre = "";
+    try {
+      if (coleccion.getFuente() != null) {
+        String tipo = coleccion.getFuente().getClass().getSimpleName();
+        switch (tipo) {
+          case "FuenteEstatica" -> fuenteTipo = "fuente_estatica";
+          case "FuenteDinamica" -> fuenteTipo = "fuente_dinamica";
+          default -> fuenteTipo = "fuente_proxy";
+        }
+        try { fuenteNombre = coleccion.getFuente().getNombre(); } catch (Exception ignored){}
+      }
+    } catch (Exception ignored){}
+
+    model.put("fuenteTipo", fuenteTipo);
+    model.put("fuenteNombre", fuenteNombre);
+
+    // Algoritmo
+    String algoritmo = coleccion.getAlgoritmoConsenso() != null ? coleccion.getAlgoritmoConsenso().name() : "DEFAULT";
+    model.put("algoritmoConsenso", algoritmo);
+    model.put("algoritmo_MAYORIA_SIMPLE", "MAYORIA_SIMPLE".equals(algoritmo));
+    model.put("algoritmo_ABSOLUTO", "ABSOLUTO".equals(algoritmo));
+    model.put("algoritmo_MULTIPLES_MENCIONES", "MULTIPLES_MENCIONES".equals(algoritmo));
+    model.put("algoritmo_DEFAULT", "DEFAULT".equals(algoritmo));
+
+    // Criterio (si hay uno)
+    model.put("criterioPertenencia", coleccion.getCriterio() != null ? coleccion.getCriterio().getDescripcion() : "");
+
+    // Fuente flags
+    model.put("fuente_estatica", "fuente_estatica".equals(fuenteTipo));
+    model.put("fuente_dinamica", "fuente_dinamica".equals(fuenteTipo));
+    model.put("fuente_proxy", "fuente_proxy".equals(fuenteTipo));
+
+    ctx.render("admin_colecciones_gestionar.hbs", model);
   }
 }

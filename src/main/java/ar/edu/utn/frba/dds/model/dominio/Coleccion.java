@@ -77,10 +77,6 @@ public class Coleccion {
     return criterioPertenencia.cumple(hecho);
   }
 
-  public void setFiltro(Filtro filtro) {
-    this.criterioPertenencia = filtro;
-  }
-
    // Setters añadidos para permitir edición desde el panel admin
   public void setFuente(Fuente fuente) {
     this.fuente = fuente;
@@ -92,6 +88,11 @@ public class Coleccion {
 
   public void setModoNavegacion(ModoNavegacion modoNavegacion) {
     this.modoNavegacion = modoNavegacion;
+  }
+
+  // Setter definitivo para el criterio
+  public void setCriterio(Filtro criterio) {
+    this.criterioPertenencia = criterio;
   }
 
   public String getTitulo() {

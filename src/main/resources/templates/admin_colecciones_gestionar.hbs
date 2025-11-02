@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Colección</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+    <link rel="stylesheet" href="/styles/admin-colecciones.css">
+</head>
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Gestionar Colección</h1>
+                <p class="subtitle">Editar configuración avanzada de la colección</p>
+            </div>
+            <div>
+                <a href="/admin/colecciones" class="btn-back">← Volver a Colecciones</a>
+            </div>
+        </div>
+
+        <form id="manage-form" action="/admin/colecciones/{{id}}/configurar" method="post" style="margin-top:1rem; max-width:720px;">
+            <input type="hidden" name="id" value="{{id}}" />
+
+            <div class="form-row">
+                <label for="titulo">Título</label>
+                <input id="titulo" name="titulo" class="input" value="{{titulo}}" disabled />
+            </div>
+
+            <div class="form-row">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" class="input" rows="3" disabled>{{descripcion}}</textarea>
+            </div>
+
+            <div class="form-row">
+                <label for="algoritmo">Algoritmo de consenso</label>
+                <select id="algoritmo" name="algoritmo" class="input">
+                    <option value="MAYORIA_SIMPLE" {{#if algoritmo_MAYORIA_SIMPLE}}selected{{/if}}>Mayoría simple</option>
+                    <option value="ABSOLUTO" {{#if algoritmo_ABSOLUTO}}selected{{/if}}>Absoluto</option>
+                    <option value="MULTIPLES_MENCIONES" {{#if algoritmo_MULTIPLES_MENCIONES}}selected{{/if}}>Múltiples menciones</option>
+                    <option value="DEFAULT" {{#if algoritmo_DEFAULT}}selected{{/if}}>Default</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="fuenteTipo">Tipo de fuente</label>
+                <select id="fuenteTipo" name="fuenteTipo" class="input">
+                    <option value="fuente_estatica" {{#if fuente_estatica}}selected{{/if}}>Fuente Estática</option>
+                    <option value="fuente_dinamica" {{#if fuente_dinamica}}selected{{/if}}>Fuente Dinámica</option>
+                    <option value="fuente_proxy" {{#if fuente_proxy}}selected{{/if}}>Fuente Proxy</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="fuenteNombre">Nombre de la fuente</label>
+                <input id="fuenteNombre" name="fuenteNombre" class="input" value="{{fuenteNombre}}" />
+            </div>
+
+            <div class="form-row">
+                <label for="criterio">Criterio (descripción)</label>
+                <textarea id="criterio" name="criterio" class="input" rows="3">{{criterioPertenencia}}</textarea>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-end;">
+                <a href="/admin/colecciones" class="btn">Cancelar</a>
+                <button type="submit" class="btn btn-eseverde">Guardar cambios</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+
+<script>
+    document.getElementById('manage-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        const id = '{{id}}';
+        const algoritmo = document.getElementById('algoritmo').value;
+        const fuenteTipo = document.getElementById('fuenteTipo').value;
+        const fuenteNombre = document.getElementById('fuenteNombre').value;
+        const criterio = document.getElementById('criterio').value;
+
+        fetch(`/admin/colecciones/${id}/configurar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ algoritmo: algoritmo, fuenteTipo: fuenteTipo, fuenteNombre: fuenteNombre, criterio: criterio })
+        }).then(r => {
+            if (r.ok) window.location.href = '/admin/colecciones';
+            else alert('Error al guardar cambios');
+        });
+    });
+</script>
+
+</body>
+</html>

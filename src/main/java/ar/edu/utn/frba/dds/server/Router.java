@@ -49,6 +49,9 @@ public class Router {
     app.get("/admin/colecciones/nueva", adminController::mostarCrearColeccion);
     app.post("/admin/colecciones", adminController::crearColeccion);
     app.post("/admin/colecciones/{id}/configurar", adminController::configurarColeccion);
+    // nueva ruta para gestionar una colección (edición avanzada)
+    app.get("/admin/colecciones/{id}/gestionar", adminController::mostrarGestionColeccion);
+
     // Endpoints provisorios para aprobar/rechazar (más adelante pasar a POST y validar
     app.post("/admin/solicitudes/aprobadas", adminSolicitudesController::aprobar);
     app.post("/admin/solicitudes/rechazadas", adminSolicitudesController::rechazar);

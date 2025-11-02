@@ -47,17 +47,16 @@
                 </thead>
                 <tbody>
                 {{#each colecciones}}
-                    <tr id="row-{{this.id}}" data-fuente-class="{{this.fuenteClass}}">
+                    <tr id="row-{{this.id}}" data-fuente-class="{{this.fuenteClass}}" data-fuente-tipo="{{this.fuenteTipo}}" data-fuente-nombre="{{this.fuenteNombre}}" data-algoritmo="{{this.algoritmoConsenso}}">
                         <td style="padding:0.75rem; vertical-align:top">{{this.titulo}}</td>
                         <td style="padding:0.75rem; vertical-align:top">{{this.descripcion}}</td>
-                        <td style="padding:0.75rem; vertical-align:top">{{#if this.fuente.nombre}}{{this.fuente.nombre}}{{else}}{{this.fuente}}{{/if}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{#if this.fuenteNombre}}{{this.fuenteNombre}}{{else}}{{this.fuente}}{{/if}}</td>
                         <td style="padding:0.75rem; vertical-align:top">{{#if this.criterioPertenencia.nombre}}{{this.criterioPertenencia.nombre}}{{else}}{{this.criterioPertenencia}}{{/if}}</td>
                         <td style="padding:0.75rem; vertical-align:top">{{this.modoNavegacion}}</td>
                         <td style="padding:0.75rem; vertical-align:top">{{this.algoritmoConsenso}}</td>
                         <td style="padding:0.75rem; text-align:center; vertical-align:top">
                             <button class="btn btn-sm" onclick="irA('gestionar','{{this.id}}')">Gestionar</button>
-                            <button class="btn btn-sm btn-eseverde" onclick="abrirConfig('{{this.id}}', '{{this.algoritmoConsenso}}', '{{#if this.fuente}}{{this.fuente}}{{else}}null{{/if}}')">Configurar</button>
-                            <button class="btn btn-sm" onclick="irA('ver','{{this.id}}')">Ver</button>
+                            <button class="btn btn-sm btn-eseverde" onclick="abrirConfig('{{this.id}}')">Configurar</button>
                         </td>
                     </tr>
                 {{/each}}
@@ -97,6 +96,11 @@
                     <option value="fuente_dinamica">Fuente Dinámica</option>
                     <option value="fuente_proxy">Fuente Proxy</option>
                 </select>
+            </div>
+
+            <div class="form-row">
+                <label for="config-fuente-nombre">Nombre de la fuente</label>
+                <input id="config-fuente-nombre" name="fuenteNombre" class="input" value="" />
             </div>
 
             <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-end;">
@@ -149,18 +153,32 @@
         else window.location.href = `/admin/colecciones/${id}`;
     }
 
-    function abrirConfig(id, algoritmo, fuenteClass) {
+    function abrirConfig(id) {
         const modal = document.getElementById('config-modal');
         document.getElementById('config-id').value = id;
-        const selectAlg = document.getElementById('config-algoritmo');
-        // Intentamos seleccionar la opción si coincide
-        for (const opt of selectAlg.options) {
-            if (opt.value === algoritmo) {
-                opt.selected = true; break;
-            }
+
+        // localizar fila y leer data-attributes
+        const row = document.getElementById('row-' + id);
+        let algoritmo = 'DEFAULT';
+        let fuenteTipo = 'fuente_estatica';
+        let fuenteNombre = '';
+        if (row) {
+            algoritmo = row.getAttribute('data-algoritmo') || algoritmo;
+            fuenteTipo = row.getAttribute('data-fuente-tipo') || fuenteTipo;
+            fuenteNombre = row.getAttribute('data-fuente-nombre') || fuenteNombre;
         }
-        // Fuente: no intentamos mapear la clase perfecta acá, dejamos que admin elija
-        document.getElementById('config-fuente').value = 'fuente_estatica';
+
+        const selectAlg = document.getElementById('config-algoritmo');
+        for (const opt of selectAlg.options) {
+            opt.selected = (opt.value === algoritmo);
+        }
+
+        const selectFuente = document.getElementById('config-fuente');
+        for (const opt of selectFuente.options) {
+            opt.selected = (opt.value === fuenteTipo);
+        }
+
+        document.getElementById('config-fuente-nombre').value = fuenteNombre;
 
         modal.classList.add('show-modal');
         modal.setAttribute('aria-hidden','false');
@@ -178,15 +196,41 @@
         const id = document.getElementById('config-id').value;
         const algoritmo = document.getElementById('config-algoritmo').value;
         const fuenteTipo = document.getElementById('config-fuente').value;
+        const fuenteNombre = document.getElementById('config-fuente-nombre').value;
 
         // POST usando fetch para /admin/colecciones/:id/configurar
         fetch(`/admin/colecciones/${id}/configurar`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ algoritmo: algoritmo, fuenteTipo: fuenteTipo })
-        }).then(r => {
+            body: JSON.stringify({ algoritmo: algoritmo, fuenteTipo: fuenteTipo, fuenteNombre: fuenteNombre })
+        }).then(async r => {
             if (r.ok) {
-                window.location.reload();
+                try {
+                    const data = await r.json();
+                    // actualizar fila en DOM usando data
+                    const row = document.getElementById('row-' + data.id);
+                    if (row) {
+                        // actualizar atributos
+                        row.setAttribute('data-fuente-class', data.fuenteClass || '');
+                        row.setAttribute('data-fuente-tipo', data.fuenteTipo || '');
+                        row.setAttribute('data-fuente-nombre', data.fuenteNombre || '');
+                        row.setAttribute('data-algoritmo', data.algoritmoConsenso || '');
+
+                        // actualizar celdas: asumimos orden de columnas (titulo, descripcion, fuente, criterio, modo, consenso)
+                        const cells = row.cells;
+                        if (cells && cells.length >= 6) {
+                            // fuente (índice 2)
+                            cells[2].textContent = data.fuenteNombre && data.fuenteNombre.length ? data.fuenteNombre : (data.fuenteClass || cells[2].textContent);
+                            // criterio (índice 3)
+                            cells[3].textContent = data.criterioPertenencia || cells[3].textContent;
+                            // consenso (índice 5)
+                            cells[5].textContent = data.algoritmoConsenso || cells[5].textContent;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error parsing response', e);
+                }
+                cerrarConfig();
             } else {
                 alert('Error al guardar la configuración');
             }
