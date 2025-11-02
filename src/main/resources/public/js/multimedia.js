@@ -47,6 +47,7 @@
 
             if (file.type.startsWith('image/')) {
                 const img = document.createElement('img');
+                img.className = 'preview-image';
                 img.alt = file.name;
                 img.src = URL.createObjectURL(file);
                 img.onload = () => URL.revokeObjectURL(img.src);
