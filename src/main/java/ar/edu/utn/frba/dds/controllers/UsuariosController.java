@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import ar.edu.utn.frba.dds.helpers.SesionHelper;
+
 public class UsuariosController {
-  RepositorioUsuarios repositorioUsuarios;
+  private final RepositorioUsuarios repositorioUsuarios;
+
   public UsuariosController() {
     this.repositorioUsuarios = RepositorioUsuarios.getInstancia();
   }
@@ -23,22 +26,16 @@ public class UsuariosController {
     String password = ctx.formParam("password");
 
     Contribuyente usuarioCreado = new Contribuyente(nombre, apellido, telefono, mail, edad, password);
-
     repositorioUsuarios.guardar(usuarioCreado);
 
-    ctx.sessionAttribute("usuario_logueado", usuarioCreado);
-    String returnTo = ctx.sessionAttribute("returnTo");
-    if (returnTo != null && !returnTo.isEmpty()) {
-      ctx.sessionAttribute("returnTo", null);
-      ctx.redirect(returnTo);
-    } else {
-      ctx.redirect("/home");
-    }
+    SesionHelper.guardarUsuario(ctx, usuarioCreado);
+    SesionHelper.redirigirPostLogin(ctx);
   }
 
   public void mostrarRegistro(Context ctx) {
     Map<String, Object> model = new HashMap<>();
-    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
+
+    Contribuyente usuario = SesionHelper.obtenerUsuario(ctx);
     if (usuario != null) {
       model.put("nombre", usuario.getNombre());
     }
@@ -46,4 +43,5 @@ public class UsuariosController {
     ctx.render("register.hbs", model);
   }
 }
+
 

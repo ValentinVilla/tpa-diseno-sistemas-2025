@@ -27,8 +27,9 @@ public class Router {
     app.post("/register", usuariosController::crearUsuario);
 
     // --- Hechos ---
+    app.get("/hechos", hechosController::mostrarVistaHechos);
     app.get("/hechos.json", hechosController::mostrarHechosMapa);
-    app.get("/hechos", hechosController::mostrarHechos);
+
     app.get("/hechos/nuevo", hechosController::mostrarFormularioNuevoHecho);
     app.post("/hechos", hechosController::crearHecho);
     app.get("/hechos/delete", hechosController::mostrarFormularioEliminacion);

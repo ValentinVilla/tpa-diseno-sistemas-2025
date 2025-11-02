@@ -42,7 +42,7 @@ public class TareasCronometradas {
         System.out.println("se actualizó el cache");
         break;
       case "curar hechos":
-        coleccion.ejecutarAlgoritmo(coleccion.mostrarHechos());
+        coleccion.ejecutarAlgoritmo(coleccion.mostrarHechos(null));
         System.out.println("Hechos curados.");
         break;
 
