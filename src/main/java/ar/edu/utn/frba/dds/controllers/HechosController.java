@@ -23,11 +23,149 @@ import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
 import io.javalin.http.Context;
+import io.javalin.http.UploadedFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
 import java.util.*;
 import javax.swing.*;
 
 public class HechosController {
+
+  private static final int MAX_FILES = 10;
+  private static final long MAX_FILE_SIZE = 20L * 1024L * 1024L; // 20 MB
+  private static final Path UPLOADS_DIR = Paths.get("uploads");
+  private static final Set<String> ALLOWED_PREFIXES = Set.of("image/", "video/");
+
+  public void crearHecho(Context ctx) {
+    try {
+      Contribuyente contribuyente = ctx.sessionAttribute("usuario_logueado");
+
+      if (contribuyente != null) {
+        System.out.println("Creando hecho para el usuario: " + contribuyente.getNombre());
+      } else {
+        System.out.println("Creando hecho anónimo.");
+      }
+
+      HechoBuilder hechoBuilder = this.construirBuilder(ctx);
+      HechoDinamico hechoDinamico = new HechoDinamico(hechoBuilder, contribuyente);
+
+      String fuenteIdStr = ctx.formParam("fuenteId");
+      if (fuenteIdStr == null || fuenteIdStr.isBlank()) {
+        ctx.status(400);
+        ctx.redirect("/hechos/nuevo?error=true");
+        return;
+      }
+
+      Long fuenteId;
+      try {
+        fuenteId = Long.parseLong(fuenteIdStr);
+      } catch (NumberFormatException nfe) {
+        ctx.status(400);
+        ctx.redirect("/hechos/nuevo?error=true");
+        return;
+      }
+
+      FuenteDinamica fuente = RepositorioFuentes.getInstancia().buscarFuenteDinamicaPorId(fuenteId);
+      if (fuente == null) {
+        ctx.status(400);
+        ctx.redirect("/hechos/nuevo?error=fuente_no_encontrada");
+        return;
+      }
+
+      List<UploadedFile> uploaded = ctx.uploadedFiles("medias");
+      List<Path> storedOnDisk = new ArrayList<>();
+      try {
+        if (uploaded != null && !uploaded.isEmpty()) {
+          if (uploaded.size() > MAX_FILES) {
+            ctx.status(400);
+            ctx.redirect("/hechos/nuevo?error=max_files");
+            return;
+          }
+
+          try {
+            Files.createDirectories(UPLOADS_DIR);
+          } catch (IOException e) {
+            throw new RuntimeException("No se pudo crear directorio de uploads", e);
+          }
+
+          for (UploadedFile uf : uploaded) {
+            /*String contentType = uf.contentType();
+            if (contentType == null || ALLOWED_PREFIXES.stream().noneMatch(contentType::startsWith)) {
+              cleanupStoredFiles(storedOnDisk);
+              ctx.status(400);
+              ctx.redirect("/hechos/nuevo?error=tipo_no_permitido");
+              return;
+            }*/
+
+            String publicPath = storeUploadedFile(uf);
+            Path storedPath = resolveServerPath(publicPath);
+            storedOnDisk.add(storedPath);
+
+            try {
+              long size = Files.size(storedPath);
+              if (size > MAX_FILE_SIZE) {
+                cleanupStoredFiles(storedOnDisk);
+                ctx.status(400);
+                ctx.redirect("/hechos/nuevo?error=file_too_large");
+                return;
+              }
+            } catch (IOException ioe) {
+              cleanupStoredFiles(storedOnDisk);
+              throw new RuntimeException("No se pudo leer tamaño de archivo guardado", ioe);
+            }
+
+            hechoDinamico.addMedia(publicPath);
+          }
+        }
+
+        RepositorioFuentes.getInstancia().agregarHechoALaFuente(fuenteId, hechoDinamico);
+
+        ctx.status(201);
+        ctx.redirect("/hechos?creacion=exito");
+      } catch (Exception e) {
+        cleanupStoredFiles(storedOnDisk);
+        throw e;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      ctx.status(500);
+      ctx.redirect("/hechos/nuevo?error=true");
+    }
+  }
+
+  private String storeUploadedFile(UploadedFile uf) throws IOException {
+    String original = uf.filename();
+    String ext = "";
+    if (original != null) {
+      int idx = original.lastIndexOf('.');
+      if (idx >= 0) ext = original.substring(idx);
+    }
+    String storedName = UUID.randomUUID().toString() + ext;
+    Path target = UPLOADS_DIR.resolve(storedName);
+
+    try (InputStream in = uf.content()) {
+      Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    return "/uploads/" + storedName;
+  }
+
+  private Path resolveServerPath(String publicPath) {
+    String maybe = publicPath.startsWith("/") ? publicPath.substring(1) : publicPath;
+    return UPLOADS_DIR.resolve(Paths.get(maybe).getFileName());
+  }
+
+  private void cleanupStoredFiles(List<Path> paths) {
+    for (Path p : paths) {
+      try {
+        Files.deleteIfExists(p);
+      } catch (Exception ex) {
+        System.err.println("No se pudo borrar archivo en limpieza: " + p + " -> " + ex.getMessage());
+      }
+    }
+  }
 
   public void mostrarHechos(Context ctx) {
     Map<String, Object> modelo = new HashMap<>();
@@ -79,54 +217,6 @@ public class HechosController {
       ctx.json(hechosJS);
     } catch (Exception e) {
       ctx.status(500).result(e.getMessage());
-    }
-  }
-
-  public void crearHecho(Context ctx) {
-    try {
-      Contribuyente contribuyente = ctx.sessionAttribute("usuario_logueado");
-
-      if (contribuyente != null) {
-        System.out.println("Creando hecho para el usuario: " + contribuyente.getNombre());
-      } else {
-        System.out.println("Creando hecho anónimo.");
-      }
-
-      HechoBuilder hechoBuilder = this.construirBuilder(ctx);
-      HechoDinamico hechoDinamico = new HechoDinamico(hechoBuilder, contribuyente);
-
-      String fuenteIdStr = ctx.formParam("fuenteId");
-      if (fuenteIdStr == null || fuenteIdStr.isBlank()) {
-        // Bad request: no se seleccionó fuente
-        ctx.status(400);
-        ctx.redirect("/hechos/nuevo?error=true");
-        return;
-      }
-
-      Long fuenteId;
-      try {
-        fuenteId = Long.parseLong(fuenteIdStr);
-      } catch (NumberFormatException nfe) {
-        ctx.status(400);
-        ctx.redirect("/hechos/nuevo?error=true");
-        return;
-      }
-
-      // Recuperar la fuente dinámica existente (no crear una nueva)
-      FuenteDinamica fuente = RepositorioFuentes.getInstancia().buscarFuenteDinamicaPorId(fuenteId);
-      if (fuente == null) {
-        ctx.status(400);
-        ctx.redirect("/hechos/nuevo?error=fuente_no_encontrada");
-        return;
-      }
-
-      fuente.subirHecho(hechoDinamico);
-
-      ctx.status(201);
-      ctx.redirect("/hechos?creacion=exito");
-    } catch (Exception e) {
-      ctx.status(500);
-      ctx.redirect("/hechos/nuevo?error=true");
     }
   }
 

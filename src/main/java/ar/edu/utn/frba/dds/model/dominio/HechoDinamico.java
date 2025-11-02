@@ -4,12 +4,13 @@ package ar.edu.utn.frba.dds.model.dominio;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.servicios.GeorefAPI;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class HechoDinamico extends Hecho {
@@ -20,6 +21,9 @@ public class HechoDinamico extends Hecho {
   private boolean visible = false;
 
   private LocalDate fechaModificacion;
+
+  @OneToMany(mappedBy = "hecho", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<Media> medias = new ArrayList<>();
 
   protected HechoDinamico() {
   }
@@ -63,5 +67,16 @@ public class HechoDinamico extends Hecho {
         this.setProvincia("Desconocida");
       }
     }
+  }
+
+  public void addMedia(String path) {
+    Media media = new Media(this, path);
+    media.setHecho(this);
+    this.medias.add(media);
+  }
+
+  public void removeMedia(Media media) {
+    this.medias.remove(media);
+    media.setHecho(null);
   }
 }

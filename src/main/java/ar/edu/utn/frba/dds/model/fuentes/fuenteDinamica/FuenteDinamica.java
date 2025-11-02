@@ -36,13 +36,7 @@ public class FuenteDinamica extends Fuente {
   public FuenteDinamica() {}
 
   public void subirHecho(HechoDinamico hecho) {
-    hecho.revisarubicacion();
     hechosDinamicos.add(hecho);
-
-    Solicitud soliciudSubida = new SolicitudSubida(hecho, "", new ImplementadorSpam(10));
-
-    RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
-    repoSolicitudes.guardar(soliciudSubida);
   }
 
   public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
