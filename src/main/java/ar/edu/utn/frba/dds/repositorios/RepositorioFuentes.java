@@ -28,4 +28,9 @@ public class RepositorioFuentes {
     return entityManager.createQuery("FROM Fuente", Fuente.class)
         .getResultList();
   }
+
+  public Fuente buscarPorID(Long id) {
+    return entityManager.find(Fuente.class, id);
+  }
+
 }

@@ -89,5 +89,6 @@ public class FuenteDinamica extends Fuente {
   public List<Fuente> getFuente(){
     return List.of(this);
   }
+
 }
 

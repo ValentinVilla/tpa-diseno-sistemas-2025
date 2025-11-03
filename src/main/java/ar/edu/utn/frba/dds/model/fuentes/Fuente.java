@@ -63,4 +63,8 @@ public abstract class Fuente {
     FiltroTexto filtroTexto = new FiltroTexto(texto);
     return hechos.stream().filter(filtroTexto::cumple).toList();
   }
+
+  public Long getId() {
+    return id;
+  }
 }

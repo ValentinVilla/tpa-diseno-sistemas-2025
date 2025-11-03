@@ -13,8 +13,10 @@ import ar.edu.utn.frba.dds.model.filtros.FiltroTexto;
 import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
+import ar.edu.utn.frba.dds.repositorios.RepositorioFuentes;
 import io.javalin.http.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,21 +139,13 @@ public class AdminController {
       }
     }
 
-    // Mapear fuente
-    if (payload.fuenteTipo != null) {
-      Fuente nuevaFuente = null;
-      switch (payload.fuenteTipo) {
-        case "fuente_estatica" -> nuevaFuente = new FuenteEstatica();
-        case "fuente_dinamica" -> nuevaFuente = new FuenteDinamica();
-        case "fuente_proxy" -> nuevaFuente = new FuenteMetaMapa();
-        default -> nuevaFuente = new FuenteEstatica();
-      }
-
-      // Si payload trae nombre, setearlo
-      if (payload.fuenteNombre != null && !payload.fuenteNombre.isBlank()) {
-        try { nuevaFuente.setNombre(payload.fuenteNombre);} catch (Exception ignored){}
-      }
-
+    // MAPEAR FUENTE
+    if(payload.fuente == null){
+      ctx.status(404).result("fuente no encontrada");
+    }
+    if(payload.fuente != null){
+      Long fuente_id = Long.parseLong(payload.fuente);
+      Fuente nuevaFuente = RepositorioFuentes.getInstancia().buscarPorID(fuente_id);
       coleccion.setFuente(nuevaFuente);
     }
 
@@ -198,18 +192,15 @@ public class AdminController {
 
   public static class ConfigPayload {
     public String algoritmo;
-    public String fuenteTipo;
-    public String fuenteNombre;
+    public String fuente;
     public String criterio;
 
     public ConfigPayload() {}
 
     public String getAlgoritmo() { return algoritmo; }
     public void setAlgoritmo(String algoritmo) { this.algoritmo = algoritmo; }
-    public String getFuenteTipo() { return fuenteTipo; }
-    public void setFuenteTipo(String fuenteTipo) { this.fuenteTipo = fuenteTipo; }
-    public String getFuenteNombre() { return fuenteNombre; }
-    public void setFuenteNombre(String fuenteNombre) { this.fuenteNombre = fuenteNombre; }
+    public String getFuente() { return fuente; }
+    public void setFuente(String fuente) { this.fuente = fuente; }
     public String getCriterio() { return criterio; }
     public void setCriterio(String criterio) { this.criterio = criterio; }
   }
@@ -261,6 +252,18 @@ public class AdminController {
     model.put("fuente_estatica", "fuente_estatica".equals(fuenteTipo));
     model.put("fuente_dinamica", "fuente_dinamica".equals(fuenteTipo));
     model.put("fuente_proxy", "fuente_proxy".equals(fuenteTipo));
+
+    //aca vamos a decirle al model que fuentes tiene que mostrar como opciones
+    List<Fuente> fuentesActivas = RepositorioFuentes.getInstancia().listarTodas();
+    List<Map<String, Object>> fuentesVM = new ArrayList<>();
+    fuentesActivas.forEach( fuente -> {
+      Map<String, Object> m = new HashMap<>();
+      m.put("fuente_id", fuente.getId());
+      m.put("titulo", fuente.getNombre());
+      m.put("tipo", fuente.getClass().getSimpleName());
+      fuentesVM.add(m);
+    });
+    model.put("FUENTESACTIVAS", fuentesVM);
 
     ctx.render("admin_colecciones_gestionar.hbs", model);
   }

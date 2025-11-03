@@ -44,7 +44,7 @@
                 </select>
             </div>
 
-            <div class="form-row">
+            <!--<div class="form-row">
                 <label for="fuenteTipo">Tipo de fuente</label>
                 <select id="fuenteTipo" name="fuenteTipo" class="input">
                     <option value="fuente_estatica" {{#if fuente_estatica}}selected{{/if}}>Fuente Estática</option>
@@ -56,6 +56,18 @@
             <div class="form-row">
                 <label for="fuenteNombre">Nombre de la fuente</label>
                 <input id="fuenteNombre" name="fuenteNombre" class="input" value="{{fuenteNombre}}" />
+            </div> GUARDA ACAAAAAAAA ABAJO-->
+
+            <div class="form-row">
+                <label for="fuente">Fuente</label>
+                <select id="fuente" name="fuente" class="input">
+                    <option value="">-- Seleccionar fuente --</option>
+                    {{#each FUENTESACTIVAS}}
+                        <option value="{{fuente_id}}" data-tipo="{{tipo}}" data-titulo="{{titulo}}" {{#if seleccionada}}selected{{/if}}>
+                            {{titulo}} ({{tipo}})
+                        </option>
+                    {{/each}}
+                </select>
             </div>
 
             <div class="form-row">
@@ -77,14 +89,13 @@
         e.preventDefault();
         const id = '{{id}}';
         const algoritmo = document.getElementById('algoritmo').value;
-        const fuenteTipo = document.getElementById('fuenteTipo').value;
-        const fuenteNombre = document.getElementById('fuenteNombre').value;
+        const fuente = document.getElementById('fuente').value;
         const criterio = document.getElementById('criterio').value;
 
         fetch(`/admin/colecciones/${id}/configurar`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ algoritmo: algoritmo, fuenteTipo: fuenteTipo, fuenteNombre: fuenteNombre, criterio: criterio })
+            body: JSON.stringify({ algoritmo: algoritmo, fuente: fuente, criterio: criterio })
         }).then(r => {
             if (r.ok) window.location.href = '/admin/colecciones';
             else alert('Error al guardar cambios');
