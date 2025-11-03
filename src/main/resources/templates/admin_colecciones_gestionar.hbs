@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/variables.css">
     <link rel="stylesheet" href="/styles/admin.css">
     <link rel="stylesheet" href="/styles/admin-colecciones.css">
+    <link rel="stylesheet" href="/styles/admin-colecciones-gestion.css">
 </head>
 <body>
 <section class="admin-panel">
@@ -58,7 +59,8 @@
 
             <div class="form-row">
                 <label for="criterio">Criterio (descripción)</label>
-                <textarea id="criterio" name="criterio" class="input" rows="3">{{criterioPertenencia}}</textarea>
+                <input type="hidden" name="criterio" value="{{categoria}}" />
+                <textarea id="criterio" name="criterio-display" class="input" rows="3" disabled>{{categoria}}</textarea>
             </div>
 
             <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-end;">

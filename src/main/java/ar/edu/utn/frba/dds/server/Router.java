@@ -47,7 +47,7 @@ public class Router {
     app.get("/admin/colecciones", ctx -> ctx.render("admin_colecciones.hbs", adminColeccionesController.mostrarColecciones()));
     app.get("/admin/colecciones/nueva", adminController::mostarCrearColeccion);
     app.post("/admin/colecciones", adminController::crearColeccion);
-    app.post("/admin/colecciones/{id}/configurar", adminController::configurarColeccion); //ES UN PATCH
+    app.post("/admin/colecciones/{id}/configurar", adminController::configurarColeccion); //ES UN PATCH borrar
     // nueva ruta para gestionar una colección (edición avanzada)
     app.get("/admin/colecciones/{id}/gestionar", adminController::mostrarGestionColeccion);
 

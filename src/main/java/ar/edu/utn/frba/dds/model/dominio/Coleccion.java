@@ -25,7 +25,7 @@ public class Coleccion {
   private String titulo;
   private String descripcion;
   public String handle;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "fuente_id",  nullable = false)
   private Fuente fuente;
   @ManyToOne(cascade = CascadeType.ALL)

@@ -3,97 +3,119 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MetaMapa - Crear Colección</title>
+    <title>Crear Colección</title>
     <link rel="stylesheet" href="/styles/variables.css" />
     <link rel="stylesheet" href="/styles/admin.css" />
     <link rel="stylesheet" href="/styles/admin-colecciones.css" />
+    <link rel="stylesheet" href="/styles/admin-colecciones-gestion.css" />
 </head>
 <body>
 <section class="admin-panel">
     <div class="container">
-        <div class="admin-header" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
-            <div class="title-block" style="flex:1">
-                <h1 class="page-title" style="color: #004d40; margin:0">Colecciones</h1>
-                <p class="subtitle">Crear y gestionar colecciones</p>
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Crear Colección</h1>
+                <p class="subtitle">Crear nueva colección</p>
+            </div>
+            <div>
+                <a href="/admin/colecciones" class="btn-back">← Volver a Colecciones</a>
             </div>
         </div>
-            <div class="admin-header-actions">
-                <a href="/admin" class="btn btn-secondary btn-back">Volver al panel</a>
+
+        <form id="create-form" action="/admin/colecciones" method="post" style="margin-top:1rem; max-width:720px;">
+            <div class="form-row">
+                <label for="titulo">Título</label>
+                <input id="titulo" name="titulo" type="text" required class="input" />
             </div>
 
-        <div class="admin-section">
-            <h2 style="color:#004d40">Crear colección</h2>
+            <div class="form-row">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" class="input" rows="3" required></textarea>
+            </div>
 
-            <details>
-                <summary class="btn btn-eseverde">+ Nueva colección</summary>
+            <div class="form-row">
+                <label for="algoritmo">Algoritmo de consenso</label>
+                <select id="algoritmo" name="algoritmo" class="input" required>
+                    <option value="MAYORIA_SIMPLE">Mayoría simple</option>
+                    <option value="ABSOLUTO">Absoluto</option>
+                    <option value="MULTIPLES_MENCIONES">Múltiples menciones</option>
+                    <option value="DEFAULT">Default</option>
+                </select>
+            </div>
 
-                <form action="/admin/colecciones" method="post" class="colecciones-form" style="margin-top:1rem;">
-                    <div class="form-row">
-                        <label for="titulo">Título</label>
-                        <input id="titulo" name="titulo" type="text" required class="input" />
-                    </div>
+            <div class="form-row">
+                <label for="fuente">Fuente</label>
+                <select id="fuente" name="fuente" class="input">
+                    <option value="">-- Seleccionar fuente --</option>
+                    {{#each FUENTESACTIVAS}}
+                        <option value="{{fuente_id}}" data-tipo="{{tipo}}" data-titulo="{{titulo}}">
+                            {{titulo}} ({{tipo}})
+                        </option>
+                    {{/each}}
+                </select>
+            </div>
 
-                    <div class="form-row">
-                        <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" name="descripcion" rows="3" class="input"></textarea>
-                    </div>
+            <div class="form-row">
+                <label for="criterio">Criterio (descripción)</label>
+                <textarea id="criterio" name="criterio" class="input" rows="3"></textarea>
+            </div>
 
-                    <div class="form-row">
-                        <label for="fuentes">Fuentes (mantener presionado Ctrl/Cmd para múltiples)</label>
-                        <select id="fuentes" name="fuentes" multiple size="4" class="input" required>
-                            <!-- Opciones predeterminadas: modificá según lo que quieras exponer -->
-                            <option value="fuente_estatica">Fuente Estática</option>
-                            <option value="fuente_dinamica">Fuente Dinámica</option>
-                            <option value="fuente_proxy">Fuente Proxy</option>
-                            <option value="fuente_externa">Fuente Externa</option>
-                        </select>
-                        <small class="muted">Seleccioná una o más fuentes.</small>
-                    </div>
+            <div class="form-row">
+                <label for="navegacion">Forma De Navegacion</label>
+                <select id="navegacion" name="navegacion" class="input" required>
+                    <option value="">-- Seleccionar --</option>
+                    <option value="IRRESTRICTA">Irrestricta</option>
+                    <option value="CURADA">Curada</option>
+                </select>
+            </div>
 
-                    <div class="form-row">
-                        <label for="fuenteNombre">Nombre de la fuente (opcional)</label>
-                        <input id="fuenteNombre" name="fuenteNombre" type="text" class="input" placeholder="Ej: Hechos del CSV institucional" />
-                        <small class="muted">Si lo dejás vacío, se mostrará el tipo de fuente.</small>
-                    </div>
-
-                    <div class="form-row">
-                        <label for="criterio">Criterio de pertenencia</label>
-                        <select id="criterio" name="criterio" class="input" required>
-                            <!-- Opciones predeterminadas para criterio de pertenencia -->
-                            <option value="filtro_geografico">Filtro geográfico</option>
-                            <option value="filtro_categoria">Filtro por categoría</option>
-                            <option value="filtro_fecha">Filtro por fecha</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row">
-                        <label for="algoritmo">Algoritmo de consenso</label>
-                        <select id="algoritmo" name="algoritmo" class="input" required>
-                            <!-- Opciones predeterminadas de algoritmo -->
-                            <option value="mayoria">Mayoría</option>
-                            <option value="unanimidad">Unanimidad</option>
-                            <option value="ponderado">Ponderado</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row">
-                        <label for="modo">Modo de navegación</label>
-                        <select id="modo" name="modo" class="input" required>
-                            <!-- Opciones predeterminadas de modo -->
-                            <option value="lista">Lista</option>
-                            <option value="mapa">Mapa</option>
-                            <option value="paginado">Paginado</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row" style="margin-top:1rem; display:flex; gap:0.5rem;">
-                        <button type="submit" class="btn btn-eseverde">Crear colección</button>
-                        <a href="/admin/colecciones" class="btn btn-danger">Cancelar</a>
-                    </div>
-                </form>
-            </details>
-        </div>
+            <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-start;">
+                <a href="/admin/colecciones" class="btn btn-danger">Cancelar</a>
+                <button type="submit" class="btn btn-eseverde">Crear colección</button>
+            </div>
+        </form>
     </div>
 </section>
+
+<script>
+    document.getElementById('create-form').addEventListener('submit', function(e){
+        e.preventDefault();
+
+        const titulo = document.getElementById('titulo').value.trim();
+        const descripcion = document.getElementById('descripcion').value.trim();
+        const algoritmo = document.getElementById('algoritmo').value;
+        const fuente = document.getElementById('fuente').value;
+        const criterio = document.getElementById('criterio').value.trim();
+        const navegacion = document.getElementById('navegacion').value;
+
+        if (!titulo) {
+            alert('El título es obligatorio');
+            document.getElementById('titulo').focus();
+            return;
+        }
+        if (!descripcion) {
+            alert('La descripción no puede ser vacía');
+            document.getElementById('descripcion').focus();
+            return;
+        }
+        if (!navegacion) {
+            alert('Seleccione la forma de navegación');
+            document.getElementById('navegacion').focus();
+            return;
+        }
+
+        fetch('/admin/colecciones', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ titulo, descripcion, algoritmo, fuente, criterio, navegacion })
+        }).then(r => {
+            if (r.ok) window.location.href = '/admin/colecciones';
+            else r.text().then(t => alert('Error al crear la colección: ' + t));
+        }).catch(err => {
+            alert('Error de red al crear la colección');
+            console.error(err);
+        });
+    });
+</script>
 </body>
 </html>
