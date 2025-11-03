@@ -26,7 +26,7 @@ public class FiltroCategoria extends Filtro {
 
   @Override
   public String getDescripcion() {
-    return "Categoría: " + (categoria != null ? categoria : "sin categoria");
+    return "Categoría: " + (categoria != null ? categoria : "-");
   }
 }
 
