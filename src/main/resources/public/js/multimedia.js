@@ -31,6 +31,9 @@
 
     function renderPreviews() {
         previewList.innerHTML = '';
+
+        input.value = '';
+
         for (let i = 0; i < dt.files.length; i++) {
             const file = dt.files[i];
             const card = document.createElement('div');
@@ -73,7 +76,12 @@
 
             previewList.appendChild(card);
         }
-        input.files = dt.files;
+
+        try {
+            input.files = dt.files;
+        } catch (err) {
+            console.warn('No se pudo asignar dt.files a input.files en este navegador', err);
+        }
     }
 
     function onFilesSelected(e) {
@@ -83,17 +91,27 @@
 
         if (dt.files.length + files.length > MAX_FILES) {
             showError(`Podés adjuntar como máximo ${MAX_FILES} archivos.`);
-            input.value = ''; return;
+            input.value = '';
+            return;
         }
 
         for (const f of files) {
             const err = isAllowed(f);
-            if (err) { showError(err); input.value = ''; return; }
+            if (err) {
+                showError(err);
+                input.value = '';
+                return;
+            }
+            const duplicate = Array.from(dt.files).some(existing => existing.name === f.name && existing.size === f.size);
+            if (duplicate) {
+                continue;
+            }
             dt.items.add(f);
         }
 
-        renderPreviews();
         input.value = '';
+
+        renderPreviews();
     }
 
     function onRemoveFile(evt) {
@@ -119,8 +137,10 @@
                 const err = isAllowed(dt.files[i]);
                 if (err) { ev.preventDefault(); showError(err); return; }
             }
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando...';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enviando...';
+            }
         });
     }
 
@@ -128,6 +148,7 @@
 
     if (input.files && input.files.length) {
         for (let i = 0; i < input.files.length; i++) dt.items.add(input.files[i]);
+        input.value = '';
         renderPreviews();
     }
 })();
