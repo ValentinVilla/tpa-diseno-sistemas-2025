@@ -218,6 +218,7 @@ public class AdminController {
     model.put("id", coleccion.getId());
     model.put("titulo", coleccion.getTitulo());
     model.put("descripcion", coleccion.getDescripcion());
+    model.put("fuenteActual", coleccion.getFuente().getNombre());
 
     // Fuente
     String fuenteTipo = "";

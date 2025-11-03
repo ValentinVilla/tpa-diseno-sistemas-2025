@@ -44,26 +44,12 @@
                 </select>
             </div>
 
-            <!--<div class="form-row">
-                <label for="fuenteTipo">Tipo de fuente</label>
-                <select id="fuenteTipo" name="fuenteTipo" class="input">
-                    <option value="fuente_estatica" {{#if fuente_estatica}}selected{{/if}}>Fuente Estática</option>
-                    <option value="fuente_dinamica" {{#if fuente_dinamica}}selected{{/if}}>Fuente Dinámica</option>
-                    <option value="fuente_proxy" {{#if fuente_proxy}}selected{{/if}}>Fuente Proxy</option>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="fuenteNombre">Nombre de la fuente</label>
-                <input id="fuenteNombre" name="fuenteNombre" class="input" value="{{fuenteNombre}}" />
-            </div> GUARDA ACAAAAAAAA ABAJO-->
-
             <div class="form-row">
                 <label for="fuente">Fuente</label>
                 <select id="fuente" name="fuente" class="input">
                     <option value="">-- Seleccionar fuente --</option>
                     {{#each FUENTESACTIVAS}}
-                        <option value="{{fuente_id}}" data-tipo="{{tipo}}" data-titulo="{{titulo}}" {{#if seleccionada}}selected{{/if}}>
+                        <option value="{{fuente_id}}" data-tipo="{{tipo}}" data-titulo="{{titulo}}" {{#if fuenteActual}}selected{{/if}}>
                             {{titulo}} ({{tipo}})
                         </option>
                     {{/each}}
