@@ -182,7 +182,7 @@ public class AdminController {
     model.put("algoritmo_MULTIPLES_MENCIONES", "MULTIPLES_MENCIONES".equals(algoritmo));
     model.put("algoritmo_DEFAULT", "DEFAULT".equals(algoritmo));
 
-    //aca vamos a decirle al model que fuentes tiene que mostrar como opciones
+    //aca vamos a decirle al model que fuentes tiene que mostrar como opciones y decirle con selected cual es la inicial
     List<Fuente> fuentesActivas = RepositorioFuentes.getInstancia().listarTodas();
     List<Map<String, Object>> fuentesVM = new ArrayList<>();
     fuentesActivas.forEach( fuente -> {
@@ -195,21 +195,6 @@ public class AdminController {
       fuentesVM.add(m);
     });
     model.put("FUENTESACTIVAS", fuentesVM);
-    /*
-    // TODO ESTO INTUYO QUE NO SIRVE DE NADA YA QUE NO SE USA EN LA VISTA
-    String fuenteTipo = "";
-    String fuenteNombre = "";
-    try {
-      if (coleccion.getFuente() != null) {
-        String tipo = coleccion.getFuente().getClass().getSimpleName();
-        switch (tipo) {
-          case "FuenteEstatica" -> fuenteTipo = "fuente_estatica";
-          case "FuenteDinamica" -> fuenteTipo = "fuente_dinamica";
-          default -> fuenteTipo = "fuente_proxy";
-        }
-        try { fuenteNombre = coleccion.getFuente().getNombre(); } catch (Exception ignored){}
-      }
-    } catch (Exception ignored){}*/
 
     ctx.render("admin_colecciones_gestionar.hbs", model);
   }
