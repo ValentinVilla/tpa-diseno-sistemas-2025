@@ -1,9 +1,6 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.model.dominio.Coleccion;
-import ar.edu.utn.frba.dds.model.dominio.Hecho;
-import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
-import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.*;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
@@ -12,23 +9,24 @@ import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
-import ar.edu.utn.frba.dds.repositorios.RepositorioFuentes;
-import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.repositorios.*;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
 import io.javalin.http.Context;
 import io.javalin.http.UploadedFile;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 public class HechosController {
@@ -362,5 +360,66 @@ public class HechosController {
       }
     }
     return hechosParaJS;
+  }
+
+  public void mostrarHecho(Context ctx) {
+    Long id;
+    try {
+      id = Long.parseLong(ctx.pathParam("id"));
+    } catch (NumberFormatException e) {
+      ctx.status(400).result("Id inválido");
+      return;
+    }
+
+    Hecho hecho = DAOHechos.getInstancia().buscarPorId(id);
+    if (hecho == null) {
+      ctx.status(404).result("Hecho no encontrado");
+      return;
+    }
+
+    List<Media> mediaEntities = RepositorioMedia.getInstancia().findByHechoId(hecho.getId());
+
+    String uploadsDirProp = System.getProperty("UPLOADS_DIR", System.getenv().getOrDefault("UPLOADS_DIR", "uploads"));
+    Path uploadsDir = Paths.get(uploadsDirProp);
+
+    List<Map<String,Object>> medias = mediaEntities.stream().map(m -> {
+      String path = m.getPath();
+      String basename = Paths.get(path.startsWith("/") ? path.substring(1) : path).getFileName().toString();
+      long sizeBytes = 0L;
+      try {
+        Path file = uploadsDir.resolve(basename);
+        if (Files.exists(file)) sizeBytes = Files.size(file);
+      } catch (IOException ignored) {}
+      boolean isVideo = basename.toLowerCase().matches(".*\\.(mp4|webm|ogg)$");
+      Map<String,Object> mm = new HashMap<>();
+      mm.put("path", path);
+      mm.put("basename", basename);
+      mm.put("humanSize", humanReadableSize(sizeBytes));
+      mm.put("isVideo", isVideo);
+      return mm;
+    }).collect(Collectors.toList());
+
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    Map<String,Object> model = new HashMap<>();
+    model.put("hecho", hecho);
+    model.put("fechaAcontecimiento", hecho.getFechaAcontecimiento() != null ? hecho.getFechaAcontecimiento().format(fmt) : "");
+    model.put("fechaCarga", hecho.getFechaCarga() != null ? hecho.getFechaCarga().format(fmt) : "");
+    model.put("medias", medias);
+
+    if (hecho instanceof HechoDinamico) {
+      HechoDinamico hd = (HechoDinamico) hecho;
+      if (!hd.esAnonimo() && hd.getContribuyente() != null) {
+        model.put("contribuyenteNombre", hd.getContribuyente().getNombre());
+      }
+    }
+
+    ctx.render("mostrar-hecho.hbs", model);
+  }
+
+  private String humanReadableSize(long bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024*1024) return String.format("%.1f KB", bytes / 1024.0);
+    return String.format("%.2f MB", bytes / (1024.0*1024.0));
   }
 }

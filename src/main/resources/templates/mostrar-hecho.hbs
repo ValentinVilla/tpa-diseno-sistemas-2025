@@ -1,0 +1,98 @@
+{{#partial "css"}}
+    <link rel="stylesheet" href="/styles/mostrar-hecho.css">
+{{/partial}}
+
+{{#partial "header"}}
+    {{> templates/nav }}
+{{/partial}}
+
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
+
+{{#partial "contenido"}}
+    <main class="show-container">
+        <article class="card">
+            <header class="card-header">
+                <h1 class="title">{{hecho.titulo}}</h1>
+                <div class="meta-row">
+                    <span class="badge">{{hecho.categoria}}</span>
+                    {{#if hecho.provincia}}<span class="muted"> · {{hecho.provincia}}</span>{{/if}}
+                    <span class="muted"> · {{fechaAcontecimiento}}</span>
+                </div>
+            </header>
+
+            <section class="card-body">
+                <div class="left">
+                    {{#if medias}}
+                        <div class="media-grid" id="mediaGrid" tabindex="0" aria-label="Galería de medios">
+                            {{#each medias}}
+                                <figure class="media-thumb" data-src="{{this.path}}" tabindex="0" aria-label="Abrir media {{this.basename}}">
+                                    {{#if this.isVideo}}
+                                        <video class="thumb-media" preload="metadata" muted>
+                                            <source src="{{this.path}}">
+                                            Tu navegador no soporta video.
+                                        </video>
+                                    {{else}}
+                                        <img class="thumb-media" alt="{{this.basename}}" src="{{this.path}}" loading="lazy">
+                                    {{/if}}
+                                    <figcaption class="media-caption">{{this.basename}} — {{this.humanSize}}</figcaption>
+                                </figure>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <p class="muted">No hay contenido multimedia asociado a este hecho.</p>
+                    {{/if}}
+                </div>
+
+                <div class="right">
+                    <h2>Descripción</h2>
+                    <p class="descripcion">{{hecho.descripcion}}</p>
+
+                    <dl class="info-list">
+                        <dt>Fecha de acontecimiento</dt>
+                        <dd>{{fechaAcontecimiento}}</dd>
+
+                        <dt>Fecha de carga</dt>
+                        <dd>{{fechaCarga}}</dd>
+
+                        {{#if hecho.latitud}}
+                            <dt>Ubicación</dt>
+                            <dd>
+                                {{hecho.latitud}}, {{hecho.longitud}}
+                                <a class="map-link" href="https://www.openstreetmap.org/?mlat={{hecho.latitud}}&mlon={{hecho.longitud}}#map=16/{{hecho.latitud}}/{{hecho.longitud}}" target="_blank" rel="noopener">Abrir en mapa</a>
+                            </dd>
+                        {{/if}}
+
+                        <dt>Origen</dt>
+                        <dd>{{hecho.origen}}</dd>
+
+                        {{#if contribuyenteNombre}}
+                            <dt>Contribuyente</dt>
+                            <dd>{{contribuyenteNombre}}</dd>
+                        {{else}}
+                            <dt>Contribuyente</dt>
+                            <dd>Anonimo</dd>
+                        {{/if}}
+                    </dl>
+
+                    <div class="actions">
+                        <a class="btn" href="/hechos">Volver a listado</a>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <div id="mediaModal" class="media-modal" aria-hidden="true" role="dialog" aria-label="Visor de media">
+        <button id="modalClose" class="modal-close" aria-label="Cerrar">×</button>
+        <div class="media-modal-content" id="mediaModalContent" role="document"></div>
+    </div>
+
+    <script src="/js/media-viewer.js"></script>
+{{/partial}}
+
+{{#partial "footer"}}
+    {{> templates/footer}}
+{{/partial}}
+
+{{> templates/main }}

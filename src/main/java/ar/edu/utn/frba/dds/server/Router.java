@@ -34,6 +34,7 @@ public class Router {
     app.get("/hechos", hechosController::mostrarHechos);
     app.get("/hechos/nuevo", hechosController::mostrarFormularioNuevoHecho);
     app.post("/hechos", hechosController::crearHecho);
+    app.get("/hechos/{id}", hechosController::mostrarHecho);
     app.get("/hechos/delete", hechosController::mostrarFormularioEliminacion);
     app.post("/hechos/delete", hechosController::crearSolicitudEliminacion);
 

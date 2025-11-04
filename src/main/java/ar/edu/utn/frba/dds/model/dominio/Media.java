@@ -26,4 +26,8 @@ public class Media {
   public void setHecho(HechoDinamico hecho) {
     this.hecho = hecho;
   }
+
+  public String getPath() {
+    return path;
+  }
 }

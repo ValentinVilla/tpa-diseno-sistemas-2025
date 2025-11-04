@@ -1,0 +1,184 @@
+@import 'variables.css';
+
+:root {
+    --card-border: var(--color-border, #e6e9ee);
+    --muted-color: var(--color-text-muted, #94a3b8);
+    --accent: var(--color-accent, #34d399);
+    --accent-contrast: var(--color-accent-foreground, #064e3b);
+    --bg: var(--color-bg, #ffffff);
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-sans, Inter, system-ui, Arial);
+    background: var(--color-background);
+    color: var(--color-text, #0f172a);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+.show-container {
+    max-width: 1100px;
+    margin: 36px auto;
+    padding: 0 16px;
+}
+
+.card {
+    background: var(--color-card, rgba(255,255,255,0.8));
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius, 12px);
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(15,23,42,0.06);
+}
+
+.card-header {
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--card-border);
+    background: linear-gradient(90deg, rgba(16,185,129,0.03), rgba(16,185,129,0.01));
+}
+
+.title {
+    margin: 0 0 6px 0;
+    font-size: 1.6rem;
+    line-height: 1.15;
+}
+
+.meta-row {
+    color: var(--muted-color);
+    font-size: 0.95rem;
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.badge{
+    background: rgba(16,185,129,0.08);
+    color: var(--color-primary, #10b981);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight:600;
+    font-size:0.85rem;
+}
+
+.card-body {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 20px;
+    padding: 20px;
+}
+
+.media-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.media-thumb {
+    background: var(--color-card, #fff);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 6px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+.media-thumb:focus,
+.media-thumb:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(3,7,18,0.06);
+    outline: none;
+}
+
+.thumb-media {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #000;
+}
+
+.media-caption {
+    margin-top: 8px;
+    color: var(--muted-color);
+    font-size: 0.85rem;
+    word-break: break-word;
+}
+
+.descripcion {
+    white-space: pre-wrap;
+    color: var(--color-text, #0f172a);
+    margin-bottom: 12px;
+}
+
+.info-list { margin-top: 10px; }
+.info-list dt { font-weight:700; font-size:0.88rem; margin-top:8px; color:var(--muted-color); }
+.info-list dd { margin:2px 0 8px 0; color:var(--color-text, #111827); }
+
+.map-link { margin-left:8px; color:var(--accent); font-weight:600; text-decoration:none; }
+.map-link:hover { text-decoration:underline; }
+
+.actions { margin-top: 18px; }
+.btn {
+    display:inline-block;
+    padding: 10px 14px;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    text-decoration:none;
+    border-radius: 8px;
+    font-weight:600;
+}
+
+.media-modal {
+    display:none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3,7,18,0.6);
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 24px;
+}
+.media-modal[aria-hidden="false"] { display:flex; }
+
+.media-modal-content {
+    max-width: 1100px;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 10px;
+    background: #000;
+    overflow: auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 8px;
+}
+
+.media-modal img,
+.media-modal video {
+    max-width: 100%;
+    max-height: 88vh;
+    border-radius: 6px;
+}
+
+.modal-close {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 10000;
+    background: rgba(255,255,255,0.95);
+    border: none;
+    font-size: 22px;
+    width:40px;
+    height:40px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 980px) {
+    .card-body { grid-template-columns: 1fr; }
+    .right { order: 2; }
+    .left { order: 1; }
+}

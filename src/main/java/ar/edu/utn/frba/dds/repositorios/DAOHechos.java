@@ -186,5 +186,9 @@ public class DAOHechos {
     return entityManager.getTransaction();
   }
 
+  public HechoDinamico buscarPorId(Long id) {
+    return entityManager.find(HechoDinamico.class, id);
+  }
+
 }
 
