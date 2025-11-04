@@ -116,6 +116,10 @@ public class Hecho {
     return id;
   }
 
+  public String getOrigen() {
+    return origen == null ? "Desconocido" : origen.getLabel();
+  }
+
 }
 
 

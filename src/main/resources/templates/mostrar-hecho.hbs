@@ -16,7 +16,6 @@
                 <h1 class="title">{{hecho.titulo}}</h1>
                 <div class="meta-row">
                     <span class="badge">{{hecho.categoria}}</span>
-                    {{#if hecho.provincia}}<span class="muted"> · {{hecho.provincia}}</span>{{/if}}
                     <span class="muted"> · {{fechaAcontecimiento}}</span>
                 </div>
             </header>
@@ -64,7 +63,7 @@
                         {{/if}}
 
                         <dt>Origen</dt>
-                        <dd>{{hecho.origen}}</dd>
+                        <dd>{{#if hecho.origen}}{{hecho.origen}}{{else}}Desconocido{{/if}}</dd>
 
                         {{#if contribuyenteNombre}}
                             <dt>Contribuyente</dt>

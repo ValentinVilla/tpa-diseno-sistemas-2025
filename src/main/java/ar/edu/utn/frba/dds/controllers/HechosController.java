@@ -333,7 +333,6 @@ public class HechosController {
     LocalDateTime fechaAcontecimiento = LocalDateTime.parse(ctx.formParam("fechaAcontecimiento"));
 
     LocalDateTime fechaCarga = LocalDateTime.now();
-    Origen origen = Origen.CARGAMANUAL;
 
     return new HechoBuilder().titulo(titulo)
         .categoria(categoria)
@@ -342,7 +341,7 @@ public class HechosController {
         .longitud(longitud)
         .fechaAcontecimiento(fechaAcontecimiento)
         .fechaCarga(fechaCarga)
-        .origen(origen);
+        .origen(Origen.CARGAMANUAL);
   }
 
   private List<Map<String, Object>> parserHechosJson(List<Hecho> hechos) {
