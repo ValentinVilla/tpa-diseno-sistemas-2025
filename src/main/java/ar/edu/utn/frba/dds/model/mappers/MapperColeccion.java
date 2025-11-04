@@ -27,12 +27,15 @@ public class MapperColeccion {
     }
 
     public Filtro toCriterio(String criterio){
-            return switch (criterio) {
-                case "incendios" -> new FiltroCategoria("Incendio");
-                case "inundaciones" -> new FiltroCategoria("Inundación");
-                case "filtro_geografico", "filtro_categoria" ->  new FiltroCategoria(null);
-                case "filtro_fecha" -> new FiltroFecha(null, null);
-                default -> new FiltroCategoria(null);
-            };
+        if (criterio == null || criterio.trim().isEmpty()) {
+            return null; // evitar crear un filtro por defecto que muestre "contiene texto"
+        }
+        return switch (criterio.trim()) {
+            case "incendios" -> new FiltroCategoria("Incendio");
+            case "inundaciones" -> new FiltroCategoria("Inundación");
+            case "filtro_geografico", "filtro_categoria" -> new FiltroCategoria(null); // si realmente se quiere un filtro vacío, conservar aquí
+            case "filtro_fecha" -> new FiltroFecha(null, null);
+            default -> null; // desconocido -> null en lugar de crear FiltroCategoria(null)
+        };
     }
 }

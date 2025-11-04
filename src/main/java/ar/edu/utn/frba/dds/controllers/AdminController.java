@@ -172,7 +172,9 @@ public class AdminController {
     model.put("id", coleccion.getId());
     model.put("titulo", coleccion.getTitulo());
     model.put("descripcion", coleccion.getDescripcion());
-    model.put("categoria", coleccion.getFiltro().getDescripcion());
+    // usar getCriterio() y proteger nulls
+    Filtro criterio = coleccion.getCriterio();
+    model.put("categoria", criterio != null ? criterio.getDescripcion() : "");
 
     // algoritmo: marcar la opción correspondiente como true/false esto es necesario para que en la casilla arranque con la opcion qe ya tiene de antes
     String algoritmo = coleccion.getAlgoritmoConsenso() != null ? coleccion.getAlgoritmoConsenso().name() : "DEFAULT";
