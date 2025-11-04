@@ -32,7 +32,6 @@ public class AdminController {
   }
 
   public void mostarCrearColeccion(Context ctx){
-
     Map<String, Object> model = new HashMap<>();
     List<Fuente> fuentesActivas = RepositorioFuentes.getInstancia().listarTodas();
     List<Map<String, Object>> fuentesVM = new ArrayList<>();
@@ -48,7 +47,6 @@ public class AdminController {
   }
 
   public void crearColeccion(Context ctx) {
-
     ColeccionDTO dto = ctx.bodyAsClass(ColeccionDTO.class);
     Coleccion coleccion = new ColeccionBuilder()
     .titulo(dto.getTitulo())
@@ -58,7 +56,6 @@ public class AdminController {
         .criterio(mapper.toCriterio(dto.getCriterio()))
         .modoNavegacion(mapper.toNavegacion(dto.getNavegacion()))
         .build();
-
     // Asignar nombre de fuente si fue provisto
     /*if (coleccion.getFuente() != null && coleccion.getFuente().getNombre() != null && !coleccion.getFuente().getNombre().isBlank()) {
       try { coleccion.getFuente().setNombre(fuenteNombre); } catch (Exception ignored) {}
@@ -68,7 +65,7 @@ public class AdminController {
   }
 
   // Endpoint para actualizar configuración rápida de una colección
-  public void configurarColeccion(Context ctx) {
+  public void editarColeccion(Context ctx) {
     String idStr = ctx.pathParam("id");
     Long id;
     try {
@@ -176,9 +173,30 @@ public class AdminController {
     model.put("titulo", coleccion.getTitulo());
     model.put("descripcion", coleccion.getDescripcion());
     model.put("categoria", coleccion.getFiltro().getDescripcion());
-    model.put("fuenteActual", coleccion.getFuente().getNombre());
 
-    // Fuente
+    // algoritmo: marcar la opción correspondiente como true/false esto es necesario para que en la casilla arranque con la opcion qe ya tiene de antes
+    String algoritmo = coleccion.getAlgoritmoConsenso() != null ? coleccion.getAlgoritmoConsenso().name() : "DEFAULT";
+    model.put("algoritmoConsenso", algoritmo);
+    model.put("algoritmo_MAYORIA_SIMPLE", "MAYORIA_SIMPLE".equals(algoritmo));
+    model.put("algoritmo_ABSOLUTO", "ABSOLUTO".equals(algoritmo));
+    model.put("algoritmo_MULTIPLES_MENCIONES", "MULTIPLES_MENCIONES".equals(algoritmo));
+    model.put("algoritmo_DEFAULT", "DEFAULT".equals(algoritmo));
+
+    //aca vamos a decirle al model que fuentes tiene que mostrar como opciones
+    List<Fuente> fuentesActivas = RepositorioFuentes.getInstancia().listarTodas();
+    List<Map<String, Object>> fuentesVM = new ArrayList<>();
+    fuentesActivas.forEach( fuente -> {
+      Map<String, Object> m = new HashMap<>();
+      m.put("fuente_id", fuente.getId());
+      m.put("titulo", fuente.getNombre());
+      m.put("tipo", fuente.getClass().getSimpleName());
+      boolean selected = (coleccion.getFuente().getId() != null && fuente.getId() != null && fuente.getId().equals(coleccion.getFuente().getId()));
+      m.put("selected", selected);
+      fuentesVM.add(m);
+    });
+    model.put("FUENTESACTIVAS", fuentesVM);
+    /*
+    // TODO ESTO INTUYO QUE NO SIRVE DE NADA YA QUE NO SE USA EN LA VISTA
     String fuenteTipo = "";
     String fuenteNombre = "";
     try {
@@ -191,38 +209,7 @@ public class AdminController {
         }
         try { fuenteNombre = coleccion.getFuente().getNombre(); } catch (Exception ignored){}
       }
-    } catch (Exception ignored){}
-
-    model.put("fuenteTipo", fuenteTipo);
-    model.put("fuenteNombre", fuenteNombre);
-
-    // Algoritmo
-    String algoritmo = coleccion.getAlgoritmoConsenso() != null ? coleccion.getAlgoritmoConsenso().name() : "DEFAULT";
-    model.put("algoritmoConsenso", algoritmo);
-    model.put("algoritmo_MAYORIA_SIMPLE", "MAYORIA_SIMPLE".equals(algoritmo));
-    model.put("algoritmo_ABSOLUTO", "ABSOLUTO".equals(algoritmo));
-    model.put("algoritmo_MULTIPLES_MENCIONES", "MULTIPLES_MENCIONES".equals(algoritmo));
-    model.put("algoritmo_DEFAULT", "DEFAULT".equals(algoritmo));
-
-    // Criterio (si hay uno)
-    model.put("criterioPertenencia", coleccion.getCriterio() != null ? coleccion.getCriterio().getDescripcion() : "");
-
-    // Fuente flags
-    model.put("fuente_estatica", "fuente_estatica".equals(fuenteTipo));
-    model.put("fuente_dinamica", "fuente_dinamica".equals(fuenteTipo));
-    model.put("fuente_proxy", "fuente_proxy".equals(fuenteTipo));
-
-    //aca vamos a decirle al model que fuentes tiene que mostrar como opciones
-    List<Fuente> fuentesActivas = RepositorioFuentes.getInstancia().listarTodas();
-    List<Map<String, Object>> fuentesVM = new ArrayList<>();
-    fuentesActivas.forEach( fuente -> {
-      Map<String, Object> m = new HashMap<>();
-      m.put("fuente_id", fuente.getId());
-      m.put("titulo", fuente.getNombre());
-      m.put("tipo", fuente.getClass().getSimpleName());
-      fuentesVM.add(m);
-    });
-    model.put("FUENTESACTIVAS", fuentesVM);
+    } catch (Exception ignored){}*/
 
     ctx.render("admin_colecciones_gestionar.hbs", model);
   }

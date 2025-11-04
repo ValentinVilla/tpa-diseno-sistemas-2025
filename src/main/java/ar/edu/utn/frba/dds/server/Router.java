@@ -47,9 +47,8 @@ public class Router {
     app.get("/admin/colecciones", ctx -> ctx.render("admin_colecciones.hbs", adminColeccionesController.mostrarColecciones()));
     app.get("/admin/colecciones/nueva", adminController::mostarCrearColeccion);
     app.post("/admin/colecciones", adminController::crearColeccion);
-    // nueva ruta para gestionar una colección (edición avanzada)
-    app.get("/admin/colecciones/{id}/gestionar", adminController::mostrarGestionColeccion);
-    app.post("/admin/colecciones/{id}/configurar", adminController::configurarColeccion);
+    app.get("/admin/colecciones/{id}/gestion", adminController::mostrarGestionColeccion);
+    app.post("/admin/colecciones/{id}/configuracion", adminController::editarColeccion); //somos conscientes que es un patch a la ruta de /admin/colecciones/{id} pero la tecnologia no soporta patch entonces cambiamos la url
 
     app.get("/admin/solicitudes", adminSolicitudesController::mostrarPanel);
 

@@ -147,8 +147,8 @@
     // Navegación a acciones de colección
     function irA(accion, id) {
         if (!id) return;
-        if (accion === 'gestionar') window.location.href = `/admin/colecciones/${id}/gestionar`;
-        else if (accion === 'configurar') window.location.href = `/admin/colecciones/${id}/configurar`;
+        if (accion === 'gestionar') window.location.href = `/admin/colecciones/${id}/gestion`;
+        else if (accion === 'configurar') window.location.href = `/admin/colecciones/${id}/configuracion`;
         else window.location.href = `/admin/colecciones/${id}`;
     }
 

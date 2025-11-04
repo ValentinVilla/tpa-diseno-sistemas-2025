@@ -50,7 +50,7 @@
                 <select id="fuente" name="fuente" class="input">
                     <option value="">-- Seleccionar fuente --</option>
                     {{#each FUENTESACTIVAS}}
-                        <option value="{{fuente_id}}" data-tipo="{{tipo}}" data-titulo="{{titulo}}" {{#if fuenteActual}}selected{{/if}}>
+                        <option value="{{fuente_id}}" data-tipo="{{tipo}}" data-titulo="{{titulo}}" {{#if selected}}selected{{/if}}>
                             {{titulo}} ({{tipo}})
                         </option>
                     {{/each}}
@@ -80,7 +80,7 @@
         const fuente = document.getElementById('fuente').value;
         const criterio = document.getElementById('criterio').value;
 
-        fetch(`/admin/colecciones/${id}/configurar`, {
+        fetch(`/admin/colecciones/${id}/configuracion`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ algoritmo: algoritmo, fuente: fuente, criterio: criterio })
