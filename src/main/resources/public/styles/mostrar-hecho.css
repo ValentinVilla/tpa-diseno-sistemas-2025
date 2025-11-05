@@ -182,3 +182,8 @@ body {
     .right { order: 2; }
     .left { order: 1; }
 }
+
+#mapaHecho {
+    margin-bottom: 0.4rem;
+    height: 300px;
+}
