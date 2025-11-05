@@ -31,6 +31,9 @@ public abstract class Fuente {
   public abstract List<Fuente> getFuente();
 
   protected ArrayList<Hecho> filtrarHechos(List<Hecho> hechos, ParametrosConsulta p) {
+    if (p == null) {
+      return (ArrayList<Hecho>) hechos;
+    }
     FiltroFecha filtroFecha = new FiltroFecha(p.getFechaAcontecimientoDesde(), p.getFechaAcontecimientoHasta());
     FiltroCategoria filtroCategoria = new FiltroCategoria(p.getCategoria());
 

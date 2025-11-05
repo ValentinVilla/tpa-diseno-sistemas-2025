@@ -6,8 +6,6 @@ import ar.edu.utn.frba.dds.controllers.SesionesController;
 import ar.edu.utn.frba.dds.controllers.UsuariosController;
 import io.javalin.Javalin;
 
-import java.util.Map;
-
 public class Router {
   UsuariosController usuariosController = new UsuariosController();
   ColeccionesController coleccionesController = new ColeccionesController();
@@ -21,7 +19,6 @@ public class Router {
 
     // --- Sesiones (Login) ---
     app.get("/login", sesionesController::mostrarLogin);
-    app.get("/logueo", sesionesController::mostrarLogin);
     app.get("/logout", sesionesController::cerrarSesion);
     app.post("/login", sesionesController::iniciarSesion);
 
@@ -30,15 +27,17 @@ public class Router {
     app.post("/register", usuariosController::crearUsuario);
 
     // --- Hechos ---
+    app.get("/hechos", hechosController::mostrarVistaHechos);
     app.get("/hechos.json", hechosController::mostrarHechosMapa);
-    app.get("/hechos", hechosController::mostrarHechos);
     app.get("/hechos/nuevo", hechosController::mostrarFormularioNuevoHecho);
-    app.post("/hechos", hechosController::crearHecho);
-    app.get("/hechos/{id}", hechosController::mostrarHecho);
     app.get("/hechos/delete", hechosController::mostrarFormularioEliminacion);
+    app.get("/hechos/{id}", hechosController::mostrarHecho);
+    app.post("/hechos", hechosController::crearHecho);
     app.post("/hechos/delete", hechosController::crearSolicitudEliminacion);
 
     // --- Colecciones ---
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones(ctx)));
+    app.get("/colecciones/{id}", coleccionesController::mostrarColeccionPorId);
+    app.get("/colecciones/{id}/hechos.json", coleccionesController::mostrarHechosColeccionJson);
   }
 }

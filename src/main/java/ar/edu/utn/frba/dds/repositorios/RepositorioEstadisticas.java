@@ -56,7 +56,7 @@ public class RepositorioEstadisticas {
 
   //metodo que carga SOLO una fila en la tabla estadistica_provincia_por_coleccion
   public void cargarFilaStatProvinciaXColeccion(Coleccion coleccion){
-    List<Hecho> hechos = coleccion.mostrarHechos();
+    List<Hecho> hechos = coleccion.mostrarHechos(null);
     EntityManager em = this.getEntityManager();
 
     em.createNativeQuery("CREATE TEMP TABLE hechos_temp (hecho_id BIGINT)").executeUpdate();
@@ -84,7 +84,7 @@ public class RepositorioEstadisticas {
 
 
   public String provinciaConMasHechos(Coleccion coleccion) {
-    List<Hecho> hechos = coleccion.mostrarHechos();
+    List<Hecho> hechos = coleccion.mostrarHechos(null);
 
     Map<String, Long> conteoPorProvincia = hechos.stream()
         .filter(h -> h.getProvincia() != null)

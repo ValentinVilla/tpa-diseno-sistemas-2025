@@ -1,15 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
   const login = document.getElementById('login');
   const loginBtn = document.getElementById('login-btn');
+  const loginBtnMobile = document.getElementById('login-btn-mobile');
   const loginClose = document.getElementById('login-close');
-  if (login && loginBtn) {
-    loginBtn.addEventListener('click', () => {
+  
+  const openLogin = () => {
+    if (login) {
       login.classList.add('show-login');
-    });
+      history.pushState(null, '', '/login');
+    }
+  };
+  
+  if (login && loginBtn) {
+    loginBtn.addEventListener('click', openLogin);
+  }
+  if (login && loginBtnMobile) {
+    loginBtnMobile.addEventListener('click', openLogin);
   }
   if (login && loginClose) {
     loginClose.addEventListener('click', () => {
       login.classList.remove('show-login');
+      history.pushState(null, '', '/home');
     });
   }
 

@@ -5,37 +5,56 @@
                 <a href="/" class="logo-link" style="text-decoration: none; display: flex; align-items: center;">
                     <div class="logo-icon">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <path d="M16 4L4 10L16 16L28 10L16 4Z" fill="currentColor"/>
-                            <path d="M4 16L16 22L28 16" stroke="currentColor" stroke-width="2"/>
-                            <path d="M4 22L16 28L28 22" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 4L4 10L16 16L28 10L16 4Z" fill="currentColor" />
+                            <path d="M4 16L16 22L28 16" stroke="currentColor" stroke-width="2" />
+                            <path d="M4 22L16 28L28 22" stroke="currentColor" stroke-width="2" />
                         </svg>
                         <span class="logo-text">MetaMapa</span>
                     </div>
                 </a>
             </div>
 
-            <button class="btn-icon menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" title="Abrir menú">
+            <button class="btn-icon menu-toggle" id="menu-toggle" aria-expanded="false"
+                    aria-controls="primary-navigation" title="Abrir menú">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="sr-only">Abrir o cerrar menú</span>
             </button>
 
             <nav class="nav" id="primary-navigation" aria-label="Navegación principal">
-               {{#block "nav-content"}}
-               {{/block}}
+                <div class="nav-content">
+                    {{#block "nav-content"}}
+                    {{/block}}
+                </div>
+                <div class="nav-actions-mobile">
+                    {{#if nombre}}
+                        <a href="/logout" class="btn btn-ghost login-btn-mobile" role="menuitem">Cerrar Sesión</a>
+                    {{else}}
+                        <button type="button" class="btn btn-ghost login-btn-mobile" id="login-btn-mobile">
+                            Iniciar sesión
+                        </button>
+                        {{#if showRegister}}
+                            <a href="/register" class="btn btn-primary">Registrarse</a>
+                        {{/if}}
+                    {{/if}}
+                </div>
             </nav>
 
             <div class="header-actions">
                 {{#if nombre}}
                     <div class="profile">
-                        <button id="profile-btn" class="btn-icon profile-toggle" aria-expanded="false" aria-controls="profile-menu" title="Abrir menú de perfil">
+                        <button id="profile-btn" class="btn-icon profile-toggle" aria-expanded="false"
+                                aria-controls="profile-menu" title="Abrir menú de perfil">
                             <svg width="35" height="35" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4Z" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4Z" stroke="currentColor"
+                                      stroke-width="1.5" />
+                                <path d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6" stroke="currentColor" stroke-width="1.5"
+                                      stroke-linecap="round" />
                             </svg>
                             <svg width="25" height="25" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                                <path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                      stroke-linejoin="round" />
                             </svg>
                             <span class="sr-only">Menú de perfil</span>
                         </button>
@@ -45,14 +64,12 @@
                         </div>
                     </div>
                 {{else}}
-                    <a href="#" class="btn btn-ghost" id="login-btn">Iniciar Sesión</a>
-                    {{#if showRegister}}
-                        <a href="/register" class="btn btn-primary">Registrarse</a>
-                    {{/if}}
+                    <button type="button" class="btn-small btn-ghost" id="login-btn">
+                        Iniciar sesión
+                    </button>
+                    <a href="/register" class="btn-small btn-primary">Registrarse</a>
                 {{/if}}
             </div>
         </div>
     </div>
 </header>
-
-

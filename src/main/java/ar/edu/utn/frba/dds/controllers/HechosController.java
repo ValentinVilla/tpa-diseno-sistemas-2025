@@ -1,40 +1,73 @@
 package ar.edu.utn.frba.dds.controllers;
 
-import ar.edu.utn.frba.dds.model.dominio.*;
+import ar.edu.utn.frba.dds.helpers.FiltroHelper;
+import ar.edu.utn.frba.dds.helpers.HechoHelper;
+import ar.edu.utn.frba.dds.helpers.MapperHelper;
+import ar.edu.utn.frba.dds.helpers.NotificacionesHelper;
+import ar.edu.utn.frba.dds.helpers.SesionHelper;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.dominio.Media;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.model.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ar.edu.utn.frba.dds.repositorios.*;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
+import ar.edu.utn.frba.dds.repositorios.RepositorioFuentes;
+import ar.edu.utn.frba.dds.repositorios.RepositorioMedia;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
-import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
 import io.javalin.http.Context;
 import io.javalin.http.UploadedFile;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Collectors;
-import javax.swing.*;
+import java.util.stream.Stream;
 
 public class HechosController {
-
   private static final int MAX_FILES = 10;
-  private static final long MAX_FILE_SIZE = 20L * 1024L * 1024L; // 20 MB
+  private static final long MAX_FILE_SIZE = 20L * 1024L * 1024L;
   private static final Path UPLOADS_DIR = Paths.get("uploads");
-  private static final Set<String> ALLOWED_PREFIXES = Set.of("image/", "video/");
+
+  public void mostrarVistaHechos(Context ctx) {
+    Map<String, Object> modelo = SesionHelper.crearModeloBase(ctx);
+
+    try {
+      ParametrosConsulta filtros = FiltroHelper.armarFiltro(ctx);
+      List<Hecho> hechos = obtenerHechos(filtros);
+
+      modelo.put("cantidad", hechos.size());
+      modelo.put("hechos", hechos);
+      modelo.put("notificacion", NotificacionesHelper.crearNotificacion(ctx));
+
+      ctx.render("hechos.hbs", modelo);
+
+    } catch (Exception e) {
+      modelo.put("error", "Error al obtener los hechos.");
+      ctx.status(500).result(e.getMessage());
+    }
+  }
+
+  public void mostrarHechosMapa(Context ctx) {
+    try {
+      ParametrosConsulta filtros = FiltroHelper.armarFiltro(ctx);
+      List<Hecho> hechos = obtenerHechos(filtros);
+      ctx.json(MapperHelper.convertirHechosAJson(hechos));
+    } catch (Exception e) {
+      ctx.status(500).result(e.getMessage());
+    }
+  }
 
   public void crearHecho(Context ctx) {
     try {
@@ -46,7 +79,7 @@ public class HechosController {
         System.out.println("Creando hecho anónimo.");
       }
 
-      HechoBuilder hechoBuilder = this.construirBuilder(ctx);
+      HechoBuilder hechoBuilder = HechoHelper.construirBuilder(ctx);
       HechoDinamico hechoDinamico = new HechoDinamico(hechoBuilder, contribuyente);
 
       String fuenteIdStr = ctx.formParam("fuenteId");
@@ -75,7 +108,7 @@ public class HechosController {
       List<UploadedFile> uploaded = ctx.uploadedFiles("medias");
       List<Path> storedOnDisk = new ArrayList<>();
       try {
-        if (uploaded != null && !uploaded.isEmpty()) {
+        if (!uploaded.isEmpty()) {
           if (uploaded.size() > MAX_FILES) {
             ctx.status(400);
             ctx.redirect("/hechos/nuevo?error=max_files");
@@ -89,14 +122,6 @@ public class HechosController {
           }
 
           for (UploadedFile uf : uploaded) {
-            /*String contentType = uf.contentType();
-            if (contentType == null || ALLOWED_PREFIXES.stream().noneMatch(contentType::startsWith)) {
-              cleanupStoredFiles(storedOnDisk);
-              ctx.status(400);
-              ctx.redirect("/hechos/nuevo?error=tipo_no_permitido");
-              return;
-            }*/
-
             String publicPath = storeUploadedFile(uf);
             Path storedPath = resolveServerPath(publicPath);
             storedOnDisk.add(storedPath);
@@ -127,7 +152,6 @@ public class HechosController {
         throw e;
       }
     } catch (Exception e) {
-      e.printStackTrace();
       ctx.status(500);
       ctx.redirect("/hechos/nuevo?error=true");
     }
@@ -136,11 +160,9 @@ public class HechosController {
   private String storeUploadedFile(UploadedFile uf) throws IOException {
     String original = uf.filename();
     String ext = "";
-    if (original != null) {
-      int idx = original.lastIndexOf('.');
-      if (idx >= 0) ext = original.substring(idx);
-    }
-    String storedName = UUID.randomUUID().toString() + ext;
+    int idx = original.lastIndexOf('.');
+    if (idx >= 0) ext = original.substring(idx);
+    String storedName = UUID.randomUUID() + ext;
     Path target = UPLOADS_DIR.resolve(storedName);
 
     try (InputStream in = uf.content()) {
@@ -165,204 +187,80 @@ public class HechosController {
     }
   }
 
-  public void mostrarHechos(Context ctx) {
-    Map<String, Object> modelo = new HashMap<>();
-
-    try {
-      List<Coleccion> colecciones = RepositorioColecciones.getInstancia().listarTodas(); 
-      ParametrosConsulta filtros = this.armarFiltro(ctx);
-      List<Hecho> hechos = this.getHechos(filtros);
-      modelo.put("cantidad", hechos.size());
-
-      modelo.put("hechos", hechos);
-      
-      modelo.put("colecciones", colecciones);
-
-      Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
-      if (usuario != null) modelo.put("nombre", usuario.getNombre());
-
-      String solicitudStatus = ctx.queryParam("solicitud");
-      if (solicitudStatus != null) {
-        Map<String, String> notificacion = new HashMap<>();
-        if (solicitudStatus.equals("exito")) {
-          notificacion.put("tipo", "exito");
-          notificacion.put("mensaje", "Solicitud enviada correctamente.");
-        }
-        modelo.put("notificacion", notificacion);
-      }
-
-      String creacionStatus = ctx.queryParam("creacion");
-      if (creacionStatus != null && creacionStatus.equals("exito")) {
-        Map<String, String> notificacion = new HashMap<>();
-        notificacion.put("tipo", "exito");
-        notificacion.put("mensaje", "Hecho creado correctamente.");
-        modelo.put("notificacion", notificacion);
-      }
-
-      ctx.render("hechos.hbs", modelo);
-    } catch (Exception e) {
-      modelo.put("error", "Error al obtener los hechos.");
-      ctx.status(500).result(e.getMessage());
-    }
-  }
-
-  public void mostrarHechosMapa(Context ctx) {
-    try {
-      ParametrosConsulta filtros = this.armarFiltro(ctx);
-      List<Hecho> hechos = this.getHechos(filtros);
-
-      List<Map<String, Object>> hechosJS = parserHechosJson(hechos);
-      ctx.json(hechosJS);
-    } catch (Exception e) {
-      ctx.status(500).result(e.getMessage());
-    }
-  }
-
   public void mostrarFormularioNuevoHecho(Context ctx) {
-    List<FuenteDinamica> fuentesDinamicas = RepositorioFuentes.getInstancia().listarFuentesDinamicas();
+    Map<String, Object> modelo = SesionHelper.crearModeloBase(ctx);
 
-    Map<String, Object> model = new HashMap<>();
-    model.put("fuentesDinamicas", fuentesDinamicas);
+    modelo.put("fuentesDinamicas", RepositorioFuentes.getInstancia().listarFuentesDinamicas());
+    modelo.put("notificacion", NotificacionesHelper.crearNotificacion(ctx));
 
-    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
-    if (usuario != null) {
-      model.put("nombre", usuario.getNombre());
-    }
-
-    ctx.render("crear-hecho.hbs", model);
+    ctx.render("crear-hecho.hbs", modelo);
   }
 
   public void mostrarFormularioEliminacion(Context ctx) {
-    Map<String, Object> model = new HashMap<>();
+    Map<String, Object> modelo = SesionHelper.crearModeloBase(ctx);
 
-    Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
-    if (usuario != null) {
-      model.put("nombre", usuario.getNombre());
-    }
+    modelo.put("hecho", Map.of(
+        "titulo", Objects.requireNonNull(ctx.queryParam("titulo")),
+        "descripcion", Objects.requireNonNull(ctx.queryParam("descripcion")),
+        "categoria", Objects.requireNonNull(ctx.queryParam("categoria"))
+    ));
 
-    Map<String, String> hecho = new HashMap<>();
-    hecho.put("titulo", ctx.queryParam("titulo"));
-    hecho.put("descripcion", ctx.queryParam("descripcion"));
-    hecho.put("categoria", ctx.queryParam("categoria"));
-
-    model.put("hecho", hecho);
-
-    ctx.render("solicitud-eliminacion.hbs", model);
+    ctx.render("solicitud-eliminacion.hbs", modelo);
   }
 
   public void crearSolicitudEliminacion(Context ctx) {
     try {
-      String titulo = ctx.formParam("titulo");
-      String descripcion = ctx.formParam("descripcion");
-      String categoria = ctx.formParam("categoria");
-      String justificacion = ctx.formParam("justificacion");
-
-      Contribuyente contribuyente = ctx.sessionAttribute("usuario_logueado");
+      Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
 
       HechoDinamico hechoTemporal = new HechoDinamico(
           new HechoBuilder()
-              .titulo(titulo)
-              .descripcion(descripcion)
-              .categoria(categoria),
-          contribuyente
+              .titulo(ctx.formParam("titulo"))
+              .descripcion(ctx.formParam("descripcion"))
+              .categoria(ctx.formParam("categoria")),
+          usuario
       );
-
-      DetectorDeSpam detectorSiempreFalse = texto -> false; // TODO: chequear q carajo hacer con el detector de spam
 
       SolicitudEliminacion solicitud = new SolicitudEliminacion(
           hechoTemporal,
-          justificacion,
-          detectorSiempreFalse
+          ctx.formParam("justificacion"),
+          texto -> false
       );
 
       RepositorioSolicitudes.getInstancia().guardar(solicitud);
-
-      ctx.status(201);
       ctx.redirect("/hechos?solicitud=exito");
+
     } catch (Exception e) {
-      e.printStackTrace();
-      ctx.status(500).result("Error al procesar la solicitud: " + e.getMessage());
       ctx.redirect("/hechos?solicitud=error");
     }
   }
 
-  private List<Hecho> getHechos(ParametrosConsulta filtros) {
-    List<Hecho> hechos = new ArrayList<>();
-
-    List<Fuente> fuentes = RepositorioFuentes.getInstancia().listarTodas();
-
-    for (Fuente fuente : fuentes) {
-      try {
-        List<Hecho> hechosFuente = fuente.cargarHechos(filtros);
-        hechos.addAll(hechosFuente);
-      } catch (Exception ignored) {
+  private Long parsearId(String idStr, String redirectUrl, Context ctx) {
+    try {
+      if (idStr == null || idStr.isBlank()) {
+        ctx.status(400).redirect(redirectUrl);
+        return null;
       }
+      return Long.parseLong(idStr);
+    } catch (NumberFormatException e) {
+      ctx.status(400).redirect(redirectUrl);
+      return null;
     }
-    return hechos;
   }
 
-  private ParametrosConsulta armarFiltro(Context ctx) {
-    String busqueda = ctx.queryParam("busqueda");
-    String categoria = ctx.queryParam("categoria");
-    String fechaDesdeStr = ctx.queryParam("fechaDesde");
-    String fechaHastaStr = ctx.queryParam("fechaHasta");
-
-    ParametrosConsulta filtros = new ParametrosConsulta();
-    if (!Objects.equals(busqueda, "")) {
-      filtros.setTexto(busqueda);
-    }
-    if (!Objects.equals(categoria, "")) {
-      filtros.setCategoria(categoria);
-    }
-    if (!Objects.equals(fechaDesdeStr, "") && fechaDesdeStr != null) {
-      filtros.setFechaAcontecimientoDesde(LocalDate.parse(fechaDesdeStr));
-    }
-    if (!Objects.equals(fechaHastaStr, "") && fechaHastaStr != null) {
-      filtros.setFechaAcontecimientoHasta(LocalDate.parse(fechaHastaStr));
-    }
-
-    return filtros;
-  }
-
-  private HechoBuilder construirBuilder(Context ctx) {
-    String titulo = ctx.formParam("titulo");
-    String descripcion = ctx.formParam("descripcion");
-    String categoria = ctx.formParam("categoria");
-    double latitud = Double.parseDouble(ctx.formParam("latitud"));
-    double longitud = Double.parseDouble(ctx.formParam("longitud"));
-    LocalDateTime fechaAcontecimiento = LocalDateTime.parse(ctx.formParam("fechaAcontecimiento"));
-
-    LocalDateTime fechaCarga = LocalDateTime.now();
-
-    return new HechoBuilder().titulo(titulo)
-        .categoria(categoria)
-        .descripcion(descripcion)
-        .latitud(latitud)
-        .longitud(longitud)
-        .fechaAcontecimiento(fechaAcontecimiento)
-        .fechaCarga(fechaCarga)
-        .origen(Origen.CARGAMANUAL);
-  }
-
-  private List<Map<String, Object>> parserHechosJson(List<Hecho> hechos) {
-    List<Map<String, Object>> hechosParaJS = new ArrayList<>();
-    for (Hecho h : hechos) {
-      if (h.getLatitud() != null && h.getLongitud() != null) {
-        Map<String, Object> json = new HashMap<>();
-        json.put("titulo", h.getTitulo());
-        json.put("categoria", h.getCategoria());
-        json.put("fecha", h.getFechaAcontecimiento().toString());
-        json.put("descripcion", h.getDescripcion());
-        json.put("lat", h.getLatitud());
-        json.put("lon", h.getLongitud());
-        hechosParaJS.add(json);
-      }
-    }
-    return hechosParaJS;
+  private List<Hecho> obtenerHechos(ParametrosConsulta filtros) {
+    return RepositorioFuentes.getInstancia().listarTodas().stream()
+        .flatMap(f -> {
+          try {
+            return f.cargarHechos(filtros).stream();
+          } catch (Exception ignored) {
+            return Stream.empty();
+          }
+        })
+        .collect(Collectors.toList());
   }
 
   public void mostrarHecho(Context ctx) {
-    Long id;
+    long id;
     try {
       id = Long.parseLong(ctx.pathParam("id"));
     } catch (NumberFormatException e) {
@@ -370,7 +268,7 @@ public class HechosController {
       return;
     }
 
-    Hecho hecho = DAOHechos.getInstancia().buscarPorId(id);
+    HechoDinamico hecho = DAOHechos.getInstancia().buscarPorId(id);
     if (hecho == null) {
       ctx.status(404).result("Hecho no encontrado");
       return;
@@ -381,16 +279,17 @@ public class HechosController {
     String uploadsDirProp = System.getProperty("UPLOADS_DIR", System.getenv().getOrDefault("UPLOADS_DIR", "uploads"));
     Path uploadsDir = Paths.get(uploadsDirProp);
 
-    List<Map<String,Object>> medias = mediaEntities.stream().map(m -> {
+    List<Map<String, Object>> medias = mediaEntities.stream().map(m -> {
       String path = m.getPath();
       String basename = Paths.get(path.startsWith("/") ? path.substring(1) : path).getFileName().toString();
       long sizeBytes = 0L;
       try {
         Path file = uploadsDir.resolve(basename);
         if (Files.exists(file)) sizeBytes = Files.size(file);
-      } catch (IOException ignored) {}
+      } catch (IOException ignored) {
+      }
       boolean isVideo = basename.toLowerCase().matches(".*\\.(mp4|webm|ogg)$");
-      Map<String,Object> mm = new HashMap<>();
+      Map<String, Object> mm = new HashMap<>();
       mm.put("path", path);
       mm.put("basename", basename);
       mm.put("humanSize", humanReadableSize(sizeBytes));
@@ -400,17 +299,14 @@ public class HechosController {
 
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    Map<String,Object> model = new HashMap<>();
+    Map<String, Object> model = new HashMap<>();
     model.put("hecho", hecho);
     model.put("fechaAcontecimiento", hecho.getFechaAcontecimiento() != null ? hecho.getFechaAcontecimiento().format(fmt) : "");
     model.put("fechaCarga", hecho.getFechaCarga() != null ? hecho.getFechaCarga().format(fmt) : "");
     model.put("medias", medias);
 
-    if (hecho instanceof HechoDinamico) {
-      HechoDinamico hd = (HechoDinamico) hecho;
-      if (!hd.esAnonimo() && hd.getContribuyente() != null) {
-        model.put("contribuyenteNombre", hd.getContribuyente().getNombre());
-      }
+    if (!hecho.esAnonimo() && hecho.getContribuyente() != null) {
+      model.put("contribuyenteNombre", hecho.getContribuyente().getNombre());
     }
 
     ctx.render("mostrar-hecho.hbs", model);
@@ -418,7 +314,7 @@ public class HechosController {
 
   private String humanReadableSize(long bytes) {
     if (bytes < 1024) return bytes + " B";
-    if (bytes < 1024*1024) return String.format("%.1f KB", bytes / 1024.0);
-    return String.format("%.2f MB", bytes / (1024.0*1024.0));
+    if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
+    return String.format("%.2f MB", bytes / (1024.0 * 1024.0));
   }
 }

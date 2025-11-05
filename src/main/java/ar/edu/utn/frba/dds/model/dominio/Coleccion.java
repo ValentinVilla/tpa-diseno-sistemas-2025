@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.model.dominio;
 
 import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
 import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +47,9 @@ public class Coleccion {
     this.algoritmoConsenso = builder.getAlgoritmoConsenso();
   }
 
-  public List<Hecho> mostrarHechos() {
+  public List<Hecho> mostrarHechos(ParametrosConsulta filtros) {
 
-    List<Hecho> hechos = fuente.cargarHechos(null);
+    List<Hecho> hechos = fuente.cargarHechos(filtros);
 
     return modoNavegacion.mostrarHechos(
         hechos.stream()
@@ -59,11 +60,12 @@ public class Coleccion {
 
   public List<Hecho> hechosFiltrados(Filtro filtro) {
     List<Hecho> resultado = new ArrayList<>();
-    for (Hecho hecho : mostrarHechos()) {
+    for (Hecho hecho : mostrarHechos(null)) {
       if (filtro.cumple(hecho)) {
         resultado.add(hecho);
       }
     }
+
     return resultado;
   }
 
