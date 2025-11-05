@@ -169,6 +169,24 @@ body {
     transform: translateY(-2px);
 }
 
+.btn-secondary {
+    background-color: var(--color-card, #f4f4f4);
+    color: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    padding: 0.6em 1.2em;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #1a1a1a;
+    color: var(--color-card, #f4f4f4);
+}
+
+
 .btn-lg {
     padding: 1.125rem 2.25rem;
     font-size: 1.0625rem;

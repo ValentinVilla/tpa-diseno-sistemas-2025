@@ -223,7 +223,8 @@ public class HechosController {
       SolicitudEliminacion solicitud = new SolicitudEliminacion(
           hechoTemporal,
           ctx.formParam("justificacion"),
-          texto -> false
+          texto -> false,
+          usuario
       );
 
       RepositorioSolicitudes.getInstancia().guardar(solicitud);

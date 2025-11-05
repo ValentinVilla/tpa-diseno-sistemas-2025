@@ -27,4 +27,15 @@ public class FiltroUbicacion extends Filtro {
       return hecho.getLatitud() >= latitudMin && hecho.getLatitud() <= latitudMax &&
           hecho.getLongitud() >= longitudMin && hecho.getLongitud() <= longitudMax;
     }
+
+  public double getLatitudMin() { return latitudMin; }
+  public double getLatitudMax() { return latitudMax; }
+  public double getLongitudMin() { return longitudMin; }
+  public double getLongitudMax() { return longitudMax; }
+
+  @Override
+  public String getDescripcion() {
+    return String.format("Ubicación [lat: %.2f–%.2f, lon: %.2f–%.2f]",
+        latitudMin, latitudMax, longitudMin, longitudMax);
+  }
 }

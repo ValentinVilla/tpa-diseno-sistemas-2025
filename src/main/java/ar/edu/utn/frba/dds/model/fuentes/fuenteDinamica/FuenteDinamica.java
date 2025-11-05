@@ -39,18 +39,18 @@ public class FuenteDinamica extends Fuente {
     hechosDinamicos.add(hecho);
   }
 
-  public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg) {
+  public void solicitarModificarHecho(HechoDinamico hechoOriginal, HechoDinamico hechoNuevo, String textoArg, Contribuyente contribuyente) {
     if (!puedeModificar(hechoOriginal, hechoNuevo.getContribuyente())) {
       throw new RuntimeException("No tenés permiso para modificar este hecho.");
     } else {
-      SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal, textoArg, new ImplementadorSpam(15),hechoNuevo);
+      SolicitudModificacion solicitudModificacion = new SolicitudModificacion(hechoOriginal, textoArg, new ImplementadorSpam(15),hechoNuevo, contribuyente);
       RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
       repoSolicitudes.guardar(solicitudModificacion);
     }
   }
 
-  public void solicitarEliminacionHecho(HechoDinamico hecho){
-    Solicitud soliciudEliminacion = new SolicitudEliminacion(hecho, "", new ImplementadorSpam(10));
+  public void solicitarEliminacionHecho(Hecho hecho, Contribuyente contribuyente){
+    Solicitud soliciudEliminacion = new SolicitudEliminacion(hecho, "", new ImplementadorSpam(10), contribuyente);
 
     RepositorioSolicitudes repoSolicitudes = RepositorioSolicitudes.getInstancia();
     repoSolicitudes.guardar(soliciudEliminacion);

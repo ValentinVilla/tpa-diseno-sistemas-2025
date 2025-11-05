@@ -26,10 +26,10 @@ public class Coleccion {
   private String titulo;
   private String descripcion;
   public String handle;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "fuente_id",  nullable = false)
   private Fuente fuente;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   public Filtro criterioPertenencia;
   @Enumerated(EnumType.STRING)
   AlgoritmoConsenso algoritmoConsenso;
@@ -79,8 +79,22 @@ public class Coleccion {
     return criterioPertenencia.cumple(hecho);
   }
 
-  public void setFiltro(Filtro filtro) {
-    this.criterioPertenencia = filtro;
+   // Setters añadidos para permitir edición desde el panel admin
+  public void setFuente(Fuente fuente) {
+    this.fuente = fuente;
+  }
+
+  public void setAlgoritmoConsenso(AlgoritmoConsenso algoritmoConsenso) {
+    this.algoritmoConsenso = algoritmoConsenso;
+  }
+
+  public void setModoNavegacion(ModoNavegacion modoNavegacion) {
+    this.modoNavegacion = modoNavegacion;
+  }
+
+  // Setter definitivo para el criterio
+  public void setCriterio(Filtro criterio) {
+    this.criterioPertenencia = criterio;
   }
 
   public String getTitulo() {
@@ -109,5 +123,17 @@ public class Coleccion {
 
   public Filtro getCriterio(){
     return criterioPertenencia;
+  }
+
+  public Filtro getCriterioPertenencia() {
+    return this.criterioPertenencia;
+  }
+
+  public AlgoritmoConsenso getAlgoritmoConsenso() {
+    return this.algoritmoConsenso;
+  }
+
+  public ModoNavegacion getModoNavegacion() {
+    return this.modoNavegacion;
   }
 }

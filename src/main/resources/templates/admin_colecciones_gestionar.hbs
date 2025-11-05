@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Colección</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+    <link rel="stylesheet" href="/styles/admin-colecciones.css">
+    <link rel="stylesheet" href="/styles/admin-colecciones-gestion.css">
+</head>
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Gestionar Colección</h1>
+                <p class="subtitle">Editar configuración avanzada de la colección</p>
+            </div>
+            <div>
+                <a href="/admin/colecciones" class="btn-back">← Volver a Colecciones</a>
+            </div>
+        </div>
+
+        <form id="manage-form" action="/admin/colecciones/{{id}}/configuracion" method="post" style="margin-top:1rem; max-width:720px;">
+            <input type="hidden" id="manage-id" name="id" value="{{id}}" />
+
+            <div class="form-row">
+                <label for="titulo">Título</label>
+                <input id="titulo" name="titulo" class="input" value="{{titulo}}" disabled />
+            </div>
+
+            <div class="form-row">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" class="input" rows="3" disabled>{{descripcion}}</textarea>
+            </div>
+
+            <div class="form-row">
+                <label for="algoritmo">Algoritmo de consenso</label>
+                <select id="algoritmo" name="algoritmo" class="input">
+                    <option value="MAYORIA_SIMPLE" {{#if algoritmo_MAYORIA_SIMPLE}}selected{{/if}}>Mayoría simple</option>
+                    <option value="ABSOLUTO" {{#if algoritmo_ABSOLUTO}}selected{{/if}}>Absoluto</option>
+                    <option value="MULTIPLES_MENCIONES" {{#if algoritmo_MULTIPLES_MENCIONES}}selected{{/if}}>Múltiples menciones</option>
+                    <option value="DEFAULT" {{#if algoritmo_DEFAULT}}selected{{/if}}>Default</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="fuente">Fuente</label>
+                <select id="fuente" name="fuente" class="input">
+                    <option value="">-- Seleccionar fuente --</option>
+                    {{#each FUENTESACTIVAS}}
+                        <option value="{{fuente_id}}" data-tipo="{{tipo}}" data-titulo="{{titulo}}" {{#if selected}}selected{{/if}}>
+                            {{titulo}} ({{tipo}})
+                        </option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="criterio">Criterio (descripción)</label>
+                <input type="hidden" id="criterio" name="criterio" value="{{categoria}}" />
+                <textarea id="criterio-display" name="criterio-display" class="input" rows="3" disabled>{{categoria}}</textarea>
+            </div>
+
+            <div class="form-row">
+                <label for="criterio_sel">Criterio (filtro)</label>
+                <select id="criterio_sel" class="input">
+                    <option value="">-- Seleccionar criterio existente --</option>
+                    {{#each FILTROS_ACTIVOS}}
+                        <option value="{{id}}" data-tipo="{{tipo}}" {{#if selected}}selected{{/if}}>{{descripcion}} ({{tipo}})</option>
+                    {{/each}}
+                    <option value="__nuevo">+ Crear nuevo criterio...</option>
+                </select>
+            </div>
+
+            <div id="nuevo-criterio" style="display:none; margin-top:0.5rem;">
+                <div class="form-row">
+                    <label for="criterioTipo">Tipo de criterio</label>
+                    <select id="criterioTipo" class="input">
+                        <option value="TEXTO">Texto</option>
+                        <option value="CATEGORIA">Categoría</option>
+                    </select>
+                </div>
+                <div class="form-row" id="campo-criterio-texto">
+                    <label for="criterio-texto">Texto a buscar</label>
+                    <input id="criterio-texto" class="input" />
+                </div>
+                <div class="form-row" id="campo-criterio-categoria" style="display:none;">
+                    <label for="criterio-categoria">Nombre de la categoría</label>
+                    <input id="criterio-categoria" class="input" />
+                </div>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-end;">
+                <a href="/admin/colecciones" class="btn">Cancelar</a>
+                <button type="submit" class="btn btn-eseverde">Guardar cambios</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+
+<script>
+    document.getElementById('manage-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        const id = document.getElementById('manage-id').value;
+        const algoritmo = document.getElementById('algoritmo').value;
+        const fuente = document.getElementById('fuente').value;
+        const criterioSel = document.getElementById('criterio_sel').value;
+        let criterio = document.getElementById('criterio-texto') ? document.getElementById('criterio-texto').value.trim() : '';
+        let criterioCategoria = document.getElementById('criterio-categoria') ? document.getElementById('criterio-categoria').value.trim() : '';
+
+        const payload = { algoritmo: algoritmo, fuente: fuente };
+        if (criterioSel && criterioSel !== '__nuevo') {
+            payload.fuente = fuente; // keep
+            payload.criterio = '';
+            payload.criterioId = Number(criterioSel);
+        } else if (criterioSel === '__nuevo') {
+            const tipo = document.getElementById('criterioTipo').value;
+            payload.criterioTipo = tipo;
+            if (tipo === 'TEXTO') payload.criterio = criterio;
+            if (tipo === 'CATEGORIA') payload.criterio = criterioCategoria;
+        } else {
+            // fallback: keep existing criterio hidden value
+            payload.criterio = document.getElementById('criterio').value;
+        }
+
+        fetch(`/admin/colecciones/${id}/configuracion`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(r => {
+             if (r.ok) window.location.href = '/admin/colecciones';
+             else r.text().then(t => alert('Error al guardar cambios: ' + t));
+         }).catch(err => {
+             console.error(err);
+             alert('Error de red al guardar cambios');
+         });
+     });
+
+    // UI controls
+    document.getElementById('criterio_sel').addEventListener('change', function(){
+        const v = this.value;
+        const nuevo = document.getElementById('nuevo-criterio');
+        if (v === '__nuevo') nuevo.style.display = '';
+        else nuevo.style.display = 'none';
+    });
+    document.getElementById('criterioTipo').addEventListener('change', function(){
+        const t = this.value;
+        document.getElementById('campo-criterio-texto').style.display = (t === 'TEXTO') ? '' : 'none';
+        document.getElementById('campo-criterio-categoria').style.display = (t === 'CATEGORIA') ? '' : 'none';
+    });
+</script>
+
+</body>
+</html>

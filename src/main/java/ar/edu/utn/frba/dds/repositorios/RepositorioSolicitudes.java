@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
+import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,12 +9,13 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 public class RepositorioSolicitudes {
-  private final EntityManagerFactory emf;
+  private final EntityManager entityManager;
 
   private static RepositorioSolicitudes instancia;
 
   private RepositorioSolicitudes() {
-    this.emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    this.entityManager = emf.createEntityManager();
   }
 
   public static RepositorioSolicitudes getInstancia() {
@@ -24,66 +26,62 @@ public class RepositorioSolicitudes {
   }
 
   public List<Solicitud> obtenerTodas() {
-    EntityManager em = emf.createEntityManager();
-    try {
-      return em.createQuery("SELECT s FROM Solicitud s", Solicitud.class)
-          .getResultList();
-    } finally {
-      em.close();
-    }
+    return entityManager.createQuery("SELECT s FROM Solicitud s ORDER BY fecha ASC NULLS LAST", Solicitud.class)
+        .getResultList();
+  }
+
+  public List<Solicitud> obtenerTodasPendientes() {
+    return entityManager.createQuery("SELECT s FROM Solicitud s WHERE s.estado = :estado ORDER BY fecha ASC NULLS LAST", Solicitud.class)
+        .setParameter("estado", EstadoSolicitud.PENDIENTE)
+        .getResultList();
   }
 
   public void guardar(Solicitud solicitud) {
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction transaction = em.getTransaction();
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
-      em.persist(solicitud);
+      entityManager.persist(solicitud);
       transaction.commit();
     } catch (Exception e) {
-      if (transaction != null && transaction.isActive()) {
+      if (transaction.isActive()) {
         transaction.rollback();
       }
       throw e;
-    } finally {
-      em.close();
     }
   }
 
   public void eliminar(Long id) {
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction transaction = em.getTransaction();
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
-      Solicitud solicitud = em.find(Solicitud.class, id);
+      Solicitud solicitud = entityManager.find(Solicitud.class, id);
       if (solicitud != null) {
-        em.remove(solicitud);
+        entityManager.remove(solicitud);
       }
       transaction.commit();
     } catch (Exception e) {
-      if (transaction != null && transaction.isActive()) {
+      if (transaction.isActive()) {
         transaction.rollback();
       }
       throw e;
-    } finally {
-      em.close();
     }
   }
 
   public void actualizar(Solicitud solicitud) {
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction transaction = em.getTransaction();
+    EntityTransaction transaction = getEntity();
     try {
       transaction.begin();
-      em.merge(solicitud);
+      entityManager.merge(solicitud);
       transaction.commit();
     } catch (Exception e) {
-      if (transaction != null && transaction.isActive()) {
+      if (transaction.isActive()) {
         transaction.rollback();
       }
       throw e;
-    } finally {
-      em.close();
     }
+  }
+
+  private  EntityTransaction getEntity() {
+      return entityManager.getTransaction();
   }
 }

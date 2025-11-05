@@ -5,6 +5,8 @@ import ar.edu.utn.frba.dds.model.dominio.Origen;
 import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudModificacion;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import org.junit.jupiter.api.AfterEach;
@@ -58,7 +60,7 @@ class RepositorioSolicitudesTest {
   }
 
   @Test
-  void testGuardarSolicitud() throws Exception {
+  void testGuardarSolicitudEliminacion() throws Exception {
     HechoDinamico hecho = crearHechoDinamico();
 
     //solo para testear
@@ -66,12 +68,44 @@ class RepositorioSolicitudesTest {
     entityManager.persist(hecho);
     entityManager.getTransaction().commit();
 
-    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de guardado", null);
+    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de guardado", null,  new Contribuyente("juan","","","",11,""));
     repo.guardar(solicitud);
 
     assertTrue(repo.obtenerTodas().stream()
         .anyMatch(s -> s.getId().equals(solicitud.getId())));
   }
+
+  @Test
+  void testGuardarSolicitudSubida() throws Exception {
+    HechoDinamico hecho = crearHechoDinamico();
+
+    //solo para testear
+    entityManager.getTransaction().begin();
+    entityManager.persist(hecho);
+    entityManager.getTransaction().commit();
+
+    Solicitud solicitud = new SolicitudSubida(hecho, "Prueba de guardado", null,  new Contribuyente("juan","","","",11,""));
+    repo.guardar(solicitud);
+
+    assertTrue(repo.obtenerTodas().stream()
+        .anyMatch(s -> s.getId().equals(solicitud.getId())));
+  }
+
+  /*@Test
+  void testGuardarSolicitudModificacion() throws Exception {
+    HechoDinamico hecho = crearHechoDinamico();
+
+    //solo para testear
+    entityManager.getTransaction().begin();
+    entityManager.persist(hecho);
+    entityManager.getTransaction().commit();
+
+    Solicitud solicitud = new SolicitudModificacion(hecho, "Prueba de guardado", null, (aca falta algo para que ande)  ,new Contribuyente("juan","","","",11,""));
+    repo.guardar(solicitud);
+
+    assertTrue(repo.obtenerTodas().stream()
+        .anyMatch(s -> s.getId().equals(solicitud.getId())));
+  }*/
 
   @Test
   void testEliminarSolicitud() throws Exception {
@@ -80,7 +114,7 @@ class RepositorioSolicitudesTest {
     entityManager.persist(hecho);
     entityManager.getTransaction().commit();
 
-    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de eliminación", null);
+    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de eliminación", null,  new Contribuyente("juan","","","",11,""));
     repo.guardar(solicitud);
 
     repo.eliminar(solicitud.getId());
@@ -89,6 +123,8 @@ class RepositorioSolicitudesTest {
         .anyMatch(s -> s.getId().equals(solicitud.getId())));
   }
 
+
+
   @Test
   void testActualizarSolicitud() throws Exception {
     HechoDinamico hecho = crearHechoDinamico();
@@ -96,7 +132,7 @@ class RepositorioSolicitudesTest {
     entityManager.persist(hecho);
     entityManager.getTransaction().commit();
 
-    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de actualización", null);
+    Solicitud solicitud = new SolicitudEliminacion(hecho, "Prueba de actualización", null,  new Contribuyente("juan","","","",11,""));
     repo.guardar(solicitud);
 
     solicitud.aceptar();

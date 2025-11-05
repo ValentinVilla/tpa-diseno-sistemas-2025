@@ -38,4 +38,14 @@ public class FiltroFecha extends Filtro {
 
     return true;
   }
+
+  public LocalDate getFechaDesde() { return fechaDesde; }
+  public LocalDate getFechaHasta() { return fechaHasta; }
+
+  @Override
+  public String getDescripcion() {
+    String desde = fechaDesde != null ? fechaDesde.toString() : "∞";
+    String hasta = fechaHasta != null ? fechaHasta.toString() : "∞";
+    return "Fecha entre " + desde + " y " + hasta;
+  }
 }

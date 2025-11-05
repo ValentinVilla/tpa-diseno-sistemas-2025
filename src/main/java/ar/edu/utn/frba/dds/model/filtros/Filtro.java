@@ -18,6 +18,11 @@ public abstract class Filtro {
   @GeneratedValue
   private Long id;
 
-  public abstract boolean cumple(Hecho hecho);
-}
+  public Long getId() { return id; }
 
+  public abstract boolean cumple(Hecho hecho);
+
+  public String getDescripcion() {
+    return getClass().getSimpleName();
+  }
+}

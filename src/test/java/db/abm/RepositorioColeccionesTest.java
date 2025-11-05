@@ -6,17 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.dominio.builders.ColeccionBuilder;
 import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
 import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
-import ar.edu.utn.frba.dds.model.fuentes.fuenteEstatica.FuenteEstatica;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class RepositorioColeccionesTest {
 
@@ -28,20 +25,24 @@ class RepositorioColeccionesTest {
   }
 
   private Coleccion crearColeccion(String titulo) {
-    ArrayList<String> campos = new ArrayList<>(List.of(
-        "titulo", "descripcion", "latitud", "longitud", "fechaHecho"
-    ));
+    // Creamos un filtro con categoría real
+    FiltroCategoria filtro = new FiltroCategoria("Noticias");
+
+    // Creamos la fuente dinámica y le agregamos algunos hechos de prueba
+    FuenteDinamica fuente = new FuenteDinamica();
+
 
     return new ColeccionBuilder()
         .titulo(titulo)
-        .descripcion("Ahora si: Probando el detalle de colecciones, amo programar y amo mi vida!! Noche soñada de sabado se viene hoy. +1000 lineas, bueno creo que ya es bastante larga la descripcion como para que se aprecie bien como se ve.")
-        .fuente(new FuenteEstatica("/Users/gongarfon/DDS/tpa-2025-04/Diagramas/hechos_argentina.csv", "testing", campos))
-        .criterio(new FiltroCategoria("testing"))
+        .descripcion("Descripción de prueba")
+        .fuente(fuente)
+        .criterio(filtro)
         .handle("handle-" + titulo)
         .modoNavegacion(ModoNavegacion.IRRESTRICTA)
         .algoritmoConsenso(AlgoritmoConsenso.ABSOLUTO)
         .build();
   }
+
 
   @Test
   void testGuardarColeccion() {

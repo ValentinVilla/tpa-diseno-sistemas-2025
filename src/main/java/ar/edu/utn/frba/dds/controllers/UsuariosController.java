@@ -26,6 +26,7 @@ public class UsuariosController {
     String password = ctx.formParam("password");
 
     Contribuyente usuarioCreado = new Contribuyente(nombre, apellido, telefono, mail, edad, password);
+
     repositorioUsuarios.guardar(usuarioCreado);
 
     SesionHelper.guardarUsuario(ctx, usuarioCreado);

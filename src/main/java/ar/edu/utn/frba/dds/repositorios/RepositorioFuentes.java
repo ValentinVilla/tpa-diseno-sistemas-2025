@@ -68,7 +68,7 @@ public class RepositorioFuentes {
     return withEntityManager(em -> em.find(FuenteDinamica.class, id));
   }
 
-  public void agregarHechoALaFuente(Long fuenteId, HechoDinamico hecho) {
+  public void agregarHechoALaFuente(Long fuenteId, HechoDinamico hecho) { //todo: ponete a laburar berty
     inTransaction(em -> {
       FuenteDinamica fuente = em.find(FuenteDinamica.class, fuenteId);
       if (fuente == null) {
@@ -78,8 +78,13 @@ public class RepositorioFuentes {
 
       fuente.subirHecho(hecho);
 
-      SolicitudSubida solicitud = new SolicitudSubida(hecho, "", new ImplementadorSpam(10));
+      SolicitudSubida solicitud = new SolicitudSubida(hecho, "", new ImplementadorSpam(10), null);
       em.persist(solicitud);
     });
   }
+
+  public Fuente buscarPorID(Long id) {
+    return emf.createEntityManager().find(Fuente.class, id);
+  }
+
 }

@@ -30,7 +30,7 @@ public class RepositorioColecciones {
     EntityTransaction transaction = getTransaction();
     try {
       transaction.begin();
-      entityManager.persist(coleccion);
+      entityManager.merge(coleccion);
       transaction.commit();
     } catch (Exception e) {
       if (transaction.isActive()) {

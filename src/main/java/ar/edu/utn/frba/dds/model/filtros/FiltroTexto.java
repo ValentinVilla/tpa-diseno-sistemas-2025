@@ -28,6 +28,13 @@ public class FiltroTexto extends Filtro {
 
     return titulo.contains(textoBuscado) || descripcion.contains(textoBuscado);
   }
+
+  public String getTextoBuscado() { return textoBuscado; }
+
+  @Override
+  public String getDescripcion() {
+    return "Contiene texto: \"" + (textoBuscado != null ? textoBuscado : "") + "\"";
+  }
 }
 
 
