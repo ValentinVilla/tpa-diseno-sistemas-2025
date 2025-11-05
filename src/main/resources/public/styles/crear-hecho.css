@@ -187,13 +187,44 @@ body {
     align-self: center;
 }
 
+.hecho-container {
+    box-sizing: border-box;
+}
+
 @media (max-width: 520px) {
-    .preview-card {
-        flex: 0 0 100%;
-        max-width: 100%;
+    .hecho-container {
+        margin: 18px;
+        padding: 18px;
+        width: calc(100% - 36px);
+        box-sizing: border-box;
+        border-radius: 12px;
     }
-    .preview-card img,
-    .preview-card video {
-        height: 140px;
+
+    .card {
+        margin: 14px;
+        padding: 14px;
+        box-sizing: border-box;
+        border-radius: 12px;
+        width: calc(100% - 28px);
+    }
+
+    main, .show-container {
+        padding-left: 12px;
+        padding-right: 12px;
+        box-sizing: border-box;
+    }
+
+    .preview-list {
+        padding-left: 4px;
+        padding-right: 4px;
+        box-sizing: border-box;
+    }
+}
+
+@media (min-width: 521px) {
+    .hecho-container, .card {
+        padding-left: 28px;
+        padding-right: 28px;
+        box-sizing: border-box;
     }
 }
