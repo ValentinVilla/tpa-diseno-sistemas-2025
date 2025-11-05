@@ -30,6 +30,7 @@ import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import io.javalin.http.Context;
 import io.javalin.http.UploadedFile;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ public class HechosController {
 
   public void mostrarVistaHechos(Context ctx) {
     Map<String, Object> modelo = SesionHelper.crearModeloBase(ctx);
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     try {
       ParametrosConsulta filtros = FiltroHelper.armarFiltro(ctx);
@@ -317,5 +319,41 @@ public class HechosController {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
     return String.format("%.2f MB", bytes / (1024.0 * 1024.0));
+  }
+
+  public void mostrarHechoPreview(Context ctx) {
+    Map<String, Object> model = SesionHelper.crearModeloBase(ctx);
+
+    java.util.function.Function<String, String> param = (name) -> {
+      String v = ctx.formParam(name);
+      if (v != null) return v;
+      return ctx.queryParam(name);
+    };
+
+    String titulo = param.apply("titulo");
+    String descripcion = param.apply("descripcion");
+    String categoria = param.apply("categoria");
+    String provincia = param.apply("provincia");
+    String fechaAcontecimiento = param.apply("fechaAcontecimiento");
+    String fechaCarga = param.apply("fechaCarga");
+    String lat = param.apply("latitud");
+    String lon = param.apply("longitud");
+    String origen = param.apply("origen");
+
+    Map<String,Object> hechoDto = new HashMap<>();
+    hechoDto.put("titulo", titulo != null ? titulo : "");
+    hechoDto.put("descripcion", descripcion != null ? descripcion : "");
+    hechoDto.put("categoria", categoria != null ? categoria : "");
+    hechoDto.put("provincia", provincia != null ? provincia : "");
+    hechoDto.put("latitud", lat);
+    hechoDto.put("longitud", lon);
+    if (origen != null) hechoDto.put("origen", origen);
+
+    model.put("hecho", hechoDto);
+    model.put("fechaAcontecimiento", fechaAcontecimiento != null ? fechaAcontecimiento : "");
+    model.put("fechaCarga", fechaCarga != null ? fechaCarga : "");
+    model.put("medias", Collections.emptyList());
+
+    ctx.render("mostrar-hecho.hbs", model);
   }
 }
