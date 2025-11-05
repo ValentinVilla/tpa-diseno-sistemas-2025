@@ -165,6 +165,14 @@ public class DAOHechos {
     return new ArrayList<>(query.getResultList());
   }
 
+  public List<HechoDinamico> buscarPorFuenteId(Long fuenteId) {
+    Session session = entityManager.unwrap(Session.class);
+    String sql = "SELECT * FROM hechoDinamico WHERE fuente_id = :fuenteId and visible = true";
+    NativeQuery<HechoDinamico> query = session.createNativeQuery(sql, HechoDinamico.class);
+    query.setParameter("fuenteId", fuenteId);
+    return new ArrayList<>(query.getResultList());
+  }
+
 
   //------------------- GESTOR LAS ELIMINACIONES APROBADAS --------------------//
 
@@ -199,4 +207,3 @@ public class DAOHechos {
   }
 
 }
-

@@ -9,7 +9,6 @@ import ar.edu.utn.frba.dds.model.servicios.HechoFTS;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudModificacion;
-import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import ar.edu.utn.frba.dds.repositorios.DAOHechos;
 import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
@@ -64,9 +63,16 @@ public class FuenteDinamica extends Fuente {
 
   @Override
   public ArrayList<Hecho> cargarHechos(ParametrosConsulta parametros){
-    ArrayList<Hecho> hechosNoEliminados = new ArrayList<>();
     DAOHechos repo = DAOHechos.getInstancia();
-    for (Hecho hecho : hechosDinamicos) {
+
+    List<HechoDinamico> hechosDeFuente;
+    if (this.id == null) {
+      hechosDeFuente = new ArrayList<>(hechosDinamicos);
+    } else {
+      hechosDeFuente = repo.buscarPorFuenteId(this.id);
+    }
+    ArrayList<Hecho> hechosNoEliminados = new ArrayList<>();
+    for (Hecho hecho : hechosDeFuente) {
       if (!repo.fueEliminado(hecho)) {
         hechosNoEliminados.add(hecho);
       }
@@ -84,4 +90,3 @@ public class FuenteDinamica extends Fuente {
     return List.of(this);
   }
 }
-
