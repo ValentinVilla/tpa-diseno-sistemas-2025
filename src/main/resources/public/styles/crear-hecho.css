@@ -191,7 +191,7 @@ body {
     box-sizing: border-box;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 580px) {
     .hecho-container {
         margin: 18px;
         padding: 18px;
@@ -217,14 +217,6 @@ body {
     .preview-list {
         padding-left: 4px;
         padding-right: 4px;
-        box-sizing: border-box;
-    }
-}
-
-@media (min-width: 521px) {
-    .hecho-container, .card {
-        padding-left: 28px;
-        padding-right: 28px;
         box-sizing: border-box;
     }
 }
