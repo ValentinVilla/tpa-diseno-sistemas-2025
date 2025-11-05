@@ -143,7 +143,7 @@ public class HechosController {
           }
         }
 
-        RepositorioFuentes.getInstancia().agregarHechoALaFuente(fuenteId, hechoDinamico);
+        RepositorioFuentes.getInstancia().agregarHechoALaFuente(fuenteId, hechoDinamico, contribuyente);
 
         ctx.status(201);
         ctx.redirect("/hechos?creacion=exito");

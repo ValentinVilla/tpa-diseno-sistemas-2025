@@ -4,6 +4,7 @@ import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
 import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
 import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 
 import javax.persistence.*;
 import java.util.List;
@@ -68,7 +69,7 @@ public class RepositorioFuentes {
     return withEntityManager(em -> em.find(FuenteDinamica.class, id));
   }
 
-  public void agregarHechoALaFuente(Long fuenteId, HechoDinamico hecho) { //todo: ponete a laburar berty
+  public void agregarHechoALaFuente(Long fuenteId, HechoDinamico hecho, Contribuyente contribuyente) {
     inTransaction(em -> {
       FuenteDinamica fuente = em.find(FuenteDinamica.class, fuenteId);
       if (fuente == null) {
@@ -78,7 +79,7 @@ public class RepositorioFuentes {
 
       fuente.subirHecho(hecho);
 
-      SolicitudSubida solicitud = new SolicitudSubida(hecho, "", new ImplementadorSpam(10), null);
+      SolicitudSubida solicitud = new SolicitudSubida(hecho, "", new ImplementadorSpam(10), contribuyente);
       em.persist(solicitud);
     });
   }
