@@ -43,6 +43,7 @@ public class Router {
     app.get("/hechos/{id}", hechosController::mostrarHecho);
     app.post("/hechos", hechosController::crearHecho);
     app.post("/hechos/delete", hechosController::crearSolicitudEliminacion);
+    app.post("/hechos/preview", hechosController::mostrarHechoPreview);
 
     // --- Colecciones ---
     app.get("/colecciones", ctx -> ctx.render("colecciones.hbs", coleccionesController.mostrarColecciones(ctx)));
