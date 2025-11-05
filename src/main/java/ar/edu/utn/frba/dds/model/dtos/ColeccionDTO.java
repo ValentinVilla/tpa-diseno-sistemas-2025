@@ -13,18 +13,22 @@ public class ColeccionDTO {
     private String algoritmo;
     private Long fuente;
     private String criterio;
+    private Long criterioId; // seleccionar un filtro existente
+    private String criterioTipo; // tipo de filtro si se crea nuevo (ej: 'TEXTO','CATEGORIA','FECHA','UBICACION')
     private String navegacion;
 
     public ColeccionDTO() {
     }
 
-    public ColeccionDTO(Long id, String titulo, String descripcion, String algoritmo, Long fuente, String criterio, String navegacion) {
+    public ColeccionDTO(Long id, String titulo, String descripcion, String algoritmo, Long fuente, String criterio, Long criterioId, String criterioTipo, String navegacion) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.algoritmo = algoritmo;
         this.fuente = fuente;
         this.criterio = criterio;
+        this.criterioId = criterioId;
+        this.criterioTipo = criterioTipo;
         this.navegacion = navegacion;
     }
 
@@ -81,6 +85,12 @@ public class ColeccionDTO {
         this.criterio = criterio;
         return this;
     }
+
+    public Long getCriterioId() { return criterioId; }
+    public ColeccionDTO setCriterioId(Long criterioId) { this.criterioId = criterioId; return this; }
+
+    public String getCriterioTipo() { return criterioTipo; }
+    public ColeccionDTO setCriterioTipo(String criterioTipo) { this.criterioTipo = criterioTipo; return this; }
 
     public String getNavegacion() {
         return navegacion;

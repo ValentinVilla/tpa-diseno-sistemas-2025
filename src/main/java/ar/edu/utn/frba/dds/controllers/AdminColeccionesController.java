@@ -35,6 +35,9 @@ public class AdminColeccionesController {
           fuenteStr = nombre != null && !nombre.isBlank() ? tipo + " - " + nombre : tipo;
           fuenteClass = tipo; // guardamos el simple nombre de la clase para filtrado
           fuenteNombre = nombre != null && !nombre.isBlank() ? nombre : "";
+          // expose id
+          Long fuenteId = null;
+          try { fuenteId = f.getId(); } catch (Exception ignored) {}
 
           // Normalizar tipo para selects y forms
           switch (tipo) {
@@ -43,6 +46,7 @@ public class AdminColeccionesController {
             case "FuenteMetaMapa", "FuenteProxy" -> fuenteTipo = "fuente_proxy";
             default -> fuenteTipo = "fuente_estatica";
           }
+          m.put("fuenteId", fuenteId);
         }
       } catch (Exception e) {
         fuenteStr = "-";

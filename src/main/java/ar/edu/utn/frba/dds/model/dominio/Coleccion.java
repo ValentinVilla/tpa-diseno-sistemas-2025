@@ -28,7 +28,7 @@ public class Coleccion {
   @ManyToOne
   @JoinColumn(name = "fuente_id",  nullable = false)
   private Fuente fuente;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.MERGE)
   public Filtro criterioPertenencia;
   @Enumerated(EnumType.STRING)
   AlgoritmoConsenso algoritmoConsenso;

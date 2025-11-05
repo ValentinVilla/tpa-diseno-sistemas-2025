@@ -56,8 +56,32 @@
             </div>
 
             <div class="form-row">
-                <label for="criterio">Criterio (descripción)</label>
-                <textarea id="criterio" name="criterio" class="input" rows="3"></textarea>
+                <label for="criterio_sel">Criterio (filtro)</label>
+                <select id="criterio_sel" class="input">
+                    <option value="">-- Seleccionar criterio existente --</option>
+                    {{#each FILTROS_ACTIVOS}}
+                        <option value="{{id}}" data-tipo="{{tipo}}">{{descripcion}} ({{tipo}})</option>
+                    {{/each}}
+                    <option value="__nuevo">+ Crear nuevo criterio...</option>
+                </select>
+            </div>
+
+            <div id="nuevo-criterio" style="display:none; margin-top:0.5rem;">
+                <div class="form-row">
+                    <label for="criterioTipo">Tipo de criterio</label>
+                    <select id="criterioTipo" class="input">
+                        <option value="TEXTO">Texto</option>
+                        <option value="CATEGORIA">Categoría</option>
+                    </select>
+                </div>
+                <div class="form-row" id="campo-criterio-texto">
+                    <label for="criterio">Texto a buscar</label>
+                    <input id="criterio-texto" class="input" />
+                </div>
+                <div class="form-row" id="campo-criterio-categoria" style="display:none;">
+                    <label for="criterio-categoria">Nombre de la categoría</label>
+                    <input id="criterio-categoria" class="input" />
+                </div>
             </div>
 
             <div class="form-row">
@@ -69,7 +93,7 @@
                 </select>
             </div>
 
-            <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-start;">
+            <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-end;">
                 <a href="/admin/colecciones" class="btn btn-danger">Cancelar</a>
                 <button type="submit" class="btn btn-eseverde">Crear colección</button>
             </div>
@@ -85,7 +109,10 @@
         const descripcion = document.getElementById('descripcion').value.trim();
         const algoritmo = document.getElementById('algoritmo').value;
         const fuente = document.getElementById('fuente').value;
-        const criterio = document.getElementById('criterio').value.trim();
+        // criterio: si se eligió filtro existente enviar criterioId; si se creó nuevo enviar criterioTipo y criterio
+        const criterioSel = document.getElementById('criterio_sel').value;
+        let criterio = document.getElementById('criterio-texto') ? document.getElementById('criterio-texto').value.trim() : '';
+        let criterioCategoria = document.getElementById('criterio-categoria') ? document.getElementById('criterio-categoria').value.trim() : '';
         const navegacion = document.getElementById('navegacion').value;
 
         if (!titulo) {
@@ -104,10 +131,20 @@
             return;
         }
 
+        const payload = { titulo, descripcion, algoritmo, fuente, navegacion };
+        if (criterioSel && criterioSel !== '__nuevo') {
+            payload.criterioId = Number(criterioSel);
+        } else if (criterioSel === '__nuevo') {
+            const tipo = document.getElementById('criterioTipo').value;
+            payload.criterioTipo = tipo;
+            if (tipo === 'TEXTO') payload.criterio = criterio;
+            if (tipo === 'CATEGORIA') payload.criterio = criterioCategoria;
+        }
+
         fetch('/admin/colecciones', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ titulo, descripcion, algoritmo, fuente, criterio, navegacion })
+            body: JSON.stringify(payload)
         }).then(r => {
             if (r.ok) window.location.href = '/admin/colecciones';
             else r.text().then(t => alert('Error al crear la colección: ' + t));
@@ -115,6 +152,22 @@
             alert('Error de red al crear la colección');
             console.error(err);
         });
+    });
+
+    // manejo de la UI para mostrar campos de nuevo criterio
+    document.getElementById('criterio_sel').addEventListener('change', function(){
+        const v = this.value;
+        const nuevo = document.getElementById('nuevo-criterio');
+        if (v === '__nuevo') {
+            nuevo.style.display = '';
+        } else {
+            nuevo.style.display = 'none';
+        }
+    });
+    document.getElementById('criterioTipo').addEventListener('change', function(){
+        const t = this.value;
+        document.getElementById('campo-criterio-texto').style.display = (t === 'TEXTO') ? '' : 'none';
+        document.getElementById('campo-criterio-categoria').style.display = (t === 'CATEGORIA') ? '' : 'none';
     });
 </script>
 </body>

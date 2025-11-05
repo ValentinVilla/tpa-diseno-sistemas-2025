@@ -22,8 +22,8 @@
             </div>
         </div>
 
-        <form id="manage-form" action="/admin/colecciones/{{id}}/configurar" method="post" style="margin-top:1rem; max-width:720px;">
-            <input type="hidden" name="id" value="{{id}}" />
+        <form id="manage-form" action="/admin/colecciones/{{id}}/configuracion" method="post" style="margin-top:1rem; max-width:720px;">
+            <input type="hidden" id="manage-id" name="id" value="{{id}}" />
 
             <div class="form-row">
                 <label for="titulo">Título</label>
@@ -59,8 +59,37 @@
 
             <div class="form-row">
                 <label for="criterio">Criterio (descripción)</label>
-                <input type="hidden" name="criterio" value="{{categoria}}" />
-                <textarea id="criterio" name="criterio-display" class="input" rows="3" disabled>{{categoria}}</textarea>
+                <input type="hidden" id="criterio" name="criterio" value="{{categoria}}" />
+                <textarea id="criterio-display" name="criterio-display" class="input" rows="3" disabled>{{categoria}}</textarea>
+            </div>
+
+            <div class="form-row">
+                <label for="criterio_sel">Criterio (filtro)</label>
+                <select id="criterio_sel" class="input">
+                    <option value="">-- Seleccionar criterio existente --</option>
+                    {{#each FILTROS_ACTIVOS}}
+                        <option value="{{id}}" data-tipo="{{tipo}}" {{#if selected}}selected{{/if}}>{{descripcion}} ({{tipo}})</option>
+                    {{/each}}
+                    <option value="__nuevo">+ Crear nuevo criterio...</option>
+                </select>
+            </div>
+
+            <div id="nuevo-criterio" style="display:none; margin-top:0.5rem;">
+                <div class="form-row">
+                    <label for="criterioTipo">Tipo de criterio</label>
+                    <select id="criterioTipo" class="input">
+                        <option value="TEXTO">Texto</option>
+                        <option value="CATEGORIA">Categoría</option>
+                    </select>
+                </div>
+                <div class="form-row" id="campo-criterio-texto">
+                    <label for="criterio-texto">Texto a buscar</label>
+                    <input id="criterio-texto" class="input" />
+                </div>
+                <div class="form-row" id="campo-criterio-categoria" style="display:none;">
+                    <label for="criterio-categoria">Nombre de la categoría</label>
+                    <input id="criterio-categoria" class="input" />
+                </div>
             </div>
 
             <div style="display:flex; gap:0.5rem; margin-top:1rem; justify-content:flex-end;">
@@ -75,19 +104,52 @@
 <script>
     document.getElementById('manage-form').addEventListener('submit', function(e){
         e.preventDefault();
-        const id = '{{id}}';
+        const id = document.getElementById('manage-id').value;
         const algoritmo = document.getElementById('algoritmo').value;
         const fuente = document.getElementById('fuente').value;
-        const criterio = document.getElementById('criterio').value;
+        const criterioSel = document.getElementById('criterio_sel').value;
+        let criterio = document.getElementById('criterio-texto') ? document.getElementById('criterio-texto').value.trim() : '';
+        let criterioCategoria = document.getElementById('criterio-categoria') ? document.getElementById('criterio-categoria').value.trim() : '';
+
+        const payload = { algoritmo: algoritmo, fuente: fuente };
+        if (criterioSel && criterioSel !== '__nuevo') {
+            payload.fuente = fuente; // keep
+            payload.criterio = '';
+            payload.criterioId = Number(criterioSel);
+        } else if (criterioSel === '__nuevo') {
+            const tipo = document.getElementById('criterioTipo').value;
+            payload.criterioTipo = tipo;
+            if (tipo === 'TEXTO') payload.criterio = criterio;
+            if (tipo === 'CATEGORIA') payload.criterio = criterioCategoria;
+        } else {
+            // fallback: keep existing criterio hidden value
+            payload.criterio = document.getElementById('criterio').value;
+        }
 
         fetch(`/admin/colecciones/${id}/configuracion`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ algoritmo: algoritmo, fuente: fuente, criterio: criterio })
+            body: JSON.stringify(payload)
         }).then(r => {
-            if (r.ok) window.location.href = '/admin/colecciones';
-            else alert('Error al guardar cambios');
-        });
+             if (r.ok) window.location.href = '/admin/colecciones';
+             else r.text().then(t => alert('Error al guardar cambios: ' + t));
+         }).catch(err => {
+             console.error(err);
+             alert('Error de red al guardar cambios');
+         });
+     });
+
+    // UI controls
+    document.getElementById('criterio_sel').addEventListener('change', function(){
+        const v = this.value;
+        const nuevo = document.getElementById('nuevo-criterio');
+        if (v === '__nuevo') nuevo.style.display = '';
+        else nuevo.style.display = 'none';
+    });
+    document.getElementById('criterioTipo').addEventListener('change', function(){
+        const t = this.value;
+        document.getElementById('campo-criterio-texto').style.display = (t === 'TEXTO') ? '' : 'none';
+        document.getElementById('campo-criterio-categoria').style.display = (t === 'CATEGORIA') ? '' : 'none';
     });
 </script>
 
