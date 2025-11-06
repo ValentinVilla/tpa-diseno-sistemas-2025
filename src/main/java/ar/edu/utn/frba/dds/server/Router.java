@@ -27,7 +27,6 @@ public class Router {
 
     // --- Sesiones (Login) ---
     app.get("/login", sesionesController::mostrarLogin);
-    app.get("/logueo", sesionesController::mostrarLogin);
     app.get("/logout", sesionesController::cerrarSesion);
     app.post("/login", sesionesController::iniciarSesion);
 

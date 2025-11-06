@@ -82,5 +82,18 @@ public class RepositorioUsuarios {
         return entityManager.getTransaction();
     }
 
+  public void actualizar(Contribuyente contribuyente) {
+    EntityTransaction transaction = getEntity();
+    try {
+      transaction.begin();
+      entityManager.merge(contribuyente);
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
+  }
 
-}//TODO: CONVIENE QUE ABSTRAIGAMOS LA LOGICA DE LOS REPOSITORIOS EN UNA CLASE PADRE TODOS HACEN LO MISMO y que trabajen con un objeto de tipo Entity !!!
+}

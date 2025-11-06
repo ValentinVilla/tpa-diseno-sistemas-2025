@@ -38,9 +38,9 @@ public class SesionesController {
     String password = ctx.formParam("password");
 
     try {
-      Contribuyente usuario = RepositorioUsuarios.getInstancia().buscarPorEmail(email);
+      Contribuyente usuario = SesionHelper.authenticateByEmailAndPassword(email, password);
 
-      if (usuario != null && usuario.getPassword().equals(password)) {
+      if (usuario != null) {
         SesionHelper.guardarUsuario(ctx, usuario);
         SesionHelper.redirigirPostLogin(ctx);
       } else {
