@@ -153,21 +153,6 @@ select{
     transition: background-color 140ms ease, transform 120ms ease, box-shadow 120ms ease;
 }
 
-/* efecto suave al pasar el mouse */
-.btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
-    border: 2px solid var(--color-secondary, #0a644b);
-    background: transparent;
-    color: var(--color-secondary, #0a644b);
-    font-weight: 700;
-    text-decoration: none;
-    transition: background-color .15s ease, color .15s ease, transform .1s ease, box-shadow .15s ease;
-}
-
 .btn-back:hover {
     background: var(--color-secondary, #0a644b);
     color: #ffffff;
@@ -206,7 +191,29 @@ textarea[disabled]{
 @media (max-width:520px){
     .manage-card,
     .admin-panel .container form { padding: 0.9rem; margin: 0.6rem; }
-    .page-header{ flex-direction:column; align-items:flex-start; gap:0.5rem; }
+
+    .page-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .page-header .page-title,
+    .page-header .subtitle {
+        text-align: center;
+    }
+
+    .page-header > div:last-child {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-header .btn-back {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center; 
+    }
 }
 
 .btn-eseverde {
