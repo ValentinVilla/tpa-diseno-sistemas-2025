@@ -8,6 +8,7 @@
     --bg: var(--color-bg, #ffffff);
 }
 
+/* --- Base layout / variables --- */
 body {
     margin: 0;
     font-family: var(--font-sans, Inter, system-ui, Arial);
@@ -121,16 +122,26 @@ body {
 .map-link:hover { text-decoration:underline; }
 
 .actions { margin-top: 18px; }
+
+/* Base button style */
 .btn {
     display:inline-block;
     padding: 10px 14px;
     background: var(--accent);
-    color: var(--accent-contrast);
+    color: var(--color-bg);
     text-decoration:none;
     border-radius: 8px;
     font-weight:600;
+    box-sizing: border-box;
+    border: 0;
+    cursor: pointer;
+    text-align: center;
+
+    /* smooth transitions for hover effects (applies to all buttons) */
+    transition: background .12s ease, color .12s ease, transform .12s ease, box-shadow .12s ease;
 }
 
+/* Media modal and related */
 .media-modal {
     display:none;
     position: fixed;
@@ -186,4 +197,163 @@ body {
 #mapaHecho {
     margin-bottom: 0.4rem;
     height: 300px;
+}
+
+/* ------------------------------------------------------------------
+   BUTTONS LAYOUT — unified and responsive (final revision)
+   Goal: BOTH buttons must be exactly the same size at all times:
+         - Desktop: side-by-side, equal width and equal height.
+         - Mobile: stacked, equal width (full width inside container) and equal height.
+   Strategy:
+   - Make .actions a flex container with a known gap.
+   - Make each direct child a flex item with an explicit flex-basis = 50% of available width
+     (accounting for gap via calc). This guarantees equal widths on desktop.
+   - On mobile switch to column and give children width:100%.
+   - Ensure inner .btn elements always fill their parent box.
+   ------------------------------------------------------------------ */
+
+/* Gap used between buttons */
+:root {
+    --actions-gap: 12px;
+}
+
+/* Container: centers group and limits max width */
+.actions {
+    margin-top: 18px;
+    display: flex;
+    gap: var(--actions-gap);
+    align-items: center;
+    justify-content: center;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+    flex-direction: row;
+}
+
+/* Exact equal-width calculation for two buttons: (100% - gap) / 2
+   This ensures both children get identical width on desktop regardless of their content. */
+.actions > * {
+    box-sizing: border-box;
+    /* two-column equal split (subtract gap between them) */
+    flex: 0 0 calc((100% - var(--actions-gap)) / 2);
+    min-width: 0; /* allow shrinking inside container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+/* Ensure forms have no extra margins and their contents stretch */
+.actions > form {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* If the direct child itself is the .btn (anchor), force it to fill the flex item */
+.actions > .btn {
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* For the case where the direct child is a container (eg. form) and has an inner .btn */
+.actions > * .btn {
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* Anchor links should not show underline */
+.actions a.btn { text-decoration: none; }
+
+/* Danger button visual: transparent background with red border and text */
+.btn-danger {
+    background: transparent !important;
+    color: var(--color-danger, #ef4444) !important;
+    border: 1px solid var(--color-danger, #ef4444) !important;
+    box-shadow: none !important;
+}
+
+/* Hover/Focus for danger (no lift, only background/color change)
+   Slight background change on hover (unobtrusive), no translate or shadow.
+   NOTE: added !important to background so it overrides the transparent !important above. */
+.btn-danger:hover,
+.btn-danger:focus {
+    background: rgba(239, 68, 68, 0.12) !important; /* subtle red tint */
+    color: var(--color-danger, #ef4444);
+    text-decoration: none;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Primary button hover: same behavior (no lift), subtle green tint */
+.actions > .btn:not(.btn-danger):hover,
+.actions > * .btn:not(.btn-danger):hover,
+.actions > .btn:not(.btn-danger):focus,
+.actions > * .btn:not(.btn-danger):focus {
+    background: rgba(52, 211, 153, 0.12); /* subtle green tint */
+    color: var(--color-accent-foreground, #064e3b);
+    text-decoration: none;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Accessible focus outlines without resizing box */
+.actions .btn:focus,
+.actions button.btn:focus,
+.actions > *:focus {
+    outline: 2px solid rgba(16,185,129,0.16);
+    outline-offset: 2px;
+}
+
+/* MOBILE: stack buttons and make them full width inside the container */
+@media (max-width: 520px) {
+    .actions {
+        flex-direction: column;
+        gap: var(--actions-gap);
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .actions > * {
+        /* full width respecting container padding */
+        width: 100%;
+        flex: none;
+        display: block;
+    }
+
+    /* both direct .btn and inner .btn fill width and keep same height */
+    .actions > .btn,
+    .actions > * .btn {
+        width: 100%;
+        height: 48px;
+    }
+
+    /* On mobile ensure hover still does not lift or shadow */
+    .btn-danger:hover,
+    .btn-danger:focus,
+    .actions > .btn:not(.btn-danger):hover,
+    .actions > * .btn:not(.btn-danger):hover {
+        transform: none;
+        box-shadow: none;
+    }
 }

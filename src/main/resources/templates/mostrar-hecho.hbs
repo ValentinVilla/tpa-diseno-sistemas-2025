@@ -83,8 +83,17 @@
                         {{/if}}
                     </dl>
 
-                    <div class="actions">
+                    <div class="actions" style="display:flex; gap:0.75rem; align-items:center;">
                         <a class="btn" href="/hechos">Volver a listado</a>
+
+                        <form action="/hechos/delete" method="get" style="display:inline-block; margin:0;">
+                            <input type="hidden" name="titulo" value="{{hecho.titulo}}">
+                            <input type="hidden" name="descripcion" value="{{hecho.descripcion}}">
+                            <input type="hidden" name="categoria" value="{{hecho.categoria}}">
+                            <button type="submit" class="btn btn-danger" aria-label="Solicitar eliminación de {{hecho.titulo}}">
+                                Solicitar eliminación
+                            </button>
+                        </form>
                     </div>
                 </div>
             </section>
@@ -98,8 +107,8 @@
 {{/partial}}
 
 {{#partial "scripts"}}
-        <script src="/js/media-viewer.js"></script>
-        <script src="/js/mapa-chico.js"></script>
+    <script src="/js/media-viewer.js"></script>
+    <script src="/js/mapa-chico.js"></script>
 {{/partial}}
 
 {{#partial "footer"}}
