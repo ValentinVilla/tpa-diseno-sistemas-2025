@@ -16,6 +16,19 @@ public class SesionHelper {
     Map<String, Object> modelo = new HashMap<>();
     Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
     if (usuario != null) modelo.put("nombre", usuario.getNombre());
+
+    String loginFlash = ctx.sessionAttribute("login_error");
+    if (loginFlash != null && !loginFlash.isEmpty()) {
+      modelo.put("loginError", loginFlash);
+      ctx.sessionAttribute("login_error", null); // limpiar
+    }
+
+    Boolean openLogin = ctx.sessionAttribute("openLogin");
+    if (openLogin != null && openLogin) {
+      modelo.put("openLogin", true);
+      ctx.sessionAttribute("openLogin", null);
+    }
+
     return modelo;
   }
 

@@ -42,12 +42,21 @@ public class SesionesController {
 
       if (usuario != null) {
         SesionHelper.guardarUsuario(ctx, usuario);
+        ctx.sessionAttribute("login_error", null);
+        ctx.sessionAttribute("openLogin", null);
         SesionHelper.redirigirPostLogin(ctx);
       } else {
-        ctx.redirect("/login?error=true");
+        ctx.sessionAttribute("login_error", "Correo o contraseña incorrectos. Verificá tus datos e intentá nuevamente.");
+        ctx.sessionAttribute("openLogin", true);
+
+        String referer = ctx.header("Referer");
+        ctx.redirect(referer != null ? referer : "/");
       }
     } catch (Exception e) {
-      ctx.redirect("/login?error=true");
+      ctx.sessionAttribute("login_error", "Ha ocurrido un error al intentar iniciar sesión. Por favor intentá más tarde.");
+      ctx.sessionAttribute("openLogin", true);
+      String referer = ctx.header("Referer");
+      ctx.redirect(referer != null ? referer : "/");
     }
   }
 
