@@ -181,7 +181,10 @@ public class DAOHechos {
             "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
         .setParameter("estado", EstadoSolicitud.ACEPTADA)
         .getResultList();
-    String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
+    valoresHechosEliminados = valoresHechosEliminados.stream()
+        .map(v -> v.contains(";") ? v.substring(0, v.lastIndexOf(';')) : v)
+        .toList();
+    String valorHecho = hecho.getTitulo() + ";" + hecho.getDescripcion() + ";" + hecho.getCategoria();
     return valoresHechosEliminados.contains(valorHecho);
   }
 
@@ -190,10 +193,14 @@ public class DAOHechos {
             "SELECT s.valoresHecho FROM SolicitudEliminacion s WHERE s.estado = :estado", String.class)
         .setParameter("estado", EstadoSolicitud.ACEPTADA)
         .getResultList();
+    valoresHechosEliminados = valoresHechosEliminados.stream()
+        .map(v -> v.contains(";") ? v.substring(0, v.lastIndexOf(';')) : v)
+        .toList();
+    List<String> finalValoresHechosEliminados = valoresHechosEliminados;
     return hechos.stream()
         .filter(hecho -> {
-          String valorHecho = hecho.getTitulo() + " | " + hecho.getDescripcion() + " | " + hecho.getCategoria();
-          return !valoresHechosEliminados.contains(valorHecho);
+          String valorHecho = hecho.getTitulo() + ";" + hecho.getDescripcion() + ";" + hecho.getCategoria();
+          return !finalValoresHechosEliminados.contains(valorHecho);
         })
         .collect(Collectors.toCollection(ArrayList::new));
   }
