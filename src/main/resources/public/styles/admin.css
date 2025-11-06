@@ -25,7 +25,6 @@
 .admin-tabs {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
     margin-bottom: var(--spacing-3xl);
     background: rgba(255, 255, 255, 0.9);
@@ -33,8 +32,7 @@
     padding: var(--spacing-sm) var(--spacing-lg);
     border-radius: var(--radius);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-
-    position: sticky;
+    position: relative;
     top: 0;
     z-index: 1000;
 }
@@ -238,6 +236,11 @@
 }
 
 .btn-back {
+    position: absolute;
+    left: var(--spacing-lg);
+    top: 50%;
+    transform: translateY(-50%);
+
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -254,7 +257,6 @@
     cursor: pointer;
 }
 
-/* estados hover/activo/focus */
 .btn-back:hover {
     background: var(--color-secondary);
     color: #ffffff;
@@ -305,3 +307,36 @@ details summary.btn {
 }
 
 details[open] summary::marker { content: ""; } /* evitar marker por defecto en algunos navegadores */
+
+@media (max-width: 768px) {
+
+    .admin-tabs {
+        flex-direction: column;
+        justify-content: center;
+        padding-top: var(--spacing-md);
+        padding-bottom: var(--spacing-md);
+        gap: var(--spacing-md);
+    }
+
+    .btn-back {
+        position: static;
+        transform: none;
+        left: auto;
+        top: auto;
+    }
+
+    .admin-tabs .nav {
+        margin: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--spacing-sm);
+
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .admin-tabs .nav .nav-link {
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-radius: var(--radius-sm);
+    }
+}
