@@ -25,7 +25,9 @@ public class UsuariosController {
     Integer edad = Integer.parseInt(Objects.requireNonNull(ctx.formParam("edad")));
     String password = ctx.formParam("password");
 
-    Contribuyente usuarioCreado = new Contribuyente(nombre, apellido, telefono, mail, edad, password);
+    String hashed = SesionHelper.hashPassword(password);
+
+    Contribuyente usuarioCreado = new Contribuyente(nombre, apellido, telefono, mail, edad, hashed);
 
     repositorioUsuarios.guardar(usuarioCreado);
 
