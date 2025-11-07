@@ -18,6 +18,10 @@ public class AdminSolicitudesController {
   private final RepositorioSolicitudes repo = RepositorioSolicitudes.getInstancia();
 
   public void mostrarPanel(Context ctx) {
+    if (!ar.edu.utn.frba.dds.helpers.SesionHelper.esAdminLogueado(ctx)) {
+      ctx.redirect("/home");
+      return;
+    }
     String activeTab = Optional.ofNullable(ctx.queryParam("tab")).orElse("eliminacion");
 
     var repo = RepositorioSolicitudes.getInstancia();

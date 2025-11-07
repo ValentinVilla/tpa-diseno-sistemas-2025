@@ -26,6 +26,10 @@ public class AdminController {
   private final RepositorioFuentes repoFuentes = RepositorioFuentes.getInstancia();
 
   public void mostrarAdmin(Context ctx) {
+    if (!ar.edu.utn.frba.dds.helpers.SesionHelper.esAdminLogueado(ctx)) {
+      ctx.redirect("/home");
+      return;
+    }
     ctx.render("admin.hbs");
   }
 

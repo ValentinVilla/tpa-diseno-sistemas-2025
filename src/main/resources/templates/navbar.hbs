@@ -60,6 +60,9 @@
                         </button>
                         <div id="profile-menu" class="dropdown-menu" role="menu" aria-labelledby="profile-btn">
                             <div class="menu-header" aria-disabled="true">Hola, {{nombre}}</div>
+                            {{#if esAdmin}}
+                                <a href="/admin" class="menu-item" role="menuitem">Panel Admin</a>
+                            {{/if}}
                             <a href="/logout" class="menu-item" role="menuitem">Cerrar Sesión</a>
                         </div>
                     </div>

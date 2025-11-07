@@ -7,7 +7,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class SesionHelper {
   private static final int BCRYPT_LOG_ROUNDS = 12;
@@ -16,6 +15,9 @@ public class SesionHelper {
     Map<String, Object> modelo = new HashMap<>();
     Contribuyente usuario = ctx.sessionAttribute("usuario_logueado");
     if (usuario != null) modelo.put("nombre", usuario.getNombre());
+    if (usuario != null && usuario.getEsAdmin() != null && usuario.getEsAdmin()) {
+      modelo.put("esAdmin", true);
+    }
 
     String loginFlash = ctx.sessionAttribute("login_error");
     if (loginFlash != null && !loginFlash.isEmpty()) {
@@ -40,6 +42,11 @@ public class SesionHelper {
     return ctx.sessionAttribute("usuario_logueado");
   }
 
+  public static boolean esAdminLogueado(Context ctx) {
+    Contribuyente usuario = obtenerUsuario(ctx);
+    return usuario != null && usuario.getEsAdmin() != null && usuario.getEsAdmin();
+  }
+
   public static void guardarReturnTo(Context ctx, String path) {
     ctx.sessionAttribute("returnTo", path);
   }
@@ -55,7 +62,18 @@ public class SesionHelper {
 
   public static void redirigirPostLogin(Context ctx) {
     String returnTo = consumirReturnTo(ctx);
-    ctx.redirect(Objects.requireNonNullElse(returnTo, "/home"));
+    if (returnTo != null && !returnTo.isEmpty()) {
+      ctx.redirect(returnTo);
+      return;
+    }
+
+    Contribuyente usuario = obtenerUsuario(ctx);
+    if (usuario != null && usuario.getEsAdmin() != null && usuario.getEsAdmin()) {
+      ctx.redirect("/admin");
+      return;
+    }
+
+    ctx.redirect("/home");
   }
 
   public static String hashPassword(String plainPassword) {
@@ -103,4 +121,3 @@ public class SesionHelper {
     }
   }
 }
-
