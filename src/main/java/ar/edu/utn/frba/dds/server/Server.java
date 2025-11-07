@@ -12,7 +12,10 @@ import java.nio.file.Paths;
 
 public class Server {
 
-  private static final String UPLOADS_DIR_PROP = System.getProperty("UPLOADS_DIR", System.getenv().getOrDefault("UPLOADS_DIR", "uploads"));
+  private static final String UPLOADS_DIR_PROP = System.getProperty("UPLOADS_DIR",
+      System.getenv().getOrDefault("UPLOADS_DIR", "uploads"));
+
+  private static final int DEFAULT_PORT = 9001;
 
   public void start() {
     try {
@@ -24,16 +27,40 @@ public class Server {
       throw new RuntimeException("No se pudo crear la carpeta de uploads: " + UPLOADS_DIR_PROP, e);
     }
 
-    var app = Javalin.create(config -> {
+    var app = Javalin.create((JavalinConfig config) -> {
       initializeStaticFiles(config);
       initializeTemplating(config);
     });
 
     new Router().configure(app);
 
-    app.start(9001);
-    System.out.println("Servidor iniciado en http://localhost:9001");
+    int port = resolvePort();
+    app.start(port);
+
+    System.out.println("Servidor iniciado en http://localhost:" + port);
     System.out.println("Uploads folder: " + UPLOADS_DIR_PROP + " -> served at /uploads");
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        System.out.println("Deteniendo servidor...");
+        app.stop();
+      } catch (Exception ignored) {}
+    }));
+  }
+
+  private int resolvePort() {
+    String portEnv = System.getenv("PORT");
+    if (portEnv == null || portEnv.isBlank()) {
+      portEnv = System.getProperty("PORT");
+    }
+    if (portEnv != null && !portEnv.isBlank()) {
+      try {
+        return Integer.parseInt(portEnv.trim());
+      } catch (NumberFormatException e) {
+        System.err.println("Valor de PORT inválido: '" + portEnv + "'. Usando puerto por defecto " + DEFAULT_PORT);
+      }
+    }
+    return DEFAULT_PORT;
   }
 
   private void initializeTemplating(JavalinConfig config) {
