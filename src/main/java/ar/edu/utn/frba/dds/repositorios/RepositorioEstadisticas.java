@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaCategoriaTop;
@@ -164,7 +165,7 @@ public class RepositorioEstadisticas {
     }
 
   private EntityManager getEntityManager() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
     return emf.createEntityManager();
   }
 }

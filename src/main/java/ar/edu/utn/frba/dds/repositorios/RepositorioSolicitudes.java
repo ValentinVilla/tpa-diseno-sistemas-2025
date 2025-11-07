@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
 import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import javax.persistence.EntityManager;
@@ -14,7 +15,7 @@ public class RepositorioSolicitudes {
   private static RepositorioSolicitudes instancia;
 
   private RepositorioSolicitudes() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
     this.entityManager = emf.createEntityManager();
   }
 

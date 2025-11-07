@@ -1,4 +1,5 @@
 package ar.edu.utn.frba.dds.repositorios;
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
 import ar.edu.utn.frba.dds.model.DetectorSpam.ImplementadorSpam;
 import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
 import ar.edu.utn.frba.dds.model.fuentes.Fuente;
@@ -17,7 +18,7 @@ public class RepositorioFuentes {
   private static RepositorioFuentes instancia;
 
   private RepositorioFuentes() {
-    this.emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    this.emf = EntityManagerFactoryProvider.getEntityManagerFactory();
   }
 
   public static synchronized RepositorioFuentes getInstancia() {

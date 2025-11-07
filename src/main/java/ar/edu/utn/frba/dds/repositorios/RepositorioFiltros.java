@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
 import ar.edu.utn.frba.dds.model.filtros.Filtro;
 
 import javax.persistence.EntityManager;
@@ -12,7 +13,7 @@ public class RepositorioFiltros {
   private static RepositorioFiltros instancia;
 
   public RepositorioFiltros() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
     this.entityManager = emf.createEntityManager();
   }
 

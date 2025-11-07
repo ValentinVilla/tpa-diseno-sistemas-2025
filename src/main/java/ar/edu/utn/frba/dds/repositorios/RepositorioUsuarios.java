@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
 import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 
@@ -15,8 +16,8 @@ public class RepositorioUsuarios {
     private static RepositorioUsuarios instancia;
 
     private RepositorioUsuarios() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-        this.entityManager = emf.createEntityManager();
+      EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
+      this.entityManager = emf.createEntityManager();
     }
 
     public static RepositorioUsuarios getInstancia() {

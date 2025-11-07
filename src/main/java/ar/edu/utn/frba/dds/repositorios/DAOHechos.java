@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.repositorios;
 
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
 
 import javax.persistence.EntityManager;
@@ -23,7 +24,7 @@ public class DAOHechos {
   private static DAOHechos instancia;
 
   private DAOHechos() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
     this.entityManager = emf.createEntityManager();
   }
 

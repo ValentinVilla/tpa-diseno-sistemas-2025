@@ -2,6 +2,7 @@ package ar.edu.utn.frba.dds.repositorios;
 
 import java.util.List;
 
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 
@@ -15,7 +16,7 @@ public class RepositorioColecciones {
   private static RepositorioColecciones instancia;
 
   public RepositorioColecciones() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
     this.entityManager = emf.createEntityManager();
   }
 
