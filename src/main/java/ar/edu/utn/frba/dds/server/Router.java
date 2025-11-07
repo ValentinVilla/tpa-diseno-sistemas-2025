@@ -21,6 +21,9 @@ public class Router {
   AdminColeccionesController adminColeccionesController = new AdminColeccionesController();
 
   public void configure(Javalin app) {
+
+    app.get("/health", ctx -> ctx.status(200).result("ok"));
+
     // --- Home ---
     app.get("/", ctx -> ctx.redirect("/home"));
     app.get("/home", sesionesController::mostrarHome);
