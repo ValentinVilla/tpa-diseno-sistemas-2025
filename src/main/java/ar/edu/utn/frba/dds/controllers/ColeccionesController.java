@@ -1,11 +1,13 @@
 package ar.edu.utn.frba.dds.controllers;
 
+import ar.edu.utn.frba.dds.helpers.FiltroHelper;
 import ar.edu.utn.frba.dds.helpers.MapperHelper;
 import ar.edu.utn.frba.dds.model.dominio.Coleccion;
 import ar.edu.utn.frba.dds.model.dominio.Hecho;
 import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,14 +44,15 @@ public class ColeccionesController {
       String idStr = ctx.pathParam("id");
       Long id = Long.parseLong(idStr);
 
+
       Coleccion coleccion = RepositorioColecciones.getInstancia().buscarPorID(id);
 
       if (coleccion == null) {
         ctx.status(404).redirect("/colecciones");
         return;
       }
-
-      List<Hecho> hechos = coleccion.mostrarHechos(null);
+      ParametrosConsulta filtros = FiltroHelper.armarFiltro(ctx);
+      List<Hecho> hechos = coleccion.mostrarHechos(filtros);
 
       Map<String, Object> modelo = new HashMap<>();
       modelo.put("coleccion", coleccion);

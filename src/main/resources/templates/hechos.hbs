@@ -35,7 +35,11 @@
                         </button>
                     </div>
                     <form action="/hechos" method="GET" aria-label="Filtros de búsqueda de hechos">
-                        {{> templates/filtros }}
+                        {{#> templates/filtros }}
+                            {{#partial "limpiarFiltro"}}
+                                <a href="/hechos" class="btn btn-clear">Limpiar filtros</a>
+                            {{/partial}}
+                        {{/templates/filtros}}
                     </form>
 
                     <div class="cant-hechos" aria-live="polite">
