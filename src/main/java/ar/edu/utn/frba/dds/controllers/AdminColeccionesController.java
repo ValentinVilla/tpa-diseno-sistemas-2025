@@ -13,6 +13,8 @@ import java.util.Map;
 public class AdminColeccionesController {
 
   public Map<String, Object> mostrarColecciones() {
+    // nota: este método es llamado desde Router donde no tenemos el Context, así que la protección debe aplicarse en las rutas.
+    // Si se decidiera exponer un endpoint directamente aquí con Context, habría que chequear SesionHelper.esAdminLogueado(ctx).
     List<Coleccion> colecciones = RepositorioColecciones.getInstancia().listarTodas();
 
     List<Map<String, Object>> coleccionesVM = new ArrayList<>();

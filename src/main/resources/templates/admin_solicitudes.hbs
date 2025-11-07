@@ -15,7 +15,7 @@
         <h1 class="page-title" style="color: #004d40">Panel de Administración</h1>
         <p class="subtitle">Gestioná las solicitudes pendientes del sistema</p>
 
-        <nav class="admin-tabs">
+        <nav class="admin-tabs admin-tabs--bar">
             <a href="/admin" class="btn-back">← Volver al Panel</a>
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="#subida">Subidas</a></li>
@@ -87,7 +87,13 @@
                         <tr id="row-{{this.id}}">
                             <td>{{this.fecha}}</td>
                             <td>{{this.contribuyente}}</td>
-                            <td>{{this.fundamentacion}}</td>
+                            <td>
+                                <div class="fundamentacion clamp-3">{{this.fundamentacion}}
+                                    {{#if this.fundamentacion}}
+                                        <span class="more-toggle" tabindex="0">Ver más</span>
+                                    {{/if}}
+                                </div>
+                            </td>
                             <td>{{this.titulo}}</td>
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>
@@ -129,7 +135,13 @@
                         <tr id="row-{{this.id}}">
                             <td>{{this.fecha}}</td>
                             <td>{{this.contribuyente}}</td>
-                            <td>{{this.fundamentacion}}</td>
+                            <td>
+                                <div class="fundamentacion clamp-3">{{this.fundamentacion}}
+                                    {{#if this.fundamentacion}}
+                                        <span class="more-toggle" tabindex="0">Ver más</span>
+                                    {{/if}}
+                                </div>
+                            </td>
                             <td>{{this.titulo}}</td>
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>
