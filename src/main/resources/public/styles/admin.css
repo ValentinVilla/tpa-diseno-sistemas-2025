@@ -249,6 +249,71 @@
     background: rgba(255, 255, 255, 0.6);
 }
 
+/* ======== TRUNCADO DE FUNDAMENTACION (admin solicitudes) ======== */
+.fundamentacion {
+    max-width: 420px; /* ancho máximo de la celda para no romper la tabla */
+    display: block;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+/* clamp a 3 líneas con ellipsis */
+.clamp-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.clamp-3.expanded {
+    -webkit-line-clamp: unset;
+    display: block;
+    white-space: normal;
+}
+
+/* alternativa: cuando el contenedor .fundamentacion tenga .expanded anular truncado */
+.fundamentacion.expanded,
+.fundamentacion.expanded .clamp-3 {
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    overflow: visible !important;
+    white-space: normal !important;
+}
+
+.fundamentacion .more-toggle {
+    display: inline-block;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-weight: 700;
+    margin-left: 0.5rem;
+    user-select: none;
+}
+
+/* Ajustes en pantallas chicas */
+@media (max-width: 768px) {
+    .fundamentacion { max-width: 100%; }
+}
+
+/* fila expandida que muestra el texto completo sin superposición */
+.fundamentacion-expanded-row td {
+    background: rgba(255,255,255,0.98);
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.fundamentacion-full {
+    max-width: 100%;
+    color: var(--color-foreground);
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+    .fundamentacion-expanded-row td { padding: var(--spacing-sm); }
+}
+
 /* ======== BOTONES ======== */
 .btn-success,
 .btn-danger {

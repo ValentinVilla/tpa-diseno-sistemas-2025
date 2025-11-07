@@ -87,7 +87,13 @@
                         <tr id="row-{{this.id}}">
                             <td>{{this.fecha}}</td>
                             <td>{{this.contribuyente}}</td>
-                            <td>{{this.fundamentacion}}</td>
+                            <td>
+                                <div class="fundamentacion clamp-3">{{this.fundamentacion}}
+                                    {{#if this.fundamentacion}}
+                                        <span class="more-toggle" tabindex="0">Ver más</span>
+                                    {{/if}}
+                                </div>
+                            </td>
                             <td>{{this.titulo}}</td>
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>
@@ -129,7 +135,13 @@
                         <tr id="row-{{this.id}}">
                             <td>{{this.fecha}}</td>
                             <td>{{this.contribuyente}}</td>
-                            <td>{{this.fundamentacion}}</td>
+                            <td>
+                                <div class="fundamentacion clamp-3">{{this.fundamentacion}}
+                                    {{#if this.fundamentacion}}
+                                        <span class="more-toggle" tabindex="0">Ver más</span>
+                                    {{/if}}
+                                </div>
+                            </td>
                             <td>{{this.titulo}}</td>
                             <td>{{this.descripcion}}</td>
                             <td>{{this.categoria}}</td>

@@ -91,6 +91,61 @@
         });
       });
 
+      // Toggle Ver más / Ver menos para fundamentaciones largas (event delegation)
+      // Mostrar el texto completo en una fila expandida debajo de la fila para evitar solapamientos
+      function escapeHtml(unsafe) {
+        return String(unsafe)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      document.addEventListener('click', function(e){
+        const t = e.target.closest('.more-toggle');
+        if (!t) return;
+        e.preventDefault();
+        const tr = t.closest('tr');
+        if (!tr) return;
+        const table = tr.closest('table');
+        const thead = table ? table.querySelector('thead tr') : null;
+        const cols = thead ? thead.children.length : tr.children.length;
+
+        // if next row is the expanded row for this tr, remove it (toggle close)
+        const next = tr.nextElementSibling;
+        if (next && next.classList.contains('fundamentacion-expanded-row') && next.dataset.for === tr.id) {
+          next.remove();
+          t.textContent = 'Ver más';
+          return;
+        }
+
+        // otherwise insert an expanded row below
+        const fundamentacionEl = tr.querySelector('.fundamentacion');
+        const content = fundamentacionEl ? fundamentacionEl.textContent.trim() : '';
+
+        const expandedTr = document.createElement('tr');
+        expandedTr.className = 'fundamentacion-expanded-row';
+        expandedTr.setAttribute('data-for', tr.id || '');
+        const td = document.createElement('td');
+        td.setAttribute('colspan', cols);
+        td.innerHTML = '<div class="fundamentacion-full">' + escapeHtml(content).replace(/\n/g, '<br>') + '</div>';
+        expandedTr.appendChild(td);
+        tr.parentNode.insertBefore(expandedTr, tr.nextSibling);
+        t.textContent = 'Ver menos';
+      });
+
+      // keyboard support: Enter / Space
+      document.addEventListener('keydown', function(e){
+        const active = document.activeElement;
+        if (!active) return;
+        if (!active.classList || !active.classList.contains('more-toggle')) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          active.click();
+        }
+      });
+
       // Si hay hash en la URL al cargar, navegar suavemente
       if (location.hash) {
         const id = location.hash.substring(1);
