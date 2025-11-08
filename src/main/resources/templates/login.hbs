@@ -1,0 +1,36 @@
+<div class="login" id="login" data-open-login="{{#if openLogin}}true{{else}}false{{/if}}">
+    <form class="login__form {{#if loginError}}has-error{{/if}}" action="/login" method="post" autocomplete="on">
+        <h2 class="login__title">Iniciar sesión</h2>
+
+        {{#if loginError}}
+            <div class="login-error" role="alert" aria-live="assertive">
+                <strong>Ups — no pudimos iniciar sesión</strong>
+                <div class="login-error-text">{{loginError}}</div>
+            </div>
+        {{/if}}
+
+        <div class="login__group">
+            <div>
+                <label for="email" class="login__label">Email</label>
+                <input type="email" id="email" name="email"
+                       class="login__input {{#if loginError}}input-error{{/if}}"
+                       placeholder="Write your email" required/>
+            </div>
+
+            <div>
+                <label for="password" class="login__label">Password</label>
+                <input type="password" id="password" name="password"
+                       class="login__input {{#if loginError}}input-error{{/if}}"
+                       placeholder="Enter your password" required/>
+            </div>
+        </div>
+
+        <p class="login__signup">
+            ¿No tenés cuenta? <a href="/register">Registrate</a>
+        </p>
+
+        <button type="submit" class="login__button">Entrar</button>
+    </form>
+
+    <i class="ri-close-line login__close" id="login-close" role="button" aria-label="Cerrar"></i>
+</div>

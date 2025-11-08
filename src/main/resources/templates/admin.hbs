@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Panel de Administración</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/landing2.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <h1 class="page-title" style="color: #004d40">Panel de Administración</h1>
+        <p class="subtitle">Gestioná los recursos y configuraciones del sistema</p>
+
+        <nav class="admin-tabs admin-tabs--no-bar">
+            <a href="/home" class="btn-back">← Volver a Home</a>
+            <ul class="nav">
+                <!-- espacio para tabs si se desea -->
+            </ul>
+        </nav>
+
+        <div class="admin-grid">
+            <!-- GESTIÓN DE COLECCIONES -->
+            <div class="admin-card" onclick="window.location.href='/admin/colecciones'">
+                <h2>Gestión de Colecciones</h2>
+                <p>Creá nuevas colecciones a partir de fuentes estáticas, dinámicas o proxy.</p>
+            </div>
+
+            <!-- SOLICITUDES DE ELIMINACIÓN -->
+            <div class="admin-card" onclick="window.location.href='/admin/solicitudes'">
+                <h2>Gestión de Solicitudes</h2>
+                <p>Revisá y aprobá o rechazá las solicitudes de eliminación pendientes asociadas a una fuente.</p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

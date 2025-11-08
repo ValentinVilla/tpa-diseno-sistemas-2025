@@ -1,15 +1,16 @@
 package ar.edu.utn.frba.dds.fuentes;
 
-import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.FuenteEstatica;
-import ar.edu.utn.frba.dds.fuentes.fuenteEstatica.LectorCSV;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.builders.ColeccionBuilder;
-import ar.edu.utn.frba.dds.filtros.Filtro;
-import ar.edu.utn.frba.dds.filtros.FiltroCategoria;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.model.fuentes.Fuente;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteEstatica.FuenteEstatica;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteEstatica.LectorCSV;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.builders.ColeccionBuilder;
+import ar.edu.utn.frba.dds.model.filtros.Filtro;
+import ar.edu.utn.frba.dds.model.filtros.FiltroCategoria;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
-import ar.edu.utn.frba.dds.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
 import org.junit.jupiter.api.Test;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -56,21 +57,12 @@ public class LeerCSVTest {
 
   @Test
   void administradorPuedeCrearUnaColeccion() throws IOException {
-    Path tempFile = Files.createTempFile("hechos", ".csv");
-    try (FileWriter writer = new FileWriter(tempFile.toFile())) {
-      writer.write("Título,Descripción,Latitud,Longitud,Fecha del hecho\n");
-      writer.write("Robo,Robo en esquina,-34.6037,-58.3816,2023-08-15 00:47:32.474046\n");
-      writer.write("Incendio,Incendio en edificio,-34.6038,-58.3820,2023-08-16 00:47:32.474046\n");
-    } catch (IOException e) {
-        throw new RuntimeException(e);
-    }
-
     ArrayList<String> campos = new ArrayList<>(List.of(
-        "Título", "Descripción", "Latitud", "Longitud", "Fecha del hecho"
+        "titulo","descripcion","latitud","longitud","fechaHecho"
     ));
 
     FiltroCategoria filtro = new FiltroCategoria("Emergencia");
-    FuenteEstatica fuente = new FuenteEstatica(tempFile.toString(), "Emergencia", campos);
+    FuenteEstatica fuente = new FuenteEstatica("/home/berty/UTN/DSI/tpa-2025-04/Diagramas/hechos_argentina.csv", "Emergencia", campos);
     AlgoritmoConsenso algoritmo = AlgoritmoConsenso.DEFAULT;
 
     RepositorioColecciones repoColeccion = RepositorioColecciones.getInstancia();
@@ -96,9 +88,9 @@ public class LeerCSVTest {
   @Test
   void cargarHechosDesdeArchivoCSV() {
     ArrayList<String> campos = new ArrayList<>(List.of(
-        "titulo", "descripcion", "latitud", "longitud", "fechaHecho"
+        "titulo","descripcion","latitud","longitud","fechaHecho"
     ));
-    FuenteEstatica fuente = new FuenteEstatica("Diagramas/hechosChico.csv", "Testing con el berty", campos);
+    FuenteEstatica fuente = new FuenteEstatica("/home/berty/UTN/DSI/tpa-2025-04/Diagramas/hechos_argentina.csv", "Testing con el berty", campos);
     ParametrosConsulta parametros = new ParametrosConsulta();
     fuente.cargarHechos(parametros);
   }
@@ -118,7 +110,7 @@ public class LeerCSVTest {
     return fuente.cargarHechos(null);
   }
 
-  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, AlgoritmoConsenso algoritmo,  RepositorioColecciones repositorio) {
+  public void crearColeccion(String titulo, String descripcion, Fuente fuente, Filtro criterio, AlgoritmoConsenso algoritmo, RepositorioColecciones repositorio) {
     Coleccion nueva = new ColeccionBuilder()
         .titulo(titulo)
         .descripcion(descripcion)

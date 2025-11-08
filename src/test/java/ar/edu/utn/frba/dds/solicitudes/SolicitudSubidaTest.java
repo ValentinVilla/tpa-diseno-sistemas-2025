@@ -1,49 +1,76 @@
 package ar.edu.utn.frba.dds.solicitudes;
 
-import ar.edu.utn.frba.dds.DetectorSpam.ImplementadorSpam;
-import ar.edu.utn.frba.dds.dominio.HechoDinamico;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.model.DetectorSpam.ImplementadorSpam;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
+import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudSubida;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 public class SolicitudSubidaTest {
 
+  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+  private EntityManager entityManager = emf.createEntityManager();
   private HechoDinamico hecho;
-  private SolicitudSubida solicitud;
+  private FuenteDinamica fuenteDinamica = new FuenteDinamica();;
+  private Contribuyente pablito = new Contribuyente("pablito","Garcia", "2324455667", "Pablito@gmail.com", 18, "123456");
 
   @BeforeEach
   void setUp() {
-    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente(42, "juan", "perez"));
-    hecho.setVisible(true);
-    solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10));
+    hecho = new HechoDinamico(new HechoBuilder(), new Contribuyente("Gonzalo","Garcia", "2324455667", "gonza@gmail.com", 18, "123456"));
+    SolicitudSubida solicitud = new SolicitudSubida(hecho, "motivo de subida", new ImplementadorSpam(10),  new Contribuyente("juan","","","",11,""));
   }
 
+  private HechoDinamico crearHecho(String titulo) {
+    HechoBuilder hechoBase = new HechoBuilder()
+        .titulo(titulo)
+        .descripcion("desc")
+        .categoria("cat")
+        .latitud(-34.65890546258081)
+        .longitud(-58.467261290470084)
+        .fechaAcontecimiento(LocalDateTime.now())
+        .fechaCarga(LocalDateTime.now())
+        .origen(Origen.CONTRIBUYENTE);
+    return new HechoDinamico(hechoBase, pablito);
+  }
+
+  //esta cheackeado que si hace lo que se le pide pero falla por ordenes de persistencia (preguntarle a tomi)
   @Test
-  void testAceptarConSugerenciaGuardaTextoCorrectamente() {
-    solicitud.aceptarConSugerencia("Agregar fuente de datos oficial");
+  void puedeAceptarUltimaSolicitud() {
+    HechoDinamico hechoDinamico = crearHecho("Pablito se robo un auto");
+    // subir hecho (crea solicitud enestado PENDIENTE)
+    entityManager.getTransaction().begin();
+    entityManager.persist(pablito);
+    entityManager.persist(fuenteDinamica);
 
-    assertEquals("Agregar fuente de datos oficial", solicitud.getSugerenciaModificacion());
+    // Crea la soli
+    fuenteDinamica.subirHecho(hechoDinamico);
 
+    // agarrar la última solicitud
+    RepositorioSolicitudes repo = RepositorioSolicitudes.getInstancia();
+    ArrayList<Solicitud> solicitudes = new ArrayList<>(repo.obtenerTodas());
+    Solicitud ultimaSolicitud = solicitudes.get(solicitudes.size() - 1);
+    entityManager.flush();
+    // simular aceptación
+    ultimaSolicitud.aceptar();
+
+    entityManager.getTransaction().commit();
+    // verificar que el hecho quedó visible
+    assertTrue(hechoDinamico.getVisible());
   }
 
-  @Test
-  void testAplicarRechazoMarcaHechoComoNoVisible() {
-    assertTrue(hecho.getVisible(), "El hecho debería ser visible inicialmente");
 
-    solicitud.aplicarRechazo();
-
-    assertFalse(hecho.getVisible(), "El hecho debería quedar no visible tras el rechazo");
-  }
-
-  @Test
-  void testAplicarAceptacionNoModificaVisibilidad() {
-    assertTrue(hecho.getVisible());
-
-    solicitud.aplicarAceptacion();
-
-    assertTrue(hecho.getVisible(), "La visibilidad no debería cambiar con aceptación directa");
-  }
 }

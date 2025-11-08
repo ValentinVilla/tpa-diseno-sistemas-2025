@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Sistema de mapeo colaborativo</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+    <link rel="stylesheet" href="/styles/admin-responsive.css">
+</head>
+
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <h1 class="page-title" style="color: #004d40">Panel de Administración</h1>
+        <p class="subtitle">Gestioná las solicitudes pendientes del sistema</p>
+
+        <nav class="admin-tabs admin-tabs--bar">
+            <a href="/admin" class="btn-back">← Volver al Panel</a>
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link" href="#subida">Subidas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#modificacion">Modificaciones</a></li>
+                <li class="nav-item"><a class="nav-link" href="#eliminacion">Eliminaciones</a></li>
+            </ul>
+        </nav>
+
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+        <!-- Solicitudes de Subida -->
+        <div class="admin-section" >
+            <h2 id="subida" style="color: #004d40">Solicitudes de Subida</h2>
+            <div class="scroll-container" >
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Contribuyente</th>
+                        <th>Titulo</th>
+                        <th>Descripción</th>
+                        <th>Categoria</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each solicitudesSubida}}
+                        <tr id="row-{{this.id}}">
+                            <td>{{this.fecha}}</td>
+                            <td>{{this.contribuyente}}</td>
+                            <td>{{this.titulo}}</td>
+                            <td>{{this.descripcion}}</td>
+                            <td>{{this.categoria}}</td>
+                            <td>
+                                <form action="/admin/solicitudes/aprobadas" method="post"  style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
+                                </form>
+                                <form action="/admin/solicitudes/rechazadas" method="post"  style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Solicitudes de Modificación -->
+        <div class="admin-section">
+            <h2 id="modificacion" style="color: #004d40">Solicitudes de Modificación</h2>
+            <div class="scroll-container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Contribuyente</th>
+                        <th>Fundamentación</th>
+                        <th>Titulo</th>
+                        <th>Descripción</th>
+                        <th>Categoria</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each solicitudesModificacion}}
+                        <tr id="row-{{this.id}}">
+                            <td>{{this.fecha}}</td>
+                            <td>{{this.contribuyente}}</td>
+                            <td>
+                                <div class="fundamentacion clamp-3">{{this.fundamentacion}}
+                                    {{#if this.fundamentacion}}
+                                        <span class="more-toggle" tabindex="0">Ver más</span>
+                                    {{/if}}
+                                </div>
+                            </td>
+                            <td>{{this.titulo}}</td>
+                            <td>{{this.descripcion}}</td>
+                            <td>{{this.categoria}}</td>
+                            <td>
+                                <form action="/admin/solicitudes/aprobadas" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
+                                </form>
+                                <form action="/admin/solicitudes/rechazadas" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Solicitudes de Eliminación -->
+        <div class="admin-section">
+            <h2 id="eliminacion" style="color: #004d40">Solicitudes de Eliminación</h2>
+            <div class="scroll-container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Contribuyente</th>
+                        <th>Fundamentación</th>
+                        <th>Titulo</th>
+                        <th>Descripción</th>
+                        <th>Categoria</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each solicitudesEliminacion}}
+                        <tr id="row-{{this.id}}">
+                            <td>{{this.fecha}}</td>
+                            <td>{{this.contribuyente}}</td>
+                            <td>
+                                <div class="fundamentacion clamp-3">{{this.fundamentacion}}
+                                    {{#if this.fundamentacion}}
+                                        <span class="more-toggle" tabindex="0">Ver más</span>
+                                    {{/if}}
+                                </div>
+                            </td>
+                            <td>{{this.titulo}}</td>
+                            <td>{{this.descripcion}}</td>
+                            <td>{{this.categoria}}</td>
+                            <td>
+                                <form action="/admin/solicitudes/aprobadas" method="post"  style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
+                                </form>
+                                <form action="/admin/solicitudes/rechazadas" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="{{this.id}}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="/js/adminGestorSolicitudes.js"></script>
+</body>
+</html>

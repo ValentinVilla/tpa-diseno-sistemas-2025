@@ -1,22 +1,22 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import java.util.ArrayList;
 import java.util.List;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
+
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import java.util.List;
-
 public class RepositorioColecciones {
   private final EntityManager entityManager;
   private static RepositorioColecciones instancia;
 
   public RepositorioColecciones() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
     this.entityManager = emf.createEntityManager();
   }
 
@@ -31,7 +31,7 @@ public class RepositorioColecciones {
     EntityTransaction transaction = getTransaction();
     try {
       transaction.begin();
-      entityManager.persist(coleccion);
+      entityManager.merge(coleccion);
       transaction.commit();
     } catch (Exception e) {
       if (transaction.isActive()) {
@@ -47,6 +47,13 @@ public class RepositorioColecciones {
 
   public List<Coleccion> listarTodas() {
     return entityManager.createQuery("SELECT c FROM Coleccion c", Coleccion.class)
+        .getResultList();
+  }
+
+  public List<Coleccion> listarColecciones(ParametrosConsulta parametrosConsulta) {
+    String jpql = "SELECT c FROM Coleccion c WHERE c.titulo = :texto";
+    return entityManager.createQuery(jpql, Coleccion.class)
+        .setParameter("texto", parametrosConsulta.getTexto())
         .getResultList();
   }
 

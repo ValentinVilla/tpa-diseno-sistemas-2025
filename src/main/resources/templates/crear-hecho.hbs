@@ -1,0 +1,93 @@
+{{#partial "css"}}
+    <link rel="stylesheet" href="/styles/crear-hecho.css">
+{{/partial}}
+
+{{#partial "header"}}
+    {{> templates/nav }}
+{{/partial}}
+
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
+
+{{#partial "contenido"}}
+    <div class="hecho-container">
+        <svg class="registro-logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16 4L4 10L16 16L28 10L16 4Z" fill="currentColor"/>
+            <path d="M4 16L16 22L28 16" stroke="currentColor" stroke-width="2"/>
+            <path d="M4 22L16 28L28 22" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <h2>Cargar Nuevo Hecho</h2>
+
+        <form action="/hechos" method="post" enctype="multipart/form-data" novalidate>
+
+            <label for="fuenteId">Fuente destino</label>
+            <select id="fuenteId" name="fuenteId" required>
+                <option value="" disabled selected>Seleccioná una fuente dinámica</option>
+                {{#each fuentesDinamicas}}
+                    <option value="{{id}}">Fuente dinámica #{{id}}</option>
+                {{/each}}
+            </select>
+
+            <label for="titulo">Título</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Título del hecho" required>
+
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" name="descripcion" placeholder="Describe lo que sucedió..."></textarea>
+
+            <label for="categoria">Categoría</label>
+            <input type="text" id="categoria" name="categoria" placeholder="Ej: Incendio, Robo, Etc..." required>
+
+            <div class="form-row">
+                <div>
+                    <label for="latitud">Latitud</label>
+                    <input type="number" step="any" id="latitud" name="latitud" placeholder="Ej: -34.603851" required>
+                </div>
+                <div>
+                    <label for="longitud">Longitud</label>
+                    <input type="number" step="any" id="longitud" name="longitud" placeholder="Ej: -58.381775" required>
+                </div>
+            </div>
+
+            <label for="fechaAcontecimiento">Fecha y Hora del Hecho</label>
+            <input type="datetime-local" id="fechaAcontecimiento" name="fechaAcontecimiento" required>
+
+            <fieldset class="multimedia-fieldset" aria-labelledby="multimediaLegend">
+                <legend id="multimediaLegend">Archivos multimedia</legend>
+
+                <p class="hint">
+                    Podés adjuntar hasta <strong id="maxFilesLabel">10</strong> archivos.
+                    Máximo <strong id="maxFileSizeLabel">20MB</strong> por archivo.
+
+                    Tipos permitidos: <em>jpg, png, webp, mp4, webm, ogg</em>.
+
+                </p>
+
+                <input type="file"
+                       id="medias"
+                       name="medias"
+                       multiple
+                       accept="image/*,video/*"
+                       aria-describedby="mediasHelp" />
+
+                <div id="mediasHelp" class="sr-only">
+                    Adjuntar archivos multimedia. El formulario se enviará como multipart/form-data.
+                </div>
+
+                <div id="previewList" class="preview-list" aria-live="polite"></div>
+
+                <div id="mediasErrors" class="medias-errors" role="alert" aria-atomic="true"></div>
+            </fieldset>
+
+            <button type="submit">Crear Hecho</button>
+
+        </form>
+        <script src="/js/multimedia.js"></script>
+    </div>
+{{/partial}}
+
+{{#partial "footer"}}
+    {{> templates/footer}}
+{{/partial}}
+
+{{> templates/main }}
+

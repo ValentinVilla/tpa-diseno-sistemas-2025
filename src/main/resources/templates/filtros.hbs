@@ -1,0 +1,46 @@
+<div class="search-bar">
+    <div class="filtro-group">
+        <input
+                type="text"
+                id="busqueda"
+                name="busqueda"
+                class="input"
+                placeholder="Buscar hechos..."
+                value="{{busqueda}}"
+                aria-label="Buscar hechos"
+        >
+    </div>
+</div>
+
+<div id="filtros-panel" class="filtros filtros-body oculto">
+    <div class="filtro-group">
+        <label for="categoria" class="label">Categoría</label>
+        <input type="text" id="categoria" name="categoria" class="input" placeholder="Ingrese la categoría...">
+    </div>
+
+    <div class="filtro-group">
+        <label for="coleccion" class="label">Colección</label>
+        <select id="coleccion" name="coleccion" class="select">
+            {{#each colecciones}}
+                <option value="{{id}}">{{titulo}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    <div class="filtro-group-row">
+        <div class="filtro-group">
+            <label for="fechaDesde" class="label">Desde</label>
+            <input type="date" id="fechaDesde" name="fechaDesde" class="input">
+        </div>
+        <div class="filtro-group">
+            <label for="fechaHasta" class="label">Hasta</label>
+            <input type="date" id="fechaHasta" name="fechaHasta" class="input">
+        </div>
+    </div>
+
+    <div class="filtro-group-row">
+        {{#block "limpiarFiltro"}}
+        {{/block}}
+        <button class="btn btn-apply" type="submit">Aplicar Filtros</button>
+    </div>
+</div>

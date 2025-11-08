@@ -1,0 +1,116 @@
+{{#partial "css"}}
+    <link rel="stylesheet" href="/styles/mainLayout.css">
+    <link rel="stylesheet" href="/styles/notificacion.css">
+    <link rel="stylesheet" href="/styles/coleccion-detalle.css">
+{{/partial}}
+
+{{#partial "header"}}
+    {{>templates/nav }}
+{{/partial}}
+
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
+
+{{#partial "contenido"}}
+    <main class="main">
+        <section id="mapa" class="section-mapa active">
+            <button id="toggle-resumen" class="btn-toggle-resumen btn-toggle-flotante" aria-label="Ocultar resumen"
+                    aria-expanded="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 15l7-7 7 7"/>
+                </svg>
+                <span class="toggle-text">Ocultar</span>
+            </button>
+
+            <div class="coleccion-resumen" id="coleccion-resumen">
+                <div class="container-resumen">
+                    <div class="resumen-header">
+                        <h1 class="resumen-titulo">{{coleccion.titulo}}</h1>
+                    </div>
+
+                    {{#if coleccion.descripcion}}
+                        <p class="resumen-descripcion">{{coleccion.descripcion}}</p>
+                    {{/if}}
+
+                    <div class="resumen-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Hechos</span>
+                            <span class="stat-value">{{cantidad}}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Fuente</span>
+                            <span class="stat-value">{{tipoFuente}}</span>
+                        </div>
+                        {{#if algoritmoConsenso}}
+                            <div class="stat-item">
+                                <span class="stat-label">Consenso</span>
+                                <span class="stat-value">{{algoritmoConsenso}}</span>
+                            </div>
+                        {{/if}}
+                    </div>
+
+                    {{#if infoCriterio}}
+                        <div class="resumen-criterio">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <span class="criterio-texto">{{infoCriterio}}</span>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+
+            <aside class="mapa-container">
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <h2>Hechos</h2>
+                        <button id="toggle-filtros" class="btn-icon icon-filter" aria-expanded="false"
+                                aria-controls="filtros-panel" title="Mostrar u ocultar filtros">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M3 5H17M6 10H14M9 15H11" stroke="currentColor" stroke-width="1.5"
+                                      stroke-linecap="round"/>
+                            </svg>
+                            <span class="sr-only">Alternar filtros</span>
+                        </button>
+                    </div>
+
+                    <form action="/colecciones/{{coleccion.id}}" method="GET"
+                          aria-label="Filtros de búsqueda de hechos">
+                        {{#> templates/filtros }}
+                            {{#partial "limpiarFiltro"}}
+                                <a href="/colecciones/{{coleccion.id}}" class="btn btn-clear">Limpiar filtros</a>
+                            {{/partial}}
+                        {{/templates/filtros}}
+                    </form>
+
+                    <div class="cant-hechos" aria-live="polite">
+                        <p>📍 Se encontraron {{cantidad}} hechos</p>
+                    </div>
+
+                    {{>templates/hecho-card}}
+                </aside>
+
+                <div class="mapa-view">
+                    <div id="map" class="map" role="region" aria-label="Mapa de hechos"></div>
+                    <div class="mapa-info" aria-live="polite">Arrastrá y hacé zoom para explorar</div>
+                </div>
+            </aside>
+        </section>
+    </main>
+{{/partial}}
+
+{{#partial "footer"}}{{/partial}}
+
+{{#partial "scripts"}}
+    <script>
+        window.coleccionId = {{coleccionId}};
+    </script>
+    <script src="/js/map.js"></script>
+    <script src="/js/filtros.js"></script>
+    <script src="/js/coleccion-detalle.js"></script>
+{{/partial}}
+
+{{> templates/main }}
+

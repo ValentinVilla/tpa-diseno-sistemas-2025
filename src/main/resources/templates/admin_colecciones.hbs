@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMapa - Colecciones</title>
+    <link rel="stylesheet" href="/styles/variables.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+    <link rel="stylesheet" href="/styles/admin-colecciones.css">
+</head>
+<body>
+<section class="admin-panel">
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Colecciones</h1>
+                <p class="subtitle">Crear y gestionar colecciones desde el panel administrativo</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <a href="/admin/colecciones/nueva" class="btn-new">+ Nueva colección</a>
+                <a href="/admin" class="btn-back">← Volver al Panel</a>
+            </div>
+        </div>
+
+        <div style="margin:1rem 0 1.5rem; display:flex; gap:0.75rem; align-items:center;">
+            <input id="search" aria-label="Buscar colecciones" type="search" placeholder="Buscar por título, descripción, fuente..." class="input" style="flex:1; padding:0.6rem;" />
+            <select id="filter-fuente" aria-label="Filtrar por fuente" class="input" style="width:220px;">
+                <option value="">Todas las fuentes</option>
+                <option value="fuente_estatica">Fuente Estática</option>
+                <option value="fuente_dinamica">Fuente Dinámica</option>
+                <option value="fuente_proxy">Fuente Proxy</option>
+            </select>
+        </div>
+
+        <div class="scroll-container">
+            <table class="table" id="colecciones-table" style="width:100%; border-collapse:collapse;">
+                <thead>
+                <tr>
+                    <th style="text-align:left; padding:0.75rem; font-size:1.3rem">Título</th>
+                    <th style="text-align:left; padding:0.75rem; font-size:1.3rem">Descripción</th>
+                    <th style="text-align:left; padding:0.75rem; font-size:1.3rem">Fuente</th>
+                    <th style="text-align:left; padding:0.75rem; font-size:1.3rem">Criterio</th>
+                    <th style="text-align:left; padding:0.75rem; font-size:1.3rem">Modo</th>
+                    <th style="text-align:left; padding:0.75rem; font-size:1.3rem">Consenso</th>
+                    <th style="text-align:center; padding:0.75rem; font-size:1.3rem">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each colecciones}}
+                    <tr id="row-{{this.id}}" data-fuente-id="{{this.fuenteId}}" data-fuente-class="{{this.fuenteClass}}" data-fuente-tipo="{{this.fuenteTipo}}" data-fuente-nombre="{{this.fuenteNombre}}" data-algoritmo="{{this.algoritmoConsenso}}">
+                        <td style="padding:0.75rem; vertical-align:top">{{this.titulo}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{this.descripcion}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{#if this.fuenteNombre}}{{this.fuenteNombre}}{{else}}{{this.fuente}}{{/if}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{#if this.criterioPertenencia.nombre}}{{this.criterioPertenencia.nombre}}{{else}}{{this.criterioPertenencia}}{{/if}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{this.modoNavegacion}}</td>
+                        <td style="padding:0.75rem; vertical-align:top">{{this.algoritmoConsenso}}</td>
+                        <td style="padding:0.75rem; text-align:center; vertical-align:top">
+                            <button class="btn btn-sm btn-eseverde" onclick="irA('gestionar','{{this.id}}')">Gestionar</button>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+
+            {{#unless colecciones}}
+                <p style="padding:1rem;">No hay colecciones registradas.</p>
+            {{/unless}}
+        </div>
+
+    </div>
+</section>
+
+<script>
+    // Filtrado simple en el cliente para facilitar búsquedas rápidas
+    const searchInput = document.getElementById('search');
+    const filterFuente = document.getElementById('filter-fuente');
+    const tableBody = document.querySelector('#colecciones-table tbody');
+
+    function normalize(text) {
+        return (text || '').toString().toLowerCase();
+    }
+
+    function filterRows() {
+        const q = normalize(searchInput.value);
+        const fuenteFilter = filterFuente.value.toLowerCase();
+        const rows = tableBody.querySelectorAll('tr');
+
+        rows.forEach(row => {
+            // buscar en todas las celdas de la fila
+            const cells = Array.from(row.cells);
+            let rowText = cells.map(c => normalize(c.textContent)).join(' ');
+
+            // además tomar la clase/tipo/nombre de la fuente expuesta en data-attrs
+            const fuenteTipo = (row.getAttribute('data-fuente-tipo') || '').toString().toLowerCase();
+            const fuenteClass = (row.getAttribute('data-fuente-class') || '').toString().toLowerCase();
+            const fuenteNombre = (row.getAttribute('data-fuente-nombre') || '').toString().toLowerCase();
+
+            // incluir atributos en el texto a buscar para cubrir todos los campos
+            rowText += ' ' + fuenteTipo + ' ' + fuenteClass + ' ' + fuenteNombre;
+
+            const matchesQuery = q === '' || rowText.includes(q);
+            const matchesFuente = fuenteFilter === '' || fuenteTipo.includes(fuenteFilter) || fuenteClass.includes(fuenteFilter);
+
+            if (matchesQuery && matchesFuente) row.style.display = '';
+            else row.style.display = 'none';
+        });
+    }
+
+    searchInput.addEventListener('input', filterRows);
+    filterFuente.addEventListener('change', filterRows);
+
+    // Navegación a acciones de colección
+    function irA(accion, id) {
+        if (!id) return;
+        if (accion === 'gestionar') window.location.href = `/admin/colecciones/${id}/gestion`;
+        else window.location.href = `/admin/colecciones/${id}`;
+    }
+
+</script>
+
+</body>
+</html>

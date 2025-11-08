@@ -1,0 +1,139 @@
+package ar.edu.utn.frba.dds.model.dominio;
+
+import ar.edu.utn.frba.dds.model.consenso.ModoNavegacion;
+import ar.edu.utn.frba.dds.model.consenso.AlgoritmoConsenso;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.model.fuentes.Fuente;
+import java.util.ArrayList;
+import java.util.List;
+import ar.edu.utn.frba.dds.model.dominio.builders.ColeccionBuilder;
+import ar.edu.utn.frba.dds.model.filtros.Filtro;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
+public class Coleccion {
+  @Id
+  @GeneratedValue
+  public Long id;
+
+  private String titulo;
+  private String descripcion;
+  public String handle;
+  @ManyToOne
+  @JoinColumn(name = "fuente_id",  nullable = false)
+  private Fuente fuente;
+  @ManyToOne(cascade = CascadeType.MERGE)
+  public Filtro criterioPertenencia;
+  @Enumerated(EnumType.STRING)
+  AlgoritmoConsenso algoritmoConsenso;
+  @Enumerated(EnumType.STRING)
+  ModoNavegacion modoNavegacion;
+
+  public Coleccion(){}
+
+  public Coleccion(ColeccionBuilder builder) {
+    this.titulo = builder.getTitulo();
+    this.descripcion = builder.getDescripcion();
+    this.fuente = builder.getFuente();
+    this.criterioPertenencia = builder.getCriterio();
+    this.modoNavegacion = builder.getModoNavegacion();
+    this.algoritmoConsenso = builder.getAlgoritmoConsenso();
+  }
+
+  public List<Hecho> mostrarHechos(ParametrosConsulta filtros) {
+
+    List<Hecho> hechos = fuente.cargarHechos(filtros);
+
+    return modoNavegacion.mostrarHechos(
+        hechos.stream()
+            .filter(hecho -> criterioPertenencia.cumple(hecho))
+            .toList()
+    );
+  }
+
+  public List<Hecho> hechosFiltrados(Filtro filtro) {
+    List<Hecho> resultado = new ArrayList<>();
+    for (Hecho hecho : mostrarHechos(null)) {
+      if (filtro.cumple(hecho)) {
+        resultado.add(hecho);
+      }
+    }
+
+    return resultado;
+  }
+
+  public void ejecutarAlgoritmo(List<Hecho> hechos) {
+    for (Hecho hecho : hechos) {
+      algoritmoConsenso.tieneConsenso(hecho, fuente.getFuente());
+    }
+  }
+
+  public boolean hechoPertenece(Hecho hecho) {
+    return criterioPertenencia.cumple(hecho);
+  }
+
+   // Setters añadidos para permitir edición desde el panel admin
+  public void setFuente(Fuente fuente) {
+    this.fuente = fuente;
+  }
+
+  public void setAlgoritmoConsenso(AlgoritmoConsenso algoritmoConsenso) {
+    this.algoritmoConsenso = algoritmoConsenso;
+  }
+
+  public void setModoNavegacion(ModoNavegacion modoNavegacion) {
+    this.modoNavegacion = modoNavegacion;
+  }
+
+  // Setter definitivo para el criterio
+  public void setCriterio(Filtro criterio) {
+    this.criterioPertenencia = criterio;
+  }
+
+  public String getTitulo() {
+    return titulo;
+  }
+
+  public String getDescripcion() {
+    return descripcion;
+  }
+
+  public Fuente getFuente() {
+    return fuente;
+  }
+
+  public Filtro getFiltro() {
+    return criterioPertenencia;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setTitulo(String nuevoTitulo) {
+    this.titulo = nuevoTitulo;
+  }
+
+  public Filtro getCriterio(){
+    return criterioPertenencia;
+  }
+
+  public Filtro getCriterioPertenencia() {
+    return this.criterioPertenencia;
+  }
+
+  public AlgoritmoConsenso getAlgoritmoConsenso() {
+    return this.algoritmoConsenso;
+  }
+
+  public ModoNavegacion getModoNavegacion() {
+    return this.modoNavegacion;
+  }
+}

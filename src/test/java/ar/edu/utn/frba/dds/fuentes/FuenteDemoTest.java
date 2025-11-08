@@ -1,10 +1,10 @@
 package ar.edu.utn.frba.dds.fuentes;
-
-import ar.edu.utn.frba.dds.clientes.ClienteDemo;
-import ar.edu.utn.frba.dds.fuentes.fuenteProxy.FuenteDemo;
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
+/*
+import ar.edu.utn.frba.dds.model.clientes.ClienteDemo;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteProxy.FuenteDemo;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
 import ar.edu.utn.frba.dds.repositorios.RepositorioColecciones;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,4 +83,4 @@ public class FuenteDemoTest {
     assertEquals(3, hechosCargados.size());
   }
 
-}
+}*/

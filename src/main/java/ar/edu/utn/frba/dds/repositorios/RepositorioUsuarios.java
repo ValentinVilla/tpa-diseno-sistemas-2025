@@ -1,0 +1,100 @@
+package ar.edu.utn.frba.dds.repositorios;
+
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
+import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
+public class RepositorioUsuarios {
+
+    private final EntityManager entityManager;
+
+    private static RepositorioUsuarios instancia;
+
+    private RepositorioUsuarios() {
+      EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
+      this.entityManager = emf.createEntityManager();
+    }
+
+    public static RepositorioUsuarios getInstancia() {
+        if (instancia == null) {
+            instancia = new RepositorioUsuarios();
+        }
+        return instancia;
+    }
+
+    public void guardar(Contribuyente contribuyente) {
+        EntityTransaction transaction = getEntity();
+        try {
+            transaction.begin();
+            entityManager.persist(contribuyente);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        }
+    }
+
+    public Contribuyente buscarUsuario(String nombre, String contrasenia){
+        try {
+            return entityManager.createQuery(
+                    "SELECT c FROM Contribuyente c WHERE c.nombre = :nombre AND c.password = :contrasenia", Contribuyente.class)
+                .setParameter("nombre", nombre)
+                .setParameter("contrasenia", contrasenia)
+                .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Contribuyente buscarPorEmail(String email){
+      try {
+          return entityManager.createQuery(
+                  "SELECT c FROM Contribuyente c WHERE c.mail = :email", Contribuyente.class)
+              .setParameter("email", email)
+              .getSingleResult();
+      } catch (Exception e) {
+          return null;
+      }
+    }
+
+    public Contribuyente buscarPorId(Long id){
+      if (entityManager == null){
+        System.err.println("EntityManager is null or closed");
+        return null;
+      }
+      try {
+          System.out.println("Ejecutando query y buscando contribuyente por id: " + id);
+            return entityManager.find(Contribuyente.class, id);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+
+    private  EntityTransaction getEntity() {
+        return entityManager.getTransaction();
+    }
+
+  public void actualizar(Contribuyente contribuyente) {
+    EntityTransaction transaction = getEntity();
+    try {
+      transaction.begin();
+      entityManager.merge(contribuyente);
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
+      throw e;
+    }
+  }
+
+}

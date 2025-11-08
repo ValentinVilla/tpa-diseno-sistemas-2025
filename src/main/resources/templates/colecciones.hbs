@@ -1,0 +1,91 @@
+{{#partial "css"}}
+<link rel="stylesheet" href="/styles/colecciones.css">
+{{/partial}}
+
+{{#partial "header"}}
+{{>templates/nav }}
+{{/partial}}
+
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
+
+{{#partial "contenido"}}
+<main class="colecciones-main">
+    <section class="colecciones-hero">
+        <div class="container">
+            <div class="colecciones-title-row">
+                <h1 class="colecciones-title">Colecciones</h1>
+            </div>
+            <p class="colecciones-subtitle">Explorá conjuntos curados de hechos y fuentes</p>
+
+            <div class="colecciones-toolbar">
+                <form action="/colecciones" method="GET" class="search-form" role="search">
+                    <div class="search-field">
+                        <input type="text" name="q" class="search-input" placeholder="Buscar colecciones..."
+                            value="{{q}}" aria-label="Buscar colecciones" />
+                        <button type="submit" class="search-button" aria-label="Buscar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+                <div class="colecciones-count">
+                    <p>Se encontraron <strong>{{cantidad}}</strong> colecciones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="colecciones-list">
+        <div class="container">
+            <div class="collections-grid">
+                {{#if colecciones}}
+                {{#each colecciones}}
+                <article class="collection-card">
+                    <header class="collection-header">
+                        <h3 class="collection-title">{{titulo}}</h3>
+                    </header>
+                    <div class="badges-row">
+                        <span class="badge badge-fuente">Fuente: Pública</span>
+                        <span class="badge badge-categoria">Categoría: General</span>
+                    </div>
+                    <p class="collection-description">{{descripcion}}</p>
+                    <footer class="collection-footer">
+                        {{#if fechaCarga}}
+                        <span class="collection-date" title="Fecha de carga">{{fechaCarga}}</span>
+                        {{else}}
+                        <span class="collection-date" title="Fecha de carga">No hay fecha de carga</span>
+                        {{/if}}
+                        <span class="collection-hechos" title="Cantidad de hechos">23 hechos</span>
+                        <a href="/colecciones/{{id}}" class="collection-link" aria-label="Ver colección">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </footer>
+                </article>
+                {{/each}}
+                {{else}}
+                <div class="empty-state">
+                    <div class="empty-illustration" aria-hidden="true">🗺️</div>
+                    <h3>No encontramos resultados</h3>
+                    <p>Prueba con otra coleccion</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </section>
+</main>
+{{/partial}}
+
+{{#partial "footer"}}
+{{>templates/footer}}
+{{/partial}}
+
+{{#partial "scripts"}}{{/partial}}
+
+{{> templates/main }}

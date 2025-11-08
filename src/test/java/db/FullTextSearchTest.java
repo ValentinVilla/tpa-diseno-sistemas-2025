@@ -1,16 +1,24 @@
 package db;
 
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.servicios.HechoFTS;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.HechoDinamico;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.fuentes.fuenteDinamica.FuenteDinamica;
+import ar.edu.utn.frba.dds.model.servicios.HechoFTS;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
+import ar.edu.utn.frba.dds.repositorios.DAOHechos;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import java.awt.datatransfer.SystemFlavorMap;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,38 +26,45 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FullTextSearchTest {
 
-  private static EntityManagerFactory emf;
-  private EntityManager em;
-  private RepositorioHechos repositorioHechos;
+  private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");  private EntityManager entityManager;
+  private DAOHechos daoHechos;
   private HechoFTS hechoFTS;
 
   @BeforeAll
-  static void initFactory() {
-    emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
-  }
+  static void setUp() {
+      EntityManager entityManager = emf.createEntityManager();
 
-  @AfterAll
-  static void closeFactory() {
-    if (emf != null) {
-      emf.close();
-    }
-  }
+      FuenteDinamica fuenteDinamica = new FuenteDinamica();
+      Contribuyente juan = new Contribuyente("Gonzalo","Garcia", "2324455667", "gonza@gmail.com", 18, "123456");
 
+      entityManager.getTransaction().begin();
+      entityManager.persist(juan);
+      entityManager.persist(fuenteDinamica);
+
+      fuenteDinamica.subirHecho(buildHechoDinamico("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("Femicidio", "El concepto de desconstrucción social.", "Sociedad", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("Accidente de tránsito", "Choque en la ruta 9", "Transito", juan));
+      fuenteDinamica.subirHecho(buildHechoDinamico("Accidente laboral", "Herido en la fábrica", "Trabajo" , juan));
+
+      entityManager.getTransaction().commit();
+      entityManager.close();
+  }
   @BeforeEach
   void init() {
-    repositorioHechos = RepositorioHechos.getInstancia();
-      hechoFTS = new HechoFTS(repositorioHechos);
+    daoHechos = DAOHechos.getInstancia();
+    hechoFTS = new HechoFTS(daoHechos);
   }
 
   @AfterEach
   void close() {
-    if (em != null) {
-      em.close();
+    if (entityManager != null) {
+      entityManager.close();
     }
   }
 
-  private Hecho buildHecho(String titulo, String descripcion, String categoria) {
-    return new HechoBuilder()
+  private static HechoDinamico buildHechoDinamico(String titulo, String descripcion, String categoria, Contribuyente contribuyente) {
+    HechoBuilder builder = new HechoBuilder()
         .titulo(titulo)
         .descripcion(descripcion)
         .categoria(categoria)
@@ -57,21 +72,12 @@ public class FullTextSearchTest {
         .longitud(-64.1833)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .origen(Origen.CONTRIBUYENTE)
-        .visible(true)
-        .build();
+        .origen(Origen.CONTRIBUYENTE);
+    return new HechoDinamico(builder, contribuyente);
   }
 
   @Test
-  void testBuscarPorTextoOrdenaPorRelevancia() throws Exception {
-    Hecho hecho1 = buildHecho("Guerra y Revolución Industrial", "Descripción sobre el conflicto bélico.", "Historia");
-    Hecho hecho2 = buildHecho("La Guerra del Pacífico", "Un conflicto bélico de la historia.", "Revolución");
-    Hecho hecho3 = buildHecho("Femicidio", "El concepto de desconstrucción social.", "Sociedad");
-
-    repositorioHechos.guardar(hecho1);
-    repositorioHechos.guardar(hecho2);
-    repositorioHechos.guardar(hecho3);
-
+  void testBuscarPorTextoOrdenaPorRelevancia(){
     List<Hecho> resultados = hechoFTS.buscar("guerra y revolución");
 
     assertFalse(resultados.isEmpty());
@@ -80,12 +86,6 @@ public class FullTextSearchTest {
 
   @Test
   void testBuscarPorTextoConFaltaDeOrtografia() throws Exception {
-    Hecho hecho1 = buildHecho("Accidente de tránsito", "Choque en la ruta 9", "Transito");
-    Hecho hecho2 = buildHecho("Accidente laboral", "Herido en la fábrica", "Trabajo");
-
-    repositorioHechos.guardar(hecho1);
-    repositorioHechos.guardar(hecho2);
-
     List<Hecho> resultados = hechoFTS.buscar("acisdente");
 
     assertFalse(resultados.isEmpty());

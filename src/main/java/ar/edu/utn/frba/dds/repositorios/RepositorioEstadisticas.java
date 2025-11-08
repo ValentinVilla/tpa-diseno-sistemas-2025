@@ -1,12 +1,12 @@
 package ar.edu.utn.frba.dds.repositorios;
 
-import ar.edu.utn.frba.dds.dominio.Coleccion;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaCategoriaTop;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaHoraPorCategoriaTop;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaProvinciaPorCategoriaTop;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaProvinciaPorColeccion;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaSolicitudesSpam;
+import ar.edu.utn.frba.dds.helpers.EntityManagerFactoryProvider;
+import ar.edu.utn.frba.dds.model.dominio.Coleccion;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaHoraPorCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaProvinciaPorCategoriaTop;
+import ar.edu.utn.frba.dds.model.estadisticas.EstadisticaSolicitudesSpam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,8 +16,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import java.util.*;
 
 public class RepositorioEstadisticas {
 
@@ -59,12 +57,12 @@ public class RepositorioEstadisticas {
 
   //metodo que carga SOLO una fila en la tabla estadistica_provincia_por_coleccion
   public void cargarFilaStatProvinciaXColeccion(Coleccion coleccion){
-    List<Hecho> hechos = coleccion.mostrarHechos();
+    List<Hecho> hechos = coleccion.mostrarHechos(null);
     EntityManager em = this.getEntityManager();
 
     em.createNativeQuery("CREATE TEMP TABLE hechos_temp (hecho_id BIGINT)").executeUpdate();
 
-    hechos.stream().map( hecho -> hecho.getId()).toList().forEach( id ->
+    hechos.stream().map(Hecho::getId).toList().forEach(id ->
         em.createNativeQuery("INSERT INTO hechos_temp (hecho_id) VALUES (?)")
             .setParameter(1, id)
             .executeUpdate()
@@ -87,7 +85,7 @@ public class RepositorioEstadisticas {
 
 
   public String provinciaConMasHechos(Coleccion coleccion) {
-    List<Hecho> hechos = coleccion.mostrarHechos();
+    List<Hecho> hechos = coleccion.mostrarHechos(null);
 
     Map<String, Long> conteoPorProvincia = hechos.stream()
         .filter(h -> h.getProvincia() != null)
@@ -167,7 +165,7 @@ public class RepositorioEstadisticas {
     }
 
   private EntityManager getEntityManager() {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("simple-persistence-unit");
+    EntityManagerFactory emf = EntityManagerFactoryProvider.getEntityManagerFactory();
     return emf.createEntityManager();
   }
 }

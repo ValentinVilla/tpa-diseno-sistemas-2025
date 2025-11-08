@@ -1,0 +1,70 @@
+{{#partial "css"}}
+    <link rel="stylesheet" href="/styles/mainLayout.css">
+    <link rel="stylesheet" href="/styles/notificacion.css">
+{{/partial}}
+
+{{#partial "header"}}
+    {{>templates/nav }}
+{{/partial}}
+
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
+
+{{#partial "contenido"}}
+    {{#if notificacion}}
+        <div class="notificacion-toast {{notificacion.tipo}}">
+            <p class="toast-mensaje">{{notificacion.mensaje}}</p>
+            <button class="toast-cerrar" onclick="this.parentElement.style.display='none';" aria-label="Cerrar">&times;
+            </button>
+        </div>
+    {{/if}}
+
+    <main class="main">
+        <section id="mapa" class="section-mapa active">
+            <aside class="mapa-container">
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <h2>Hechos</h2>
+                        <button id="toggle-filtros" class="btn-icon icon-filter" aria-expanded="false"
+                                aria-controls="filtros-panel" title="Mostrar u ocultar filtros">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M3 5H17M6 10H14M9 15H11" stroke="currentColor" stroke-width="1.5"
+                                      stroke-linecap="round"/>
+                            </svg>
+                            <span class="sr-only">Alternar filtros</span>
+                        </button>
+                    </div>
+                    <form action="/hechos" method="GET" aria-label="Filtros de búsqueda de hechos">
+                        {{#> templates/filtros }}
+                            {{#partial "limpiarFiltro"}}
+                                <a href="/hechos" class="btn btn-clear">Limpiar filtros</a>
+                            {{/partial}}
+                        {{/templates/filtros}}
+                    </form>
+
+                    <div class="cant-hechos" aria-live="polite">
+                        <p>📍 Se encontraron {{cantidad}} hechos</p>
+                    </div>
+
+                    {{>templates/hecho-card}}
+                </aside>
+
+                <div class="mapa-view">
+                    <div id="map" class="map" role="region" aria-label="Mapa de hechos"></div>
+                    <div class="mapa-info" aria-live="polite">Arrastrá y hacé zoom para explorar</div>
+                </div>
+                </div>
+            </aside>
+        </section>
+    </main>
+{{/partial}}
+
+{{#partial "footer"}}{{/partial}}
+
+{{#partial "scripts"}}
+    <script src="/js/map.js"></script>
+    <script src="/js/filtros.js"></script>
+    <script src="/js/hecho-card-redirect.js"></script>
+{{/partial}}
+
+{{> templates/main }}

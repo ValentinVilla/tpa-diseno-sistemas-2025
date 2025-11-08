@@ -4,16 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import ar.edu.utn.frba.dds.DetectorSpam.DetectorDeSpam;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.estadisticas.EstadisticaSolicitudesSpam;
-import ar.edu.utn.frba.dds.repositorios.RepositorioEstadisticas;
-import ar.edu.utn.frba.dds.repositorios.RepositorioHechos;
-import ar.edu.utn.frba.dds.repositorios.RepositorioSolicitudes;
+import ar.edu.utn.frba.dds.model.DetectorSpam.DetectorDeSpam;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.solicitudes.EstadoSolicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.Solicitud;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
+import ar.edu.utn.frba.dds.model.usuarios.Contribuyente;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class SolicitarEliminacionTest {
@@ -30,11 +29,10 @@ public class SolicitarEliminacionTest {
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
-        .visible(true)
         .build();
 
     DetectorDeSpam detectorSiempreTrue = texto -> true;
-    SolicitudEliminacion solicitudEliminacion = new SolicitudEliminacion("spam", hecho ,detectorSiempreTrue);
+    SolicitudEliminacion solicitudEliminacion = new SolicitudEliminacion(hecho ,"spam", detectorSiempreTrue, new Contribuyente("juan","","","",11,""));
 
     assertEquals(EstadoSolicitud.RECHAZADA, solicitudEliminacion.getEstado());
   }
@@ -50,17 +48,12 @@ public class SolicitarEliminacionTest {
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
         .origen(Origen.CARGAMANUAL)
-        .visible(true)
         .build();
 
     DetectorDeSpam detectorSiempreFalse = texto -> false;
 
-    SolicitudEliminacion solicitud = new SolicitudEliminacion("Texto valido y claro", hecho, detectorSiempreFalse);
+    Solicitud solicitud = new SolicitudEliminacion( hecho ,"Texto valido y claro", detectorSiempreFalse,  new Contribuyente("juan","","","",11,""));
 
-    hecho.agregarSolicitud(solicitud);
-
-    SolicitudEliminacion solicitudDesdeHecho = hecho.getSolicitudes().get(0);
-
-    assertTrue(solicitudDesdeHecho.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");
+    assertTrue(solicitud.estaPendiente(), "La solicitud debería quedar pendiente si no es spam");
   }
 }

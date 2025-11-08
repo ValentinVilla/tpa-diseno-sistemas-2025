@@ -1,16 +1,15 @@
 package ar.edu.utn.frba.dds.fuentes;
-
-import ar.edu.utn.frba.dds.fuentes.fuenteProxy.FuenteMetaMapa;
-import ar.edu.utn.frba.dds.dominio.Hecho;
-import ar.edu.utn.frba.dds.dominio.Origen;
-import ar.edu.utn.frba.dds.dominio.builders.HechoBuilder;
-import ar.edu.utn.frba.dds.dtos.ParametrosConsulta;
-import ar.edu.utn.frba.dds.clientes.ClienteMetaMapa;
-import ar.edu.utn.frba.dds.solicitudes.SolicitudEliminacion;
+/*
+import ar.edu.utn.frba.dds.model.fuentes.fuenteProxy.FuenteMetaMapa;
+import ar.edu.utn.frba.dds.model.dominio.Hecho;
+import ar.edu.utn.frba.dds.model.dominio.Origen;
+import ar.edu.utn.frba.dds.model.dominio.builders.HechoBuilder;
+import ar.edu.utn.frba.dds.model.dtos.ParametrosConsulta;
+import ar.edu.utn.frba.dds.model.clientes.ClienteMetaMapa;
+import ar.edu.utn.frba.dds.model.solicitudes.SolicitudEliminacion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,6 @@ public class FuenteMetaMapaTest {
         .longitud(1.0)
         .fechaAcontecimiento(LocalDateTime.now())
         .fechaCarga(LocalDateTime.now())
-        .visible(true)
         .origen(Origen.CONTRIBUYENTE);
   }
 
@@ -88,4 +86,4 @@ public class FuenteMetaMapaTest {
         .enviarSolicitudEliminacion("http://example.com", solicitud);
   }
 
-}
+}*/

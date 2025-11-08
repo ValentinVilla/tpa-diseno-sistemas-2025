@@ -1,0 +1,118 @@
+{{#partial "css"}}
+    <link rel="stylesheet" href="/styles/mostrar-hecho.css">
+{{/partial}}
+
+{{#partial "header"}}
+    {{> templates/nav }}
+{{/partial}}
+
+{{#partial "mapa-home"}}{{/partial}}
+{{#partial "acerca"}}{{/partial}}
+
+{{#partial "contenido"}}
+    <main class="show-container">
+        <article class="card">
+            <header class="card-header">
+                <h1 class="title">{{hecho.titulo}}</h1>
+                <div class="meta-row">
+                    <span class="badge">{{hecho.categoria}}</span>
+                    <span class="muted"> · {{fechaAcontecimiento}}</span>
+                </div>
+            </header>
+
+            <section class="card-body">
+                <div class="left">
+                    {{#if medias}}
+                        <div class="media-grid" id="mediaGrid" tabindex="0" aria-label="Galería de medios">
+                            {{#each medias}}
+                                <figure class="media-thumb" data-src="{{this.path}}" tabindex="0" aria-label="Abrir media {{this.basename}}">
+                                    {{#if this.isVideo}}
+                                        <video class="thumb-media" preload="metadata" muted>
+                                            <source src="{{this.path}}">
+                                            Tu navegador no soporta video.
+                                        </video>
+                                    {{else}}
+                                        <img class="thumb-media" alt="{{this.basename}}" src="{{this.path}}" loading="lazy">
+                                    {{/if}}
+                                    <figcaption class="media-caption">{{this.basename}} — {{this.humanSize}}</figcaption>
+                                </figure>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <p class="muted">No hay contenido multimedia asociado a este hecho.</p>
+                    {{/if}}
+                </div>
+
+                <div class="right">
+                    <h2>Descripción</h2>
+                    <p class="descripcion">{{hecho.descripcion}}</p>
+
+                    <dl class="info-list">
+                        <dt>Fecha de acontecimiento</dt>
+                        <dd>{{fechaAcontecimiento}}</dd>
+
+                        <dt>Fecha de carga</dt>
+                        <dd>{{fechaCarga}}</dd>
+
+                        {{#if hecho.latitud}}
+                            <dt>Ubicación</dt>
+                            <dd>
+                                <div class="coords">
+                                    <span class="coord-item"><strong>Latitud:</strong> {{hecho.latitud}}</span>
+                                    <span class="coord-item" style="margin-left:0.6rem;"><strong>Longitud:</strong> {{hecho.longitud}}</span>
+                                </div>
+
+                                <div id="mapaHecho" class="mapa-chico" style="height:300px; margin-top:0.75rem; margin-bottom:0.5rem;"
+                                     data-lat="{{hecho.latitud}}"
+                                     data-lon="{{hecho.longitud}}"
+                                     data-titulo="{{hecho.titulo}}"
+                                     data-categoria="{{hecho.categoria}}"
+                                ></div>
+                            </dd>
+                        {{/if}}
+
+                        <dt>Origen</dt>
+                        <dd>{{#if hecho.origen}}{{hecho.origen}}{{else}}Desconocido{{/if}}</dd>
+
+                        {{#if contribuyenteNombre}}
+                            <dt>Contribuyente</dt>
+                            <dd>{{contribuyenteNombre}}</dd>
+                        {{else}}
+                            <dt>Contribuyente</dt>
+                            <dd>Anonimo</dd>
+                        {{/if}}
+                    </dl>
+
+                    <div class="actions" style="display:flex; gap:0.75rem; align-items:center;">
+                        <a class="btn" href="/hechos">Volver a listado</a>
+
+                        <form action="/hechos/delete" method="get" style="display:inline-block; margin:0;">
+                            <input type="hidden" name="titulo" value="{{hecho.titulo}}">
+                            <input type="hidden" name="descripcion" value="{{hecho.descripcion}}">
+                            <input type="hidden" name="categoria" value="{{hecho.categoria}}">
+                            <button type="submit" class="btn btn-danger" aria-label="Solicitar eliminación de {{hecho.titulo}}">
+                                Solicitar eliminación
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <div id="mediaModal" class="media-modal" aria-hidden="true" role="dialog" aria-label="Visor de media">
+        <button id="modalClose" class="modal-close" aria-label="Cerrar">×</button>
+        <div class="media-modal-content" id="mediaModalContent" role="document"></div>
+    </div>
+{{/partial}}
+
+{{#partial "scripts"}}
+    <script src="/js/media-viewer.js"></script>
+    <script src="/js/mapa-chico.js"></script>
+{{/partial}}
+
+{{#partial "footer"}}
+    {{> templates/footer}}
+{{/partial}}
+
+{{> templates/main }}

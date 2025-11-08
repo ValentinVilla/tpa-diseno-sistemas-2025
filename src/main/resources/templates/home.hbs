@@ -1,0 +1,57 @@
+{{#partial "header"}}
+    {{> templates/header-home }}
+{{/partial}}
+
+{{#partial "contenido"}}
+    <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Conecta, comparte y crea <span class="text-primary">impacto real</span>
+                    </h1>
+                    <p class="hero-description">
+                        Mapea y organiza información confiable de manera segura y colaborativa.
+                        Explora, contribuye y genera conocimiento útil para tu comunidad.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="/register" class="btn btn-primary btn-lg">
+                            Get started for free
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </section>
+{{/partial}}
+
+{{#partial "acerca"}}
+    <section class="cta-section" id="acerca">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Acerca de</h2>
+                    <p class="cta-description">
+                        MetaMapa es un proyecto universitario de la UTN desarrollado para explorar cómo la inteligencia colectiva puede generar información confiable y útil. Este sistema de <span class="cta-highlight">código abierto</span> permite que ONG, universidades y organismos estatales visualicen, compartan y protejan datos de manera colaborativa y segura.
+                        Gracias a su arquitectura descentralizada, MetaMapa asegura que la información esté disponible en todo momento, protegiendo la privacidad de quienes contribuyen y ofreciendo herramientas para organizar y vincular los datos de forma clara y verificable.
+                        Bienvenido a MetaMapa: explora mapas, contribuye con datos y forma parte de una comunidad que transforma información en conocimiento útil.
+                    </p>
+                </div>
+            </div>
+    </section>
+{{/partial}}
+
+{{#partial "mapa-home"}}
+    {{> templates/mapa }}
+{{/partial}}
+
+{{#partial "footer"}}
+    {{> templates/footer}}
+{{/partial}}
+
+{{#partial "scripts"}}
+    <script src="/js/map.js"></script>
+{{/partial}}
+
+{{> templates/main }}
